@@ -1,5 +1,6 @@
 package br.com.battlebits.yutils.common.account;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -21,8 +22,11 @@ import br.com.battlebits.yutils.common.translate.nationalities.Nationalities;
 
 public class BattlePlayer {
 
+	private String userName;
 	private UUID uuid;
 
+	private List<String> nameHistory;
+	
 	private int fichas;
 	private int money;
 	private int xp;
@@ -45,6 +49,8 @@ public class BattlePlayer {
 
 	private String name;
 	private Party actualParty;
+	private String skype;
+	private boolean friendOnly;
 	private String twitter;
 	private String youtubeChannel;
 	private Nationalities nationality;
