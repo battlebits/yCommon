@@ -8,6 +8,7 @@ import br.com.battlebits.yutils.common.account.battlecraft.BattlecraftStatus;
 import br.com.battlebits.yutils.common.account.game.GameStatus;
 import br.com.battlebits.yutils.common.account.hungergames.HGStatus;
 import br.com.battlebits.yutils.common.banmanager.history.BanHistory;
+import br.com.battlebits.yutils.common.clans.Clan;
 import br.com.battlebits.yutils.common.enums.Liga;
 import br.com.battlebits.yutils.common.enums.ServerType;
 import br.com.battlebits.yutils.common.friends.Friend;
@@ -24,9 +25,10 @@ public class BattlePlayer {
 
 	private String userName;
 	private UUID uuid;
+	private String fakeName;
 
 	private List<String> nameHistory;
-	
+
 	private int fichas;
 	private int money;
 	private int xp;
@@ -48,6 +50,7 @@ public class BattlePlayer {
 	private Map<UUID, Blocked> blockedPlayers;
 
 	private String name;
+	private Clan actualClan;
 	private Party actualParty;
 	private String skype;
 	private boolean friendOnly;
