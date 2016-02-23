@@ -19,7 +19,6 @@ import br.com.battlebits.yutils.common.payment.constructors.Expire;
 import br.com.battlebits.yutils.common.permissions.enums.Group;
 import br.com.battlebits.yutils.common.tagmanager.enums.Tag;
 import br.com.battlebits.yutils.common.translate.languages.Language;
-import br.com.battlebits.yutils.common.translate.nationalities.Nationalities;
 
 public class BattlePlayer {
 
@@ -56,11 +55,144 @@ public class BattlePlayer {
 	private boolean friendOnly;
 	private String twitter;
 	private String youtubeChannel;
-	private Nationalities nationality;
+	private String countryCode;
 	private Language language;
 
 	private HGStatus hungerGamesStatus;
 	private BattlecraftStatus battlecraftStatus;
 	private GameStatus gameStatus;
 	private BanHistory banHistory;
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public UUID getUuid() {
+		return uuid;
+	}
+
+	public String getFakeName() {
+		return fakeName;
+	}
+
+	public List<String> getNameHistory() {
+		return nameHistory;
+	}
+
+	public int getFichas() {
+		return fichas;
+	}
+
+	public int getMoney() {
+		return money;
+	}
+
+	public int getXp() {
+		return xp;
+	}
+
+	public Liga getLiga() {
+		return liga;
+	}
+
+	public Tag getTag() {
+		return tag;
+	}
+
+	public String getIpAddress() {
+		return ipAddress;
+	}
+
+	public long getOnlineTime() {
+		return onlineTime;
+	}
+
+	public long getLastLoggedIn() {
+		return lastLoggedIn;
+	}
+
+	public long getFirstTimePlaying() {
+		return firstTimePlaying;
+	}
+
+	public String getLastIpAddress() {
+		return lastIpAddress;
+	}
+
+	public boolean isIgnoreAll() {
+		return ignoreAll;
+	}
+
+	public Map<ServerType, Group> getGroups() {
+		return groups;
+	}
+
+	public Map<Group, Expire> getRanks() {
+		return ranks;
+	}
+
+	public Map<UUID, Friend> getFriends() {
+		return friends;
+	}
+
+	public Map<UUID, Request> getFriendRequests() {
+		return friendRequests;
+	}
+
+	public Map<UUID, Blocked> getBlockedPlayers() {
+		return blockedPlayers;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public Clan getActualClan() {
+		return actualClan;
+	}
+
+	public Party getActualParty() {
+		return actualParty;
+	}
+
+	public String getSkype() {
+		return skype;
+	}
+
+	public boolean isFriendOnly() {
+		return friendOnly;
+	}
+
+	public String getTwitter() {
+		return twitter;
+	}
+
+	public String getYoutubeChannel() {
+		return youtubeChannel;
+	}
+
+	public String getCountryCode() {
+		return countryCode;
+	}
+
+	public Language getLanguage() {
+		return language;
+	}
+
+	public HGStatus getHungerGamesStatus() {
+		return hungerGamesStatus;
+	}
+
+	public BattlecraftStatus getBattlecraftStatus() {
+		return battlecraftStatus;
+	}
+
+	public GameStatus getGameStatus() {
+		return gameStatus;
+	}
+
+	public BanHistory getBanHistory() {
+		return banHistory;
+	}
+
 }
