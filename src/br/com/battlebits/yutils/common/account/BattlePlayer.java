@@ -17,7 +17,6 @@ import br.com.battlebits.yutils.common.friends.request.Request;
 import br.com.battlebits.yutils.common.party.Party;
 import br.com.battlebits.yutils.common.payment.constructors.Expire;
 import br.com.battlebits.yutils.common.permissions.enums.Group;
-import br.com.battlebits.yutils.common.tagmanager.enums.Tag;
 import br.com.battlebits.yutils.common.translate.languages.Language;
 
 public class BattlePlayer {
@@ -32,7 +31,6 @@ public class BattlePlayer {
 	private int money;
 	private int xp;
 	private Liga liga;
-	private Tag tag;
 	private String ipAddress;
 
 	private long onlineTime;
@@ -62,6 +60,48 @@ public class BattlePlayer {
 	private BattlecraftStatus battlecraftStatus;
 	private GameStatus gameStatus;
 	private BanHistory banHistory;
+
+	private boolean loaded;
+
+	public BattlePlayer() {
+		loaded = false;
+	}
+
+	public BattlePlayer(String userName, UUID uuid, String fakeName, List<String> nameHistory, int fichas, int money, int xp, Liga liga, String ipAddress, long onlineTime, long lastLoggedIn, long firstTimePlaying, String lastIpAddress, boolean ignoreAll, Map<ServerType, Group> groups, Map<Group, Expire> ranks, Map<UUID, Friend> friends, Map<UUID, Request> friendRequests, Map<UUID, Blocked> blockedPlayers, String name, Clan actualClan, Party actualParty, String skype, boolean friendOnly, String twitter, String youtubeChannel, String countryCode, Language language, HGStatus hungerGamesStatus, BattlecraftStatus battlecraftStatus, GameStatus gameStatus, BanHistory banHistory) {
+		this.userName = userName;
+		this.uuid = uuid;
+		this.fakeName = fakeName;
+		this.nameHistory = nameHistory;
+		this.fichas = fichas;
+		this.money = money;
+		this.xp = xp;
+		this.liga = liga;
+		this.ipAddress = ipAddress;
+		this.onlineTime = onlineTime;
+		this.lastLoggedIn = lastLoggedIn;
+		this.firstTimePlaying = firstTimePlaying;
+		this.lastIpAddress = lastIpAddress;
+		this.ignoreAll = ignoreAll;
+		this.groups = groups;
+		this.ranks = ranks;
+		this.friends = friends;
+		this.friendRequests = friendRequests;
+		this.blockedPlayers = blockedPlayers;
+		this.name = name;
+		this.actualClan = actualClan;
+		this.actualParty = actualParty;
+		this.skype = skype;
+		this.friendOnly = friendOnly;
+		this.twitter = twitter;
+		this.youtubeChannel = youtubeChannel;
+		this.countryCode = countryCode;
+		this.language = language;
+		this.hungerGamesStatus = hungerGamesStatus;
+		this.battlecraftStatus = battlecraftStatus;
+		this.gameStatus = gameStatus;
+		this.banHistory = banHistory;
+		this.loaded = true;
+	}
 
 	public String getUserName() {
 		return userName;
@@ -93,10 +133,6 @@ public class BattlePlayer {
 
 	public Liga getLiga() {
 		return liga;
-	}
-
-	public Tag getTag() {
-		return tag;
 	}
 
 	public String getIpAddress() {
@@ -193,6 +229,10 @@ public class BattlePlayer {
 
 	public BanHistory getBanHistory() {
 		return banHistory;
+	}
+
+	public boolean isLoaded() {
+		return loaded;
 	}
 
 }
