@@ -14,21 +14,20 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 
-import me.flame.utils.Main;
+import br.com.battlebits.yutils.common.BattlebitsAPI;
 
 public class UUIDFetcher {
 
 	private static JsonParser parser = new JsonParser();
 	private static String mojangURL = "https://api.mojang.com/users/profiles/minecraft";
 	private static String craftApiURL = "https://craftapi.com/api/user/uuid";
-	
-	private static Cache<String, UUID> nameUUID = CacheBuilder.newBuilder().expireAfterWrite(1L, TimeUnit.DAYS)
-			.build(new CacheLoader<String, UUID>() {
-				@Override
-				public UUID load(String name) throws Exception {
-					return loadFromMojang(name);
-				}
-			});
+
+	private static Cache<String, UUID> nameUUID = CacheBuilder.newBuilder().expireAfterWrite(1L, TimeUnit.DAYS).build(new CacheLoader<String, UUID>() {
+		@Override
+		public UUID load(String name) throws Exception {
+			return loadFromMojang(name);
+		}
+	});
 
 	private static UUID loadFromMojang(String name) {
 		UUID id = null;
@@ -43,8 +42,7 @@ public class UUIDFetcher {
 			streamReader.close();
 			is.close();
 		} catch (Exception e) {
-			Main.getPlugin().getLogger()
-					.warning("Erro ao tentar obter UUID do jogador " + name + " utilizando a API da Mojang! Tentando com a CraftAPI!");
+			BattlebitsAPI.getLogger().warning("Erro ao tentar obter UUID do jogador " + name + " utilizando a API da Mojang! Tentando com a CraftAPI!");
 			id = loadFromCraftAPI(name);
 		}
 		return id;
@@ -63,17 +61,16 @@ public class UUIDFetcher {
 			streamReader.close();
 			is.close();
 		} catch (Exception e) {
-			Main.getPlugin().getLogger().warning("Erro ao tentar obter UUID do jogador " + name + " utilizando a CraftAPI!");
+			BattlebitsAPI.getLogger().warning("Erro ao tentar obter UUID do jogador " + name + " utilizando a CraftAPI!");
 		}
 		return id;
 	}
 
 	public static UUID getUUIDFromString(String id) {
-		return UUID.fromString(id.substring(0, 8) + "-" + id.substring(8, 12) + "-" + id.substring(12, 16) + "-" + id.substring(16, 20) + "-"
-				+ id.substring(20, 32));
+		return UUID.fromString(id.substring(0, 8) + "-" + id.substring(8, 12) + "-" + id.substring(12, 16) + "-" + id.substring(16, 20) + "-" + id.substring(20, 32));
 	}
 
 	public static UUID getUUIDOf(String name) throws Exception {
-		return nameUUID.get(name);
+		return nameUUID.get(name, null);
 	}
 }
