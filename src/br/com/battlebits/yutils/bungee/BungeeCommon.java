@@ -1,5 +1,17 @@
 package br.com.battlebits.yutils.bungee;
 
-public class BungeeCommon {
+import br.com.battlebits.yutils.common.BattleCommon;
+
+public class BungeeCommon extends BattleCommon {
+
+	@Override
+	public void onEnable() {
+
+	}
+
+	@Override
+	public void onDisable() {
+
+	}
 
 }
