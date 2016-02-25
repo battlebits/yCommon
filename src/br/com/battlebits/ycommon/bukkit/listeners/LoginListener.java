@@ -7,8 +7,10 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
@@ -16,7 +18,7 @@ import net.minecraft.util.com.google.gson.Gson;
 
 public class LoginListener implements Listener {
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onAsync(AsyncPlayerPreLoginEvent event) throws UnknownHostException, IOException {
 		BattlebitsAPI.debug(System.currentTimeMillis() + "");
 		Socket socket = new Socket("localhost", 57966);
@@ -37,6 +39,12 @@ public class LoginListener implements Listener {
 		outputStream.close();
 		inputStream.close();
 		socket.close();
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onRemoveAccount(AsyncPlayerPreLoginEvent event) {
+		if (event.getLoginResult() != Result.ALLOWED)
+			BattlebitsAPI.getAccountCommon().unloadBattlePlayer(event.getUniqueId());
 	}
 
 }
