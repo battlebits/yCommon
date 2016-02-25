@@ -2,6 +2,7 @@ package br.com.battlebits.ycommon.bungee.networking;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -30,7 +31,6 @@ public class CommonServer implements Runnable {
 	public void run() {
 		while (RUNNING) {
 			try {
-				BattlebitsAPI.debug("SOCKET > ACCEPT");
 				Socket client = server.accept();
 
 				DataInputStream inputStream = new DataInputStream(client.getInputStream());
@@ -38,7 +38,6 @@ public class CommonServer implements Runnable {
 				String subCommand = inputStream.readUTF();
 				switch (subCommand) {
 				case "Account":
-					BattlebitsAPI.debug("SOCKET > ACCOUNT HANDLER");
 					UUID uuid = UUID.fromString(inputStream.readUTF());
 					handleAccountRequest(uuid, outputStream);
 					break;
@@ -53,7 +52,11 @@ public class CommonServer implements Runnable {
 				e.printStackTrace();
 			}
 		}
-		stopServer();
+		try {
+			stopServer();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void handleAccountRequest(UUID uuid, DataOutputStream output) throws Exception {
@@ -63,8 +66,9 @@ public class CommonServer implements Runnable {
 		output.flush();
 	}
 
-	public void stopServer() {
-
+	public void stopServer() throws IOException {
+		RUNNING = false;
+		server.close();
 	}
 
 }
