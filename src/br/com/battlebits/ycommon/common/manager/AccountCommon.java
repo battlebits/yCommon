@@ -29,6 +29,8 @@ public class AccountCommon {
 	}
 
 	public void loadBattlePlayer(UUID uuid, BattlePlayer player) {
+		if (players.containsKey(uuid))
+			return;
 		players.put(uuid, player);
 	}
 

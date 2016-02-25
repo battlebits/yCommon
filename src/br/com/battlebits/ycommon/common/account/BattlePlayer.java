@@ -1,5 +1,6 @@
 package br.com.battlebits.ycommon.common.account;
 
+import java.net.InetSocketAddress;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -31,9 +32,9 @@ public class BattlePlayer {
 	private int money;
 	private int xp;
 	private Liga liga;
-	private String ipAddress;
+	private InetSocketAddress ipAddress;
 	private String connectionFrom;
-	
+
 	private long onlineTime;
 	private long lastLoggedIn;
 	private long firstTimePlaying;
@@ -47,7 +48,6 @@ public class BattlePlayer {
 	private Map<UUID, Request> friendRequests;
 	private Map<UUID, Blocked> blockedPlayers;
 
-	private String name;
 	private Clan actualClan;
 	private Party actualParty;
 	private String skype;
@@ -69,7 +69,7 @@ public class BattlePlayer {
 		loaded = false;
 	}
 
-	public BattlePlayer(String userName, UUID uuid, String fakeName, List<String> nameHistory, int fichas, int money, int xp, Liga liga, String ipAddress, long onlineTime, long lastLoggedIn, long firstTimePlaying, String lastIpAddress, boolean ignoreAll, Map<ServerType, Group> groups, Map<Group, Expire> ranks, Map<UUID, Friend> friends, Map<UUID, Request> friendRequests, Map<UUID, Blocked> blockedPlayers, String name, Clan actualClan, Party actualParty, String skype, boolean friendOnly, String twitter, String youtubeChannel, String countryCode, Language language, HGStatus hungerGamesStatus, BattlecraftStatus battlecraftStatus, GameStatus gameStatus, BanHistory banHistory) {
+	public BattlePlayer(String userName, UUID uuid, String fakeName, List<String> nameHistory, int fichas, int money, int xp, Liga liga, InetSocketAddress ipAddress, long onlineTime, long lastLoggedIn, long firstTimePlaying, String lastIpAddress, boolean ignoreAll, Map<ServerType, Group> groups, Map<Group, Expire> ranks, Map<UUID, Friend> friends, Map<UUID, Request> friendRequests, Map<UUID, Blocked> blockedPlayers, Clan actualClan, Party actualParty, String skype, boolean friendOnly, String twitter, String youtubeChannel, String countryCode, Language language, HGStatus hungerGamesStatus, BattlecraftStatus battlecraftStatus, GameStatus gameStatus, BanHistory banHistory) {
 		this.userName = userName;
 		this.uuid = uuid;
 		this.fakeName = fakeName;
@@ -89,7 +89,6 @@ public class BattlePlayer {
 		this.friends = friends;
 		this.friendRequests = friendRequests;
 		this.blockedPlayers = blockedPlayers;
-		this.name = name;
 		this.actualClan = actualClan;
 		this.actualParty = actualParty;
 		this.skype = skype;
@@ -137,7 +136,7 @@ public class BattlePlayer {
 		return liga;
 	}
 
-	public String getIpAddress() {
+	public InetSocketAddress getIpAddress() {
 		return ipAddress;
 	}
 
@@ -179,10 +178,6 @@ public class BattlePlayer {
 
 	public Map<UUID, Blocked> getBlockedPlayers() {
 		return blockedPlayers;
-	}
-
-	public String getName() {
-		return name;
 	}
 
 	public Clan getActualClan() {

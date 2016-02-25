@@ -7,7 +7,7 @@ import br.com.battlebits.ycommon.common.manager.AccountCommon;
 public class BattlebitsAPI {
 
 	private static AccountCommon accountCommon = new AccountCommon();
-	private static Logger logger = Logger.getLogger("yCommon");
+	private static Logger logger = Logger.getLogger("Minecraft");
 	private static boolean debugMode = true;
 
 	public static AccountCommon getAccountCommon() {
@@ -16,6 +16,10 @@ public class BattlebitsAPI {
 
 	public static Logger getLogger() {
 		return logger;
+	}
+
+	public static String getBungeeChannel() {
+		return "yCommon";
 	}
 
 	public static boolean debugModeEnabled() {

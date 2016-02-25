@@ -1,0 +1,4 @@
+name: yCommon
+author: GustavoInacio
+main: br.com.battlebits.ycommon.bukkit.BukkitMain
+version: 0.0.1-PREALPHA
