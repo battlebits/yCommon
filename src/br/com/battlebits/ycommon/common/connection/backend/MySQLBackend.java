@@ -33,8 +33,7 @@ public class MySQLBackend extends BattleConnection {
 	}
 
 	public void update(String sqlString) {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 	public void closeConnection() throws SQLException {
@@ -56,6 +55,10 @@ public class MySQLBackend extends BattleConnection {
 		if (connection.isClosed())
 			return false;
 		return true;
+	}
+
+	public Connection getConnection() {
+		return connection;
 	}
 
 }

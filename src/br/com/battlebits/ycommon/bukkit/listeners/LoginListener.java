@@ -12,15 +12,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 
+import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
-import net.minecraft.util.com.google.gson.Gson;
 
 public class LoginListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onAsync(AsyncPlayerPreLoginEvent event) throws UnknownHostException, IOException {
-		BattlebitsAPI.debug(System.currentTimeMillis() + "");
 		Socket socket = new Socket("localhost", 57966);
 		BattlebitsAPI.debug("SOCKET > CONNECT");
 		DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
@@ -31,14 +30,20 @@ public class LoginListener implements Listener {
 		String command = inputStream.readUTF();
 		if (command.equals("Account")) {
 			String json = inputStream.readUTF();
-			BattlePlayer battlePlayer = new Gson().fromJson(json, BattlePlayer.class);
+			BattlePlayer battlePlayer = BukkitMain.getGson().fromJson(json, BattlePlayer.class);
 			BattlebitsAPI.getAccountCommon().loadBattlePlayer(event.getUniqueId(), battlePlayer);
 			BattlebitsAPI.debug("NEW BATTLEPLAYER > " + battlePlayer.getUserName() + " (" + event.getUniqueId() + ")");
+			battlePlayer = null;
+			json = null;
 		}
 		BattlebitsAPI.debug("SOCKET > CLOSE");
 		outputStream.close();
 		inputStream.close();
 		socket.close();
+		command = null;
+		outputStream = null;
+		inputStream = null;
+		socket = null;
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)

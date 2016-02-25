@@ -5,10 +5,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 import br.com.battlebits.ycommon.bukkit.bungee.MessageListener;
 import br.com.battlebits.ycommon.bukkit.listeners.LoginListener;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
+import net.minecraft.util.com.google.gson.Gson;
 
 public class BukkitMain extends JavaPlugin {
 
 	private static BukkitMain plugin;
+	private static Gson gson = new Gson();
 
 	{
 		plugin = this;
@@ -39,6 +41,10 @@ public class BukkitMain extends JavaPlugin {
 
 	public static BukkitMain getPlugin() {
 		return plugin;
+	}
+
+	public static Gson getGson() {
+		return gson;
 	}
 
 }
