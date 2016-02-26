@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 import br.com.battlebits.ycommon.bukkit.BukkitCommon;
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
-import br.com.battlebits.ycommon.common.BattlebitsAPI;
 
 public class TagManager extends BukkitCommon {
 	public TagManager(BukkitMain main) {
@@ -20,7 +19,7 @@ public class TagManager extends BukkitCommon {
 	}
 
 	public void updatePlayerTag(Player p) {
-		BukkitPlayer player = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
+		//BukkitPlayer player = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
 		
 	}
 
