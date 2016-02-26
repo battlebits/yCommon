@@ -15,7 +15,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
-import br.com.battlebits.ycommon.common.account.BattlePlayer;
 
 public class AccountListener implements Listener {
 
@@ -31,7 +30,7 @@ public class AccountListener implements Listener {
 		String command = inputStream.readUTF();
 		if (command.equals("Account")) {
 			String json = inputStream.readUTF();
-			BattlePlayer battlePlayer = BukkitMain.getGson().fromJson(json, BattlePlayer.class);
+			BukkitPlayer battlePlayer = BukkitMain.getGson().fromJson(json, BukkitPlayer.class);
 			BattlebitsAPI.getAccountCommon().loadBattlePlayer(event.getUniqueId(), battlePlayer);
 			BattlebitsAPI.debug("NEW BATTLEPLAYER > " + battlePlayer.getUserName() + " (" + event.getUniqueId() + ")");
 			battlePlayer = null;

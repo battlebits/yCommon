@@ -262,6 +262,94 @@ public class BattlePlayer {
 		return banHistory;
 	}
 
+	public void setFakeName(String fakeName) {
+		this.fakeName = fakeName;
+	}
+
+	public void setFichas(int fichas) {
+		this.fichas = fichas;
+	}
+
+	public void setMoney(int money) {
+		this.money = money;
+	}
+
+	public void setXp(int xp) {
+		this.xp = xp;
+	}
+
+	public void updateGroup(Map<ServerType, Group> groups) {
+		this.groups = groups;
+	}
+
+	public void updateRanks(Map<Group, Expire> ranks) {
+		this.ranks = ranks;
+	}
+
+	public void updateFriends(Map<UUID, Friend> friends) {
+		this.friends = friends;
+	}
+
+	public void updateFriendRequests(Map<UUID, Request> friendRequests) {
+		this.friendRequests = friendRequests;
+	}
+
+	public void updateBlockedPlayers(Map<UUID, Blocked> blockedPlayers) {
+		this.blockedPlayers = blockedPlayers;
+	}
+
+	public void setActualClan(Clan actualClan) {
+		this.actualClan = actualClan;
+	}
+
+	public void setActualParty(Party actualParty) {
+		this.actualParty = actualParty;
+	}
+
+	public void setSkype(String skype) {
+		this.skype = skype;
+	}
+
+	public void setSkypeFriendOnly(boolean skypeFriendOnly) {
+		this.skypeFriendOnly = skypeFriendOnly;
+	}
+
+	public void setTwitter(String twitter) {
+		this.twitter = twitter;
+	}
+
+	public void setYoutubeChannel(String youtubeChannel) {
+		this.youtubeChannel = youtubeChannel;
+	}
+
+	public void setSteam(String steam) {
+		this.steam = steam;
+	}
+
+	public void setIgnoreAll(boolean ignoreAll) {
+		this.ignoreAll = ignoreAll;
+	}
+
+	public void setLanguage(Language language) {
+		this.language = language;
+	}
+
+	public void updateHungerGamesStatus(HGStatus hungerGamesStatus) {
+		this.hungerGamesStatus = hungerGamesStatus;
+	}
+
+	public void updateBattlecraftStatus(BattlecraftStatus battlecraftStatus) {
+		this.battlecraftStatus = battlecraftStatus;
+	}
+
+	public void updateGameStatus(GameStatus gameStatus) {
+		this.gameStatus = gameStatus;
+	}
+
+	public void updateBanHistory(BanHistory banHistory) {
+		this.banHistory = banHistory;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
