@@ -2,8 +2,8 @@ package br.com.battlebits.ycommon.bukkit;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import br.com.battlebits.ycommon.bukkit.accounts.BukkitAccount;
 import br.com.battlebits.ycommon.bukkit.bungee.MessageListener;
-import br.com.battlebits.ycommon.bukkit.listeners.LoginListener;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import net.minecraft.util.com.google.gson.Gson;
 
@@ -11,6 +11,8 @@ public class BukkitMain extends JavaPlugin {
 
 	private static BukkitMain plugin;
 	private static Gson gson = new Gson();
+
+	private BukkitAccount accountManager;
 
 	{
 		plugin = this;
@@ -27,16 +29,21 @@ public class BukkitMain extends JavaPlugin {
 		this.getServer().getMessenger().registerIncomingPluginChannel(this, BattlebitsAPI.getBungeeChannel(), new MessageListener());
 		this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 		this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new MessageListener());
-		registerListeners();
+		registerCommonManagement();
+		enableCommonManagement();
 	}
 
 	@Override
 	public void onDisable() {
-
+		accountManager.onDisable();
 	}
 
-	private void registerListeners() {
-		getServer().getPluginManager().registerEvents(new LoginListener(), this);
+	private void registerCommonManagement() {
+		accountManager = new BukkitAccount(this);
+	}
+
+	private void enableCommonManagement() {
+		accountManager.onEnable();
 	}
 
 	public static BukkitMain getPlugin() {
