@@ -4,6 +4,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitAccount;
 import br.com.battlebits.ycommon.bukkit.bungee.MessageListener;
+import br.com.battlebits.ycommon.bukkit.event.UpdateScheduler;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import net.minecraft.util.com.google.gson.Gson;
 
@@ -31,6 +32,7 @@ public class BukkitMain extends JavaPlugin {
 		this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new MessageListener());
 		registerCommonManagement();
 		enableCommonManagement();
+		getServer().getScheduler().runTaskTimer(this, new UpdateScheduler(), 1, 1);
 	}
 
 	@Override
