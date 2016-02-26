@@ -11,6 +11,7 @@ import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.account.battlecraft.BattlecraftStatus;
 import br.com.battlebits.ycommon.common.account.game.GameStatus;
 import br.com.battlebits.ycommon.common.account.hungergames.HGStatus;
+import br.com.battlebits.ycommon.common.banmanager.constructors.Ban;
 import br.com.battlebits.ycommon.common.banmanager.history.BanHistory;
 import br.com.battlebits.ycommon.common.clans.Clan;
 import br.com.battlebits.ycommon.common.enums.Liga;
@@ -21,6 +22,7 @@ import br.com.battlebits.ycommon.common.friends.request.Request;
 import br.com.battlebits.ycommon.common.party.Party;
 import br.com.battlebits.ycommon.common.payment.constructors.Expire;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
+import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.event.LoginEvent;
@@ -29,7 +31,7 @@ import net.md_5.bungee.event.EventHandler;
 
 public class LoginListener implements Listener {
 
-	@EventHandler
+	@EventHandler(priority = -128)
 	public void onLogin(final LoginEvent event) {
 		event.registerIntent(BungeeMain.getPlugin());
 		final String userName = event.getConnection().getName();
@@ -72,6 +74,29 @@ public class LoginListener implements Listener {
 				event.completeIntent(BungeeMain.getPlugin());
 			}
 		});
+	}
+
+	@EventHandler(priority = 0)
+	public void onCheckBanned(LoginEvent event) {
+		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(event.getConnection().getUniqueId());
+		Ban ban = player.getBanHistory().getActualBan();
+		if (ban != null) {
+			event.setCancelled(true);
+			// VOCE ESTÁ BANIDO
+			//
+			// VOCE FOI BANIDO POR %banned-By% NO DIA %day%
+			// MOTIVO: %reason%
+			//
+			// BANIDO INCORRETAMENTE? PEÇA APPEAL: %forum%
+			//
+			// COMPRE UNBAN EM %store% PARA ACESSAR NOVAMENTE
+			String reason = Translate.getTranslation(player.getLanguage(), "login-banned");
+			reason = reason.replace("%banned-By%", ban.getBannedBy());
+			reason = reason.replace("%reason%", ban.getReason());
+			reason = reason.replace("%forum%", BattlebitsAPI.FORUM_WEBSITE);
+			reason = reason.replace("%store%", BattlebitsAPI.STORE);
+			event.setCancelReason(reason);
+		}
 	}
 
 }

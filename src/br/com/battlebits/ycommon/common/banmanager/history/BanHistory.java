@@ -15,6 +15,26 @@ public class BanHistory {
 		muteHistory = new ArrayList<>();
 	}
 
+	public Ban getActualBan() {
+		for (Ban ban : banHistory) {
+			if (ban.isUnbanned())
+				continue;
+			if (ban.getExpire() == -1 || ban.getExpire() > System.currentTimeMillis())
+				return ban;
+		}
+		return null;
+	}
+
+	public Mute getActualMute() {
+		for (Mute mute : muteHistory) {
+			if (mute.isUnmuted())
+				continue;
+			if (mute.getExpire() == -1 || mute.getExpire() > System.currentTimeMillis())
+				return mute;
+		}
+		return null;
+	}
+
 	public List<Ban> getBanHistory() {
 		return banHistory;
 	}
