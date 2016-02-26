@@ -35,11 +35,23 @@ public class CommonServer implements Runnable {
 
 				DataInputStream inputStream = new DataInputStream(client.getInputStream());
 				DataOutputStream outputStream = new DataOutputStream(client.getOutputStream());
-				String subCommand = inputStream.readUTF();
-				switch (subCommand) {
+
+				String command = inputStream.readUTF();
+				switch (command) {
 				case "Account":
+					String subComand = inputStream.readUTF();
 					UUID uuid = UUID.fromString(inputStream.readUTF());
-					handleAccountRequest(uuid, outputStream);
+					switch (subComand) {
+					case "Load":
+						handleAccountRequest(uuid, outputStream);
+						break;
+					case "Update":
+						break;
+					default:
+						break;
+					}
+					uuid = null;
+					subComand = null;
 					break;
 				default:
 					break;
@@ -48,6 +60,11 @@ public class CommonServer implements Runnable {
 				outputStream.close();
 				inputStream.close();
 				client.close();
+
+				command = null;
+				outputStream = null;
+				inputStream = null;
+				client = null;
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -69,6 +86,7 @@ public class CommonServer implements Runnable {
 	public void stopServer() throws IOException {
 		RUNNING = false;
 		server.close();
+		server = null;
 	}
 
 }

@@ -1,17 +1,24 @@
 package br.com.battlebits.ycommon.bungee.listeners;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import br.com.battlebits.ycommon.bungee.BungeeMain;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
+import br.com.battlebits.ycommon.common.account.battlecraft.BattlecraftStatus;
+import br.com.battlebits.ycommon.common.account.game.GameStatus;
+import br.com.battlebits.ycommon.common.account.hungergames.HGStatus;
+import br.com.battlebits.ycommon.common.banmanager.history.BanHistory;
+import br.com.battlebits.ycommon.common.clans.Clan;
 import br.com.battlebits.ycommon.common.enums.Liga;
 import br.com.battlebits.ycommon.common.enums.ServerType;
 import br.com.battlebits.ycommon.common.friends.Friend;
 import br.com.battlebits.ycommon.common.friends.block.Blocked;
 import br.com.battlebits.ycommon.common.friends.request.Request;
+import br.com.battlebits.ycommon.common.party.Party;
 import br.com.battlebits.ycommon.common.payment.constructors.Expire;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
@@ -32,12 +39,35 @@ public class LoginListener implements Listener {
 			public void run() {
 				// CRIAR QUERIES E QUALQUER COISA NO MYSQL PARA GERAR UM
 				// BATTLEPLAYER
+				int fichas = 0;
+				int xp = 0;
+				int money = 0;
+				Liga liga = Liga.FIRST;
+				String lastAddressIp = "";
+				long onlineTime = 0;
+				long firstJoin = System.currentTimeMillis();
+				long lastJoin = System.currentTimeMillis();
+				boolean ignoreAll = false;
 				Map<ServerType, Group> groups = new HashMap<>();
 				Map<Group, Expire> ranks = new HashMap<>();
 				Map<UUID, Friend> friends = new HashMap<>();
 				Map<UUID, Request> friendRequests = new HashMap<>();
 				Map<UUID, Blocked> blockedPlayers = new HashMap<>();
-				BattlePlayer player = new BattlePlayer(userName, uuid, userName, null, 0, 0, 0, Liga.FIRST, event.getConnection().getAddress(), 0, System.currentTimeMillis(), System.currentTimeMillis(), "localhost", false, groups, ranks, friends, friendRequests, blockedPlayers, null, null, "", false, "", "", "BR", Language.PORTUGUES, null, null, null, null);
+				Clan clan = null;
+				Party party = null;
+				String skype = "";
+				boolean skypeFriendsOnly = true;
+				String twitter = "";
+				String youtubeChannel = "";
+				String steam = "";
+				String countryCode = "BR";
+				Language language = Language.PORTUGUES;
+				HGStatus hgStatus = null;
+				BattlecraftStatus pvpStatus = null;
+				GameStatus gameStatus = null;
+				BanHistory banHistory = null;
+				List<String> nameHistory = null;
+				BattlePlayer player = new BattlePlayer(userName, uuid, userName, fichas, money, xp, liga, event.getConnection().getAddress(), lastAddressIp, event.getConnection().getVirtualHost(), onlineTime, lastJoin, firstJoin, ignoreAll, groups, ranks, friends, friendRequests, blockedPlayers, clan, party, skype, skypeFriendsOnly, twitter, youtubeChannel, steam, countryCode, language, hgStatus, pvpStatus, gameStatus, banHistory, nameHistory);
 				BattlebitsAPI.getAccountCommon().loadBattlePlayer(uuid, player);
 				event.completeIntent(BungeeMain.getPlugin());
 			}

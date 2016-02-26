@@ -1,5 +1,6 @@
 package br.com.battlebits.ycommon.common.manager;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -40,6 +41,10 @@ public class AccountCommon {
 
 	public void unloadBattlePlayer(UUID uuid) {
 		players.remove(uuid);
+	}
+
+	public Collection<BattlePlayer> getPlayers() {
+		return players.values();
 	}
 
 }

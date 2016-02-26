@@ -22,86 +22,112 @@ import br.com.battlebits.ycommon.common.translate.languages.Language;
 
 public class BattlePlayer {
 
+	// INFORMAÇOES DA CONTA
 	private String userName;
 	private UUID uuid;
 	private String fakeName;
 
-	private List<String> nameHistory;
-
+	// DADOS DA CONTA
 	private int fichas;
 	private int money;
 	private int xp;
 	private Liga liga;
-	private InetSocketAddress ipAddress;
-	private String connectionFrom;
 
+	// ENDEREÇOS E NETWORKING
+	private InetSocketAddress ipAddress;
+	private InetSocketAddress hostname;
+	private String lastIpAddress;
+
+	// PLAYING
 	private long onlineTime;
 	private long lastLoggedIn;
 	private long firstTimePlaying;
-	private String lastIpAddress;
 
-	private boolean ignoreAll;
-
+	// GRUPOS
 	private Map<ServerType, Group> groups;
 	private Map<Group, Expire> ranks;
+
+	// AMIGOS
 	private Map<UUID, Friend> friends;
 	private Map<UUID, Request> friendRequests;
 	private Map<UUID, Blocked> blockedPlayers;
 
+	// CLANS E PARTY
 	private Clan actualClan;
 	private Party actualParty;
+
+	// DADOS PESSOAS COMPARTILHADOS
 	private String skype;
-	private boolean friendOnly;
+	private boolean skypeFriendOnly;
 	private String twitter;
 	private String youtubeChannel;
-	private String countryCode;
 	private String steam;
+
+	// CONFIGURACOES
+	private boolean ignoreAll;
+
+	// PAIS E LINGUA
+	private String countryCode;
 	private Language language;
 
+	// STATUS
 	private HGStatus hungerGamesStatus;
 	private BattlecraftStatus battlecraftStatus;
 	private GameStatus gameStatus;
+
+	// HISTORIA
+	private List<String> nameHistory;
 	private BanHistory banHistory;
 
-	private boolean loaded;
-
 	public BattlePlayer() {
-		loaded = false;
+
 	}
 
-	public BattlePlayer(String userName, UUID uuid, String fakeName, List<String> nameHistory, int fichas, int money, int xp, Liga liga, InetSocketAddress ipAddress, long onlineTime, long lastLoggedIn, long firstTimePlaying, String lastIpAddress, boolean ignoreAll, Map<ServerType, Group> groups, Map<Group, Expire> ranks, Map<UUID, Friend> friends, Map<UUID, Request> friendRequests, Map<UUID, Blocked> blockedPlayers, Clan actualClan, Party actualParty, String skype, boolean friendOnly, String twitter, String youtubeChannel, String countryCode, Language language, HGStatus hungerGamesStatus, BattlecraftStatus battlecraftStatus, GameStatus gameStatus, BanHistory banHistory) {
+	public BattlePlayer(String userName, UUID uuid, String fakeName, int fichas, int money, int xp, Liga liga, InetSocketAddress ipAddress, String lastIpAddress, InetSocketAddress hostname, long onlineTime, long lastLoggedIn, long firstTimePlaying, boolean ignoreAll, Map<ServerType, Group> groups, Map<Group, Expire> ranks, Map<UUID, Friend> friends, Map<UUID, Request> friendRequests, Map<UUID, Blocked> blockedPlayers, Clan actualClan, Party actualParty, String skype, boolean skypeFriendOnly, String twitter, String youtubeChannel, String steam, String countryCode, Language language, HGStatus hungerGamesStatus, BattlecraftStatus battlecraftStatus, GameStatus gameStatus, BanHistory banHistory, List<String> nameHistory) {
 		this.userName = userName;
 		this.uuid = uuid;
 		this.fakeName = fakeName;
-		this.nameHistory = nameHistory;
+
 		this.fichas = fichas;
 		this.money = money;
 		this.xp = xp;
 		this.liga = liga;
+
 		this.ipAddress = ipAddress;
+		this.lastIpAddress = lastIpAddress;
+		this.hostname = hostname;
+
 		this.onlineTime = onlineTime;
 		this.lastLoggedIn = lastLoggedIn;
 		this.firstTimePlaying = firstTimePlaying;
-		this.lastIpAddress = lastIpAddress;
+
 		this.ignoreAll = ignoreAll;
+
 		this.groups = groups;
 		this.ranks = ranks;
+
 		this.friends = friends;
 		this.friendRequests = friendRequests;
 		this.blockedPlayers = blockedPlayers;
+
 		this.actualClan = actualClan;
 		this.actualParty = actualParty;
+
 		this.skype = skype;
-		this.friendOnly = friendOnly;
+		this.skypeFriendOnly = skypeFriendOnly;
 		this.twitter = twitter;
 		this.youtubeChannel = youtubeChannel;
+		this.steam = steam;
+
 		this.countryCode = countryCode;
 		this.language = language;
+
 		this.hungerGamesStatus = hungerGamesStatus;
 		this.battlecraftStatus = battlecraftStatus;
 		this.gameStatus = gameStatus;
+
+		this.nameHistory = nameHistory;
 		this.banHistory = banHistory;
-		this.loaded = true;
 	}
 
 	public String getUserName() {
@@ -142,6 +168,10 @@ public class BattlePlayer {
 
 	public long getOnlineTime() {
 		return onlineTime;
+	}
+
+	public InetSocketAddress getHostname() {
+		return hostname;
 	}
 
 	public long getLastLoggedIn() {
@@ -192,8 +222,8 @@ public class BattlePlayer {
 		return skype;
 	}
 
-	public boolean isFriendOnly() {
-		return friendOnly;
+	public boolean isSkypeFriendOnly() {
+		return skypeFriendOnly;
 	}
 
 	public String getTwitter() {
@@ -202,6 +232,10 @@ public class BattlePlayer {
 
 	public String getYoutubeChannel() {
 		return youtubeChannel;
+	}
+
+	public String getSteam() {
+		return steam;
 	}
 
 	public String getCountryCode() {
@@ -228,8 +262,54 @@ public class BattlePlayer {
 		return banHistory;
 	}
 
-	public boolean isLoaded() {
-		return loaded;
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("UUID > " + uuid.toString());
+		builder.append("USERNAME > " + userName);
+		builder.append("FAKENAME > " + fakeName);
+
+		builder.append("FICHAS > " + fakeName);
+		builder.append("MONEY > " + fakeName);
+		builder.append("XP > " + fakeName);
+		builder.append("LIGA > " + fakeName);
+
+		builder.append("ADDRESSIP > " + fakeName);
+		builder.append("HOSTNAME > " + fakeName);
+		builder.append("LASTADDRESSIP > " + fakeName);
+
+		builder.append("ONLINETIME > " + fakeName);
+		builder.append("LASTLOGIN > " + fakeName);
+		builder.append("FIRSTJOIN > " + fakeName);
+
+		builder.append("GROUPS > " + fakeName);
+		builder.append("RANKS > " + fakeName);
+
+		builder.append("FRIENDS > " + fakeName);
+		builder.append("FRIENDSREQUEST > " + fakeName);
+		builder.append("BLOCKEDFRIENDS > " + fakeName);
+
+		builder.append("CLAN > " + fakeName);
+		builder.append("PARTY > " + fakeName);
+
+		builder.append("SKYPE > " + fakeName);
+		builder.append("SKYPEFRIENDSONLY > " + fakeName);
+		builder.append("TWITTER > " + fakeName);
+		builder.append("YOUTUBECHANNEL > " + fakeName);
+		builder.append("STEAM > " + fakeName);
+		builder.append("IGNOREALL > " + fakeName);
+
+		builder.append("COUNTRY > " + fakeName);
+		builder.append("LANGUAGE > " + fakeName);
+
+		builder.append("HGSTATUS > " + fakeName);
+		builder.append("PVPSTATUS > " + fakeName);
+		builder.append("GAMESTATUS > " + fakeName);
+
+		builder.append("BANHISTORY > " + fakeName);
+		builder.append("NAMEHISTORY > " + fakeName);
+
+		return super.toString();
 	}
 
 }
