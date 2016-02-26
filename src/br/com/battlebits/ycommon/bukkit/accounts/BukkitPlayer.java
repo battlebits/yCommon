@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bukkit.tagmanager.Tag;
+import br.com.battlebits.ycommon.bukkit.tagmanager.TagManager;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.account.battlecraft.BattlecraftStatus;
 import br.com.battlebits.ycommon.common.account.game.GameStatus;
@@ -30,6 +31,7 @@ public class BukkitPlayer extends BattlePlayer {
 
 	public BukkitPlayer(String userName, UUID uuid, String fakeName, int fichas, int money, int xp, Liga liga, InetSocketAddress ipAddress, String lastIpAddress, InetSocketAddress hostname, long onlineTime, long lastLoggedIn, long firstTimePlaying, boolean ignoreAll, Map<ServerType, Group> groups, Map<Group, Expire> ranks, Map<UUID, Friend> friends, Map<UUID, Request> friendRequests, Map<UUID, Blocked> blockedPlayers, Clan actualClan, Party actualParty, String skype, boolean skypeFriendOnly, String twitter, String youtubeChannel, String steam, String countryCode, Language language, HGStatus hungerGamesStatus, BattlecraftStatus battlecraftStatus, GameStatus gameStatus, BanHistory banHistory, List<String> nameHistory) {
 		super(userName, uuid, fakeName, fichas, money, xp, liga, ipAddress, lastIpAddress, hostname, onlineTime, lastLoggedIn, firstTimePlaying, ignoreAll, groups, ranks, friends, friendRequests, blockedPlayers, actualClan, actualParty, skype, skypeFriendOnly, twitter, youtubeChannel, steam, countryCode, language, hungerGamesStatus, battlecraftStatus, gameStatus, banHistory, nameHistory);
+		tag = TagManager.getPlayerDefaultTag(this);
 	}
 
 	public Group getServerGroup() {

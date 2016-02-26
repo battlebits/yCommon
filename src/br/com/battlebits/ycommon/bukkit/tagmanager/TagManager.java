@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 
 import br.com.battlebits.ycommon.bukkit.BukkitCommon;
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
+import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
 
 public class TagManager extends BukkitCommon {
 	public TagManager(BukkitMain main) {
@@ -17,6 +18,14 @@ public class TagManager extends BukkitCommon {
 		registerListener(new TagListener(this));
 	}
 
+	public void updatePlayerTag(Player p) {
+
+	}
+
+	public void removePlayerTag(Player p) {
+
+	}
+
 	public static boolean isNadhyneOuGustavo(UUID uuid) {
 		if (uuid.toString().equals("2a759cc7-0b01-4b7c-8f4a-a081a74dfab7"))
 			return true;
@@ -25,12 +34,11 @@ public class TagManager extends BukkitCommon {
 		return false;
 	}
 
-	public void updatePlayerTag(Player p) {
-
-	}
-
-	public void removePlayerTag(Player p) {
-
+	public static Tag getPlayerDefaultTag(BukkitPlayer p) {
+		if (TagManager.isNadhyneOuGustavo(p.getUuid())) {
+			return Tag.ESTRELA;
+		}
+		return Tag.valueOf(p.getServerGroup().toString());
 	}
 
 	@SuppressWarnings("deprecation")
