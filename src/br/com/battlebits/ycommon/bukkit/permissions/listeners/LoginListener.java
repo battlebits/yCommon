@@ -1,6 +1,5 @@
 package br.com.battlebits.ycommon.bukkit.permissions.listeners;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -18,11 +17,9 @@ import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
 import br.com.battlebits.ycommon.bukkit.permissions.PermissionManager;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
-import br.com.battlebits.ycommon.common.account.BattlePlayer;
-import br.com.battlebits.ycommon.common.enums.ServerType;
-import br.com.battlebits.ycommon.common.payment.constructors.Expire;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 
 public class LoginListener implements Listener {
@@ -37,43 +34,20 @@ public class LoginListener implements Listener {
 			@Override
 			public void run() {
 				for (Player player : manager.getServer().getOnlinePlayers()) {
-					updateAttachment(player, getServerGroup(player));
+					updateAttachment(player, getServerGroup(player) );
 				}
 			}
 		}.runTaskLater(manager.getPlugin(), 10);
-	}
-
-	private Group getServerGroup(Player bukkitPlayer) {
-		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(bukkitPlayer.getUniqueId());
-		Group group = Group.NORMAL;
-		if (!player.getGroups().isEmpty()) {
-			if (player.getGroups().containsKey(manager.getServerType())) {
-				group = player.getGroups().get(manager.getServerType());
-			} else if (player.getGroups().containsKey(ServerType.NETWORK)) {
-				group = player.getGroups().get(ServerType.NETWORK);
-			} else {
-				group = Group.ULTIMATE;
-			}
-		} else if (!player.getRanks().isEmpty()) {
-			Collection<Expire> expires = player.getRanks().values();
-			Expire expire = null;
-			for (Expire expireRank : expires) {
-				if (expireRank == null) {
-					expire = expireRank;
-				} else if (expireRank.getRankType().ordinal() > expire.getRankType().ordinal()) {
-					expire = expireRank;
-				}
-			}
-			if (expire != null)
-				group = Group.valueOf(expire.getRankType().name());
-		}
-		return group;
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onLogin(PlayerLoginEvent event) {
 		final Player player = event.getPlayer();
 		updateAttachment(player, getServerGroup(player));
+	}
+	
+	private Group getServerGroup(Player player) {
+		return ((BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId())).getServerGroup();
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)

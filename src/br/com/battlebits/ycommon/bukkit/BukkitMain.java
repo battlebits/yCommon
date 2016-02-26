@@ -6,6 +6,7 @@ import br.com.battlebits.ycommon.bukkit.accounts.BukkitAccount;
 import br.com.battlebits.ycommon.bukkit.bungee.MessageListener;
 import br.com.battlebits.ycommon.bukkit.event.UpdateScheduler;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
+import br.com.battlebits.ycommon.common.enums.ServerType;
 import net.minecraft.util.com.google.gson.Gson;
 
 public class BukkitMain extends JavaPlugin {
@@ -54,6 +55,10 @@ public class BukkitMain extends JavaPlugin {
 
 	public static Gson getGson() {
 		return gson;
+	}
+	
+	public static ServerType getServerType() {
+		return null;
 	}
 
 }
