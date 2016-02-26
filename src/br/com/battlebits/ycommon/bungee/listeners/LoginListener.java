@@ -72,6 +72,26 @@ public class LoginListener implements Listener {
 				BattlePlayer player = new BattlePlayer(userName, uuid, userName, fichas, money, xp, liga, event.getConnection().getAddress(), lastAddressIp, event.getConnection().getVirtualHost(), onlineTime, lastJoin, firstJoin, ignoreAll, groups, ranks, friends, friendRequests, blockedPlayers, clan, party, skype, skypeFriendsOnly, twitter, youtubeChannel, steam, countryCode, language, hgStatus, pvpStatus, gameStatus, banHistory, nameHistory);
 				BattlebitsAPI.getAccountCommon().loadBattlePlayer(uuid, player);
 				event.completeIntent(BungeeMain.getPlugin());
+				liga = null;
+				lastAddressIp = null;
+				groups = null;
+				ranks = null;
+				friends = null;
+				friendRequests = null;
+				blockedPlayers = null;
+				clan = null;
+				party = null;
+				skype = null;
+				twitter = null;
+				youtubeChannel = null;
+				steam = null;
+				countryCode = null;
+				language = null;
+				hgStatus = null;
+				pvpStatus = null;
+				gameStatus = null;
+				banHistory = null;
+				nameHistory = null;
 			}
 		});
 	}
@@ -96,7 +116,10 @@ public class LoginListener implements Listener {
 			reason = reason.replace("%forum%", BattlebitsAPI.FORUM_WEBSITE);
 			reason = reason.replace("%store%", BattlebitsAPI.STORE);
 			event.setCancelReason(reason);
+			reason = null;
 		}
+		player = null;
+		ban = null;
 	}
 
 }
