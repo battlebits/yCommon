@@ -77,4 +77,12 @@ public class Ban {
 		return duration;
 	}
 
+	public boolean hasExpired() {
+		return expire != -1 && expire < System.currentTimeMillis();
+	}
+
+	public boolean isPermanent() {
+		return expire == -1;
+	}
+
 }

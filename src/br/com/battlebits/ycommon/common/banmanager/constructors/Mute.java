@@ -77,4 +77,12 @@ public class Mute {
 		return duration;
 	}
 
+	public boolean hasExpired() {
+		return !isPermanent() && expire < System.currentTimeMillis();
+	}
+
+	public boolean isPermanent() {
+		return expire == -1;
+	}
+
 }

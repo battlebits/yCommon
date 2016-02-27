@@ -24,6 +24,7 @@ import br.com.battlebits.ycommon.common.payment.constructors.Expire;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
+import br.com.battlebits.ycommon.common.utils.DateUtils;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.event.LoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -102,17 +103,27 @@ public class LoginListener implements Listener {
 		Ban ban = player.getBanHistory().getActualBan();
 		if (ban != null) {
 			event.setCancelled(true);
-			// VOCE ESTÁ BANIDO
-			//
-			// VOCE FOI BANIDO POR %banned-By% NO DIA %day%
-			// MOTIVO: %reason%
-			//
-			// BANIDO INCORRETAMENTE? PEÇA APPEAL: %forum%
-			//
-			// COMPRE UNBAN EM %store% PARA ACESSAR NOVAMENTE
-			String reason = Translate.getTranslation(player.getLanguage(), "login-banned");
+
+			String reason = "";
+			if (ban.isPermanent()) {
+				reason = Translate.getTranslation(player.getLanguage(), "banned-permanent");
+				// VOCE FOI BANIDO(A) PERMANENTEMENTE
+				// POR %banned-By% NO DIA %day%
+				// MOTIVO: %reason%
+				//
+				// BANIDO(A) INCORRETAMENTE? PEÇA APPEAL: %forum%
+				// COMPRE UNBAN EM %store% PARA ACESSAR NOVAMENTE
+			} else {
+				reason = Translate.getTranslation(player.getLanguage(), "banned-temp");
+				// VOCE FOI BANIDO(A) TEMPORARIAMENTE
+				// POR %banned-By% NO DIA %day%
+				// MOTIVO: %reason%
+				//
+				// DURAÇAO DE BANIMENTO: %duration%
+			}
 			reason = reason.replace("%banned-By%", ban.getBannedBy());
 			reason = reason.replace("%reason%", ban.getReason());
+			reason = reason.replace("%duration%", DateUtils.formatDifference(player.getLanguage(), (ban.getDuration() - System.currentTimeMillis()) / 1000));
 			reason = reason.replace("%forum%", BattlebitsAPI.FORUM_WEBSITE);
 			reason = reason.replace("%store%", BattlebitsAPI.STORE);
 			event.setCancelReason(reason);

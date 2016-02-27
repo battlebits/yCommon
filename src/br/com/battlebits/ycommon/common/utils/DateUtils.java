@@ -11,6 +11,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import br.com.battlebits.ycommon.common.translate.Translate;
+import br.com.battlebits.ycommon.common.translate.languages.Language;
+
 public class DateUtils {
 
 	private static long timeDiff = 0;
@@ -19,7 +22,7 @@ public class DateUtils {
 		return timeDiff;
 	}
 
-	public static String formatDifference(long time) {
+	public static String formatDifference(Language lang, long time) {
 		if (time == 0) {
 			return "";
 		}
@@ -32,28 +35,28 @@ public class DateUtils {
 		StringBuilder sb = new StringBuilder();
 
 		if (day > 0) {
-			sb.append(day).append(" ").append(day == 1 ? "dia" : "dias").append(" ");
+			sb.append(day).append(" ").append(day == 1 ? Translate.getTranslation(lang, "day") : Translate.getTranslation(lang, "day") + "s").append(" ");
 		}
 
 		if (hours > 0) {
-			sb.append(hours).append(" ").append(hours == 1 ? "hora" : "horas").append(" ");
+			sb.append(hours).append(" ").append(hours == 1 ? Translate.getTranslation(lang, "hour") : Translate.getTranslation(lang, "hour") + "s").append(" ");
 		}
 
 		if (minutes > 0) {
-			sb.append(minutes).append(" ").append(minutes == 1 ? "minuto" : "minutos").append(" ");
+			sb.append(minutes).append(" ").append(minutes == 1 ? Translate.getTranslation(lang, "minute") : Translate.getTranslation(lang, "minute") + "s").append(" ");
 		}
 
 		if (seconds > 0) {
-			sb.append(seconds).append(" ").append(seconds == 1 ? "segundo" : "segundos");
+			sb.append(seconds).append(" ").append(seconds == 1 ? Translate.getTranslation(lang, "second") : Translate.getTranslation(lang, "second") + "s");
 		}
 
 		String diff = sb.toString();
 
-		return diff.isEmpty() ? "0 segundos" : diff;
+		return diff.isEmpty() ? "0 " + Translate.getTranslation(lang, "second") + "s" : diff;
 	}
 
-	public static String getDifferenceFormat(long timestamp) {
-		return formatDifference(timestamp - (System.currentTimeMillis() / 1000L));
+	public static String getDifferenceFormat(Language lang, long timestamp) {
+		return formatDifference(lang, timestamp - (System.currentTimeMillis() / 1000L));
 	}
 
 	public static long parseDateDiff(String time, boolean future) throws Exception {
