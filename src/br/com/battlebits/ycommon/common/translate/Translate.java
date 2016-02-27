@@ -6,12 +6,14 @@ public class Translate {
 
 	// banned-permanent
 	// banned-temp
+
+	// muted-permanent
+	// muted-temp
+
 	// day
 	// hour
 	// minute
 	// second
-	// muted-permanent
-	// muted-temp
 
 	public static String getTranslation(Language language, String messageId) {
 		return "";

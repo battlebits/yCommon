@@ -17,23 +17,32 @@ public class ChatListener implements Listener {
 	// [CLAN] RANK Nick (LigaSymbol) >>
 	// [TEMPO] DONO GustavoInacio (*) >>
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onChat(AsyncPlayerChatEvent event) {
 		Player p = event.getPlayer();
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
 		Mute mute = player.getBanHistory().getActualMute();
 		if (mute == null)
 			return;
+		String message = "";
 		if (mute.isPermanent()) {
-
+			message = Translate.getTranslation(player.getLanguage(), "muted-permanent");
+			// VOCE FOI MUTADO PERMANENTE POR %muted-By% DURANTE %duration%. Motivo: %reason%.
+			// COMPRE UNMUTE EM %store%;
 		} else {
-			// VOCE FOI MUTADO POR 
-			String message = Translate.getTranslation(player.getLanguage(), "muted-temp");
-			message = message.replace("%duration%", DateUtils.formatDifference(player.getLanguage(), (mute.getDuration() - System.currentTimeMillis()) / 1000));
-			message = message.replace("%muted-By%", mute.getMutedBy());
-			message = message.replace("%reason%", mute.getReason());
-			p.sendMessage(message);
+			message = Translate.getTranslation(player.getLanguage(), "muted-temp");
+			// VOCE FOI MUTADO TEMPORARIAMENTE POR %muted-By% DURANTE %duration%. Motivo: %reason%.
 		}
+		message = message.replace("%duration%", DateUtils.formatDifference(player.getLanguage(), (mute.getDuration() - System.currentTimeMillis()) / 1000));
+		message = message.replace("%forum%", BattlebitsAPI.FORUM_WEBSITE);
+		message = message.replace("%store%", BattlebitsAPI.STORE);
+		message = message.replace("%muted-By%", mute.getMutedBy());
+		message = message.replace("%reason%", mute.getReason());
+		p.sendMessage(message);
 		event.setCancelled(true);
+		message = null;
+		mute = null;
+		p = null;
+		player = null;
 	}
 }
