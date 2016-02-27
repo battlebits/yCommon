@@ -14,9 +14,6 @@ import br.com.battlebits.ycommon.common.utils.DateUtils;
 
 public class ChatListener implements Listener {
 
-	// [CLAN] RANK Nick (LigaSymbol) >>
-	// [TEMPO] DONO GustavoInacio (*) >>
-
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onChat(AsyncPlayerChatEvent event) {
 		Player p = event.getPlayer();

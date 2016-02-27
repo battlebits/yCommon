@@ -60,7 +60,7 @@ public class BukkitPlayer extends BattlePlayer {
 		return group;
 	}
 
-	public Tag getPrefix() {
+	public Tag getTag() {
 		return tag;
 	}
 
