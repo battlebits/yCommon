@@ -89,6 +89,10 @@ public class BungeeMain extends Plugin {
 		username = config.getString("sql-username");
 		password = config.getString("sql-password");
 	}
+	
+	public MySQLBackend getConnection() {
+		return mysql;
+	}
 
 	public static BungeeMain getPlugin() {
 		return plugin;
