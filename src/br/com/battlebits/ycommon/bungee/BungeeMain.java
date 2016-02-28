@@ -1,15 +1,30 @@
 package br.com.battlebits.ycommon.bungee;
 
+import java.io.File;
 import java.io.IOException;
 
 import br.com.battlebits.ycommon.bungee.listeners.LoginListener;
 import br.com.battlebits.ycommon.bungee.networking.CommonServer;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
+import br.com.battlebits.ycommon.common.connection.backend.MySQLBackend;
 import net.md_5.bungee.api.plugin.Plugin;
+import net.md_5.bungee.config.Configuration;
+import net.md_5.bungee.config.ConfigurationProvider;
+import net.md_5.bungee.config.YamlConfiguration;
 
 public class BungeeMain extends Plugin {
 
 	private static BungeeMain plugin;
+	private MySQLBackend mysql;
+
+	// MYSQL DATA
+	private String hostname;
+	private int port;
+	private String database;
+	private String username;
+	private String password;
+
+	private Configuration config;
 
 	private CommonServer commonServer;
 
@@ -29,6 +44,13 @@ public class BungeeMain extends Plugin {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		try {
+			config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(getDataFolder(), "config.yml"));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		loadConfiguration();
+		mysql = new MySQLBackend(hostname, port, database, username, password);
 		getProxy().registerChannel(BattlebitsAPI.getBungeeChannel());
 		loadListeners();
 	}
@@ -40,10 +62,32 @@ public class BungeeMain extends Plugin {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		try {
+			mysql.closeConnection();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		config = null;
+		commonServer = null;
+		plugin = null;
+		mysql = null;
+		hostname = null;
+		port = 0;
+		database = null;
+		username = null;
+		password = null;
 	}
 
 	private void loadListeners() {
 		getProxy().getPluginManager().registerListener(this, new LoginListener());
+	}
+
+	private void loadConfiguration() {
+		hostname = config.getString("sql-hostname");
+		port = config.getInt("sql-port");
+		database = config.getString("sql-database");
+		username = config.getString("sql-username");
+		password = config.getString("sql-password");
 	}
 
 	public static BungeeMain getPlugin() {
