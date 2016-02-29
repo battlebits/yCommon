@@ -1,7 +1,6 @@
 package br.com.battlebits.ycommon.bungee.managers;
 
 import java.net.InetSocketAddress;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.cache.Cache;
@@ -24,7 +23,7 @@ public class BanManager {
 		banCache.put(player.getIpAddress(), ban);
 	}
 
-	public Ban getIpBan(InetSocketAddress address) throws ExecutionException {
+	public Ban getIpBan(InetSocketAddress address){
 		return banCache.asMap().get(address);
 	}
 }

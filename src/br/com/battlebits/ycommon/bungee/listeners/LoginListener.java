@@ -7,7 +7,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
 
 import br.com.battlebits.ycommon.bungee.BungeeMain;
 import br.com.battlebits.ycommon.bungee.utils.GeoIpUtils;
@@ -71,16 +70,13 @@ public class LoginListener implements Listener {
 				BattlebitsAPI.debug("BANNING > STARTING");
 				BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(event.getConnection().getUniqueId());
 
-				if (player.getBanHistory().getActualBan() == null)
-					try {
-						Ban ipBan = BungeeMain.getPlugin().getBanManager().getIpBan(ipAdress);
-						if (ipBan != null) {
-							if (!ipBan.getBannedPlayer().equals(player.getUuid()))
-								BungeeMain.getPlugin().getBanManager().ban(player, new Ban(player.getUuid(), "CONSOLE", ipAdress.getHostString(), "Conta Alternativa"));
-						}
-					} catch (ExecutionException e2) {
+				if (player.getBanHistory().getActualBan() == null) {
+					Ban ipBan = BungeeMain.getPlugin().getBanManager().getIpBan(ipAdress);
+					if (ipBan != null) {
+						if (!ipBan.getBannedPlayer().equals(player.getUuid()))
+							BungeeMain.getPlugin().getBanManager().ban(player, new Ban(player.getUuid(), "CONSOLE", ipAdress.getHostString(), "Conta Alternativa"));
 					}
-
+				}
 				Ban ban = player.getBanHistory().getActualBan();
 				if (ban != null) {
 					event.setCancelled(true);
