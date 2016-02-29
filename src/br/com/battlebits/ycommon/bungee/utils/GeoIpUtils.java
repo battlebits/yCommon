@@ -1,6 +1,11 @@
 package br.com.battlebits.ycommon.bungee.utils;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashMap;
 
 import br.com.battlebits.ycommon.bungee.BungeeMain;
@@ -14,7 +19,7 @@ public class GeoIpUtils {
 			return ipStorage.get(ipAdress);
 		} else {
 			String url = "http://api.ipinfodb.com/v3/ip-city/?format=json&key=d7859a91e5346872d0378a2674821fbd60bc07ed63684c3286c083198f024138&ip=" + ipAdress;
-			IpCityResponse ipCityResponse = BungeeMain.getGson().fromJson(url, IpCityResponse.class);
+			IpCityResponse ipCityResponse = BungeeMain.getGson().fromJson(getUrlSource(url), IpCityResponse.class);
 			if ("OK".equals(ipCityResponse.getStatusCode())) {
 				System.out.println(ipCityResponse.getCountryCode() + ", " + ipCityResponse.getRegionName() + ", " + ipCityResponse.getCityName());
 				ipStorage.put(ipAdress, ipCityResponse);
@@ -24,6 +29,38 @@ public class GeoIpUtils {
 			}
 		}
 		return null;
+	}
+
+	private static String getUrlSource(String url) {
+		URL url2 = null;
+		try {
+			url2 = new URL(url);
+		} catch (MalformedURLException localMalformedURLException) {
+		}
+		URLConnection yc = null;
+		try {
+			yc = url2.openConnection();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		BufferedReader in = null;
+		try {
+			in = new BufferedReader(new InputStreamReader(yc.getInputStream(), "UTF-8"));
+		} catch (IOException localIOException1) {
+		}
+		StringBuilder a = new StringBuilder();
+		try {
+			String inputLine;
+			while ((inputLine = in.readLine()) != null) {
+				a.append(inputLine);
+			}
+		} catch (IOException localIOException2) {
+		}
+		try {
+			in.close();
+		} catch (IOException localIOException3) {
+		}
+		return a.toString();
 	}
 
 	/**

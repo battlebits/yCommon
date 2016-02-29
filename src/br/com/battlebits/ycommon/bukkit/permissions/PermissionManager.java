@@ -20,7 +20,7 @@ public class PermissionManager extends BukkitCommon {
 
 	@Override
 	public void onEnable() {
-		getServer().getPluginManager().registerEvents(superms = new LoginListener(this), getPlugin());
+		registerListener(superms = new LoginListener(this));
 		regexPerms = new RegexPermissions(this);
 	}
 

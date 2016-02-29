@@ -1,13 +1,16 @@
 package br.com.battlebits.ycommon.bungee.listeners;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 import br.com.battlebits.ycommon.bungee.BungeeMain;
+import br.com.battlebits.ycommon.bungee.utils.GeoIpUtils;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.banmanager.constructors.Ban;
@@ -30,12 +33,12 @@ public class LoginListener implements Listener {
 		ProxyServer.getInstance().getScheduler().runAsync(BungeeMain.getPlugin(), new Runnable() {
 			@Override
 			public void run() {
-				String countryCode = "UNDEFINED";
-				/*try {
+				String countryCode = "-";
+				try {
 					countryCode = GeoIpUtils.getIpStatus(ipAdress.getHostString()).getCountryCode();
 				} catch (IOException e1) {
 					e1.printStackTrace();
-				}*/
+				}
 				BattlebitsAPI.debug("CONNECTION > STARTING");
 
 				Connection connection = BungeeMain.getPlugin().getConnection().getConnection();
@@ -67,6 +70,15 @@ public class LoginListener implements Listener {
 				}
 				BattlebitsAPI.debug("BANNING > STARTING");
 				BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(event.getConnection().getUniqueId());
+
+				try {
+					Ban ipBan = BattlebitsAPI.getBanCommon().getIpBan(ipAdress);
+					if (ipBan != null) {
+						BattlebitsAPI.getBanCommon().ban(player, new Ban(player.getUuid(), "CONSOLE", ipAdress.getHostString(), "Conta Alternativa"));
+					}
+				} catch (ExecutionException e2) {
+				}
+
 				Ban ban = player.getBanHistory().getActualBan();
 				if (ban != null) {
 					event.setCancelled(true);

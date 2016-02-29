@@ -19,6 +19,20 @@ public class Ban {
 	private long expire;
 	private long duration;
 
+	public Ban(UUID bannedPlayer, String bannedBy, String bannedIp, String reason) {
+		this.bannedPlayer = bannedPlayer;
+		this.bannedBy = bannedBy;
+		this.bannedIp = bannedIp;
+		this.bannedByUUID = null;
+		this.banTime = System.currentTimeMillis();
+		this.reason = reason;
+		this.unbanned = false;
+		this.unbannedBy = null;
+		this.unbannedByUUID = null;
+		this.expire = -1;
+		this.duration = -1;
+	}
+	
 	public Ban(UUID bannedPlayer, String bannedBy, String bannedIp, UUID bannedByUUID, long banTime, String reason, boolean unbanned, String unbannedBy, UUID unbannedByUUID, long expire, long duration) {
 		this.bannedPlayer = bannedPlayer;
 		this.bannedBy = bannedBy;
