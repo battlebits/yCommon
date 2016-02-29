@@ -3,6 +3,7 @@ package br.com.battlebits.ycommon.common.connection.backend;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.concurrent.locks.ReentrantLock;
 
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
@@ -32,8 +33,13 @@ public class MySQLBackend extends BattleConnection {
 		connection = DriverManager.getConnection("jdbc:mysql://" + hostname + ":" + port + "/" + database, username, password);
 	}
 
-	public void update(String sqlString) {
-		
+	public void update(String sqlString) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+		if(!isConnected())
+			recallConnection();
+		Statement stmt = connection.createStatement();
+		stmt.executeUpdate(sqlString);
+		stmt.close();
+		stmt = null;
 	}
 
 	public void closeConnection() throws SQLException {

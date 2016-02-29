@@ -25,9 +25,13 @@ public class AccountListener implements Listener {
 		DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
 		DataInputStream inputStream = new DataInputStream(socket.getInputStream());
 		outputStream.writeUTF("Account");
+		outputStream.writeUTF("Load");
 		outputStream.writeUTF(event.getUniqueId().toString());
 		outputStream.flush();
+		BattlebitsAPI.debug("SOCKET > MESSAGE SENT");
+		BattlebitsAPI.debug("SOCKET > MESSAGE WAITING");
 		String command = inputStream.readUTF();
+		BattlebitsAPI.debug("SOCKET > MESSAGE RECEIVED");
 		if (command.equals("Account")) {
 			String json = inputStream.readUTF();
 			BukkitPlayer battlePlayer = BukkitMain.getGson().fromJson(json, BukkitPlayer.class);

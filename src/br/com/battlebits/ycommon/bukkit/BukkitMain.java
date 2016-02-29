@@ -5,6 +5,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitAccount;
 import br.com.battlebits.ycommon.bukkit.bungee.MessageListener;
 import br.com.battlebits.ycommon.bukkit.event.UpdateScheduler;
+import br.com.battlebits.ycommon.bukkit.listeners.ChatListener;
+import br.com.battlebits.ycommon.bukkit.listeners.PlayerListener;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.enums.ServerType;
 import net.minecraft.util.com.google.gson.Gson;
@@ -33,12 +35,18 @@ public class BukkitMain extends JavaPlugin {
 		this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new MessageListener());
 		registerCommonManagement();
 		enableCommonManagement();
+		registerListeners();
 		getServer().getScheduler().runTaskTimer(this, new UpdateScheduler(), 1, 1);
 	}
 
 	@Override
 	public void onDisable() {
 		accountManager.onDisable();
+	}
+
+	private void registerListeners() {
+		getServer().getPluginManager().registerEvents(new ChatListener(), this);
+		getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 	}
 
 	private void registerCommonManagement() {
@@ -56,7 +64,7 @@ public class BukkitMain extends JavaPlugin {
 	public static Gson getGson() {
 		return gson;
 	}
-	
+
 	public static ServerType getServerType() {
 		return null;
 	}

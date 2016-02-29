@@ -3,7 +3,10 @@ package br.com.battlebits.ycommon.bungee;
 import java.io.File;
 import java.io.IOException;
 
+import com.google.gson.Gson;
+
 import br.com.battlebits.ycommon.bungee.listeners.LoginListener;
+import br.com.battlebits.ycommon.bungee.listeners.QuitListener;
 import br.com.battlebits.ycommon.bungee.networking.CommonServer;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.connection.backend.MySQLBackend;
@@ -16,7 +19,7 @@ public class BungeeMain extends Plugin {
 
 	private static BungeeMain plugin;
 	private MySQLBackend mysql;
-
+	private static Gson gson = new Gson();
 	// MYSQL DATA
 	private String hostname = "localhost";
 	private int port = 3306;
@@ -39,6 +42,7 @@ public class BungeeMain extends Plugin {
 
 	@Override
 	public void onEnable() {
+		//loadConfiguration();
 		try {
 			getProxy().getScheduler().runAsync(this, commonServer = new CommonServer());
 		} catch (Exception e) {
@@ -49,8 +53,12 @@ public class BungeeMain extends Plugin {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		loadConfiguration();
 		mysql = new MySQLBackend(hostname, port, database, username, password);
+		try {
+			mysql.startConnection();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		getProxy().registerChannel(BattlebitsAPI.getBungeeChannel());
 		loadListeners();
 	}
@@ -80,18 +88,23 @@ public class BungeeMain extends Plugin {
 
 	private void loadListeners() {
 		getProxy().getPluginManager().registerListener(this, new LoginListener());
+		getProxy().getPluginManager().registerListener(this, new QuitListener());
 	}
 
 	private void loadConfiguration() {
-		hostname = config.getString("sql-hostname");
-		port = config.getInt("sql-port");
-		database = config.getString("sql-database");
-		username = config.getString("sql-username");
-		password = config.getString("sql-password");
+		hostname = config.getString("database.hostname");
+		port = config.getInt("database.port");
+		database = config.getString("database.database");
+		username = config.getString("database.username");
+		password = config.getString("database.password");
 	}
-	
+
 	public MySQLBackend getConnection() {
 		return mysql;
+	}
+
+	public static Gson getGson() {
+		return gson;
 	}
 
 	public static BungeeMain getPlugin() {

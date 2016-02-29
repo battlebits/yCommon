@@ -1,10 +1,13 @@
 package br.com.battlebits.ycommon.common.account;
 
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.battlecraft.BattlecraftStatus;
 import br.com.battlebits.ycommon.common.account.game.GameStatus;
 import br.com.battlebits.ycommon.common.account.hungergames.HGStatus;
@@ -35,11 +38,11 @@ public class BattlePlayer {
 
 	// ENDEREÇOS E NETWORKING
 	private InetSocketAddress ipAddress;
-	private InetSocketAddress hostname;
 	private String lastIpAddress;
 
 	// PLAYING
 	private long onlineTime;
+	private long joinTime;
 	private long lastLoggedIn;
 	private long firstTimePlaying;
 
@@ -79,11 +82,53 @@ public class BattlePlayer {
 	private List<String> nameHistory;
 	private BanHistory banHistory;
 
-	public BattlePlayer() {
-		// TODO Auto-generated constructor stub
+	public BattlePlayer(String userName, UUID uuid, InetSocketAddress ipAddress, String countryCode) {
+		this.userName = userName;
+		this.uuid = uuid;
+		this.fakeName = userName;
+
+		this.fichas = 0;
+		this.money = 0;
+		this.xp = 0;
+		this.liga = Liga.FIRST;
+
+		this.ipAddress = ipAddress;
+		this.lastIpAddress = ipAddress.getHostString();
+
+		this.onlineTime = 0;
+		this.lastLoggedIn = System.currentTimeMillis();
+		this.firstTimePlaying = System.currentTimeMillis();
+
+		this.ignoreAll = false;
+
+		this.groups = new HashMap<>();
+		this.ranks = new HashMap<>();
+
+		this.friends = new HashMap<>();
+		this.friendRequests = new HashMap<>();
+		this.blockedPlayers = new HashMap<>();
+
+		this.actualClan = null;
+		this.actualParty = null;
+
+		this.skype = "";
+		this.skypeFriendOnly = true;
+		this.twitter = "";
+		this.youtubeChannel = "";
+		this.steam = "";
+
+		this.countryCode = countryCode;
+		this.language = BattlebitsAPI.getDefaultLanguage();
+
+		this.hungerGamesStatus = new HGStatus();
+		this.battlecraftStatus = new BattlecraftStatus();
+		this.gameStatus = new GameStatus();
+
+		this.nameHistory = new ArrayList<>();
+		this.banHistory = new BanHistory();
 	}
-	
-	public BattlePlayer(String userName, UUID uuid, String fakeName, int fichas, int money, int xp, Liga liga, InetSocketAddress ipAddress, String lastIpAddress, InetSocketAddress hostname, long onlineTime, long lastLoggedIn, long firstTimePlaying, boolean ignoreAll, Map<ServerType, Group> groups, Map<Group, Expire> ranks, Map<UUID, Friend> friends, Map<UUID, Request> friendRequests, Map<UUID, Blocked> blockedPlayers, Clan actualClan, Party actualParty, String skype, boolean skypeFriendOnly, String twitter, String youtubeChannel, String steam, String countryCode, Language language, HGStatus hungerGamesStatus, BattlecraftStatus battlecraftStatus, GameStatus gameStatus, BanHistory banHistory, List<String> nameHistory) {
+
+	public BattlePlayer(String userName, UUID uuid, String fakeName, int fichas, int money, int xp, Liga liga, InetSocketAddress ipAddress, String lastIpAddress, long onlineTime, long lastLoggedIn, long firstTimePlaying, boolean ignoreAll, Map<ServerType, Group> groups, Map<Group, Expire> ranks, Map<UUID, Friend> friends, Map<UUID, Request> friendRequests, Map<UUID, Blocked> blockedPlayers, Clan actualClan, Party actualParty, String skype, boolean skypeFriendOnly, String twitter, String youtubeChannel, String steam, String countryCode, Language language, HGStatus hungerGamesStatus, BattlecraftStatus battlecraftStatus, GameStatus gameStatus, BanHistory banHistory, List<String> nameHistory) {
 		this.userName = userName;
 		this.uuid = uuid;
 		this.fakeName = fakeName;
@@ -95,9 +140,9 @@ public class BattlePlayer {
 
 		this.ipAddress = ipAddress;
 		this.lastIpAddress = lastIpAddress;
-		this.hostname = hostname;
 
 		this.onlineTime = onlineTime;
+		this.joinTime = System.currentTimeMillis();
 		this.lastLoggedIn = lastLoggedIn;
 		this.firstTimePlaying = firstTimePlaying;
 
@@ -167,11 +212,11 @@ public class BattlePlayer {
 	}
 
 	public long getOnlineTime() {
-		return onlineTime;
+		return onlineTime + (System.currentTimeMillis() - joinTime);
 	}
 
-	public InetSocketAddress getHostname() {
-		return hostname;
+	public String getHostname() {
+		return ipAddress.getHostName();
 	}
 
 	public long getLastLoggedIn() {
@@ -348,6 +393,18 @@ public class BattlePlayer {
 
 	public void updateBanHistory(BanHistory banHistory) {
 		this.banHistory = banHistory;
+	}
+
+	public void setJoinData(InetSocketAddress ipAdrress, String countryCode) {
+		this.ipAddress = ipAdrress;
+		joinTime = System.currentTimeMillis();
+		this.countryCode = countryCode;
+	}
+
+	public void setLeaveData() {
+		lastLoggedIn = System.currentTimeMillis();
+		onlineTime = getOnlineTime();
+		lastIpAddress = ipAddress.getHostString();
 	}
 
 	@Override

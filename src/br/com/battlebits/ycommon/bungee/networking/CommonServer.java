@@ -8,8 +8,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.UUID;
 
-import com.google.gson.Gson;
-
+import br.com.battlebits.ycommon.bungee.BungeeMain;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 
 public class CommonServer implements Runnable {
@@ -78,7 +77,7 @@ public class CommonServer implements Runnable {
 
 	public void handleAccountRequest(UUID uuid, DataOutputStream output) throws Exception {
 		output.writeUTF("Account");
-		String json = new Gson().toJson(BattlebitsAPI.getAccountCommon().getBattlePlayer(uuid));
+		String json = BungeeMain.getGson().toJson(BattlebitsAPI.getAccountCommon().getBattlePlayer(uuid));
 		output.writeUTF(json);
 		output.flush();
 	}

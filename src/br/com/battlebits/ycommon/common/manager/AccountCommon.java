@@ -36,7 +36,7 @@ public class AccountCommon {
 	}
 
 	public BattlePlayer getBattlePlayer(UUID uuid) {
-		return players.containsKey(uuid) ? players.get(uuid) : players.put(uuid, new BattlePlayer());
+		return players.containsKey(uuid) ? players.get(uuid) : null;
 	}
 
 	public void unloadBattlePlayer(UUID uuid) {
