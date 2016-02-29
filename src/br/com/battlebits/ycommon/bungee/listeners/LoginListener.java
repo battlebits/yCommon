@@ -1,6 +1,5 @@
 package br.com.battlebits.ycommon.bungee.listeners;
 
-import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,7 +8,6 @@ import java.sql.SQLException;
 import java.util.UUID;
 
 import br.com.battlebits.ycommon.bungee.BungeeMain;
-import br.com.battlebits.ycommon.bungee.utils.GeoIpUtils;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.banmanager.constructors.Ban;
