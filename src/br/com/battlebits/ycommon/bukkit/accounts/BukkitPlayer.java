@@ -8,9 +8,7 @@ import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bukkit.tagmanager.Tag;
 import br.com.battlebits.ycommon.bukkit.tagmanager.TagManager;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
-import br.com.battlebits.ycommon.common.account.battlecraft.BattlecraftStatus;
 import br.com.battlebits.ycommon.common.account.game.GameStatus;
-import br.com.battlebits.ycommon.common.account.hungergames.HGStatus;
 import br.com.battlebits.ycommon.common.banmanager.history.BanHistory;
 import br.com.battlebits.ycommon.common.clans.Clan;
 import br.com.battlebits.ycommon.common.enums.ServerType;
@@ -146,16 +144,6 @@ public class BukkitPlayer extends BattlePlayer {
 	@Override
 	public void setLanguage(Language language) {
 		super.setLanguage(language);
-	}
-
-	@Override
-	public void updateHungerGamesStatus(HGStatus hungerGamesStatus) {
-		super.updateHungerGamesStatus(hungerGamesStatus);
-	}
-
-	@Override
-	public void updateBattlecraftStatus(BattlecraftStatus battlecraftStatus) {
-		super.updateBattlecraftStatus(battlecraftStatus);
 	}
 
 	@Override

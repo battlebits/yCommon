@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
+import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 
@@ -44,6 +45,7 @@ public class PlayerListener implements Listener {
 			}
 			r.sendMessage(format + event.getMessage());
 		}
+		BukkitMain.getPlugin().getLogger().info("<" + player.getUserName() + "> " + event.getMessage());
 		event.setCancelled(true);
 		format = null;
 		player = null;

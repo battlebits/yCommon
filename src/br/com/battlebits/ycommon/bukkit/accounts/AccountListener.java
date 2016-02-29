@@ -14,13 +14,14 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
+import br.com.battlebits.ycommon.bungee.networking.CommonServer;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 
 public class AccountListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onAsync(AsyncPlayerPreLoginEvent event) throws UnknownHostException, IOException {
-		Socket socket = new Socket("localhost", 57966);
+		Socket socket = new Socket(CommonServer.ADDRESS, CommonServer.PORT);
 		BattlebitsAPI.debug("SOCKET > CONNECT");
 		DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
 		DataInputStream inputStream = new DataInputStream(socket.getInputStream());

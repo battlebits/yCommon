@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashMap;
 
 import com.google.gson.Gson;
@@ -116,30 +115,33 @@ public class BungeeMain extends Plugin {
 	private void loadTranslations() {
 		try {
 			BattlebitsAPI.debug("TRANSLATIONS > LOADING");
-			PreparedStatement stmt = getConnection().getConnection().prepareStatement("SELECT * FROM `translations`;");
-			ResultSet result = stmt.executeQuery();
-			BattlebitsAPI.debug("TRANSLATIONS > EXCUTED");
-			if (result.next()) {
-				for (Language lang : Language.values()) {
-					String json = result.getString(lang.toString());
-					if (json != null) {
-						HashMap<String, String> translation = BungeeMain.getGson().fromJson(json, new TypeToken<HashMap<String, String>>() {
+			PreparedStatement stmt = null;
+			ResultSet result = null;
+			for (Language lang : Language.values()) {
+				try {
+					stmt = getConnection().getConnection().prepareStatement("SELECT * FROM `translations` WHERE `language`='" + lang + "';");
+					result = stmt.executeQuery();
+					if (result.next()) {
+						HashMap<String, String> translation = BungeeMain.getGson().fromJson(result.getString("json"), new TypeToken<HashMap<String, String>>() {
 						}.getType());
 						Translate.loadTranslations(lang, translation);
 						BattlebitsAPI.debug(lang.toString() + " > LOADED");
-					} else {
-						BattlebitsAPI.debug(lang.toString() + " > FAILED");
+
 					}
+					result.close();
+					stmt.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+					BattlebitsAPI.debug(lang.toString() + " > FAILED");
 				}
 			}
-			result.close();
-			stmt.close();
 			result = null;
 			stmt = null;
 			BattlebitsAPI.debug("TRANSLATIONS > CLOSE");
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 	}
 
 	public MySQLBackend getConnection() {

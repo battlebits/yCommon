@@ -3,6 +3,7 @@ package br.com.battlebits.ycommon.common.translate;
 import java.util.HashMap;
 import java.util.Map;
 
+import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
 
 public class Translate {
@@ -38,7 +39,23 @@ public class Translate {
 	private static Map<Language, Map<String, String>> languageTranslations = new HashMap<>();
 
 	public static String getTranslation(Language language, String messageId) {
+		if(!languageTranslations.containsKey(language)) {
+			BattlebitsAPI.debug(language.toString() + " > NAO ENCONTRADA");
+			return null;
+		}
+		if(!languageTranslations.get(language).containsKey(messageId)) {
+			BattlebitsAPI.debug(language.toString() + " > " + messageId + " > NAO ENCONTRADA");
+			return null;
+		}
 		return languageTranslations.get(language).get(messageId);
+	}
+	
+	public static Map<String, String> getMapTranslation(Language language) {
+		if(!languageTranslations.containsKey(language)) {
+			BattlebitsAPI.debug(language.toString() + " > NAO ENCONTRADA");
+			return null;
+		}
+		return languageTranslations.get(language);
 	}
 
 	public static void loadTranslations(Language lang, Map<String, String> json) {

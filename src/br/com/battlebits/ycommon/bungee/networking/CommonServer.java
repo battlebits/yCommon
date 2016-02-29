@@ -10,12 +10,14 @@ import java.util.UUID;
 
 import br.com.battlebits.ycommon.bungee.BungeeMain;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
+import br.com.battlebits.ycommon.common.translate.Translate;
+import br.com.battlebits.ycommon.common.translate.languages.Language;
 
 public class CommonServer implements Runnable {
 
 	private ServerSocket server;
-	private static final int PORT = 57966;
-	private static final String ADDRESS = "0.0.0.0";
+	public static final int PORT = 57966;
+	public static final String ADDRESS = "localhost";
 
 	private static boolean RUNNING = false;
 
@@ -36,9 +38,10 @@ public class CommonServer implements Runnable {
 				DataOutputStream outputStream = new DataOutputStream(client.getOutputStream());
 
 				String command = inputStream.readUTF();
+				String subComand = null;
 				switch (command) {
 				case "Account":
-					String subComand = inputStream.readUTF();
+					subComand = inputStream.readUTF();
 					UUID uuid = UUID.fromString(inputStream.readUTF());
 					switch (subComand) {
 					case "Load":
@@ -50,7 +53,16 @@ public class CommonServer implements Runnable {
 						break;
 					}
 					uuid = null;
-					subComand = null;
+					break;
+				case "Translations":
+					subComand = inputStream.readUTF();
+					switch (subComand) {
+					case "Load":
+						handleTranslationsLoad(Language.valueOf(inputStream.readUTF()), outputStream);
+						break;
+					default:
+						break;
+					}
 					break;
 				default:
 					break;
@@ -60,6 +72,7 @@ public class CommonServer implements Runnable {
 				inputStream.close();
 				client.close();
 
+				subComand = null;
 				command = null;
 				outputStream = null;
 				inputStream = null;
@@ -82,6 +95,13 @@ public class CommonServer implements Runnable {
 		output.flush();
 	}
 
+	public void handleTranslationsLoad(Language lang, DataOutputStream output) throws Exception {
+		output.writeUTF("Translations");
+		String json = BungeeMain.getGson().toJson(Translate.getMapTranslation(lang));
+		output.writeUTF(json);
+		output.flush();
+	}
+	
 	public void stopServer() throws IOException {
 		RUNNING = false;
 		server.close();

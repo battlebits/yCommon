@@ -8,9 +8,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
-import br.com.battlebits.ycommon.common.account.battlecraft.BattlecraftStatus;
 import br.com.battlebits.ycommon.common.account.game.GameStatus;
-import br.com.battlebits.ycommon.common.account.hungergames.HGStatus;
 import br.com.battlebits.ycommon.common.banmanager.history.BanHistory;
 import br.com.battlebits.ycommon.common.clans.Clan;
 import br.com.battlebits.ycommon.common.enums.Liga;
@@ -74,8 +72,6 @@ public class BattlePlayer {
 	private Language language;
 
 	// STATUS
-	private HGStatus hungerGamesStatus;
-	private BattlecraftStatus battlecraftStatus;
 	private GameStatus gameStatus;
 
 	// HISTORIA
@@ -123,8 +119,6 @@ public class BattlePlayer {
 		this.countryCode = countryCode;
 		this.language = BattlebitsAPI.getDefaultLanguage();
 
-		this.hungerGamesStatus = new HGStatus();
-		this.battlecraftStatus = new BattlecraftStatus();
 		this.gameStatus = new GameStatus();
 
 		this.nameHistory = new ArrayList<>();
@@ -247,14 +241,6 @@ public class BattlePlayer {
 		return language;
 	}
 
-	public HGStatus getHungerGamesStatus() {
-		return hungerGamesStatus;
-	}
-
-	public BattlecraftStatus getBattlecraftStatus() {
-		return battlecraftStatus;
-	}
-
 	public GameStatus getGameStatus() {
 		return gameStatus;
 	}
@@ -333,14 +319,6 @@ public class BattlePlayer {
 
 	public void setLanguage(Language language) {
 		this.language = language;
-	}
-
-	public void updateHungerGamesStatus(HGStatus hungerGamesStatus) {
-		this.hungerGamesStatus = hungerGamesStatus;
-	}
-
-	public void updateBattlecraftStatus(BattlecraftStatus battlecraftStatus) {
-		this.battlecraftStatus = battlecraftStatus;
 	}
 
 	public void updateGameStatus(GameStatus gameStatus) {
@@ -434,10 +412,6 @@ public class BattlePlayer {
 		builder.append("LANGUAGE > " + language);
 		builder.append(" | ");
 
-		builder.append("HGSTATUS > " + hungerGamesStatus);
-		builder.append(" | ");
-		builder.append("PVPSTATUS > " + battlecraftStatus);
-		builder.append(" | ");
 		builder.append("GAMESTATUS > " + gameStatus);
 		builder.append(" | ");
 

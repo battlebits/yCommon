@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.UUID;
 
 import br.com.battlebits.ycommon.bungee.BungeeMain;
@@ -98,6 +99,9 @@ public class LoginListener implements Listener {
 						//
 						// DURAÇAO DE BANIMENTO: %duration%
 					}
+					Calendar calendar = Calendar.getInstance();
+					calendar.setTimeInMillis(ban.getBanTime());
+					reason = reason.replace("%day%", calendar.getTime().toString());
 					reason = reason.replace("%banned-By%", ban.getBannedBy());
 					reason = reason.replace("%reason%", ban.getReason());
 					reason = reason.replace("%duration%", DateUtils.formatDifference(player.getLanguage(), (ban.getDuration() - System.currentTimeMillis()) / 1000));

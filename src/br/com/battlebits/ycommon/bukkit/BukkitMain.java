@@ -1,5 +1,12 @@
 package br.com.battlebits.ycommon.bukkit;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.HashMap;
+
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -9,12 +16,15 @@ import br.com.battlebits.ycommon.bukkit.event.UpdateScheduler;
 import br.com.battlebits.ycommon.bukkit.listeners.ChatListener;
 import br.com.battlebits.ycommon.bukkit.listeners.PlayerListener;
 import br.com.battlebits.ycommon.bukkit.permissions.PermissionManager;
+import br.com.battlebits.ycommon.bungee.networking.CommonServer;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.enums.BattleInstance;
 import br.com.battlebits.ycommon.common.enums.ServerType;
 import br.com.battlebits.ycommon.common.translate.Translate;
+import br.com.battlebits.ycommon.common.translate.languages.Language;
 import net.minecraft.util.com.google.gson.Gson;
+import net.minecraft.util.com.google.gson.reflect.TypeToken;
 
 public class BukkitMain extends JavaPlugin {
 
@@ -39,6 +49,11 @@ public class BukkitMain extends JavaPlugin {
 		this.getServer().getMessenger().registerIncomingPluginChannel(this, BattlebitsAPI.getBungeeChannel(), new MessageListener());
 		this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 		this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new MessageListener());
+		try {
+			loadTranslations();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		registerCommonManagement();
 		enableCommonManagement();
 		registerListeners();
@@ -61,6 +76,40 @@ public class BukkitMain extends JavaPlugin {
 	private void registerCommonManagement() {
 		accountManager = new BukkitAccount(this);
 		permissionManager = new PermissionManager(this);
+	}
+
+	private void loadTranslations() throws UnknownHostException, IOException {
+		for (Language lang : Language.values()) {
+			Socket socket = new Socket(CommonServer.ADDRESS, CommonServer.PORT);
+			BattlebitsAPI.debug("SOCKET > CONNECT");
+			DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
+			DataInputStream inputStream = new DataInputStream(socket.getInputStream());
+			outputStream.writeUTF("Translations");
+			outputStream.writeUTF("Load");
+			outputStream.writeUTF(lang.toString());
+			outputStream.flush();
+			BattlebitsAPI.debug("SOCKET > MESSAGE SENT");
+			BattlebitsAPI.debug("SOCKET > MESSAGE WAITING");
+			String command = inputStream.readUTF();
+			BattlebitsAPI.debug("SOCKET > MESSAGE RECEIVED");
+			if (command.equals("Translations")) {
+				String json = inputStream.readUTF();
+				HashMap<String, String> translation = getGson().fromJson(json, new TypeToken<HashMap<String, String>>() {
+				}.getType());
+				Translate.loadTranslations(lang, translation);
+				BattlebitsAPI.debug("NEW TRANSLATION > " + lang);
+				json = null;
+			}
+			command = null;
+
+			BattlebitsAPI.debug("SOCKET > CLOSE");
+			outputStream.close();
+			inputStream.close();
+			socket.close();
+			outputStream = null;
+			inputStream = null;
+			socket = null;
+		}
 	}
 
 	private void enableCommonManagement() {
