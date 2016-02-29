@@ -7,6 +7,7 @@ import br.com.battlebits.ycommon.bukkit.bungee.MessageListener;
 import br.com.battlebits.ycommon.bukkit.event.UpdateScheduler;
 import br.com.battlebits.ycommon.bukkit.listeners.ChatListener;
 import br.com.battlebits.ycommon.bukkit.listeners.PlayerListener;
+import br.com.battlebits.ycommon.bukkit.permissions.PermissionManager;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.enums.ServerType;
 import net.minecraft.util.com.google.gson.Gson;
@@ -17,6 +18,7 @@ public class BukkitMain extends JavaPlugin {
 	private static Gson gson = new Gson();
 
 	private BukkitAccount accountManager;
+	private PermissionManager permissionManager;
 
 	{
 		plugin = this;
@@ -42,6 +44,9 @@ public class BukkitMain extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		accountManager.onDisable();
+		permissionManager.onDisable();
+		accountManager = null;
+		permissionManager = null;
 	}
 
 	private void registerListeners() {
@@ -51,10 +56,12 @@ public class BukkitMain extends JavaPlugin {
 
 	private void registerCommonManagement() {
 		accountManager = new BukkitAccount(this);
+		permissionManager = new PermissionManager(this);
 	}
 
 	private void enableCommonManagement() {
 		accountManager.onEnable();
+		permissionManager.onEnable();
 	}
 
 	public static BukkitMain getPlugin() {

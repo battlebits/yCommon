@@ -1,8 +1,6 @@
 package br.com.battlebits.ycommon.bukkit.accounts;
 
-import java.net.InetSocketAddress;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -15,7 +13,6 @@ import br.com.battlebits.ycommon.common.account.game.GameStatus;
 import br.com.battlebits.ycommon.common.account.hungergames.HGStatus;
 import br.com.battlebits.ycommon.common.banmanager.history.BanHistory;
 import br.com.battlebits.ycommon.common.clans.Clan;
-import br.com.battlebits.ycommon.common.enums.Liga;
 import br.com.battlebits.ycommon.common.enums.ServerType;
 import br.com.battlebits.ycommon.common.friends.Friend;
 import br.com.battlebits.ycommon.common.friends.block.Blocked;
@@ -28,10 +25,6 @@ import br.com.battlebits.ycommon.common.translate.languages.Language;
 public class BukkitPlayer extends BattlePlayer {
 
 	private Tag tag;
-
-	public BukkitPlayer(String userName, UUID uuid, String fakeName, int fichas, int money, int xp, Liga liga, InetSocketAddress ipAddress, String lastIpAddress, long onlineTime, long lastLoggedIn, long firstTimePlaying, boolean ignoreAll, Map<ServerType, Group> groups, Map<Group, Expire> ranks, Map<UUID, Friend> friends, Map<UUID, Request> friendRequests, Map<UUID, Blocked> blockedPlayers, String clanName, Party actualParty, String skype, boolean skypeFriendOnly, String twitter, String youtubeChannel, String steam, String countryCode, Language language, HGStatus hungerGamesStatus, BattlecraftStatus battlecraftStatus, GameStatus gameStatus, BanHistory banHistory, List<String> nameHistory) {
-		super(userName, uuid, fakeName, fichas, money, xp, liga, ipAddress, lastIpAddress, onlineTime, lastLoggedIn, firstTimePlaying, ignoreAll, groups, ranks, friends, friendRequests, blockedPlayers, clanName, actualParty, skype, skypeFriendOnly, twitter, youtubeChannel, steam, countryCode, language, hungerGamesStatus, battlecraftStatus, gameStatus, banHistory, nameHistory);
-	}
 
 	public Group getServerGroup() {
 		Group group = Group.NORMAL;

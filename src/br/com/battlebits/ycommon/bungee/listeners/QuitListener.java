@@ -27,6 +27,7 @@ public class QuitListener implements Listener {
 				} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
 					e.printStackTrace();
 				}
+				BattlebitsAPI.getAccountCommon().unloadBattlePlayer(p.getUniqueId());
 				json = null;
 				player = null;
 			}
