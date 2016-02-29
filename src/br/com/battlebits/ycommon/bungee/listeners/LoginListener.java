@@ -74,7 +74,7 @@ public class LoginListener implements Listener {
 					Ban ipBan = BungeeMain.getPlugin().getBanManager().getIpBan(ipAdress);
 					if (ipBan != null) {
 						if (!ipBan.getBannedPlayer().equals(player.getUuid()))
-							BungeeMain.getPlugin().getBanManager().ban(player, new Ban(player.getUuid(), "CONSOLE", ipAdress.getHostString(), "Conta Alternativa"));
+							BungeeMain.getPlugin().getBanManager().ban(player, new Ban(player.getUuid(), "CONSOLE", ipAdress.getHostString(), Translate.getTranslation(player.getLanguage(), "alt-account")));
 					}
 				}
 				Ban ban = player.getBanHistory().getActualBan();

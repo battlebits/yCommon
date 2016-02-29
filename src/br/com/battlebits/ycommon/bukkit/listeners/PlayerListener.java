@@ -1,7 +1,10 @@
 package br.com.battlebits.ycommon.bukkit.listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -26,16 +29,22 @@ public class PlayerListener implements Listener {
 		}
 	}
 
-	@EventHandler(ignoreCancelled = true)
+	@SuppressWarnings("deprecation")
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
 	public void onChat(AsyncPlayerChatEvent event) {
 		BukkitPlayer player = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(event.getPlayer().getUniqueId());
-		String format = "";
-		if (player.getActualClan() == null) {
-			format = player.getTag().getPrefix() + " " + ChatColor.WHITE + player.getUserName() + ChatColor.GRAY + " (" + player.getLiga().getSymbol() + ChatColor.GRAY + ") " + ChatColor.GOLD + ">>" + ChatColor.WHITE + " %2$s";
-		} else {
-			format = "[" + player.getActualClan().getAbbreviation() + "] " + player.getTag().getPrefix() + " " + ChatColor.WHITE + player.getUserName() + ChatColor.GRAY + " (" + player.getLiga().getSymbol() + ChatColor.GRAY + ") " + ChatColor.GOLD + ">>" + ChatColor.WHITE + " %2$s";
+		String format = null;
+		for (Player r : Bukkit.getOnlinePlayers()) {
+			BukkitPlayer receiver = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(r.getUniqueId());
+			format = "";
+			if (player.getActualClan() == null) {
+				format = player.getTag().getPrefix(receiver.getLanguage()) + " " + ChatColor.WHITE + player.getUserName() + ChatColor.GRAY + " (" + player.getLiga().getSymbol() + ChatColor.GRAY + ") " + ChatColor.GOLD + ">> " + ChatColor.WHITE;
+			} else {
+				format = "[" + player.getActualClan().getAbbreviation() + "] " + player.getTag().getPrefix(receiver.getLanguage()) + " " + ChatColor.WHITE + player.getUserName() + ChatColor.GRAY + " (" + player.getLiga().getSymbol() + ChatColor.GRAY + ") " + ChatColor.GOLD + ">> " + ChatColor.WHITE;
+			}
+			r.sendMessage(format + event.getMessage());
 		}
-		event.setFormat(format);
+		event.setCancelled(true);
 		format = null;
 		player = null;
 	}

@@ -2,8 +2,13 @@ package br.com.battlebits.ycommon.bungee;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import br.com.battlebits.ycommon.bungee.listeners.LoginListener;
 import br.com.battlebits.ycommon.bungee.listeners.QuitListener;
@@ -12,6 +17,8 @@ import br.com.battlebits.ycommon.bungee.networking.CommonServer;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.connection.backend.MySQLBackend;
 import br.com.battlebits.ycommon.common.enums.BattleInstance;
+import br.com.battlebits.ycommon.common.translate.Translate;
+import br.com.battlebits.ycommon.common.translate.languages.Language;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -45,7 +52,7 @@ public class BungeeMain extends Plugin {
 
 	@Override
 	public void onEnable() {
-		//loadConfiguration();
+		// loadConfiguration();
 		banManager = new BanManager();
 		try {
 			getProxy().getScheduler().runAsync(this, commonServer = new CommonServer());
@@ -63,6 +70,7 @@ public class BungeeMain extends Plugin {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
+		loadTranslations();
 		getProxy().registerChannel(BattlebitsAPI.getBungeeChannel());
 		loadListeners();
 	}
@@ -105,6 +113,35 @@ public class BungeeMain extends Plugin {
 		password = config.getString("database.password");
 	}
 
+	private void loadTranslations() {
+		try {
+			BattlebitsAPI.debug("TRANSLATIONS > LOADING");
+			PreparedStatement stmt = getConnection().getConnection().prepareStatement("SELECT * FROM `translations`;");
+			ResultSet result = stmt.executeQuery();
+			BattlebitsAPI.debug("TRANSLATIONS > EXCUTED");
+			if (result.next()) {
+				for (Language lang : Language.values()) {
+					String json = result.getString(lang.toString());
+					if (json != null) {
+						HashMap<String, String> translation = BungeeMain.getGson().fromJson(json, new TypeToken<HashMap<String, String>>() {
+						}.getType());
+						Translate.loadTranslations(lang, translation);
+						BattlebitsAPI.debug(lang.toString() + " > LOADED");
+					} else {
+						BattlebitsAPI.debug(lang.toString() + " > FAILED");
+					}
+				}
+			}
+			result.close();
+			stmt.close();
+			result = null;
+			stmt = null;
+			BattlebitsAPI.debug("TRANSLATIONS > CLOSE");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public MySQLBackend getConnection() {
 		return mysql;
 	}
@@ -112,7 +149,7 @@ public class BungeeMain extends Plugin {
 	public static Gson getGson() {
 		return gson;
 	}
-	
+
 	public BanManager getBanManager() {
 		return banManager;
 	}

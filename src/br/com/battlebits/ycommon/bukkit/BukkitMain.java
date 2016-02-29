@@ -1,5 +1,6 @@
 package br.com.battlebits.ycommon.bukkit;
 
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitAccount;
@@ -9,8 +10,10 @@ import br.com.battlebits.ycommon.bukkit.listeners.ChatListener;
 import br.com.battlebits.ycommon.bukkit.listeners.PlayerListener;
 import br.com.battlebits.ycommon.bukkit.permissions.PermissionManager;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
+import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.enums.BattleInstance;
 import br.com.battlebits.ycommon.common.enums.ServerType;
+import br.com.battlebits.ycommon.common.translate.Translate;
 import net.minecraft.util.com.google.gson.Gson;
 
 public class BukkitMain extends JavaPlugin {
@@ -63,6 +66,16 @@ public class BukkitMain extends JavaPlugin {
 	private void enableCommonManagement() {
 		accountManager.onEnable();
 		permissionManager.onEnable();
+	}
+
+	@SuppressWarnings("deprecation")
+	public void broadcastMessage(String messageId) {
+		BattlePlayer player = null;
+		for (Player p : getServer().getOnlinePlayers()) {
+			player = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
+			Translate.getTranslation(player.getLanguage(), messageId);
+		}
+		player = null;
 	}
 
 	public static BukkitMain getPlugin() {
