@@ -8,9 +8,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.UUID;
 
-import br.com.battlebits.ycommon.bungee.BungeeMain;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
-import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
 
 public class CommonServer implements Runnable {
@@ -45,7 +43,7 @@ public class CommonServer implements Runnable {
 					UUID uuid = UUID.fromString(inputStream.readUTF());
 					switch (subComand) {
 					case "Load":
-						handleAccountRequest(uuid, outputStream);
+						CommonHandler.handleAccountRequest(uuid, outputStream);
 						break;
 					case "Update":
 						break;
@@ -58,7 +56,7 @@ public class CommonServer implements Runnable {
 					subComand = inputStream.readUTF();
 					switch (subComand) {
 					case "Load":
-						handleTranslationsLoad(Language.valueOf(inputStream.readUTF()), outputStream);
+						CommonHandler.handleTranslationsLoad(Language.valueOf(inputStream.readUTF()), outputStream);
 						break;
 					default:
 						break;
@@ -88,20 +86,6 @@ public class CommonServer implements Runnable {
 		}
 	}
 
-	public void handleAccountRequest(UUID uuid, DataOutputStream output) throws Exception {
-		output.writeUTF("Account");
-		String json = BungeeMain.getGson().toJson(BattlebitsAPI.getAccountCommon().getBattlePlayer(uuid));
-		output.writeUTF(json);
-		output.flush();
-	}
-
-	public void handleTranslationsLoad(Language lang, DataOutputStream output) throws Exception {
-		output.writeUTF("Translations");
-		String json = BungeeMain.getGson().toJson(Translate.getMapTranslation(lang));
-		output.writeUTF(json);
-		output.flush();
-	}
-	
 	public void stopServer() throws IOException {
 		RUNNING = false;
 		server.close();
