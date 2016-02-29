@@ -1,7 +1,5 @@
 package br.com.battlebits.ycommon.bungee.listeners;
 
-import java.sql.SQLException;
-
 import br.com.battlebits.ycommon.bungee.BungeeMain;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
@@ -21,14 +19,8 @@ public class QuitListener implements Listener {
 			public void run() {
 				BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
 				player.setLeaveData();
-				String json = BungeeMain.getGson().toJson(player);
-				try {
-					BungeeMain.getPlugin().getConnection().update("INSERT INTO `account`(`uuid`, `json`) VALUES ('" + p.getUniqueId().toString().replace("-", "") + "','" + json + "') ON DUPLICATE KEY UPDATE `json` ='" + json + "';");
-				} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
-					e.printStackTrace();
-				}
+				BattlebitsAPI.getAccountCommon().saveBattlePlayer(player);
 				BattlebitsAPI.getAccountCommon().unloadBattlePlayer(p.getUniqueId());
-				json = null;
 				player = null;
 			}
 		});

@@ -1,4 +1,4 @@
-package br.com.battlebits.ycommon.common.manager;
+package br.com.battlebits.ycommon.bungee.managers;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.ExecutionException;
@@ -11,7 +11,7 @@ import com.google.common.cache.CacheLoader;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.banmanager.constructors.Ban;
 
-public class BanCommon {
+public class BanManager {
 	private Cache<InetSocketAddress, Ban> banCache = CacheBuilder.newBuilder().expireAfterWrite(30L, TimeUnit.MINUTES).build(new CacheLoader<InetSocketAddress, Ban>() {
 		@Override
 		public Ban load(InetSocketAddress name) throws Exception {
@@ -25,7 +25,6 @@ public class BanCommon {
 	}
 
 	public Ban getIpBan(InetSocketAddress address) throws ExecutionException {
-		return banCache.get(address, null);
+		return banCache.asMap().get(address);
 	}
-
 }

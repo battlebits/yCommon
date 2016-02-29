@@ -2,8 +2,8 @@ package br.com.battlebits.ycommon.common;
 
 import java.util.logging.Logger;
 
+import br.com.battlebits.ycommon.common.enums.BattleInstance;
 import br.com.battlebits.ycommon.common.manager.AccountCommon;
-import br.com.battlebits.ycommon.common.manager.BanCommon;
 import br.com.battlebits.ycommon.common.manager.ClanCommon;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
 
@@ -11,8 +11,8 @@ public class BattlebitsAPI {
 
 	private static AccountCommon accountCommon = new AccountCommon();
 	private static ClanCommon clanCommon = new ClanCommon();
-	private static BanCommon banCommon = new BanCommon();
 	
+	private static BattleInstance battleInstance;
 	private static Logger logger = Logger.getLogger("Minecraft");
 	private static boolean debugMode = true;
 	public final static String FORUM_WEBSITE = "http://forum.battlebits.com.br";
@@ -30,10 +30,6 @@ public class BattlebitsAPI {
 	public static ClanCommon getClanCommon() {
 		return clanCommon;
 	}
-	
-	public static BanCommon getBanCommon() {
-		return banCommon;
-	}
 
 	public static Logger getLogger() {
 		return logger;
@@ -50,9 +46,17 @@ public class BattlebitsAPI {
 	public static Language getDefaultLanguage() {
 		return defaultLanguage;
 	}
+	
+	public static BattleInstance getBattleInstance() {
+		return battleInstance;
+	}
 
 	public static void setDefaultLanguange(Language language) {
 		defaultLanguage = language;
+	}
+	
+	public static void setBattleInstance(BattleInstance instance) {
+		battleInstance = instance;
 	}
 
 	public static void debug(String debugStr) {

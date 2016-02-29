@@ -71,13 +71,15 @@ public class LoginListener implements Listener {
 				BattlebitsAPI.debug("BANNING > STARTING");
 				BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(event.getConnection().getUniqueId());
 
-				try {
-					Ban ipBan = BattlebitsAPI.getBanCommon().getIpBan(ipAdress);
-					if (ipBan != null) {
-						BattlebitsAPI.getBanCommon().ban(player, new Ban(player.getUuid(), "CONSOLE", ipAdress.getHostString(), "Conta Alternativa"));
+				if (player.getBanHistory().getActualBan() == null)
+					try {
+						Ban ipBan = BungeeMain.getPlugin().getBanManager().getIpBan(ipAdress);
+						if (ipBan != null) {
+							if (!ipBan.getBannedPlayer().equals(player.getUuid()))
+								BungeeMain.getPlugin().getBanManager().ban(player, new Ban(player.getUuid(), "CONSOLE", ipAdress.getHostString(), "Conta Alternativa"));
+						}
+					} catch (ExecutionException e2) {
 					}
-				} catch (ExecutionException e2) {
-				}
 
 				Ban ban = player.getBanHistory().getActualBan();
 				if (ban != null) {
@@ -110,6 +112,10 @@ public class LoginListener implements Listener {
 				}
 				BattlebitsAPI.debug("BANNING > FINISHED");
 				event.completeIntent(BungeeMain.getPlugin());
+				if (event.isCancelled()) {
+					BattlebitsAPI.getAccountCommon().saveBattlePlayer(player);
+					BattlebitsAPI.getAccountCommon().unloadBattlePlayer(uuid);
+				}
 				player = null;
 				ban = null;
 			}

@@ -9,6 +9,7 @@ import br.com.battlebits.ycommon.bukkit.listeners.ChatListener;
 import br.com.battlebits.ycommon.bukkit.listeners.PlayerListener;
 import br.com.battlebits.ycommon.bukkit.permissions.PermissionManager;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
+import br.com.battlebits.ycommon.common.enums.BattleInstance;
 import br.com.battlebits.ycommon.common.enums.ServerType;
 import net.minecraft.util.com.google.gson.Gson;
 
@@ -26,7 +27,7 @@ public class BukkitMain extends JavaPlugin {
 
 	@Override
 	public void onLoad() {
-
+		BattlebitsAPI.setBattleInstance(BattleInstance.BUKKIT);
 	}
 
 	@Override

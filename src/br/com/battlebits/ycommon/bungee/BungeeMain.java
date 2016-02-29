@@ -7,9 +7,11 @@ import com.google.gson.Gson;
 
 import br.com.battlebits.ycommon.bungee.listeners.LoginListener;
 import br.com.battlebits.ycommon.bungee.listeners.QuitListener;
+import br.com.battlebits.ycommon.bungee.managers.BanManager;
 import br.com.battlebits.ycommon.bungee.networking.CommonServer;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.connection.backend.MySQLBackend;
+import br.com.battlebits.ycommon.common.enums.BattleInstance;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -30,6 +32,7 @@ public class BungeeMain extends Plugin {
 	private Configuration config;
 
 	private CommonServer commonServer;
+	private BanManager banManager;
 
 	{
 		plugin = this;
@@ -37,12 +40,13 @@ public class BungeeMain extends Plugin {
 
 	@Override
 	public void onLoad() {
-
+		BattlebitsAPI.setBattleInstance(BattleInstance.BUNGEECORD);
 	}
 
 	@Override
 	public void onEnable() {
 		//loadConfiguration();
+		banManager = new BanManager();
 		try {
 			getProxy().getScheduler().runAsync(this, commonServer = new CommonServer());
 		} catch (Exception e) {
@@ -84,6 +88,7 @@ public class BungeeMain extends Plugin {
 		database = null;
 		username = null;
 		password = null;
+		banManager = null;
 	}
 
 	private void loadListeners() {
@@ -106,6 +111,10 @@ public class BungeeMain extends Plugin {
 
 	public static Gson getGson() {
 		return gson;
+	}
+	
+	public BanManager getBanManager() {
+		return banManager;
 	}
 
 	public static BungeeMain getPlugin() {
