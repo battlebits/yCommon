@@ -3,11 +3,13 @@ package br.com.battlebits.ycommon.common;
 import java.util.logging.Logger;
 
 import br.com.battlebits.ycommon.common.manager.AccountCommon;
+import br.com.battlebits.ycommon.common.manager.ClanCommon;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
 
 public class BattlebitsAPI {
 
 	private static AccountCommon accountCommon = new AccountCommon();
+	private static ClanCommon clanCommon = new ClanCommon();
 	private static Logger logger = Logger.getLogger("Minecraft");
 	private static boolean debugMode = true;
 	public final static String FORUM_WEBSITE = "http://forum.battlebits.com.br";
@@ -17,9 +19,13 @@ public class BattlebitsAPI {
 	public final static String TWITTER = "@BattlebitsMC";
 	public final static String HUNGERGAMES_ADDRESS = "battle-hg.com";
 	public static Language defaultLanguage = Language.PORTUGUES;
-	
+
 	public static AccountCommon getAccountCommon() {
 		return accountCommon;
+	}
+
+	public static ClanCommon getClanCommon() {
+		return clanCommon;
 	}
 
 	public static Logger getLogger() {

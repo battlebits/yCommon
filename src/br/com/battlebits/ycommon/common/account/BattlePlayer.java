@@ -56,7 +56,7 @@ public class BattlePlayer {
 	private Map<UUID, Blocked> blockedPlayers;
 
 	// CLANS E PARTY
-	private Clan actualClan;
+	private String clanName;
 	private Party actualParty;
 
 	// DADOS PESSOAS COMPARTILHADOS
@@ -108,7 +108,7 @@ public class BattlePlayer {
 		this.friendRequests = new HashMap<>();
 		this.blockedPlayers = new HashMap<>();
 
-		this.actualClan = null;
+		this.clanName = "";
 		this.actualParty = null;
 
 		this.skype = "";
@@ -128,7 +128,7 @@ public class BattlePlayer {
 		this.banHistory = new BanHistory();
 	}
 
-	public BattlePlayer(String userName, UUID uuid, String fakeName, int fichas, int money, int xp, Liga liga, InetSocketAddress ipAddress, String lastIpAddress, long onlineTime, long lastLoggedIn, long firstTimePlaying, boolean ignoreAll, Map<ServerType, Group> groups, Map<Group, Expire> ranks, Map<UUID, Friend> friends, Map<UUID, Request> friendRequests, Map<UUID, Blocked> blockedPlayers, Clan actualClan, Party actualParty, String skype, boolean skypeFriendOnly, String twitter, String youtubeChannel, String steam, String countryCode, Language language, HGStatus hungerGamesStatus, BattlecraftStatus battlecraftStatus, GameStatus gameStatus, BanHistory banHistory, List<String> nameHistory) {
+	public BattlePlayer(String userName, UUID uuid, String fakeName, int fichas, int money, int xp, Liga liga, InetSocketAddress ipAddress, String lastIpAddress, long onlineTime, long lastLoggedIn, long firstTimePlaying, boolean ignoreAll, Map<ServerType, Group> groups, Map<Group, Expire> ranks, Map<UUID, Friend> friends, Map<UUID, Request> friendRequests, Map<UUID, Blocked> blockedPlayers, String clanName, Party actualParty, String skype, boolean skypeFriendOnly, String twitter, String youtubeChannel, String steam, String countryCode, Language language, HGStatus hungerGamesStatus, BattlecraftStatus battlecraftStatus, GameStatus gameStatus, BanHistory banHistory, List<String> nameHistory) {
 		this.userName = userName;
 		this.uuid = uuid;
 		this.fakeName = fakeName;
@@ -155,7 +155,7 @@ public class BattlePlayer {
 		this.friendRequests = friendRequests;
 		this.blockedPlayers = blockedPlayers;
 
-		this.actualClan = actualClan;
+		this.clanName = clanName;
 		this.actualParty = actualParty;
 
 		this.skype = skype;
@@ -256,7 +256,7 @@ public class BattlePlayer {
 	}
 
 	public Clan getActualClan() {
-		return actualClan;
+		return BattlebitsAPI.getClanCommon().getClan(clanName);
 	}
 
 	public Party getActualParty() {
@@ -344,7 +344,7 @@ public class BattlePlayer {
 	}
 
 	public void setActualClan(Clan actualClan) {
-		this.actualClan = actualClan;
+		this.clanName = actualClan.getClanName();
 	}
 
 	public void setActualParty(Party actualParty) {
@@ -405,6 +405,7 @@ public class BattlePlayer {
 		lastLoggedIn = System.currentTimeMillis();
 		onlineTime = getOnlineTime();
 		lastIpAddress = ipAddress.getHostString();
+		actualParty = null;
 	}
 
 	@Override

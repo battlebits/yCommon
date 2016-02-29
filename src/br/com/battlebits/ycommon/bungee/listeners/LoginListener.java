@@ -100,41 +100,6 @@ public class LoginListener implements Listener {
 				event.completeIntent(BungeeMain.getPlugin());
 				player = null;
 				ban = null;
-				// CRIAR QUERIES E QUALQUER COISA NO MYSQL PARA GERAR UM
-				// BATTLEPLAYER
-				/*
-				 * int fichas = 0; int xp = 0; int money = 0; Liga liga =
-				 * Liga.FIRST; String lastAddressIp = ""; long onlineTime = 0;
-				 * long firstJoin = System.currentTimeMillis(); long lastJoin =
-				 * System.currentTimeMillis(); boolean ignoreAll = false;
-				 * Map<ServerType, Group> groups = new HashMap<>(); Map<Group,
-				 * Expire> ranks = new HashMap<>(); Map<UUID, Friend> friends =
-				 * new HashMap<>(); Map<UUID, Request> friendRequests = new
-				 * HashMap<>(); Map<UUID, Blocked> blockedPlayers = new
-				 * HashMap<>(); Clan clan = null; Party party = null; String
-				 * skype = ""; boolean skypeFriendsOnly = true; String twitter =
-				 * ""; String youtubeChannel = ""; String steam = ""; String
-				 * countryCode = "BR"; Language language = Language.PORTUGUES;
-				 * HGStatus hgStatus = null; BattlecraftStatus pvpStatus = null;
-				 * GameStatus gameStatus = null; BanHistory banHistory = null;
-				 * List<String> nameHistory = null; BattlePlayer player = new
-				 * BattlePlayer(userName, uuid, userName, fichas, money, xp,
-				 * liga, event.getConnection().getAddress(), lastAddressIp,
-				 * event.getConnection().getVirtualHost(), onlineTime, lastJoin,
-				 * firstJoin, ignoreAll, groups, ranks, friends, friendRequests,
-				 * blockedPlayers, clan, party, skype, skypeFriendsOnly,
-				 * twitter, youtubeChannel, steam, countryCode, language,
-				 * hgStatus, pvpStatus, gameStatus, banHistory, nameHistory);
-				 * BattlebitsAPI.getAccountCommon().loadBattlePlayer(uuid,
-				 * player); event.completeIntent(BungeeMain.getPlugin()); liga =
-				 * null; lastAddressIp = null; groups = null; ranks = null;
-				 * friends = null; friendRequests = null; blockedPlayers = null;
-				 * clan = null; party = null; skype = null; twitter = null;
-				 * youtubeChannel = null; steam = null; countryCode = null;
-				 * language = null; hgStatus = null; pvpStatus = null;
-				 * gameStatus = null; banHistory = null; nameHistory = null;
-				 * connection = null;
-				 */
 			}
 		});
 	}

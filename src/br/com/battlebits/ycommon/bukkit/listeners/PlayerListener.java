@@ -31,9 +31,9 @@ public class PlayerListener implements Listener {
 		BukkitPlayer player = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(event.getPlayer().getUniqueId());
 		String format = "";
 		if (player.getActualClan() == null) {
-			format = player.getTag().getPrefix() + " " + player.getUserName() + ChatColor.GRAY + " (" + player.getLiga().getSymbol() + ChatColor.GRAY + ") " + ChatColor.GOLD + ">>" + ChatColor.WHITE + "%2$s";
+			format = player.getTag().getPrefix() + " " + ChatColor.WHITE + player.getUserName() + ChatColor.GRAY + " (" + player.getLiga().getSymbol() + ChatColor.GRAY + ") " + ChatColor.GOLD + ">>" + ChatColor.WHITE + " %2$s";
 		} else {
-			format = "[" + player.getActualClan().getAbbreviation() + "] " + player.getTag().getPrefix() + " " + player.getUserName() + ChatColor.GRAY + " (" + player.getLiga().getSymbol() + ChatColor.GRAY + ") " + ChatColor.GOLD + ">>" + ChatColor.WHITE + "%2$s";
+			format = "[" + player.getActualClan().getAbbreviation() + "] " + player.getTag().getPrefix() + " " + ChatColor.WHITE + player.getUserName() + ChatColor.GRAY + " (" + player.getLiga().getSymbol() + ChatColor.GRAY + ") " + ChatColor.GOLD + ">>" + ChatColor.WHITE + " %2$s";
 		}
 		event.setFormat(format);
 		format = null;

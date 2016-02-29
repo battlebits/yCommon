@@ -29,9 +29,8 @@ public class BukkitPlayer extends BattlePlayer {
 
 	private Tag tag;
 
-	public BukkitPlayer(String userName, UUID uuid, String fakeName, int fichas, int money, int xp, Liga liga, InetSocketAddress ipAddress, String lastIpAddress, long onlineTime, long lastLoggedIn, long firstTimePlaying, boolean ignoreAll, Map<ServerType, Group> groups, Map<Group, Expire> ranks, Map<UUID, Friend> friends, Map<UUID, Request> friendRequests, Map<UUID, Blocked> blockedPlayers, Clan actualClan, Party actualParty, String skype, boolean skypeFriendOnly, String twitter, String youtubeChannel, String steam, String countryCode, Language language, HGStatus hungerGamesStatus, BattlecraftStatus battlecraftStatus, GameStatus gameStatus, BanHistory banHistory, List<String> nameHistory) {
-		super(userName, uuid, fakeName, fichas, money, xp, liga, ipAddress, lastIpAddress, onlineTime, lastLoggedIn, firstTimePlaying, ignoreAll, groups, ranks, friends, friendRequests, blockedPlayers, actualClan, actualParty, skype, skypeFriendOnly, twitter, youtubeChannel, steam, countryCode, language, hungerGamesStatus, battlecraftStatus, gameStatus, banHistory, nameHistory);
-		tag = TagManager.getPlayerDefaultTag(this);
+	public BukkitPlayer(String userName, UUID uuid, String fakeName, int fichas, int money, int xp, Liga liga, InetSocketAddress ipAddress, String lastIpAddress, long onlineTime, long lastLoggedIn, long firstTimePlaying, boolean ignoreAll, Map<ServerType, Group> groups, Map<Group, Expire> ranks, Map<UUID, Friend> friends, Map<UUID, Request> friendRequests, Map<UUID, Blocked> blockedPlayers, String clanName, Party actualParty, String skype, boolean skypeFriendOnly, String twitter, String youtubeChannel, String steam, String countryCode, Language language, HGStatus hungerGamesStatus, BattlecraftStatus battlecraftStatus, GameStatus gameStatus, BanHistory banHistory, List<String> nameHistory) {
+		super(userName, uuid, fakeName, fichas, money, xp, liga, ipAddress, lastIpAddress, onlineTime, lastLoggedIn, firstTimePlaying, ignoreAll, groups, ranks, friends, friendRequests, blockedPlayers, clanName, actualParty, skype, skypeFriendOnly, twitter, youtubeChannel, steam, countryCode, language, hungerGamesStatus, battlecraftStatus, gameStatus, banHistory, nameHistory);
 	}
 
 	public Group getServerGroup() {
@@ -61,6 +60,8 @@ public class BukkitPlayer extends BattlePlayer {
 	}
 
 	public Tag getTag() {
+		if (tag == null)
+			tag = TagManager.getPlayerDefaultTag(this);
 		return tag;
 	}
 
