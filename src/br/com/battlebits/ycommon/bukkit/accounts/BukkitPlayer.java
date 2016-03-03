@@ -38,7 +38,7 @@ public class BukkitPlayer extends BattlePlayer {
 			Collection<Expire> expires = getRanks().values();
 			Expire expire = null;
 			for (Expire expireRank : expires) {
-				if (expireRank == null) {
+				if (expire == null) {
 					expire = expireRank;
 				} else if (expireRank.getRankType().ordinal() > expire.getRankType().ordinal()) {
 					expire = expireRank;

@@ -127,6 +127,10 @@ public class BukkitMain extends JavaPlugin {
 		player = null;
 	}
 
+	public BukkitAccount getAccountManager() {
+		return accountManager;
+	}
+
 	public static BukkitMain getPlugin() {
 		return plugin;
 	}

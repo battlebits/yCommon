@@ -36,9 +36,9 @@ public class TagManager extends BukkitCommon {
 	}
 
 	public static Tag getPlayerDefaultTag(BukkitPlayer p) {
-		if (TagManager.isNadhyneOuGustavo(p.getUuid())) {
+		/*if (TagManager.isNadhyneOuGustavo(p.getUuid())) {
 			return Tag.ESTRELA;
-		}
+		}*/
 		return Tag.valueOf(p.getServerGroup().toString());
 	}
 

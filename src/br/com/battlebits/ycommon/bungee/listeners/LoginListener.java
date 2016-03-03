@@ -14,6 +14,9 @@ import br.com.battlebits.ycommon.bungee.utils.GeoIpUtils;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.banmanager.constructors.Ban;
+import br.com.battlebits.ycommon.common.payment.constructors.Expire;
+import br.com.battlebits.ycommon.common.payment.enums.RankType;
+import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.utils.DateUtils;
 import net.md_5.bungee.api.ProxyServer;
@@ -116,6 +119,7 @@ public class LoginListener implements Listener {
 					BattlebitsAPI.getAccountCommon().saveBattlePlayer(player);
 					BattlebitsAPI.getAccountCommon().unloadBattlePlayer(uuid);
 				}
+				player.getRanks().put(Group.ULTIMATE, new Expire(player.getUuid(), System.currentTimeMillis() + 360000, RankType.ULTIMATE));
 				player = null;
 				ban = null;
 			}
