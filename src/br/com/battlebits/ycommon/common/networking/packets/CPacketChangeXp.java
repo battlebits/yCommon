@@ -22,8 +22,7 @@ public class CPacketChangeXp extends CommonPacket{
 
 	@Override
 	public void handle(CommonHandler handler) {
-		// TODO Auto-generated method stub
-		
+		handler.handleChangeXp(this);
 	}
 
 }

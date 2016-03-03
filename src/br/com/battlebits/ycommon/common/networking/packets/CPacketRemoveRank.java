@@ -22,8 +22,7 @@ public class CPacketRemoveRank extends CommonPacket{
 
 	@Override
 	public void handle(CommonHandler handler) {
-		// TODO Auto-generated method stub
-		
+		handler.handleRemoveRank(this);
 	}
 
 }

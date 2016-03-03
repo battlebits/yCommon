@@ -22,8 +22,7 @@ public class CPacketUpdateGameStatus extends CommonPacket{
 
 	@Override
 	public void handle(CommonHandler handler) {
-		// TODO Auto-generated method stub
-		
+		handler.handleUpdateGameStatus(this);
 	}
 
 }

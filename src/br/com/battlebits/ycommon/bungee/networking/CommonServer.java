@@ -43,7 +43,7 @@ public class CommonServer implements Runnable {
 					UUID uuid = UUID.fromString(inputStream.readUTF());
 					switch (subComand) {
 					case "Load":
-						CommonHandler.handleAccountRequest(uuid, outputStream);
+						BungeePacketHandler.handleAccountRequest(uuid, outputStream);
 						break;
 					case "Update":
 						break;
@@ -56,7 +56,7 @@ public class CommonServer implements Runnable {
 					subComand = inputStream.readUTF();
 					switch (subComand) {
 					case "Load":
-						CommonHandler.handleTranslationsLoad(Language.valueOf(inputStream.readUTF()), outputStream);
+						BungeePacketHandler.handleTranslationsLoad(Language.valueOf(inputStream.readUTF()), outputStream);
 						break;
 					default:
 						break;

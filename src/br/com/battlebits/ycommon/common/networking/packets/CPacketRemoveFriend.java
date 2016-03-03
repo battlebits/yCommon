@@ -22,8 +22,7 @@ public class CPacketRemoveFriend extends CommonPacket{
 
 	@Override
 	public void handle(CommonHandler handler) {
-		// TODO Auto-generated method stub
-		
+		handler.handleRemoveFriend(this);
 	}
 
 }

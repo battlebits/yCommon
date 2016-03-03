@@ -6,7 +6,7 @@ import java.io.DataOutputStream;
 import br.com.battlebits.ycommon.common.networking.CommonHandler;
 import br.com.battlebits.ycommon.common.networking.CommonPacket;
 
-public class CPacketAddBlockedPlayer extends CommonPacket {
+public class CPacketTranslationsLoad extends CommonPacket {
 
 	@Override
 	public void read(DataInputStream in) throws Exception {
@@ -22,7 +22,7 @@ public class CPacketAddBlockedPlayer extends CommonPacket {
 
 	@Override
 	public void handle(CommonHandler handler) {
-		handler.handleBlockPlayer(this);
+		handler.handleTranslationsLoad(this);
 	}
 
 }

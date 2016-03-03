@@ -22,8 +22,7 @@ public class CPacketUpdateClan extends CommonPacket{
 
 	@Override
 	public void handle(CommonHandler handler) {
-		// TODO Auto-generated method stub
-		
+		handler.handleUpdateClan(this);
 	}
 
 }
