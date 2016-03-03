@@ -21,7 +21,7 @@ public class CPacketCreateParty extends CommonPacket {
 	}
 
 	@Override
-	public void handle(CommonHandler handler) {
+	public void handle(CommonHandler handler) throws Exception {
 		handler.handleCreateParty(this);
 	}
 

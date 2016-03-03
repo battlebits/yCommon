@@ -21,7 +21,7 @@ public class CPacketDisbandParty extends CommonPacket {
 	}
 
 	@Override
-	public void handle(CommonHandler handler) {
+	public void handle(CommonHandler handler) throws Exception {
 		handler.handleDisbandParty(this);
 	}
 

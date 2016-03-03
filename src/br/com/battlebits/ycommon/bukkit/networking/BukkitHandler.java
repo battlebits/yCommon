@@ -1,9 +1,9 @@
-package br.com.battlebits.ycommon.bungee.networking;
+package br.com.battlebits.ycommon.bukkit.networking;
 
-import java.io.DataOutputStream;
-import java.util.UUID;
+import java.util.HashMap;
 
-import br.com.battlebits.ycommon.bungee.BungeeMain;
+import br.com.battlebits.ycommon.bukkit.BukkitMain;
+import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.networking.CommonHandler;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAccountLoad;
@@ -34,48 +34,38 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketUpdateGameStat
 import br.com.battlebits.ycommon.common.networking.packets.CPacketUpdateProfile;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
+import net.minecraft.util.com.google.gson.reflect.TypeToken;
 
-public class BungeePacketHandler extends CommonHandler {
-
-	private PacketSender sender;
-
-	public BungeePacketHandler(PacketSender sender) {
-		this.sender = sender;
-	}
-
-	public static void handleTranslationsLoad(Language lang, DataOutputStream output) throws Exception {
-		output.writeUTF("Translations");
-		String json = BungeeMain.getGson().toJson(Translate.getMapTranslation(lang));
-		output.writeUTF(json);
-		output.flush();
-	}
+public class BukkitHandler extends CommonHandler {
 
 	@Override
-	public void handleAccountRequest(CPacketAccountRequest packet) throws Exception {
-		UUID uuid = packet.getUuid();
-		String json = BungeeMain.getGson().toJson(BattlebitsAPI.getAccountCommon().getBattlePlayer(uuid));
-		sender.sendPacket(new CPacketAccountLoad(uuid, json));
-		uuid = null;
-		json = null;
+	public void handleAccountRequest(CPacketAccountRequest packet) {
+		// PROVAVEL QUE NUNCA VAI TER
 	}
 
 	@Override
 	public void handleAccountLoad(CPacketAccountLoad packet) {
-		// PROVAVEL QUE NUNCA VAI RECEBER.
+		BukkitPlayer battlePlayer = BukkitMain.getGson().fromJson(packet.getJson(), BukkitPlayer.class);
+		BattlebitsAPI.getAccountCommon().loadBattlePlayer(packet.getUuid(), battlePlayer);
+		BattlebitsAPI.debug("NEW BATTLEPLAYER>" + battlePlayer.getUserName() + "(" + packet.getUuid() + ")");
+		battlePlayer = null;
 	}
 
 	@Override
-	public void handleTranslationsRequest(CPacketTranslationsRequest packet) throws Exception {
-		Language lang = packet.getLanguage();
-		String json = BungeeMain.getGson().toJson(Translate.getMapTranslation(lang));
-		sender.sendPacket(new CPacketTranslationsLoad(lang, json));
-		lang = null;
-		json = null;
+	public void handleTranslationsRequest(CPacketTranslationsRequest packet) {
+		// PROVAVEL QUE NUNCA VAI TER
 	}
 
 	@Override
 	public void handleTranslationsLoad(CPacketTranslationsLoad packet) {
-
+		Language lang = packet.getLanguage();
+		String json = packet.getJson();
+		HashMap<String, String> translation = BukkitMain.getGson().fromJson(json, new TypeToken<HashMap<String, String>>() {
+		}.getType());
+		Translate.loadTranslations(lang, translation);
+		BattlebitsAPI.debug("NEW TRANSLATION>" + lang);
+		lang = null;
+		json = null;
 	}
 
 	@Override

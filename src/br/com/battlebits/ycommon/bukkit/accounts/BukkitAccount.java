@@ -2,7 +2,6 @@ package br.com.battlebits.ycommon.bukkit.accounts;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.net.Socket;
 import java.util.UUID;
 
@@ -11,8 +10,10 @@ import org.bukkit.entity.Player;
 
 import br.com.battlebits.ycommon.bukkit.BukkitCommon;
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
+import br.com.battlebits.ycommon.bukkit.networking.PacketSender;
 import br.com.battlebits.ycommon.bungee.networking.CommonServer;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketAccountRequest;
 
 public class BukkitAccount extends BukkitCommon {
 
@@ -23,10 +24,10 @@ public class BukkitAccount extends BukkitCommon {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void onEnable() {
-		for(Player p : Bukkit.getOnlinePlayers()) {
+		for (Player p : Bukkit.getOnlinePlayers()) {
 			try {
 				loadPlayer(p.getUniqueId());
-			} catch (IOException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -37,7 +38,8 @@ public class BukkitAccount extends BukkitCommon {
 	public void onDisable() {
 	}
 
-	public void loadPlayer(UUID uuid) throws IOException {
+	public void loadPlayer(UUID uuid) throws Exception {
+		PacketSender.sendPacket(new CPacketAccountRequest(uuid), BukkitMain.getPlugin().getPacketHandler());
 		Socket socket = new Socket(CommonServer.ADDRESS, CommonServer.PORT);
 		BattlebitsAPI.debug("SOCKET > CONNECT");
 		DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
@@ -67,5 +69,5 @@ public class BukkitAccount extends BukkitCommon {
 		inputStream = null;
 		socket = null;
 	}
-	
+
 }

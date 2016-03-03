@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAccountLoad;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketTranslationsLoad;
 
 public abstract class CommonPacket {
 	private static final Map<Byte, Class<?>> MAP_CLASS = new HashMap<Byte, Class<?>>();
@@ -14,8 +15,9 @@ public abstract class CommonPacket {
 	private static final Map<Byte, Boolean> MAP_VALID = new HashMap<Byte, Boolean>();
 
 	static {
-		/** 0x0X: Protocol **/
+		/** 0x0X: Load **/
 		register((byte) 0x00, CPacketAccountLoad.class);
+		register((byte) 0x01, CPacketTranslationsLoad.class);
 	}
 
 	private static void register(byte i, Class<? extends CommonPacket> c, short v) {
@@ -61,5 +63,5 @@ public abstract class CommonPacket {
 
 	public abstract void write(DataOutputStream out) throws Exception;
 
-	public abstract void handle(CommonHandler handler);
+	public abstract void handle(CommonHandler handler) throws Exception;
 }

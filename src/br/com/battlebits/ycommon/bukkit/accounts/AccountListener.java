@@ -1,7 +1,5 @@
 package br.com.battlebits.ycommon.bukkit.accounts;
 
-import java.io.IOException;
-
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -15,7 +13,7 @@ import br.com.battlebits.ycommon.common.BattlebitsAPI;
 public class AccountListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onAsync(AsyncPlayerPreLoginEvent event) throws IOException {
+	public void onAsync(AsyncPlayerPreLoginEvent event) throws Exception {
 		BukkitMain.getPlugin().getAccountManager().loadPlayer(event.getUniqueId());
 	}
 

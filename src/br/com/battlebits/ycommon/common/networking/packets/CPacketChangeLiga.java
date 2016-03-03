@@ -21,7 +21,7 @@ public class CPacketChangeLiga extends CommonPacket{
 	}
 
 	@Override
-	public void handle(CommonHandler handler) {
+	public void handle(CommonHandler handler) throws Exception {
 		handler.handleChangeLiga(this);
 	}
 
