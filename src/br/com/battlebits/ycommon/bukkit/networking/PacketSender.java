@@ -11,15 +11,20 @@ import br.com.battlebits.ycommon.common.networking.CommonPacket;
 
 public class PacketSender {
 
-	public static void sendPacket(CommonPacket packet, CommonHandler handler) throws Exception {
-		sendPacket(CommonServer.ADDRESS, CommonServer.PORT, packet, handler);
+	public static void sendPacket(CommonPacket packet) throws Exception {
+		sendPacket(CommonServer.ADDRESS, CommonServer.PORT, packet);
 	}
 
-	public static void sendPacket(String hostName, int port, CommonPacket packet, CommonHandler handler) throws Exception {
+	public static void sendPacketReturn(CommonPacket packet, CommonHandler handler) throws Exception {
+		sendPacketReturn(CommonServer.ADDRESS, CommonServer.PORT, packet, handler);
+	}
+
+	public static void sendPacketReturn(String hostName, int port, CommonPacket packet, CommonHandler handler) throws Exception {
 		Socket socket = new Socket(hostName, port);
 		BattlebitsAPI.debug("SOCKET>CONNECT");
 		DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
 		DataInputStream inputStream = new DataInputStream(socket.getInputStream());
+		outputStream.writeByte(packet.id());
 		packet.write(outputStream);
 		outputStream.flush();
 		BattlebitsAPI.debug("SOCKET>OUT>" + packet.getClass().getSimpleName());
@@ -37,6 +42,21 @@ public class PacketSender {
 		BattlebitsAPI.debug("SOCKET>CLOSE");
 		outputStream = null;
 		inputStream = null;
+		socket = null;
+	}
+
+	public static void sendPacket(String hostName, int port, CommonPacket packet) throws Exception {
+		Socket socket = new Socket(hostName, port);
+		BattlebitsAPI.debug("SOCKET>CONNECT");
+		DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
+		outputStream.writeByte(packet.id());
+		packet.write(outputStream);
+		outputStream.flush();
+		BattlebitsAPI.debug("SOCKET>OUT>" + packet.getClass().getSimpleName());
+		outputStream.close();
+		socket.close();
+		BattlebitsAPI.debug("SOCKET>CLOSE");
+		outputStream = null;
 		socket = null;
 	}
 }

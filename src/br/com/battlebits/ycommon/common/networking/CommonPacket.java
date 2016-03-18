@@ -58,7 +58,8 @@ public abstract class CommonPacket {
 		/** 0x3X: Update **/
 		register((byte) 0x31, CPacketUpdateGameStatus.class);
 		register((byte) 0x32, CPacketUpdateProfile.class);
-
+		register((byte) 0x33, CPacketUpdateClan.class);
+		
 		/** 0x4X: Friends **/
 		register((byte) 0x40, CPacketAddFriend.class);
 		register((byte) 0x41, CPacketRemoveFriend.class);
@@ -78,12 +79,9 @@ public abstract class CommonPacket {
 		register((byte) 0x61, CPacketJoinParty.class);
 		register((byte) 0x62, CPacketDisbandParty.class);
 
-		/** 0x7X: Clans **/
-		register((byte) 0x70, CPacketUpdateClan.class);
-
-		/** 0x8X: Bans **/
-		register((byte) 0x80, CPacketBanPlayer.class);
-		register((byte) 0x81, CPacketUnbanPlayer.class);
+		/** 0x7X: Bans **/
+		register((byte) 0x70, CPacketBanPlayer.class);
+		register((byte) 0x71, CPacketUnbanPlayer.class);
 	}
 
 	private static void register(byte i, Class<? extends CommonPacket> c, short v) {

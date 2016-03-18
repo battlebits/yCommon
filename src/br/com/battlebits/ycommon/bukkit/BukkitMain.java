@@ -8,6 +8,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitAccount;
 import br.com.battlebits.ycommon.bukkit.bungee.MessageListener;
+import br.com.battlebits.ycommon.bukkit.commands.CommandFramework;
+import br.com.battlebits.ycommon.bukkit.commands.CommandLoader;
 import br.com.battlebits.ycommon.bukkit.event.UpdateScheduler;
 import br.com.battlebits.ycommon.bukkit.listeners.ChatListener;
 import br.com.battlebits.ycommon.bukkit.listeners.PlayerListener;
@@ -28,7 +30,9 @@ public class BukkitMain extends JavaPlugin {
 
 	private static BukkitMain plugin;
 	private static Gson gson = new Gson();
-
+	
+	private CommandFramework commandFramework;
+	
 	private BukkitAccount accountManager;
 	private PermissionManager permissionManager;
 	private CommonHandler packetHandler;
@@ -57,6 +61,8 @@ public class BukkitMain extends JavaPlugin {
 		registerCommonManagement();
 		enableCommonManagement();
 		registerListeners();
+		commandFramework = new CommandFramework(this);
+		new CommandLoader(commandFramework).registerAbilityListeners();
 		getServer().getScheduler().runTaskTimer(this, new UpdateScheduler(), 1, 1);
 	}
 
@@ -81,7 +87,7 @@ public class BukkitMain extends JavaPlugin {
 	private void loadTranslations() throws UnknownHostException, IOException {
 		for (Language lang : Language.values()) {
 			try {
-				PacketSender.sendPacket(new CPacketTranslationsRequest(lang), packetHandler);
+				PacketSender.sendPacketReturn(new CPacketTranslationsRequest(lang), packetHandler);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

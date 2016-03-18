@@ -34,7 +34,7 @@ public class BukkitAccount extends BukkitCommon {
 	}
 
 	public void loadPlayer(UUID uuid) throws Exception {
-		PacketSender.sendPacket(new CPacketAccountRequest(uuid), BukkitMain.getPlugin().getPacketHandler());
+		PacketSender.sendPacketReturn(new CPacketAccountRequest(uuid), BukkitMain.getPlugin().getPacketHandler());
 	}
 
 }
