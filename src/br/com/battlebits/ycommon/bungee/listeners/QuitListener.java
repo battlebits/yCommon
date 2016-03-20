@@ -20,7 +20,6 @@ public class QuitListener implements Listener {
 				BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
 				player.setLeaveData();
 				BattlebitsAPI.getAccountCommon().saveBattlePlayer(player);
-				BattlebitsAPI.getAccountCommon().unloadBattlePlayer(p.getUniqueId());
 				player = null;
 			}
 		});

@@ -43,6 +43,7 @@ public class BattlePlayer {
 	private long joinTime;
 	private long lastLoggedIn;
 	private long firstTimePlaying;
+	private long cacheExpire;
 
 	// GRUPOS
 	private Map<ServerType, Group> groups;
@@ -80,7 +81,7 @@ public class BattlePlayer {
 
 	public BattlePlayer() {
 	}
-	
+
 	public BattlePlayer(String userName, UUID uuid, InetSocketAddress ipAddress, String countryCode) {
 		this.userName = userName;
 		this.uuid = uuid;
@@ -249,6 +250,10 @@ public class BattlePlayer {
 		return banHistory;
 	}
 
+	public boolean isCacheExpired() {
+		return System.currentTimeMillis() > cacheExpire;
+	}
+
 	public void setFakeName(String fakeName) {
 		this.fakeName = fakeName;
 	}
@@ -329,10 +334,15 @@ public class BattlePlayer {
 		this.banHistory = banHistory;
 	}
 
+	public void updateCache() {
+		this.cacheExpire = System.currentTimeMillis() + (60 * 15 * 1000);
+	}
+
 	public void setJoinData(InetSocketAddress ipAdrress, String countryCode) {
 		this.ipAddress = ipAdrress;
 		joinTime = System.currentTimeMillis();
 		this.countryCode = countryCode;
+		updateCache();
 	}
 
 	public void setLeaveData() {
@@ -340,6 +350,7 @@ public class BattlePlayer {
 		onlineTime = getOnlineTime();
 		lastIpAddress = ipAddress.getHostString();
 		actualParty = null;
+		this.cacheExpire = System.currentTimeMillis() + (60 * 15 * 1000);
 	}
 
 	@Override
@@ -351,7 +362,7 @@ public class BattlePlayer {
 		builder.append(" | ");
 		builder.append("FAKENAME > " + fakeName);
 		builder.append(" | ");
-		
+
 		builder.append("FICHAS > " + fichas);
 		builder.append(" | ");
 		builder.append("MONEY > " + money);

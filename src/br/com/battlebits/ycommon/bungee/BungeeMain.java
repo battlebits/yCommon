@@ -5,10 +5,12 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import br.com.battlebits.ycommon.bungee.event.UpdateScheduler;
 import br.com.battlebits.ycommon.bungee.listeners.LoginListener;
 import br.com.battlebits.ycommon.bungee.listeners.QuitListener;
 import br.com.battlebits.ycommon.bungee.managers.BanManager;
@@ -70,6 +72,7 @@ public class BungeeMain extends Plugin {
 			e1.printStackTrace();
 		}
 		loadTranslations();
+		getProxy().getScheduler().schedule(this, new UpdateScheduler(), 0, 50, TimeUnit.MILLISECONDS);
 		getProxy().registerChannel(BattlebitsAPI.getBungeeChannel());
 		loadListeners();
 	}
