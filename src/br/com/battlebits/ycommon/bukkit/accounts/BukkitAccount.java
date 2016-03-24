@@ -37,4 +37,8 @@ public class BukkitAccount extends BukkitCommon {
 		PacketSender.sendPacketReturn(new CPacketAccountRequest(uuid), BukkitMain.getPlugin().getPacketHandler());
 	}
 
+	public BukkitPlayer getOfflinePlayer(UUID uuid) throws Exception {
+		return PacketSender.getOfflinePlayer(uuid);
+	}
+
 }

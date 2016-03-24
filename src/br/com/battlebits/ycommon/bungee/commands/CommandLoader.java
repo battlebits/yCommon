@@ -1,4 +1,4 @@
-package br.com.battlebits.ycommon.bukkit.commands;
+package br.com.battlebits.ycommon.bungee.commands;
 
 import java.util.HashMap;
 
@@ -12,7 +12,7 @@ public class CommandLoader {
 	
 	public CommandLoader(CommandFramework framework) {
 		this.framework = framework;
-		initializeAllAbilitiesInPackage("br.com.battlebits.ycommon.bukkit.commands.register");
+		initializeAllAbilitiesInPackage("br.com.battlebits.ycommon.bungee.commands.register");
 	}
 
 	public void initializeAllAbilitiesInPackage(String packageName) {

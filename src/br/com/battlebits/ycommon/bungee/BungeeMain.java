@@ -12,6 +12,7 @@ import com.google.gson.reflect.TypeToken;
 
 import br.com.battlebits.ycommon.bungee.event.UpdateScheduler;
 import br.com.battlebits.ycommon.bungee.listeners.LoginListener;
+import br.com.battlebits.ycommon.bungee.listeners.PlayerListener;
 import br.com.battlebits.ycommon.bungee.listeners.QuitListener;
 import br.com.battlebits.ycommon.bungee.managers.BanManager;
 import br.com.battlebits.ycommon.bungee.networking.CommonServer;
@@ -102,6 +103,7 @@ public class BungeeMain extends Plugin {
 	}
 
 	private void loadListeners() {
+		getProxy().getPluginManager().registerListener(this, new PlayerListener());
 		getProxy().getPluginManager().registerListener(this, new LoginListener());
 		getProxy().getPluginManager().registerListener(this, new QuitListener());
 	}
