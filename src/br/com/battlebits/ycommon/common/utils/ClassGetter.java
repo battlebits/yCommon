@@ -8,8 +8,6 @@ import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import org.bukkit.plugin.java.JavaPlugin;
-
 /**
  * User: Austin Date: 4/22/13 Time: 11:47 PM (c) lazertester
  */
@@ -18,12 +16,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 // https://github.com/ddopson/java-class-enumerator
 public class ClassGetter {
 
-	public static ArrayList<Class<?>> getClassesForPackage(JavaPlugin plugin, String pkgname) {
+	public static ArrayList<Class<?>> getClassesForPackage(Class<?> clas, String pkgname) {
 		ArrayList<Class<?>> classes = new ArrayList<Class<?>>();
 		// String relPath = pkgname.replace('.', '/');
 
 		// Get a File object for the package
-		CodeSource src = plugin.getClass().getProtectionDomain().getCodeSource();
+		CodeSource src = clas.getProtectionDomain().getCodeSource();
 		if (src != null) {
 			URL resource = src.getLocation();
 			resource.getPath();

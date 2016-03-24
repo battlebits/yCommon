@@ -12,12 +12,12 @@ public class CommandLoader {
 	
 	public CommandLoader(CommandFramework framework) {
 		this.framework = framework;
-		initializeAllAbilitiesInPackage("br.com.battlebits.ycommon.bukkit.commands.register");
+		initializeAllCommandsInPackage("br.com.battlebits.ycommon.bukkit.commands.register");
 	}
 
-	public void initializeAllAbilitiesInPackage(String packageName) {
+	public void initializeAllCommandsInPackage(String packageName) {
 		int i = 0;
-		for (Class<?> commandClass : ClassGetter.getClassesForPackage(BukkitMain.getPlugin(), packageName)) {
+		for (Class<?> commandClass : ClassGetter.getClassesForPackage(BukkitMain.getPlugin().getClass(), packageName)) {
 			try {
 				Object abilityListener = commandClass.newInstance();
 				commands.put(commandClass.getSimpleName(), abilityListener);

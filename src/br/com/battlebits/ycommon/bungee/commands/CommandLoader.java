@@ -2,7 +2,7 @@ package br.com.battlebits.ycommon.bungee.commands;
 
 import java.util.HashMap;
 
-import br.com.battlebits.ycommon.bukkit.BukkitMain;
+import br.com.battlebits.ycommon.bungee.BungeeMain;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.utils.ClassGetter;
 
@@ -17,7 +17,7 @@ public class CommandLoader {
 
 	public void initializeAllAbilitiesInPackage(String packageName) {
 		int i = 0;
-		for (Class<?> commandClass : ClassGetter.getClassesForPackage(BukkitMain.getPlugin(), packageName)) {
+		for (Class<?> commandClass : ClassGetter.getClassesForPackage(BungeeMain.getPlugin().getClass(), packageName)) {
 			try {
 				Object abilityListener = commandClass.newInstance();
 				commands.put(commandClass.getSimpleName(), abilityListener);
