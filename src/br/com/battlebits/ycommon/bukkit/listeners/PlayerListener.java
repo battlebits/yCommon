@@ -1,7 +1,5 @@
 package br.com.battlebits.ycommon.bukkit.listeners;
 
-import java.util.Iterator;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -13,10 +11,7 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
-import br.com.battlebits.ycommon.bukkit.event.UpdateEvent;
-import br.com.battlebits.ycommon.bukkit.event.UpdateEvent.UpdateType;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
-import br.com.battlebits.ycommon.common.account.BattlePlayer;
 
 public class PlayerListener implements Listener {
 
@@ -54,21 +49,6 @@ public class PlayerListener implements Listener {
 		event.setCancelled(true);
 		format = null;
 		player = null;
-	}
-
-	@EventHandler
-	public void onUpdate(UpdateEvent event) {
-		if (event.getType() != UpdateType.TICK)
-			return;
-		Iterator<BattlePlayer> players = BattlebitsAPI.getAccountCommon().getPlayers().iterator();
-		if (players.hasNext()) {
-			BattlePlayer player = players.next();
-			if (Bukkit.getPlayer(player.getUuid()) == null) {
-				if (player.isCacheExpired()) {
-					players.remove();
-				}
-			}
-		}
 	}
 
 }

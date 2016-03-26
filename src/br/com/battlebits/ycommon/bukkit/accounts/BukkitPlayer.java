@@ -137,11 +137,6 @@ public class BukkitPlayer extends BattlePlayer {
 	}
 
 	@Override
-	public void setIgnoreAll(boolean ignoreAll) {
-		super.setIgnoreAll(ignoreAll);
-	}
-
-	@Override
 	public void setLanguage(Language language) {
 		super.setLanguage(language);
 	}

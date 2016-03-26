@@ -66,7 +66,7 @@ public class BattlePlayer {
 	private String steam;
 
 	// CONFIGURACOES
-	private boolean ignoreAll;
+	private AccountConfiguration configuration;
 
 	// PAIS E LINGUA
 	private String countryCode;
@@ -99,7 +99,7 @@ public class BattlePlayer {
 		this.lastLoggedIn = System.currentTimeMillis();
 		this.firstTimePlaying = System.currentTimeMillis();
 
-		this.ignoreAll = false;
+		this.configuration = new AccountConfiguration();
 
 		this.groups = new HashMap<>();
 		this.ranks = new HashMap<>();
@@ -182,8 +182,8 @@ public class BattlePlayer {
 		return lastIpAddress;
 	}
 
-	public boolean isIgnoreAll() {
-		return ignoreAll;
+	public AccountConfiguration getConfiguration() {
+		return configuration;
 	}
 
 	public Map<ServerType, Group> getGroups() {
@@ -318,10 +318,6 @@ public class BattlePlayer {
 		this.steam = steam;
 	}
 
-	public void setIgnoreAll(boolean ignoreAll) {
-		this.ignoreAll = ignoreAll;
-	}
-
 	public void setLanguage(Language language) {
 		this.language = language;
 	}
@@ -415,7 +411,7 @@ public class BattlePlayer {
 		builder.append(" | ");
 		builder.append("STEAM > " + steam);
 		builder.append(" | ");
-		builder.append("IGNOREALL > " + ignoreAll);
+		builder.append("CONFIGURATION > " + configuration.toString());
 		builder.append(" | ");
 
 		builder.append("COUNTRY > " + countryCode);

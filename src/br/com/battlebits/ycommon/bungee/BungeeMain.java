@@ -36,7 +36,7 @@ public class BungeeMain extends Plugin {
 	private int port = 3306;
 	private String database = "ycommon";
 	private String username = "root";
-	private String password = "";
+	private String password = "saobestanime";
 
 	private Configuration config;
 
