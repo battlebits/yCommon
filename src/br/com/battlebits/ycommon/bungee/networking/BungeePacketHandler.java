@@ -56,6 +56,8 @@ public class BungeePacketHandler extends CommonHandler {
 
 	@Override
 	public void handleAccountConfiguration(CPacketAccountConfiguration packet) throws Exception {
+		BattlebitsAPI.getLogger().warning("Recebendo AccountConfiguration!");
+		BattlebitsAPI.getLogger().info(packet.getConfiguration());
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(packet.getUuid());
 		player.setConfiguration(BungeeMain.getGson().fromJson(packet.getConfiguration(), AccountConfiguration.class));
 		player = null;
