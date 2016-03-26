@@ -337,7 +337,7 @@ public class CommandFramework {
 			}
 
 			try {
-				success = executor.onCommand(sender, this, commandLabel, args);
+				success = handleCommand(sender, commandLabel, this, args);
 			} catch (Throwable ex) {
 				throw new CommandException("Unhandled exception executing command '" + commandLabel + "' in plugin "
 						+ owningPlugin.getDescription().getFullName(), ex);
