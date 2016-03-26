@@ -102,7 +102,7 @@ public abstract class CommonPacket {
 		try {
 			return (CommonPacket) MAP_CLASS.get(i).newInstance();
 		} catch (Exception e) {
-			System.out.println(MAP_CLASS.get(i).getSimpleName());
+			System.out.println("ERRO NA CLASSE: " + MAP_CLASS.get(i).getSimpleName());
 			return null;
 		}
 	}

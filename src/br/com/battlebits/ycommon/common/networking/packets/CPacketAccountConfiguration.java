@@ -12,6 +12,10 @@ public class CPacketAccountConfiguration extends CommonPacket {
 	private UUID uuid;
 	private String configuration;
 
+	public CPacketAccountConfiguration() {
+
+	}
+
 	public CPacketAccountConfiguration(UUID uuid, String accountConfiguration) {
 		this.uuid = uuid;
 		this.configuration = accountConfiguration;
