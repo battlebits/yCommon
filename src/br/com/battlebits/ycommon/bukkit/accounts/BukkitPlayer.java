@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
+import br.com.battlebits.ycommon.bukkit.networking.PacketSender;
 import br.com.battlebits.ycommon.bukkit.tagmanager.Tag;
 import br.com.battlebits.ycommon.bukkit.tagmanager.TagManager;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
@@ -15,6 +16,7 @@ import br.com.battlebits.ycommon.common.enums.ServerType;
 import br.com.battlebits.ycommon.common.friends.Friend;
 import br.com.battlebits.ycommon.common.friends.block.Blocked;
 import br.com.battlebits.ycommon.common.friends.request.Request;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketAccountConfiguration;
 import br.com.battlebits.ycommon.common.party.Party;
 import br.com.battlebits.ycommon.common.payment.constructors.Expire;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
@@ -149,6 +151,14 @@ public class BukkitPlayer extends BattlePlayer {
 	@Override
 	public void updateBanHistory(BanHistory banHistory) {
 		super.updateBanHistory(banHistory);
+	}
+	
+	public void injectConfiguration() {
+		setConfiguration(new BukkitConfiguration(this));
+	}
+	
+	public void updateConfiguration() throws Exception {
+		PacketSender.sendPacket(new CPacketAccountConfiguration(getUuid(), BukkitMain.getGson().toJson(getConfiguration())));
 	}
 
 }

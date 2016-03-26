@@ -1,5 +1,6 @@
 package br.com.battlebits.ycommon.common.networking;
 
+import br.com.battlebits.ycommon.common.networking.packets.CPacketAccountConfiguration;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAccountLoad;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAccountRequest;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAddBlockedPlayer;
@@ -29,6 +30,8 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketUpdateProfile;
 
 public abstract class CommonHandler {
 
+	public abstract void handleAccountConfiguration(CPacketAccountConfiguration packet) throws Exception;
+	
 	public abstract void handleAccountRequest(CPacketAccountRequest packet) throws Exception;
 
 	public abstract void handleAccountLoad(CPacketAccountLoad packet) throws Exception;

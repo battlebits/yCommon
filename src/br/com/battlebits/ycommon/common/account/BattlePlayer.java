@@ -317,6 +317,10 @@ public class BattlePlayer {
 	public void setSteam(String steam) {
 		this.steam = steam;
 	}
+	
+	public void setConfiguration(AccountConfiguration config) {
+		this.configuration = config;
+	}
 
 	public void setLanguage(Language language) {
 		this.language = language;

@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import br.com.battlebits.ycommon.common.networking.packets.CPacketAccountConfiguration;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAccountLoad;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAccountRequest;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAddBlockedPlayer;
@@ -43,6 +44,7 @@ public abstract class CommonPacket {
 		/** 0x0X: Account **/
 		register((byte) 0x00, CPacketAccountRequest.class);
 		register((byte) 0x01, CPacketAccountLoad.class);
+		register((byte) 0x02, CPacketAccountConfiguration.class);
 
 		/** 0x1X: Translations **/
 		register((byte) 0x10, CPacketTranslationsRequest.class);

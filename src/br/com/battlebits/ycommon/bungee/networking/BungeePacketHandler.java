@@ -5,7 +5,10 @@ import java.util.UUID;
 
 import br.com.battlebits.ycommon.bungee.BungeeMain;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
+import br.com.battlebits.ycommon.common.account.AccountConfiguration;
+import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.networking.CommonHandler;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketAccountConfiguration;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAccountLoad;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAccountRequest;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAddBlockedPlayer;
@@ -34,6 +37,7 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketUpdateGameStat
 import br.com.battlebits.ycommon.common.networking.packets.CPacketUpdateProfile;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
+import net.md_5.bungee.BungeeCord;
 
 public class BungeePacketHandler extends CommonHandler {
 
@@ -48,6 +52,13 @@ public class BungeePacketHandler extends CommonHandler {
 		String json = BungeeMain.getGson().toJson(Translate.getMapTranslation(lang));
 		output.writeUTF(json);
 		output.flush();
+	}
+
+	@Override
+	public void handleAccountConfiguration(CPacketAccountConfiguration packet) throws Exception {
+		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(packet.getUuid());
+		player.setConfiguration(BungeeMain.getGson().fromJson(packet.getConfiguration(), AccountConfiguration.class));
+		player = null;
 	}
 
 	@Override

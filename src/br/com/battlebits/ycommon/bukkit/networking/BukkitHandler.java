@@ -6,6 +6,7 @@ import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.networking.CommonHandler;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketAccountConfiguration;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAccountLoad;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAccountRequest;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAddBlockedPlayer;
@@ -46,6 +47,7 @@ public class BukkitHandler extends CommonHandler {
 	@Override
 	public void handleAccountLoad(CPacketAccountLoad packet) {
 		BukkitPlayer battlePlayer = BukkitMain.getGson().fromJson(packet.getJson(), BukkitPlayer.class);
+		battlePlayer.injectConfiguration();
 		BattlebitsAPI.getAccountCommon().loadBattlePlayer(packet.getUuid(), battlePlayer);
 		BattlebitsAPI.debug("NEW BATTLEPLAYER>" + battlePlayer.getUserName() + "(" + packet.getUuid() + ")");
 		battlePlayer = null;
@@ -198,6 +200,12 @@ public class BukkitHandler extends CommonHandler {
 	public void handleChangeLanguage(CPacketChangeLanguage packet) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void handleAccountConfiguration(CPacketAccountConfiguration packet) throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
