@@ -4,7 +4,7 @@ import br.com.battlebits.ycommon.common.account.AccountConfiguration;
 
 public class BukkitConfiguration extends AccountConfiguration {
 
-	private BukkitPlayer player;
+	private transient BukkitPlayer player;
 	
 	public BukkitConfiguration(BukkitPlayer player) {
 		this.player = player;
