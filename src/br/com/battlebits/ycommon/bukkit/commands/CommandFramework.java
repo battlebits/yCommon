@@ -82,11 +82,6 @@ public class CommandFramework {
 			String cmdLabel = buffer.toString();
 			if (commandMap.containsKey(cmdLabel)) {
 				Entry<Method, Object> entry = commandMap.get(cmdLabel);
-				Command command = entry.getKey().getAnnotation(Command.class);
-				if (!sender.hasPermission(command.permission())) {
-					sender.sendMessage(command.noPerm());
-					return true;
-				}
 				try {
 					entry.getKey().invoke(entry.getValue(),
 							new CommandArgs(sender, cmd, label, args, cmdLabel.split("\\.").length - 1));
