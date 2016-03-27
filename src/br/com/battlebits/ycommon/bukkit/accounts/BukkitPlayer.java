@@ -25,6 +25,7 @@ import br.com.battlebits.ycommon.common.translate.languages.Language;
 public class BukkitPlayer extends BattlePlayer {
 
 	private Tag tag;
+	private UUID lastTellUUID;
 
 	public Group getServerGroup() {
 		Group group = Group.NORMAL;
@@ -163,6 +164,18 @@ public class BukkitPlayer extends BattlePlayer {
 
 	public void updateConfiguration() throws Exception {
 		PacketSender.sendPacket(new CPacketAccountConfiguration(getUuid(), BukkitMain.getGson().toJson(getConfiguration())));
+	}
+
+	public UUID getLastTellUUID() {
+		return lastTellUUID;
+	}
+
+	public void setLastTellUUID(UUID lastTellUUID) {
+		this.lastTellUUID = lastTellUUID;
+	}
+
+	public boolean hasLastTell() {
+		return this.lastTellUUID != null;
 	}
 
 }

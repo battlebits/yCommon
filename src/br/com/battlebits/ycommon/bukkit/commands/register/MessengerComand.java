@@ -67,6 +67,11 @@ public class MessengerComand {
 								}
 								p.spigot().sendMessage(toPlayer);
 								t.spigot().sendMessage(toTarget);
+								// TODO: SEND MESSAGE ON BOSSBAR/ACTIONBAR
+								// TODO: PLAY SOUND
+								bt.setLastTellUUID(p.getUniqueId());
+								toTarget = null;
+								toPlayer = null;
 							} else {
 								p.sendMessage(Translate.getTranslation(bp.getLanguage(), "tell-player-disabled"));
 							}
@@ -80,6 +85,75 @@ public class MessengerComand {
 					t = null;
 				} else {
 					p.sendMessage(Translate.getTranslation(bp.getLanguage(), "tell-disabled"));
+				}
+			}
+			bp = null;
+			p = null;
+		}
+	}
+
+	@Command(name = "reply", aliases = { "r", "responder" })
+	public void reply(CommandArgs args) {
+		if (args.isPlayer()) {
+			Player p = args.getPlayer();
+			BukkitPlayer bp = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
+			if (args.getArgs().length == 0) {
+				p.sendMessage(Translate.getTranslation(bp.getLanguage(), "reply-use"));
+			} else {
+				if (bp.hasLastTell()) {
+					Player t = Bukkit.getPlayer(bp.getLastTellUUID());
+					if (t != null) {
+						BukkitPlayer bt = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(t.getUniqueId());
+						if (bt.getConfiguration().isTellEnabled()) {
+							TextComponent[] toPlayer = new TextComponent[args.getArgs().length + 1];
+							TextComponent to = new TextComponent(
+									Translate.getTranslation(bp.getLanguage(), "tell-me-player").replace("%player%", t.getName()));
+							to.setClickEvent(new ClickEvent(Action.SUGGEST_COMMAND, "/tell " + t.getName() + " "));
+							to.setHoverEvent(
+									new HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT, new TextComponent[] { new TextComponent(
+											Translate.getTranslation(bp.getLanguage(), "tell-hover-another").replace("%player%", t.getName())) }));
+							toPlayer[0] = to;
+							to = null;
+							TextComponent[] toTarget = new TextComponent[args.getArgs().length + 1];
+							TextComponent from = new TextComponent(
+									Translate.getTranslation(bt.getLanguage(), "tell-player-me").replace("%player%", p.getName()));
+							from.setClickEvent(new ClickEvent(Action.SUGGEST_COMMAND, "/r "));
+							from.setHoverEvent(
+									new HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT, new TextComponent[] { new TextComponent(
+											Translate.getTranslation(bt.getLanguage(), "tell-hover-reply").replace("%player%", p.getName())) }));
+							toTarget[0] = from;
+							from = null;
+							for (int i = 0; i < args.getArgs().length; i += 1) {
+								String msg = args.getArgs()[i];
+								msg = " " + msg;
+								TextComponent text = new TextComponent(msg);
+								List<String> url = StringURLUtils.extractUrls(msg);
+								if (url.size() > 0) {
+									text.setClickEvent(new ClickEvent(Action.OPEN_URL, url.get(0)));
+								}
+								toPlayer[i + 1] = text;
+								toTarget[i + 1] = text;
+								text = null;
+								url = null;
+								msg = null;
+							}
+							p.spigot().sendMessage(toPlayer);
+							t.spigot().sendMessage(toTarget);
+							// TODO: SEND MESSAGE ON BOSSBAR/ACTIONBAR
+							// TODO: PLAY SOUND
+							bt.setLastTellUUID(p.getUniqueId());
+							toTarget = null;
+							toPlayer = null;
+						} else {
+							p.sendMessage(Translate.getTranslation(bp.getLanguage(), "reply-tell-off"));
+						}
+						bt = null;
+					} else {
+						p.sendMessage(Translate.getTranslation(bp.getLanguage(), "reply-offline"));
+					}
+					t = null;
+				} else {
+					p.sendMessage(Translate.getTranslation(bp.getLanguage(), "reply-none"));
 				}
 			}
 			bp = null;
