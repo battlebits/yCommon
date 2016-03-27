@@ -37,7 +37,6 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketUpdateGameStat
 import br.com.battlebits.ycommon.common.networking.packets.CPacketUpdateProfile;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
-import net.md_5.bungee.BungeeCord;
 
 public class BungeePacketHandler extends CommonHandler {
 

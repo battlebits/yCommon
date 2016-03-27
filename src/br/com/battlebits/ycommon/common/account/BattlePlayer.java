@@ -189,6 +189,16 @@ public class BattlePlayer {
 	public Map<ServerType, Group> getGroups() {
 		return groups;
 	}
+	
+	public boolean isStaff() {
+		boolean staff = false;
+		for(Group group : getGroups().values()) {
+			if(group.ordinal() > 6) {
+				staff = true;
+			}
+		}
+		return staff;
+	}
 
 	public Map<Group, Expire> getRanks() {
 		return ranks;

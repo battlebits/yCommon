@@ -52,6 +52,10 @@ public class BukkitPlayer extends BattlePlayer {
 		return group;
 	}
 
+	public boolean hasGroupPermission(Group group) {
+		return getServerGroup().ordinal() >= group.ordinal();
+	}
+
 	public Tag getTag() {
 		if (tag == null)
 			tag = TagManager.getPlayerDefaultTag(this);
@@ -152,11 +156,11 @@ public class BukkitPlayer extends BattlePlayer {
 	public void updateBanHistory(BanHistory banHistory) {
 		super.updateBanHistory(banHistory);
 	}
-	
+
 	public void injectConfiguration() {
 		setConfiguration(new BukkitConfiguration(this));
 	}
-	
+
 	public void updateConfiguration() throws Exception {
 		PacketSender.sendPacket(new CPacketAccountConfiguration(getUuid(), BukkitMain.getGson().toJson(getConfiguration())));
 	}
