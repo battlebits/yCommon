@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
+
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bukkit.networking.PacketSender;
 import br.com.battlebits.ycommon.bukkit.tagmanager.Tag;
@@ -20,6 +22,7 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketAccountConfigu
 import br.com.battlebits.ycommon.common.party.Party;
 import br.com.battlebits.ycommon.common.payment.constructors.Expire;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
+import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
 
 public class BukkitPlayer extends BattlePlayer {
@@ -162,8 +165,12 @@ public class BukkitPlayer extends BattlePlayer {
 		setConfiguration(new BukkitConfiguration(this));
 	}
 
-	public void updateConfiguration() throws Exception {
-		PacketSender.sendPacket(new CPacketAccountConfiguration(getUuid(), BukkitMain.getGson().toJson(getConfiguration())));
+	public void updateConfiguration() {
+		try {
+			PacketSender.sendPacket(new CPacketAccountConfiguration(getUuid(), BukkitMain.getGson().toJson(getConfiguration())));
+		} catch (Exception ex) {
+			Bukkit.getPlayer(getUuid()).sendMessage(Translate.getTranslation(getLanguage(), "configuration-fail-save"));
+		}
 	}
 
 	public UUID getLastTellUUID() {
