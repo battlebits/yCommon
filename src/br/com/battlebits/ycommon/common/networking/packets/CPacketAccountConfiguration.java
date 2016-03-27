@@ -13,7 +13,6 @@ public class CPacketAccountConfiguration extends CommonPacket {
 	private String configuration;
 
 	public CPacketAccountConfiguration() {
-
 	}
 
 	public CPacketAccountConfiguration(UUID uuid, String accountConfiguration) {

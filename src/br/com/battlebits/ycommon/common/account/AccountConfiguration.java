@@ -5,6 +5,11 @@ public class AccountConfiguration {
 	private boolean ignoreAll;
 	private boolean tellEnabled;
 
+	public AccountConfiguration() {
+		ignoreAll = false;
+		tellEnabled = true;
+	}
+
 	@Override
 	public String toString() {
 		return super.toString();
