@@ -31,6 +31,9 @@ import org.bukkit.help.IndexHelpTopic;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.SimplePluginManager;
 
+import br.com.battlebits.ycommon.common.BattlebitsAPI;
+import br.com.battlebits.ycommon.common.permissions.enums.Group;
+
 /**
  * Command Framework - CommandFramework <br>
  * The main command framework class used for controlling the framework.
@@ -65,11 +68,15 @@ public class CommandFramework {
 	/**
 	 * Handles commands. Used in the onCommand method in your JavaPlugin class
 	 * 
-	 * @param sender The {@link org.bukkit.command.CommandSender} parsed from
+	 * @param sender
+	 *            The {@link org.bukkit.command.CommandSender} parsed from
 	 *            onCommand
-	 * @param label The label parsed from onCommand
-	 * @param cmd The {@link org.bukkit.command.Command} parsed from onCommand
-	 * @param args The arguments parsed from onCommand
+	 * @param label
+	 *            The label parsed from onCommand
+	 * @param cmd
+	 *            The {@link org.bukkit.command.Command} parsed from onCommand
+	 * @param args
+	 *            The arguments parsed from onCommand
 	 * @return Always returns true for simplicity's sake in onCommand
 	 */
 	public boolean handleCommand(CommandSender sender, String label, org.bukkit.command.Command cmd, String[] args) {
@@ -82,9 +89,14 @@ public class CommandFramework {
 			String cmdLabel = buffer.toString();
 			if (commandMap.containsKey(cmdLabel)) {
 				Entry<Method, Object> entry = commandMap.get(cmdLabel);
+				Command command = entry.getKey().getAnnotation(Command.class);
+				//CHECK IF SENDER IS PLAYER AND HAS GROUP TO USE
+				if (!(command.groupToUse() == Group.NORMAL)) {
+					sender.sendMessage(command.noPerm());
+					return true;
+				}
 				try {
-					entry.getKey().invoke(entry.getValue(),
-							new CommandArgs(sender, cmd, label, args, cmdLabel.split("\\.").length - 1));
+					entry.getKey().invoke(entry.getValue(), new CommandArgs(sender, cmd, label, args, cmdLabel.split("\\.").length - 1));
 				} catch (IllegalArgumentException | InvocationTargetException | IllegalAccessException e) {
 					e.printStackTrace();
 				}
@@ -99,7 +111,8 @@ public class CommandFramework {
 	 * Registers all command and completer methods inside of the object. Similar
 	 * to Bukkit's registerEvents method.
 	 * 
-	 * @param obj The object to register the commands of
+	 * @param obj
+	 *            The object to register the commands of
 	 */
 	public void registerCommands(Object obj) {
 		for (Method m : obj.getClass().getMethods()) {
@@ -115,10 +128,8 @@ public class CommandFramework {
 				}
 			} else if (m.getAnnotation(Completer.class) != null) {
 				Completer comp = m.getAnnotation(Completer.class);
-				if (m.getParameterTypes().length > 1 || m.getParameterTypes().length == 0
-						|| m.getParameterTypes()[0] != CommandArgs.class) {
-					System.out.println("Unable to register tab completer " + m.getName()
-							+ ". Unexpected method arguments");
+				if (m.getParameterTypes().length > 1 || m.getParameterTypes().length == 0 || m.getParameterTypes()[0] != CommandArgs.class) {
+					System.out.println("Unable to register tab completer " + m.getName() + ". Unexpected method arguments");
 					continue;
 				}
 				if (m.getReturnType() != List.class) {
@@ -191,8 +202,8 @@ public class CommandFramework {
 					BukkitCompleter completer = (BukkitCompleter) field.get(command);
 					completer.addCompleter(label, m, obj);
 				} else {
-					System.out.println("Unable to register tab completer " + m.getName()
-							+ ". A tab completer is already registered for that command!");
+					System.out
+							.println("Unable to register tab completer " + m.getName() + ". A tab completer is already registered for that command!");
 				}
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -229,7 +240,7 @@ public class CommandFramework {
 		 * 
 		 * @return
 		 */
-		public String permission() default "";
+		public Group groupToUse() default Group.NORMAL;
 
 		/**
 		 * The message sent to the player when they do not have permission to
@@ -237,7 +248,7 @@ public class CommandFramework {
 		 * 
 		 * @return
 		 */
-		public String noPerm() default "You do not have permission to perform that action";
+		public String noPerm() default "§4§lERRO §fVoce nao tem §C§LACESSO §fa este comando!";
 
 		/**
 		 * A list of alternate names that the command is executed under. See
@@ -334,8 +345,8 @@ public class CommandFramework {
 			try {
 				success = handleCommand(sender, commandLabel, this, args);
 			} catch (Throwable ex) {
-				throw new CommandException("Unhandled exception executing command '" + commandLabel + "' in plugin "
-						+ owningPlugin.getDescription().getFullName(), ex);
+				throw new CommandException(
+						"Unhandled exception executing command '" + commandLabel + "' in plugin " + owningPlugin.getDescription().getFullName(), ex);
 			}
 
 			if (!success && usageMessage.length() > 0) {
@@ -348,8 +359,7 @@ public class CommandFramework {
 		}
 
 		@Override
-		public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws CommandException,
-				IllegalArgumentException {
+		public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws CommandException, IllegalArgumentException {
 			Validate.notNull(sender, "Sender cannot be null");
 			Validate.notNull(args, "Arguments cannot be null");
 			Validate.notNull(alias, "Alias cannot be null");
@@ -368,8 +378,7 @@ public class CommandFramework {
 				for (String arg : args) {
 					message.append(arg).append(' ');
 				}
-				message.deleteCharAt(message.length() - 1).append("' in plugin ")
-						.append(owningPlugin.getDescription().getFullName());
+				message.deleteCharAt(message.length() - 1).append("' in plugin ").append(owningPlugin.getDescription().getFullName());
 				throw new CommandException(message.toString(), ex);
 			}
 
@@ -398,8 +407,7 @@ public class CommandFramework {
 
 		@SuppressWarnings("unchecked")
 		@Override
-		public List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command command, String label,
-				String[] args) {
+		public List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
 			for (int i = args.length; i >= 0; i--) {
 				StringBuilder buffer = new StringBuilder();
 				buffer.append(label.toLowerCase());
@@ -437,8 +445,7 @@ public class CommandFramework {
 		private final String label;
 		private final String[] args;
 
-		protected CommandArgs(CommandSender sender, org.bukkit.command.Command command, String label, String[] args,
-				int subCommand) {
+		protected CommandArgs(CommandSender sender, org.bukkit.command.Command command, String label, String[] args, int subCommand) {
 			String[] modArgs = new String[args.length - subCommand];
 			System.arraycopy(args, 0 + subCommand, modArgs, 0, args.length - subCommand);
 
