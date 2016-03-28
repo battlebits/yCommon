@@ -2,7 +2,6 @@ package br.com.battlebits.ycommon.bukkit.networking;
 
 import java.util.HashMap;
 
-import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.networking.CommonHandler;
@@ -46,7 +45,7 @@ public class BukkitHandler extends CommonHandler {
 
 	@Override
 	public void handleAccountLoad(CPacketAccountLoad packet) {
-		BukkitPlayer battlePlayer = BukkitMain.getGson().fromJson(packet.getJson(), BukkitPlayer.class);
+		BukkitPlayer battlePlayer = BattlebitsAPI.getGson().fromJson(packet.getJson(), BukkitPlayer.class);
 		battlePlayer.injectConfiguration();
 		BattlebitsAPI.getAccountCommon().loadBattlePlayer(packet.getUuid(), battlePlayer);
 		BattlebitsAPI.debug("NEW BATTLEPLAYER>" + battlePlayer.getUserName() + "(" + packet.getUuid() + ")");
@@ -62,7 +61,7 @@ public class BukkitHandler extends CommonHandler {
 	public void handleTranslationsLoad(CPacketTranslationsLoad packet) {
 		Language lang = packet.getLanguage();
 		String json = packet.getJson();
-		HashMap<String, String> translation = BukkitMain.getGson().fromJson(json, new TypeToken<HashMap<String, String>>() {
+		HashMap<String, String> translation = BattlebitsAPI.getGson().fromJson(json, new TypeToken<HashMap<String, String>>() {
 		}.getType());
 		Translate.loadTranslations(lang, translation);
 		BattlebitsAPI.debug("NEW TRANSLATION>" + lang);

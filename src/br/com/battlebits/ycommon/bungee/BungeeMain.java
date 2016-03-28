@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
-import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import br.com.battlebits.ycommon.bungee.event.UpdateScheduler;
@@ -16,6 +15,7 @@ import br.com.battlebits.ycommon.bungee.listeners.PlayerListener;
 import br.com.battlebits.ycommon.bungee.listeners.QuitListener;
 import br.com.battlebits.ycommon.bungee.managers.BanManager;
 import br.com.battlebits.ycommon.bungee.networking.CommonServer;
+import br.com.battlebits.ycommon.bungee.utils.gson.GsonBungee;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.connection.backend.MySQLBackend;
 import br.com.battlebits.ycommon.common.enums.BattleInstance;
@@ -30,7 +30,6 @@ public class BungeeMain extends Plugin {
 
 	private static BungeeMain plugin;
 	private MySQLBackend mysql;
-	private static Gson gson = new Gson();
 	// MYSQL DATA
 	private String hostname = "localhost";
 	private int port = 3306;
@@ -50,6 +49,7 @@ public class BungeeMain extends Plugin {
 	@Override
 	public void onLoad() {
 		BattlebitsAPI.setBattleInstance(BattleInstance.BUNGEECORD);
+		BattlebitsAPI.setGson(new GsonBungee());
 	}
 
 	@Override
@@ -127,7 +127,7 @@ public class BungeeMain extends Plugin {
 					stmt = getConnection().getConnection().prepareStatement("SELECT * FROM `translations` WHERE `language`='" + lang + "';");
 					result = stmt.executeQuery();
 					if (result.next()) {
-						HashMap<String, String> translation = BungeeMain.getGson().fromJson(result.getString("json"), new TypeToken<HashMap<String, String>>() {
+						HashMap<String, String> translation = BattlebitsAPI.getGson().fromJson(result.getString("json"), new TypeToken<HashMap<String, String>>() {
 						}.getType());
 						Translate.loadTranslations(lang, translation);
 						BattlebitsAPI.debug(lang.toString() + " > LOADED");
@@ -151,10 +151,6 @@ public class BungeeMain extends Plugin {
 
 	public MySQLBackend getConnection() {
 		return mysql;
-	}
-
-	public static Gson getGson() {
-		return gson;
 	}
 
 	public BanManager getBanManager() {

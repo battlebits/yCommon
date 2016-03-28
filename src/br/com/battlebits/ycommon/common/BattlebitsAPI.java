@@ -6,12 +6,14 @@ import br.com.battlebits.ycommon.common.enums.BattleInstance;
 import br.com.battlebits.ycommon.common.manager.AccountCommon;
 import br.com.battlebits.ycommon.common.manager.ClanCommon;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
+import br.com.battlebits.ycommon.common.utils.gson.GsonInterface;
 
 public class BattlebitsAPI {
 
 	private static AccountCommon accountCommon = new AccountCommon();
 	private static ClanCommon clanCommon = new ClanCommon();
 	
+	private static GsonInterface gson;
 	private static BattleInstance battleInstance;
 	private static Logger logger = Logger.getLogger("Minecraft");
 	private static boolean debugMode = true;
@@ -38,6 +40,10 @@ public class BattlebitsAPI {
 	public static String getBungeeChannel() {
 		return "yCommon";
 	}
+	
+	public static GsonInterface getGson() {
+		return gson;
+	}
 
 	public static boolean debugModeEnabled() {
 		return debugMode;
@@ -53,6 +59,10 @@ public class BattlebitsAPI {
 
 	public static void setDefaultLanguange(Language language) {
 		defaultLanguage = language;
+	}
+	
+	public static void setGson(GsonInterface gson) {
+		BattlebitsAPI.gson = gson;
 	}
 	
 	public static void setBattleInstance(BattleInstance instance) {

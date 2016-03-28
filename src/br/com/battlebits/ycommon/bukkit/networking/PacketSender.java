@@ -5,7 +5,6 @@ import java.io.DataOutputStream;
 import java.net.Socket;
 import java.util.UUID;
 
-import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
 import br.com.battlebits.ycommon.bungee.networking.CommonServer;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
@@ -90,6 +89,6 @@ public class PacketSender {
 		inputStream = null;
 		socket = null;
 		packet = null;
-		return BukkitMain.getGson().fromJson(PACKET.getJson(), BukkitPlayer.class);
+		return BattlebitsAPI.getGson().fromJson(PACKET.getJson(), BukkitPlayer.class);
 	}
 }

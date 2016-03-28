@@ -7,6 +7,7 @@ import br.com.battlebits.ycommon.bungee.BungeeMain;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.AccountConfiguration;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
+import br.com.battlebits.ycommon.common.banmanager.constructors.Ban;
 import br.com.battlebits.ycommon.common.networking.CommonHandler;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAccountConfiguration;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAccountLoad;
@@ -48,7 +49,7 @@ public class BungeePacketHandler extends CommonHandler {
 
 	public static void handleTranslationsLoad(Language lang, DataOutputStream output) throws Exception {
 		output.writeUTF("Translations");
-		String json = BungeeMain.getGson().toJson(Translate.getMapTranslation(lang));
+		String json = BattlebitsAPI.getGson().toJson(Translate.getMapTranslation(lang));
 		output.writeUTF(json);
 		output.flush();
 	}
@@ -58,14 +59,14 @@ public class BungeePacketHandler extends CommonHandler {
 		BattlebitsAPI.getLogger().warning("Recebendo AccountConfiguration!");
 		BattlebitsAPI.getLogger().info(packet.getConfiguration());
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(packet.getUuid());
-		player.setConfiguration(BungeeMain.getGson().fromJson(packet.getConfiguration(), AccountConfiguration.class));
+		player.setConfiguration(BattlebitsAPI.getGson().fromJson(packet.getConfiguration(), AccountConfiguration.class));
 		player = null;
 	}
 
 	@Override
 	public void handleAccountRequest(CPacketAccountRequest packet) throws Exception {
 		UUID uuid = packet.getUuid();
-		String json = BungeeMain.getGson().toJson(BattlebitsAPI.getAccountCommon().getBattlePlayer(uuid));
+		String json = BattlebitsAPI.getGson().toJson(BattlebitsAPI.getAccountCommon().getBattlePlayer(uuid));
 		sender.sendPacket(new CPacketAccountLoad(uuid, json));
 		uuid = null;
 		json = null;
@@ -79,7 +80,7 @@ public class BungeePacketHandler extends CommonHandler {
 	@Override
 	public void handleTranslationsRequest(CPacketTranslationsRequest packet) throws Exception {
 		Language lang = packet.getLanguage();
-		String json = BungeeMain.getGson().toJson(Translate.getMapTranslation(lang));
+		String json = BattlebitsAPI.getGson().toJson(Translate.getMapTranslation(lang));
 		sender.sendPacket(new CPacketTranslationsLoad(lang, json));
 		lang = null;
 		json = null;
@@ -164,8 +165,11 @@ public class BungeePacketHandler extends CommonHandler {
 
 	@Override
 	public void handleBanPlayer(CPacketBanPlayer packet) {
-		// TODO Auto-generated method stub
-
+		Ban ban = BattlebitsAPI.getGson().fromJson(packet.getBanJson(), Ban.class);
+		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(ban.getBannedPlayer());
+		BungeeMain.getPlugin().getBanManager().ban(player, ban);
+		player = null;
+		ban = null;
 	}
 
 	@Override

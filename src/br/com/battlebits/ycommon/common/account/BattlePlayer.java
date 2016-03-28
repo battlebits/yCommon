@@ -79,6 +79,8 @@ public class BattlePlayer {
 	private List<String> nameHistory;
 	private BanHistory banHistory;
 
+	private boolean online;
+	
 	public BattlePlayer() {
 	}
 
@@ -263,6 +265,10 @@ public class BattlePlayer {
 	public boolean isCacheExpired() {
 		return System.currentTimeMillis() > cacheExpire;
 	}
+	
+	public boolean isOnline() {
+		return online;
+	}
 
 	public void setFakeName(String fakeName) {
 		this.fakeName = fakeName;
@@ -352,6 +358,7 @@ public class BattlePlayer {
 		this.ipAddress = ipAdrress;
 		joinTime = System.currentTimeMillis();
 		this.countryCode = countryCode;
+		this.online = true;
 		updateCache();
 	}
 
@@ -361,6 +368,7 @@ public class BattlePlayer {
 		lastIpAddress = ipAddress.getHostString();
 		actualParty = null;
 		this.cacheExpire = System.currentTimeMillis() + (60 * 15 * 1000);
+		this.online = false;
 	}
 
 	@Override

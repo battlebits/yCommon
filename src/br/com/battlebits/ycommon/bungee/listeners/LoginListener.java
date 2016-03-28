@@ -51,7 +51,7 @@ public class LoginListener implements Listener {
 					ResultSet result = stmt.executeQuery();
 					BattlebitsAPI.debug("ACCOUNT > EXCUTED");
 					if (result.next()) {
-						BattlePlayer player = BungeeMain.getGson().fromJson(result.getString("json"), BattlePlayer.class);
+						BattlePlayer player = BattlebitsAPI.getGson().fromJson(result.getString("json"), BattlePlayer.class);
 						player.setJoinData(ipAdress, countryCode);
 						BattlebitsAPI.getAccountCommon().loadBattlePlayer(uuid, player);
 						BattlebitsAPI.debug("ACCOUNT > LOADED");
@@ -78,7 +78,7 @@ public class LoginListener implements Listener {
 					Ban ipBan = BungeeMain.getPlugin().getBanManager().getIpBan(ipAdress);
 					if (ipBan != null) {
 						if (!ipBan.getBannedPlayer().equals(player.getUuid()))
-							BungeeMain.getPlugin().getBanManager().ban(player, new Ban(player.getUuid(), "CONSOLE", ipAdress.getHostString(), Translate.getTranslation(player.getLanguage(), "alt-account")));
+							BungeeMain.getPlugin().getBanManager().ban(player, new Ban(player.getUuid(), "CONSOLE", ipAdress.getHostString(), Translate.getTranslation(player.getLanguage(), "alt-account"), "proxy"));
 					}
 				}
 				Ban ban = player.getBanHistory().getActualBan();

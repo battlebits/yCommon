@@ -10,6 +10,7 @@ import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bukkit.networking.PacketSender;
 import br.com.battlebits.ycommon.bukkit.tagmanager.Tag;
 import br.com.battlebits.ycommon.bukkit.tagmanager.TagManager;
+import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.account.game.GameStatus;
 import br.com.battlebits.ycommon.common.banmanager.history.BanHistory;
@@ -167,7 +168,7 @@ public class BukkitPlayer extends BattlePlayer {
 
 	public void updateConfiguration() {
 		try {
-			PacketSender.sendPacket(new CPacketAccountConfiguration(getUuid(), BukkitMain.getGson().toJson(getConfiguration())));
+			PacketSender.sendPacket(new CPacketAccountConfiguration(getUuid(), BattlebitsAPI.getGson().toJson(getConfiguration())));
 		} catch (Exception ex) {
 			Bukkit.getPlayer(getUuid()).sendMessage(Translate.getTranslation(getLanguage(), "configuration-fail-save"));
 		}

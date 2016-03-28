@@ -8,7 +8,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
 
-import br.com.battlebits.ycommon.bungee.BungeeMain;
+import br.com.battlebits.ycommon.common.BattlebitsAPI;
 
 public class GeoIpUtils {
 
@@ -19,7 +19,7 @@ public class GeoIpUtils {
 			return ipStorage.get(ipAdress);
 		} else {
 			String url = "http://api.ipinfodb.com/v3/ip-city/?format=json&key=d7859a91e5346872d0378a2674821fbd60bc07ed63684c3286c083198f024138&ip=" + ipAdress;
-			IpCityResponse ipCityResponse = BungeeMain.getGson().fromJson(getUrlSource(url), IpCityResponse.class);
+			IpCityResponse ipCityResponse = BattlebitsAPI.getGson().fromJson(getUrlSource(url), IpCityResponse.class);
 			if ("OK".equals(ipCityResponse.getStatusCode())) {
 				System.out.println(ipCityResponse.getCountryCode() + ", " + ipCityResponse.getRegionName() + ", " + ipCityResponse.getCityName());
 				ipStorage.put(ipAdress, ipCityResponse);

@@ -21,18 +21,17 @@ import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.enums.BattleInstance;
 import br.com.battlebits.ycommon.common.enums.ServerType;
 import br.com.battlebits.ycommon.common.networking.CommonHandler;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketServerNameRequest;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketTranslationsRequest;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
-import net.minecraft.util.com.google.gson.Gson;
 
 public class BukkitMain extends JavaPlugin {
 
 	private static BukkitMain plugin;
-	private static Gson gson = new Gson();
-	
+	private static String SERVERNAME = "";
 	private CommandFramework commandFramework;
-	
+
 	private BukkitAccount accountManager;
 	private PermissionManager permissionManager;
 	private CommonHandler packetHandler;
@@ -56,6 +55,11 @@ public class BukkitMain extends JavaPlugin {
 		try {
 			loadTranslations();
 		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			PacketSender.sendPacketReturn(new CPacketServerNameRequest(), packetHandler);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		registerCommonManagement();
@@ -121,12 +125,16 @@ public class BukkitMain extends JavaPlugin {
 		return plugin;
 	}
 
-	public static Gson getGson() {
-		return gson;
-	}
-
 	public static ServerType getServerType() {
 		return null;
+	}
+
+	public static void setServerName(String serverName) {
+		SERVERNAME = serverName;
+	}
+
+	public static String getServerName() {
+		return SERVERNAME;
 	}
 
 }
