@@ -1,7 +1,5 @@
 package br.com.battlebits.ycommon.bukkit.networking;
 
-import java.util.HashMap;
-
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.networking.CommonHandler;
@@ -34,7 +32,6 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketUpdateGameStat
 import br.com.battlebits.ycommon.common.networking.packets.CPacketUpdateProfile;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
-import net.minecraft.util.com.google.gson.reflect.TypeToken;
 
 public class BukkitHandler extends CommonHandler {
 
@@ -45,10 +42,10 @@ public class BukkitHandler extends CommonHandler {
 
 	@Override
 	public void handleAccountLoad(CPacketAccountLoad packet) {
-		BukkitPlayer battlePlayer = BattlebitsAPI.getGson().fromJson(packet.getJson(), BukkitPlayer.class);
+		BukkitPlayer battlePlayer = packet.getBukkitPlayer();
 		battlePlayer.injectConfiguration();
-		BattlebitsAPI.getAccountCommon().loadBattlePlayer(packet.getUuid(), battlePlayer);
-		BattlebitsAPI.debug("NEW BATTLEPLAYER>" + battlePlayer.getUserName() + "(" + packet.getUuid() + ")");
+		BattlebitsAPI.getAccountCommon().loadBattlePlayer(packet.getBattlePlayer().getUuid(), battlePlayer);
+		BattlebitsAPI.debug("NEW BATTLEPLAYER>" + battlePlayer.getUserName() + "(" + battlePlayer.getUuid() + ")");
 		battlePlayer = null;
 	}
 
@@ -61,9 +58,7 @@ public class BukkitHandler extends CommonHandler {
 	public void handleTranslationsLoad(CPacketTranslationsLoad packet) {
 		Language lang = packet.getLanguage();
 		String json = packet.getJson();
-		HashMap<String, String> translation = BattlebitsAPI.getGson().fromJson(json, new TypeToken<HashMap<String, String>>() {
-		}.getType());
-		Translate.loadTranslations(lang, translation);
+		Translate.loadTranslations(lang, json);
 		BattlebitsAPI.debug("NEW TRANSLATION>" + lang);
 		lang = null;
 		json = null;

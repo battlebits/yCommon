@@ -4,10 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
-
-import com.google.gson.reflect.TypeToken;
 
 import br.com.battlebits.ycommon.bungee.event.UpdateScheduler;
 import br.com.battlebits.ycommon.bungee.listeners.LoginListener;
@@ -127,9 +124,7 @@ public class BungeeMain extends Plugin {
 					stmt = getConnection().getConnection().prepareStatement("SELECT * FROM `translations` WHERE `language`='" + lang + "';");
 					result = stmt.executeQuery();
 					if (result.next()) {
-						HashMap<String, String> translation = BattlebitsAPI.getGson().fromJson(result.getString("json"), new TypeToken<HashMap<String, String>>() {
-						}.getType());
-						Translate.loadTranslations(lang, translation);
+						Translate.loadTranslations(lang, result.getString("json"));
 						BattlebitsAPI.debug(lang.toString() + " > LOADED");
 
 					}

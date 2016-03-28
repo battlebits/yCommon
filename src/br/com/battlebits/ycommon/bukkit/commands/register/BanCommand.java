@@ -72,13 +72,13 @@ public class BanCommand {
 						return;
 					}
 					Ban actualBan = player.getBanHistory().getActualBan();
-					if(actualBan != null && !actualBan.isUnbanned() && actualBan.isPermanent()) {
+					if (actualBan != null && !actualBan.isUnbanned() && actualBan.isPermanent()) {
 						sender.sendMessage(banPrefix + Translate.getTranslation(language, "already-banned"));
 						return;
 					}
-					if(player.isStaff()) {
+					if (player.isStaff()) {
 						Group group = getBukkitPlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup();
-						if(group != Group.DONO || group != Group.ADMIN) {
+						if (group != Group.DONO || group != Group.ADMIN) {
 							sender.sendMessage(banPrefix + Translate.getTranslation(language, "ban-staff"));
 							return;
 						}
@@ -92,12 +92,12 @@ public class BanCommand {
 					}
 					Ban ban = null;
 					String playerIp = "";
-					if(player.isOnline()) {
+					if (player.isOnline()) {
 						playerIp = player.getIpAddress().getHostString();
 					} else {
 						playerIp = "OFFLINE";
 					}
-					if(cmdArgs.isPlayer()) {
+					if (cmdArgs.isPlayer()) {
 						Player bannedBy = cmdArgs.getPlayer();
 						ban = new Ban(uuid, bannedBy.getName(), bannedBy.getUniqueId(), playerIp, BukkitMain.getServerName(), builder.toString());
 						bannedBy = null;
@@ -105,7 +105,7 @@ public class BanCommand {
 						ban = new Ban(uuid, "CONSOLE", playerIp, BukkitMain.getServerName(), builder.toString());
 					}
 					try {
-						PacketSender.sendPacket(new CPacketBanPlayer(BattlebitsAPI.getGson().toJson(ban)));
+						PacketSender.sendPacket(new CPacketBanPlayer(ban));
 					} catch (Exception e) {
 						sender.sendMessage(banPrefix + Translate.getTranslation(language, "ban-failure"));
 						e.printStackTrace();

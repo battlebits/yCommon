@@ -3,32 +3,34 @@ package br.com.battlebits.ycommon.common.networking.packets;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
+import br.com.battlebits.ycommon.common.BattlebitsAPI;
+import br.com.battlebits.ycommon.common.banmanager.constructors.Ban;
 import br.com.battlebits.ycommon.common.networking.CommonHandler;
 import br.com.battlebits.ycommon.common.networking.CommonPacket;
 
 public class CPacketBanPlayer extends CommonPacket {
 
-	private String banJson;
+	private Ban ban;
 	
 	public CPacketBanPlayer() {
 	}
 	
-	public CPacketBanPlayer(String banJson) {
-		this.banJson = banJson;
+	public CPacketBanPlayer(Ban ban) {
+		this.ban = ban;
 	}
 	
-	public String getBanJson() {
-		return banJson;
+	public Ban getBan() {
+		return ban;
 	}
 	
 	@Override
 	public void read(DataInputStream in) throws Exception {
-		this.banJson = in.readUTF();
+		this.ban = BattlebitsAPI.getGson().fromJson(in.readUTF(), Ban.class);
 	}
 
 	@Override
 	public void write(DataOutputStream out) throws Exception {
-		out.writeUTF(banJson);
+		out.writeUTF(BattlebitsAPI.getGson().toJson(ban));
 	}
 
 	@Override

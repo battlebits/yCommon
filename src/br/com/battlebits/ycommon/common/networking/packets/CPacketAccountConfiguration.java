@@ -4,18 +4,20 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.util.UUID;
 
+import br.com.battlebits.ycommon.common.BattlebitsAPI;
+import br.com.battlebits.ycommon.common.account.AccountConfiguration;
 import br.com.battlebits.ycommon.common.networking.CommonHandler;
 import br.com.battlebits.ycommon.common.networking.CommonPacket;
 
 public class CPacketAccountConfiguration extends CommonPacket {
 
 	private UUID uuid;
-	private String configuration;
+	private AccountConfiguration configuration;
 
 	public CPacketAccountConfiguration() {
 	}
 
-	public CPacketAccountConfiguration(UUID uuid, String accountConfiguration) {
+	public CPacketAccountConfiguration(UUID uuid, AccountConfiguration accountConfiguration) {
 		this.uuid = uuid;
 		this.configuration = accountConfiguration;
 	}
@@ -24,20 +26,20 @@ public class CPacketAccountConfiguration extends CommonPacket {
 		return uuid;
 	}
 
-	public String getConfiguration() {
+	public AccountConfiguration getConfiguration() {
 		return configuration;
 	}
 
 	@Override
 	public void read(DataInputStream in) throws Exception {
 		this.uuid = UUID.fromString(in.readUTF());
-		this.configuration = in.readUTF();
+		this.configuration = BattlebitsAPI.getGson().fromJson(in.readUTF(), AccountConfiguration.class);
 	}
 
 	@Override
 	public void write(DataOutputStream out) throws Exception {
 		out.writeUTF(uuid.toString());
-		out.writeUTF(configuration);
+		out.writeUTF(BattlebitsAPI.getGson().toJson(configuration));
 	}
 
 	@Override

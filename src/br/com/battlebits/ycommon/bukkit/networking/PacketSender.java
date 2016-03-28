@@ -89,6 +89,6 @@ public class PacketSender {
 		inputStream = null;
 		socket = null;
 		packet = null;
-		return BattlebitsAPI.getGson().fromJson(PACKET.getJson(), BukkitPlayer.class);
+		return PACKET.getBukkitPlayer();
 	}
 }

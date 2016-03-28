@@ -2,41 +2,38 @@ package br.com.battlebits.ycommon.common.networking.packets;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.util.UUID;
 
+import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
+import br.com.battlebits.ycommon.common.BattlebitsAPI;
+import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.networking.CommonHandler;
 import br.com.battlebits.ycommon.common.networking.CommonPacket;
 
 public class CPacketAccountLoad extends CommonPacket {
 
-	private UUID uuid;
 	private String json;
-
 	public CPacketAccountLoad() {
 	}
 
-	public CPacketAccountLoad(UUID uuid, String json) {
-		this.uuid = uuid;
-		this.json = json;
+	public CPacketAccountLoad(BattlePlayer player) {
+		json = BattlebitsAPI.getGson().toJson(player);
 	}
 
-	public UUID getUuid() {
-		return uuid;
+	public BattlePlayer getBattlePlayer() {
+		return BattlebitsAPI.getGson().fromJson(json, BattlePlayer.class);
 	}
-
-	public String getJson() {
-		return json;
+	
+	public BukkitPlayer getBukkitPlayer() {
+		return BattlebitsAPI.getGson().fromJson(json, BukkitPlayer.class);
 	}
 
 	@Override
 	public void read(DataInputStream in) throws Exception {
-		uuid = UUID.fromString(in.readUTF());
 		json = in.readUTF();
 	}
 
 	@Override
 	public void write(DataOutputStream out) throws Exception {
-		out.writeUTF(uuid.toString());
 		out.writeUTF(json);
 	}
 

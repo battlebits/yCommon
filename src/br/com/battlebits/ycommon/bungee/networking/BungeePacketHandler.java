@@ -1,11 +1,9 @@
 package br.com.battlebits.ycommon.bungee.networking;
 
 import java.io.DataOutputStream;
-import java.util.UUID;
 
 import br.com.battlebits.ycommon.bungee.BungeeMain;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
-import br.com.battlebits.ycommon.common.account.AccountConfiguration;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.banmanager.constructors.Ban;
 import br.com.battlebits.ycommon.common.networking.CommonHandler;
@@ -49,7 +47,7 @@ public class BungeePacketHandler extends CommonHandler {
 
 	public static void handleTranslationsLoad(Language lang, DataOutputStream output) throws Exception {
 		output.writeUTF("Translations");
-		String json = BattlebitsAPI.getGson().toJson(Translate.getMapTranslation(lang));
+		String json = Translate.getMapTranslation(lang);
 		output.writeUTF(json);
 		output.flush();
 	}
@@ -57,19 +55,15 @@ public class BungeePacketHandler extends CommonHandler {
 	@Override
 	public void handleAccountConfiguration(CPacketAccountConfiguration packet) throws Exception {
 		BattlebitsAPI.getLogger().warning("Recebendo AccountConfiguration!");
-		BattlebitsAPI.getLogger().info(packet.getConfiguration());
+		BattlebitsAPI.getLogger().info(packet.getConfiguration().toString());
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(packet.getUuid());
-		player.setConfiguration(BattlebitsAPI.getGson().fromJson(packet.getConfiguration(), AccountConfiguration.class));
+		player.setConfiguration(packet.getConfiguration());
 		player = null;
 	}
 
 	@Override
 	public void handleAccountRequest(CPacketAccountRequest packet) throws Exception {
-		UUID uuid = packet.getUuid();
-		String json = BattlebitsAPI.getGson().toJson(BattlebitsAPI.getAccountCommon().getBattlePlayer(uuid));
-		sender.sendPacket(new CPacketAccountLoad(uuid, json));
-		uuid = null;
-		json = null;
+		sender.sendPacket(new CPacketAccountLoad(BattlebitsAPI.getAccountCommon().getBattlePlayer(packet.getUuid())));
 	}
 
 	@Override
@@ -165,7 +159,7 @@ public class BungeePacketHandler extends CommonHandler {
 
 	@Override
 	public void handleBanPlayer(CPacketBanPlayer packet) {
-		Ban ban = BattlebitsAPI.getGson().fromJson(packet.getBanJson(), Ban.class);
+		Ban ban = packet.getBan();
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(ban.getBannedPlayer());
 		BungeeMain.getPlugin().getBanManager().ban(player, ban);
 		player = null;
