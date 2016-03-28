@@ -1,15 +1,20 @@
 package br.com.battlebits.ycommon.bukkit.commands.register;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
 import br.com.battlebits.ycommon.bukkit.commands.CommandFramework.Command;
 import br.com.battlebits.ycommon.bukkit.commands.CommandFramework.CommandArgs;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
+import br.com.battlebits.ycommon.common.friends.block.Blocked;
 import br.com.battlebits.ycommon.common.translate.Translate;
+import br.com.battlebits.ycommon.common.utils.mojang.UUIDFetcher;
 import br.com.battlebits.ycommon.common.utils.string.StringURLUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ClickEvent.Action;
@@ -158,6 +163,56 @@ public class MessengerComand {
 			}
 			bp = null;
 			p = null;
+		}
+	}
+
+	@Command(name = "ignore", aliases = { "ignorar", "bloquear", "block" })
+	public void ignore(CommandArgs args) {
+		if (args.isPlayer()) {
+			new BukkitRunnable() {
+				@Override
+				public void run() {
+					Player p = args.getPlayer();
+					BukkitPlayer bp = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
+					if (args.getArgs().length == 0) {
+						p.sendMessage(Translate.getTranslation(bp.getLanguage(), "ignore-invalid"));
+					} else {
+						UUID id = null;
+						Player t = Bukkit.getPlayerExact(args.getArgs()[0]);
+						if (t != null) {
+							id = t.getUniqueId();
+						}
+						t = null;
+						if (id == null) {
+							try {
+								id = UUIDFetcher.getUUIDOf(args.getArgs()[0]);
+							} catch (Exception e) {
+								p.sendMessage(Translate.getTranslation(bp.getLanguage(), "ignore-player-not-found"));
+							}
+						}
+						if (id != null) {
+							if (id != p.getUniqueId()) {
+								if (!bp.getBlockedPlayers().containsKey(id)) {
+									bp.getBlockedPlayers().put(id, new Blocked());
+									// TODO: BLOCKED?
+									p.sendMessage(
+											Translate.getTranslation(bp.getLanguage(), "ignore-you-ignore").replace("%player%", args.getArgs()[0]));
+								} else {
+									bp.getBlockedPlayers().remove(id);
+									p.sendMessage(Translate.getTranslation(bp.getLanguage(), "ignore-not-ignore").replace("%player%", args.getArgs()[0]));
+								}
+							} else {
+								p.sendMessage(Translate.getTranslation(bp.getLanguage(), "ignore-cant-you"));
+							}
+						} else {
+							p.sendMessage(Translate.getTranslation(bp.getLanguage(), "ignore-player-not-found"));
+						}
+						id = null;
+					}
+					bp = null;
+					p = null;
+				}
+			}.runTaskAsynchronously(BukkitMain.getPlugin());
 		}
 	}
 
