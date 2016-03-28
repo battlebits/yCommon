@@ -50,7 +50,7 @@ public class AccountCommon {
 	public void saveBattlePlayer(BattlePlayer player) {
 		if (BattlebitsAPI.getBattleInstance() == BattleInstance.BUKKIT)
 			return;
-		String json = BungeeMain.getGson().toJson(player);
+		String json = BattlebitsAPI.getGson().toJson(player);
 		try {
 			BungeeMain.getPlugin().getConnection().update("INSERT INTO `account`(`uuid`, `json`) VALUES ('" + player.getUuid().toString().replace("-", "") + "','" + json + "') ON DUPLICATE KEY UPDATE `json` ='" + json + "';");
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {

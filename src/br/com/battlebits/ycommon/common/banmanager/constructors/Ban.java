@@ -8,6 +8,8 @@ public class Ban {
 	private String bannedBy;
 	private String bannedIp;
 
+	private String server;
+	
 	private UUID bannedByUUID;
 	private long banTime;
 	private String reason;
@@ -19,27 +21,22 @@ public class Ban {
 	private long expire;
 	private long duration;
 
-	public Ban(UUID bannedPlayer, String bannedBy, String bannedIp, String reason) {
-		this.bannedPlayer = bannedPlayer;
-		this.bannedBy = bannedBy;
-		this.bannedIp = bannedIp;
-		this.bannedByUUID = null;
-		this.banTime = System.currentTimeMillis();
-		this.reason = reason;
-		this.unbanned = false;
-		this.unbannedBy = null;
-		this.unbannedByUUID = null;
-		this.expire = -1;
-		this.duration = -1;
+	public Ban(UUID bannedPlayer, String bannedBy, String bannedIp, String server, String reason) {
+		this(bannedPlayer, bannedBy, null, bannedIp, server, reason);
 	}
 	
-	public Ban(UUID bannedPlayer, String bannedBy, String bannedIp, UUID bannedByUUID, long banTime, String reason, boolean unbanned, String unbannedBy, UUID unbannedByUUID, long expire, long duration) {
+	public Ban(UUID bannedPlayer, String bannedBy, UUID bannedByUuid, String bannedIp, String server, String reason) {
+		this(bannedPlayer, bannedBy, bannedIp, server, bannedByUuid, System.currentTimeMillis(), reason, false, null, null, -1, -1);
+	}
+	
+	public Ban(UUID bannedPlayer, String bannedBy, String bannedIp, String server, UUID bannedByUUID, long banTime, String reason, boolean unbanned, String unbannedBy, UUID unbannedByUUID, long expire, long duration) {
 		this.bannedPlayer = bannedPlayer;
 		this.bannedBy = bannedBy;
 		this.bannedIp = bannedIp;
 		this.bannedByUUID = bannedByUUID;
 		this.banTime = banTime;
 		this.reason = reason;
+		this.server = server;
 		this.unbanned = unbanned;
 		this.unbannedBy = unbannedBy;
 		this.unbannedByUUID = unbannedByUUID;
@@ -69,6 +66,10 @@ public class Ban {
 
 	public String getReason() {
 		return reason;
+	}
+	
+	public String getServer() {
+		return server;
 	}
 
 	public boolean isUnbanned() {

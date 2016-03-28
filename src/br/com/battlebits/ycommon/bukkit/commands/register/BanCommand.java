@@ -11,8 +11,10 @@ import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
 import br.com.battlebits.ycommon.bukkit.commands.CommandFramework.Command;
 import br.com.battlebits.ycommon.bukkit.commands.CommandFramework.CommandArgs;
+import br.com.battlebits.ycommon.bukkit.networking.PacketSender;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.banmanager.constructors.Ban;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketBanPlayer;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
@@ -34,7 +36,7 @@ public class BanCommand {
 			}
 		}
 		final Language language = lang;
-		final String banPrefix = Translate.getTranslation(lang, "ban-prefix");
+		final String banPrefix = Translate.getTranslation(lang, "ban-prefix") + " ";
 		if (args.length < 2) {
 			sender.sendMessage(banPrefix + " " + Translate.getTranslation(lang, "ban-usage"));
 			return;
@@ -50,7 +52,7 @@ public class BanCommand {
 					try {
 						uuid = UUIDFetcher.getUUIDOf(args[0]);
 					} catch (Exception e) {
-						sender.sendMessage(banPrefix + " " + Translate.getTranslation(language, "player-not-exist"));
+						sender.sendMessage(banPrefix + Translate.getTranslation(language, "player-not-exist"));
 						return;
 					}
 				}
@@ -58,7 +60,7 @@ public class BanCommand {
 				if (player == null) {
 					if (sender instanceof Player) {
 						if (getBukkitPlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup().equals(Group.TRIAL)) {
-							sender.sendMessage(banPrefix + " " + Translate.getTranslation(language, "trial-no-prefix"));
+							sender.sendMessage(banPrefix + Translate.getTranslation(language, "trial-no-prefix"));
 							return;
 						}
 					}
@@ -66,17 +68,49 @@ public class BanCommand {
 						player = BukkitMain.getPlugin().getAccountManager().getOfflinePlayer(uuid);
 					} catch (Exception e) {
 						e.printStackTrace();
-						sender.sendMessage(banPrefix + " " + Translate.getTranslation(language, "cant-request-offline"));
+						sender.sendMessage(banPrefix + Translate.getTranslation(language, "cant-request-offline"));
 						return;
 					}
 					Ban actualBan = player.getBanHistory().getActualBan();
 					if(actualBan != null && !actualBan.isUnbanned() && actualBan.isPermanent()) {
-						sender.sendMessage(banPrefix + " " + Translate.getTranslation(language, "already-banned"));
+						sender.sendMessage(banPrefix + Translate.getTranslation(language, "already-banned"));
 						return;
 					}
 					if(player.isStaff()) {
-						
+						Group group = getBukkitPlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup();
+						if(group != Group.DONO || group != Group.ADMIN) {
+							sender.sendMessage(banPrefix + Translate.getTranslation(language, "ban-staff"));
+							return;
+						}
 					}
+					StringBuilder builder = new StringBuilder();
+					for (int i = 1; i < args.length; i++) {
+						String espaco = " ";
+						if (i >= args.length - 1)
+							espaco = "";
+						builder.append(args[i] + espaco);
+					}
+					Ban ban = null;
+					String playerIp = "";
+					if(player.isOnline()) {
+						playerIp = player.getIpAddress().getHostString();
+					} else {
+						playerIp = "OFFLINE";
+					}
+					if(cmdArgs.isPlayer()) {
+						Player bannedBy = cmdArgs.getPlayer();
+						ban = new Ban(uuid, bannedBy.getName(), bannedBy.getUniqueId(), playerIp, BukkitMain.getServerName(), builder.toString());
+						bannedBy = null;
+					} else {
+						ban = new Ban(uuid, "CONSOLE", playerIp, BukkitMain.getServerName(), builder.toString());
+					}
+					try {
+						PacketSender.sendPacket(new CPacketBanPlayer(BattlebitsAPI.getGson().toJson(ban)));
+					} catch (Exception e) {
+						sender.sendMessage(banPrefix + Translate.getTranslation(language, "ban-failure"));
+						e.printStackTrace();
+					}
+					sender.sendMessage(banPrefix + Translate.getTranslation(language, "ban-success"));
 				}
 			}
 		}.runTaskAsynchronously(BukkitMain.getPlugin());
