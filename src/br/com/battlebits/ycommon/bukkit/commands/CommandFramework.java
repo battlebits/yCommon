@@ -102,7 +102,6 @@ public class CommandFramework {
 					bp = null;
 					p = null;
 				}
-				command = null;
 				try {
 					entry.getKey().invoke(entry.getValue(), new CommandArgs(sender, cmd, label, args, cmdLabel.split("\\.").length - 1));
 				} catch (IllegalArgumentException | InvocationTargetException | IllegalAccessException e) {
