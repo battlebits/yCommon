@@ -31,6 +31,8 @@ import org.bukkit.help.IndexHelpTopic;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.SimplePluginManager;
 
+import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
+import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 
 /**
@@ -89,11 +91,17 @@ public class CommandFramework {
 			if (commandMap.containsKey(cmdLabel)) {
 				Entry<Method, Object> entry = commandMap.get(cmdLabel);
 				Command command = entry.getKey().getAnnotation(Command.class);
-				//CHECK IF SENDER IS PLAYER AND HAS GROUP TO USE
-				if (!(command.groupToUse() == Group.NORMAL)) {
-					sender.sendMessage(command.noPerm());
-					return true;
+				if (sender instanceof Player) {
+					Player p = (Player)sender;
+					BukkitPlayer bp = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
+					if(!bp.hasGroupPermission(command.groupToUse())){
+						p.sendMessage(command.noPerm());
+						return true;
+					}
+					bp = null;
+					p = null;
 				}
+				command = null;
 				try {
 					entry.getKey().invoke(entry.getValue(), new CommandArgs(sender, cmd, label, args, cmdLabel.split("\\.").length - 1));
 				} catch (IllegalArgumentException | InvocationTargetException | IllegalAccessException e) {
