@@ -34,6 +34,7 @@ import org.bukkit.plugin.SimplePluginManager;
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
+import br.com.battlebits.ycommon.common.translate.Translate;
 
 /**
  * Command Framework - CommandFramework <br>
@@ -95,7 +96,7 @@ public class CommandFramework {
 					Player p = (Player)sender;
 					BukkitPlayer bp = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
 					if(!bp.hasGroupPermission(command.groupToUse())){
-						p.sendMessage(command.noPerm());
+						p.sendMessage(Translate.getTranslation(bp.getLanguage(), command.noPermMessageId()));
 						return true;
 					}
 					bp = null;
@@ -255,7 +256,7 @@ public class CommandFramework {
 		 * 
 		 * @return
 		 */
-		public String noPerm() default "§4§lERRO §fVoce nao tem §C§LACESSO §fa este comando!";
+		public String noPermMessageId() default "command-no-access";
 
 		/**
 		 * A list of alternate names that the command is executed under. See
