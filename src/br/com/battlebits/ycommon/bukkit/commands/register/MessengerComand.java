@@ -14,7 +14,6 @@ import br.com.battlebits.ycommon.bukkit.commands.CommandFramework.CommandArgs;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.friends.block.Blocked;
 import br.com.battlebits.ycommon.common.translate.Translate;
-import br.com.battlebits.ycommon.common.utils.mojang.UUIDFetcher;
 import br.com.battlebits.ycommon.common.utils.string.StringURLUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ClickEvent.Action;
@@ -185,7 +184,7 @@ public class MessengerComand {
 						t = null;
 						if (id == null) {
 							try {
-								id = UUIDFetcher.getUUIDOf(args.getArgs()[0]);
+								id = BattlebitsAPI.getUUIDOf(args.getArgs()[0]);
 							} catch (Exception e) {
 								p.sendMessage(Translate.getTranslation(bp.getLanguage(), "ignore-player-not-found"));
 							}

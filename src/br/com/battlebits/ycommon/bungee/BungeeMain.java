@@ -12,7 +12,6 @@ import br.com.battlebits.ycommon.bungee.listeners.PlayerListener;
 import br.com.battlebits.ycommon.bungee.listeners.QuitListener;
 import br.com.battlebits.ycommon.bungee.managers.BanManager;
 import br.com.battlebits.ycommon.bungee.networking.CommonServer;
-import br.com.battlebits.ycommon.bungee.utils.gson.GsonBungee;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.connection.backend.MySQLBackend;
 import br.com.battlebits.ycommon.common.enums.BattleInstance;
@@ -46,7 +45,6 @@ public class BungeeMain extends Plugin {
 	@Override
 	public void onLoad() {
 		BattlebitsAPI.setBattleInstance(BattleInstance.BUNGEECORD);
-		BattlebitsAPI.setGson(new GsonBungee());
 	}
 
 	@Override

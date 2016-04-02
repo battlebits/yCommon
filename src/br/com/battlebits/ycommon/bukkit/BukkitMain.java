@@ -16,7 +16,6 @@ import br.com.battlebits.ycommon.bukkit.listeners.PlayerListener;
 import br.com.battlebits.ycommon.bukkit.networking.BukkitHandler;
 import br.com.battlebits.ycommon.bukkit.networking.PacketSender;
 import br.com.battlebits.ycommon.bukkit.permissions.PermissionManager;
-import br.com.battlebits.ycommon.bukkit.util.gson.GsonBukkit;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.enums.BattleInstance;
@@ -44,7 +43,6 @@ public class BukkitMain extends JavaPlugin {
 	@Override
 	public void onLoad() {
 		BattlebitsAPI.setBattleInstance(BattleInstance.BUKKIT);
-		BattlebitsAPI.setGson(new GsonBukkit());
 	}
 
 	@Override
