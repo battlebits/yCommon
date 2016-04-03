@@ -8,11 +8,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
-import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
 import br.com.battlebits.ycommon.bukkit.commands.CommandFramework.Command;
 import br.com.battlebits.ycommon.bukkit.commands.CommandFramework.CommandArgs;
 import br.com.battlebits.ycommon.bukkit.networking.PacketSender;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
+import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.banmanager.constructors.Ban;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketBanPlayer;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
@@ -28,7 +28,7 @@ public class BanCommand {
 		final String[] args = cmdArgs.getArgs();
 		Language lang = BattlebitsAPI.getDefaultLanguage();
 		if (cmdArgs.isPlayer()) {
-			BukkitPlayer player = getBukkitPlayer(cmdArgs.getPlayer().getUniqueId());
+			BattlePlayer player = getBukkitPlayer(cmdArgs.getPlayer().getUniqueId());
 			lang = player.getLanguage();
 			if (!player.hasGroupPermission(Group.TRIAL)) {
 				cmdArgs.getPlayer().sendMessage(Translate.getTranslation(lang, "ban-prefix") + " " + Translate.getTranslation(lang, "no-permission"));
@@ -56,7 +56,7 @@ public class BanCommand {
 						return;
 					}
 				}
-				BukkitPlayer player = getBukkitPlayer(uuid);
+				BattlePlayer player = getBukkitPlayer(uuid);
 				if (player == null) {
 					if (sender instanceof Player) {
 						if (getBukkitPlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup().equals(Group.TRIAL)) {
@@ -110,14 +110,14 @@ public class BanCommand {
 						sender.sendMessage(banPrefix + Translate.getTranslation(language, "ban-failure"));
 						e.printStackTrace();
 					}
-					sender.sendMessage(banPrefix + Translate.getTranslation(language, "ban-success"));
+					//sender.sendMessage(banPrefix + Translate.getTranslation(language, "ban-success"));
 				}
 			}
 		}.runTaskAsynchronously(BukkitMain.getPlugin());
 	}
 
-	private BukkitPlayer getBukkitPlayer(UUID uuid) {
-		return (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(uuid);
+	private BattlePlayer getBukkitPlayer(UUID uuid) {
+		return BattlebitsAPI.getAccountCommon().getBattlePlayer(uuid);
 	}
 
 	@Command(name = "tempban")

@@ -1,12 +1,10 @@
 package br.com.battlebits.ycommon.bukkit.accounts;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 
-import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bukkit.networking.PacketSender;
 import br.com.battlebits.ycommon.bukkit.tagmanager.Tag;
 import br.com.battlebits.ycommon.bukkit.tagmanager.TagManager;
@@ -29,36 +27,6 @@ public class BukkitPlayer extends BattlePlayer {
 
 	private Tag tag;
 	private UUID lastTellUUID;
-
-	public Group getServerGroup() {
-		Group group = Group.NORMAL;
-		if (!getGroups().isEmpty()) {
-			if (getGroups().containsKey(BukkitMain.getServerType())) {
-				group = getGroups().get(BukkitMain.getServerType());
-			} else if (getGroups().containsKey(ServerType.NETWORK)) {
-				group = getGroups().get(ServerType.NETWORK);
-			} else {
-				group = Group.ULTIMATE;
-			}
-		} else if (!getRanks().isEmpty()) {
-			Collection<Expire> expires = getRanks().values();
-			Expire expire = null;
-			for (Expire expireRank : expires) {
-				if (expire == null) {
-					expire = expireRank;
-				} else if (expireRank.getRankType().ordinal() > expire.getRankType().ordinal()) {
-					expire = expireRank;
-				}
-			}
-			if (expire != null)
-				group = Group.valueOf(expire.getRankType().name());
-		}
-		return group;
-	}
-
-	public boolean hasGroupPermission(Group group) {
-		return getServerGroup().ordinal() >= group.ordinal();
-	}
 
 	public Tag getTag() {
 		if (tag == null)

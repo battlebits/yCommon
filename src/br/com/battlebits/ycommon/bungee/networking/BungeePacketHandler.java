@@ -3,6 +3,7 @@ package br.com.battlebits.ycommon.bungee.networking;
 import java.io.DataOutputStream;
 
 import br.com.battlebits.ycommon.bungee.BungeeMain;
+import br.com.battlebits.ycommon.bungee.managers.BanManager;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.banmanager.constructors.Ban;
@@ -36,6 +37,9 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketUpdateGameStat
 import br.com.battlebits.ycommon.common.networking.packets.CPacketUpdateProfile;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
+import net.md_5.bungee.BungeeCord;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class BungeePacketHandler extends CommonHandler {
 
@@ -162,6 +166,10 @@ public class BungeePacketHandler extends CommonHandler {
 		Ban ban = packet.getBan();
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(ban.getBannedPlayer());
 		BungeeMain.getPlugin().getBanManager().ban(player, ban);
+		ProxiedPlayer p = BungeeCord.getInstance().getPlayer(player.getUuid());
+		if (p != null)
+			p.disconnect(TextComponent.fromLegacyText(BanManager.getBanKickMessage(ban, player.getLanguage())));
+		p = null;
 		player = null;
 		ban = null;
 	}

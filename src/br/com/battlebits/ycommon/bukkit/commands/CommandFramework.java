@@ -31,8 +31,8 @@ import org.bukkit.help.IndexHelpTopic;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.SimplePluginManager;
 
-import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
+import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.translate.Translate;
 
@@ -94,7 +94,7 @@ public class CommandFramework {
 				Command command = entry.getKey().getAnnotation(Command.class);
 				if (sender instanceof Player) {
 					Player p = (Player)sender;
-					BukkitPlayer bp = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
+					BattlePlayer bp = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
 					if(!bp.hasGroupPermission(command.groupToUse())){
 						p.sendMessage(Translate.getTranslation(bp.getLanguage(), command.noPermMessageId()));
 						return true;

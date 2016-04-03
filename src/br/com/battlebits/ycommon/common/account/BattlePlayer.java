@@ -2,6 +2,7 @@ package br.com.battlebits.ycommon.common.account;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,7 +59,7 @@ public class BattlePlayer {
 	private String clanName;
 	private Party actualParty;
 
-	// DADOS PESSOAS COMPARTILHADOS
+	// DADOS PESSOAIS COMPARTILHADOS
 	private String skype;
 	private boolean skypeFriendOnly;
 	private String twitter;
@@ -80,8 +81,12 @@ public class BattlePlayer {
 	private BanHistory banHistory;
 
 	private boolean online;
-	
+
+	private String serverConnected;
+	private ServerType serverConnectedType;
+
 	public BattlePlayer() {
+
 	}
 
 	public BattlePlayer(String userName, UUID uuid, InetSocketAddress ipAddress, String countryCode) {
@@ -126,6 +131,9 @@ public class BattlePlayer {
 
 		this.nameHistory = new ArrayList<>();
 		this.banHistory = new BanHistory();
+
+		this.serverConnected = "";
+		this.serverConnectedType = ServerType.NONE;
 	}
 
 	public String getUserName() {
@@ -191,11 +199,41 @@ public class BattlePlayer {
 	public Map<ServerType, Group> getGroups() {
 		return groups;
 	}
-	
+
+	public Group getServerGroup() {
+		Group group = Group.NORMAL;
+		if (!getGroups().isEmpty()) {
+			if (getGroups().containsKey(serverConnectedType)) {
+				group = getGroups().get(serverConnectedType);
+			} else if (getGroups().containsKey(ServerType.NETWORK)) {
+				group = getGroups().get(ServerType.NETWORK);
+			} else {
+				group = Group.ULTIMATE;
+			}
+		} else if (!getRanks().isEmpty()) {
+			Collection<Expire> expires = getRanks().values();
+			Expire expire = null;
+			for (Expire expireRank : expires) {
+				if (expire == null) {
+					expire = expireRank;
+				} else if (expireRank.getRankType().ordinal() > expire.getRankType().ordinal()) {
+					expire = expireRank;
+				}
+			}
+			if (expire != null)
+				group = Group.valueOf(expire.getRankType().name());
+		}
+		return group;
+	}
+
+	public boolean hasGroupPermission(Group group) {
+		return getServerGroup().ordinal() >= group.ordinal();
+	}
+
 	public boolean isStaff() {
 		boolean staff = false;
-		for(Group group : getGroups().values()) {
-			if(group.ordinal() > 6) {
+		for (Group group : getGroups().values()) {
+			if (group.ordinal() > 6) {
 				staff = true;
 			}
 		}
@@ -265,9 +303,17 @@ public class BattlePlayer {
 	public boolean isCacheExpired() {
 		return System.currentTimeMillis() > cacheExpire;
 	}
-	
+
 	public boolean isOnline() {
 		return online;
+	}
+
+	public String getServerConnected() {
+		return serverConnected;
+	}
+
+	public ServerType getServerConnectedType() {
+		return serverConnectedType;
 	}
 
 	public void setFakeName(String fakeName) {
@@ -333,7 +379,7 @@ public class BattlePlayer {
 	public void setSteam(String steam) {
 		this.steam = steam;
 	}
-	
+
 	public void setConfiguration(AccountConfiguration config) {
 		this.configuration = config;
 	}
@@ -348,6 +394,11 @@ public class BattlePlayer {
 
 	public void updateBanHistory(BanHistory banHistory) {
 		this.banHistory = banHistory;
+	}
+
+	public void connect(String serverIp, ServerType serverType) {
+		this.serverConnected = serverIp;
+		this.serverConnectedType = serverType;
 	}
 
 	public void updateCache() {
