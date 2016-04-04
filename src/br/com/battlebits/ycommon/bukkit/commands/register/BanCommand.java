@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
+import br.com.battlebits.ycommon.bukkit.commands.CommandClass;
 import br.com.battlebits.ycommon.bukkit.commands.CommandFramework.Command;
 import br.com.battlebits.ycommon.bukkit.commands.CommandFramework.CommandArgs;
 import br.com.battlebits.ycommon.bukkit.networking.PacketSender;
@@ -20,7 +21,7 @@ import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
 import br.com.battlebits.ycommon.common.utils.mojang.UUIDFetcher;
 
-public class BanCommand {
+public class BanCommand extends CommandClass  {
 
 	@Command(name = "ban", usage = "/<command> <player> <reason>", aliases = { "banir" })
 	public void ban(CommandArgs cmdArgs) {

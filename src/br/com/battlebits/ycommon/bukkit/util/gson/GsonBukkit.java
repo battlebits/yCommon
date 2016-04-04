@@ -2,12 +2,17 @@ package br.com.battlebits.ycommon.bukkit.util.gson;
 
 import java.lang.reflect.Type;
 
+import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
+
 import br.com.battlebits.ycommon.common.utils.gson.GsonInterface;
-import net.minecraft.util.com.google.gson.Gson;
 
 public class GsonBukkit extends GsonInterface {
-	private static Gson gson = new Gson();
+	private Gson gson;
 
+	public GsonBukkit() {
+		gson = new Gson();
+	}
+	
 	@Override
 	public <T> T fromJson(String json, Class<?> type) {
 		return gson.fromJson(json, type);

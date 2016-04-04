@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
+import br.com.battlebits.ycommon.bukkit.commands.CommandClass;
 import br.com.battlebits.ycommon.bukkit.commands.CommandFramework.Command;
 import br.com.battlebits.ycommon.bukkit.commands.CommandFramework.CommandArgs;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
@@ -11,7 +12,7 @@ import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.translate.Translate;
 
-public class ModeratingCommands {
+public class ModeratingCommands extends CommandClass {
 
 	@SuppressWarnings("deprecation")
 	@Command(name = "gamemode", aliases = { "gm" }, groupToUse = Group.ADMIN, noPermMessageId = "gamemode-no-access")

@@ -31,7 +31,7 @@ public class LoginListener implements Listener {
 		BattlebitsAPI.debug("ACCOUNT > STARTING");
 		event.registerIntent(BungeeMain.getPlugin());
 		final String userName = event.getConnection().getName();
-		final InetSocketAddress ipAdress = event.getConnection().getVirtualHost();
+		final InetSocketAddress ipAdress = event.getConnection().getAddress();
 		final UUID uuid = event.getConnection().getUniqueId();
 		ProxyServer.getInstance().getScheduler().runAsync(BungeeMain.getPlugin(), new Runnable() {
 			@Override

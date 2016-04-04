@@ -1,5 +1,7 @@
 package br.com.battlebits.ycommon.bukkit.commands.register;
 
-public class YoutubeCommand {
+import br.com.battlebits.ycommon.bukkit.commands.CommandClass;
+
+public class YoutubeCommand extends CommandClass {
 
 }

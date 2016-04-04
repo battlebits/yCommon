@@ -231,13 +231,12 @@ public class BattlePlayer {
 	}
 
 	public boolean isStaff() {
-		boolean staff = false;
 		for (Group group : getGroups().values()) {
 			if (group.ordinal() > 6) {
-				staff = true;
+				return true;
 			}
 		}
-		return staff;
+		return false;
 	}
 
 	public Map<Group, Expire> getRanks() {

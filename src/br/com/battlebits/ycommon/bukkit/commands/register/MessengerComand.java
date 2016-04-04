@@ -9,6 +9,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
+import br.com.battlebits.ycommon.bukkit.commands.CommandClass;
 import br.com.battlebits.ycommon.bukkit.commands.CommandFramework.Command;
 import br.com.battlebits.ycommon.bukkit.commands.CommandFramework.CommandArgs;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
@@ -20,7 +21,7 @@ import net.md_5.bungee.api.chat.ClickEvent.Action;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 
-public class MessengerComand {
+public class MessengerComand extends CommandClass {
 
 	@Command(name = "tell", aliases = { "msg", "w", "pm", "privatemessage", "whisper" })
 	public void tell(CommandArgs args) {

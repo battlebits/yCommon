@@ -1,7 +1,5 @@
 package br.com.battlebits.ycommon.bungee.networking;
 
-import java.io.DataOutputStream;
-
 import br.com.battlebits.ycommon.bungee.BungeeMain;
 import br.com.battlebits.ycommon.bungee.managers.BanManager;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
@@ -49,13 +47,6 @@ public class BungeePacketHandler extends CommonHandler {
 		this.sender = sender;
 	}
 
-	public static void handleTranslationsLoad(Language lang, DataOutputStream output) throws Exception {
-		output.writeUTF("Translations");
-		String json = Translate.getMapTranslation(lang);
-		output.writeUTF(json);
-		output.flush();
-	}
-
 	@Override
 	public void handleAccountConfiguration(CPacketAccountConfiguration packet) throws Exception {
 		BattlebitsAPI.getLogger().warning("Recebendo AccountConfiguration!");
@@ -78,7 +69,7 @@ public class BungeePacketHandler extends CommonHandler {
 	@Override
 	public void handleTranslationsRequest(CPacketTranslationsRequest packet) throws Exception {
 		Language lang = packet.getLanguage();
-		String json = BattlebitsAPI.getGson().toJson(Translate.getMapTranslation(lang));
+		String json = Translate.getMapTranslation(lang);
 		sender.sendPacket(new CPacketTranslationsLoad(lang, json));
 		lang = null;
 		json = null;

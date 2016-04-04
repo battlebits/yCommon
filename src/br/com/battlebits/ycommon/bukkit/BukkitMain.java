@@ -21,7 +21,6 @@ import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.enums.BattleInstance;
 import br.com.battlebits.ycommon.common.enums.ServerType;
 import br.com.battlebits.ycommon.common.networking.CommonHandler;
-import br.com.battlebits.ycommon.common.networking.packets.CPacketServerNameRequest;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketTranslationsRequest;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
@@ -57,11 +56,11 @@ public class BukkitMain extends JavaPlugin {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		try {
+	/*	try {
 			PacketSender.sendPacketReturn(new CPacketServerNameRequest(), packetHandler);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		}*/
 		registerCommonManagement();
 		enableCommonManagement();
 		registerListeners();

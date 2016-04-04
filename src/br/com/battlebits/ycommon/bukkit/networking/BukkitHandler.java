@@ -199,7 +199,7 @@ public class BukkitHandler extends CommonHandler {
 	@Override
 	public void handleAccountConfiguration(CPacketAccountConfiguration packet) throws Exception {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
