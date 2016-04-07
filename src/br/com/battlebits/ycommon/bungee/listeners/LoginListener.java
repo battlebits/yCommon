@@ -43,9 +43,8 @@ public class LoginListener implements Listener {
 					e1.printStackTrace();
 				}
 				BattlebitsAPI.debug("CONNECTION > STARTING");
-
-				Connection connection = BungeeMain.getPlugin().getConnection().getConnection();
 				try {
+					Connection connection = BungeeMain.getPlugin().getConnection().getConnection();
 					BattlebitsAPI.debug("CONNECTION > STARTING");
 					PreparedStatement stmt = connection.prepareStatement("SELECT * FROM `account` WHERE `uuid`='" + uuid.toString().replace("-", "") + "';");
 					ResultSet result = stmt.executeQuery();
@@ -64,7 +63,7 @@ public class LoginListener implements Listener {
 					result = null;
 					stmt = null;
 					BattlebitsAPI.debug("ACCOUNT > CLOSE");
-				} catch (SQLException e) {
+				} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
 					event.setCancelled(true);
 					String accountLoadFailed = Translate.getTranslation(BattlebitsAPI.getDefaultLanguage(), "account-load-failed");
 					event.setCancelReason(accountLoadFailed);

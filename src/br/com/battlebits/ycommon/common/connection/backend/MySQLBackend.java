@@ -63,7 +63,9 @@ public class MySQLBackend extends BattleConnection {
 		return true;
 	}
 
-	public Connection getConnection() {
+	public Connection getConnection() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+		if(isConnected())
+			recallConnection();
 		return connection;
 	}
 
