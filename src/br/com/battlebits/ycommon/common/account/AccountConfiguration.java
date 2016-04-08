@@ -4,10 +4,12 @@ public class AccountConfiguration {
 
 	private boolean ignoreAll;
 	private boolean tellEnabled;
+	private boolean canPlaySound;
 
 	public AccountConfiguration() {
 		ignoreAll = false;
 		tellEnabled = true;
+		canPlaySound = true;
 	}
 
 	@Override
@@ -29,5 +31,13 @@ public class AccountConfiguration {
 
 	public void setTellEnabled(boolean tellEnabled) {
 		this.tellEnabled = tellEnabled;
+	}
+	
+	public boolean canPlaySound() {
+		return canPlaySound;
+	}
+	
+	public void setCanPlaySound(boolean canPlaySound) {
+		this.canPlaySound = canPlaySound;
 	}
 }

@@ -10,6 +10,7 @@ public class BukkitConfiguration extends AccountConfiguration {
 		this.player = player;
 		super.setIgnoreAll(player.getConfiguration().isIgnoreAll());
 		super.setTellEnabled(player.getConfiguration().isTellEnabled());
+		super.setCanPlaySound(player.getConfiguration().canPlaySound());
 	}
 
 	@Override
@@ -21,6 +22,12 @@ public class BukkitConfiguration extends AccountConfiguration {
 	@Override
 	public void setTellEnabled(boolean tellEnabled) {
 		super.setTellEnabled(tellEnabled);
+		player.updateConfiguration();
+	}
+
+	@Override
+	public void setCanPlaySound(boolean canPlaySound) {
+		super.setCanPlaySound(canPlaySound);
 		player.updateConfiguration();
 	}
 
