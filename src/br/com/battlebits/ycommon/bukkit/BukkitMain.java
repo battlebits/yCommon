@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitAccount;
+import br.com.battlebits.ycommon.bukkit.api.inventory.menu.MenuListener;
 import br.com.battlebits.ycommon.bukkit.bungee.MessageListener;
 import br.com.battlebits.ycommon.bukkit.commands.CommandFramework;
 import br.com.battlebits.ycommon.bukkit.commands.CommandLoader;
@@ -56,14 +57,14 @@ public class BukkitMain extends JavaPlugin {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	/*	try {
-			PacketSender.sendPacketReturn(new CPacketServerNameRequest(), packetHandler);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}*/
+		/*
+		 * try { PacketSender.sendPacketReturn(new CPacketServerNameRequest(),
+		 * packetHandler); } catch (Exception e) { e.printStackTrace(); }
+		 */
 		registerCommonManagement();
 		enableCommonManagement();
 		registerListeners();
+		getServer().getPluginManager().registerEvents(new MenuListener(), this);
 		commandFramework = new CommandFramework(this);
 		new CommandLoader(commandFramework).registerAbilityListeners();
 		getServer().getScheduler().runTaskTimer(this, new UpdateScheduler(), 1, 1);
