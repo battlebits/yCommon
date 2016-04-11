@@ -1,4 +1,4 @@
-package br.com.battlebits.ycommon.bukkit.util;
+package br.com.battlebits.ycommon.bukkit.injector;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -10,8 +10,6 @@ import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
-import br.com.battlebits.ycommon.bukkit.injector.PacketListener;
-import br.com.battlebits.ycommon.bukkit.injector.PacketListenerAPI;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
@@ -42,34 +40,39 @@ public class WindowInjector {
 						}
 						ItemStack iS = CraftItemStack.copyNMSStack(item, item.count);
 						ItemMeta meta = CraftItemStack.getItemMeta(iS);
-						if (meta.hasDisplayName()) {
-							String name = meta.getDisplayName();
-							Matcher matcher = translateFinder.matcher(name);
-							while (matcher.find()) {
-								name = name.replace("%translateId:" + matcher.group(1) + "%", Translate.getTranslation(lang, matcher.group(1)));
-							}
-							matcher = null;
-							meta.setDisplayName(name);
-							name = null;
-						}
-						if (meta.hasLore()) {
-							String newlore = "";
-							for (String name : meta.getLore()) {
-								if (!newlore.isEmpty()) {
-									newlore += "\\n";
-								}
+						if (meta != null) {
+							if (meta.hasDisplayName() && meta.getDisplayName().contains("%translateId:")) {
+								String name = meta.getDisplayName();
 								Matcher matcher = translateFinder.matcher(name);
 								while (matcher.find()) {
 									name = name.replace("%translateId:" + matcher.group(1) + "%", Translate.getTranslation(lang, matcher.group(1)));
 								}
 								matcher = null;
-								newlore += name;
+								meta.setDisplayName(name);
 								name = null;
 							}
-							meta.setLore(formatForLore(newlore));
-							newlore = null;
+							if (meta.hasLore()) {
+								String newlore = "";
+								for (String name : meta.getLore()) {
+									if (!newlore.isEmpty()) {
+										newlore += "\\n";
+									}
+									if (name.contains("%translateId:")) {
+										Matcher matcher = translateFinder.matcher(name);
+										while (matcher.find()) {
+											name = name.replace("%translateId:" + matcher.group(1) + "%",
+													Translate.getTranslation(lang, matcher.group(1)));
+										}
+										matcher = null;
+									}
+									newlore += name;
+									name = null;
+								}
+								meta.setLore(formatForLore(newlore));
+								newlore = null;
+							}
+							CraftItemStack.setItemMeta(iS, meta);
 						}
-						CraftItemStack.setItemMeta(iS, meta);
 						array.add(iS);
 						meta = null;
 						iS = null;
@@ -88,37 +91,43 @@ public class WindowInjector {
 						if (item != null) {
 							ItemStack iS = CraftItemStack.copyNMSStack(item, item.count);
 							ItemMeta meta = CraftItemStack.getItemMeta(iS);
-							Language lang = BattlebitsAPI.getAccountCommon().getBattlePlayer(pacote.getPlayer().getUniqueId()).getLanguage();
-							if (meta.hasDisplayName()) {
-								String name = meta.getDisplayName();
-								Matcher matcher = translateFinder.matcher(name);
-								while (matcher.find()) {
-									name = name.replace("%translateId:" + matcher.group(1) + "%", Translate.getTranslation(lang, matcher.group(1)));
-								}
-								matcher = null;
-								meta.setDisplayName(name);
-								name = null;
-							}
-							if (meta.hasLore()) {
-								String newlore = "";
-								for (String name : meta.getLore()) {
-									if (!newlore.isEmpty()) {
-										newlore += "\\n";
-									}
+							if (meta != null) {
+								Language lang = BattlebitsAPI.getAccountCommon().getBattlePlayer(pacote.getPlayer().getUniqueId()).getLanguage();
+								if (meta.hasDisplayName() && meta.getDisplayName().contains("%translateId:")) {
+									String name = meta.getDisplayName();
 									Matcher matcher = translateFinder.matcher(name);
 									while (matcher.find()) {
-										name = name.replace("%translateId:" + matcher.group(1) + "%", Translate.getTranslation(lang, matcher.group(1)));
+										name = name.replace("%translateId:" + matcher.group(1) + "%",
+												Translate.getTranslation(lang, matcher.group(1)));
 									}
 									matcher = null;
-									newlore += name;
+									meta.setDisplayName(name);
 									name = null;
 								}
-								meta.setLore(formatForLore(newlore));
-								newlore = null;
+								if (meta.hasLore()) {
+									String newlore = "";
+									for (String name : meta.getLore()) {
+										if (!newlore.isEmpty()) {
+											newlore += "\\n";
+										}
+										if (name.contains("%translateId:")) {
+											Matcher matcher = translateFinder.matcher(name);
+											while (matcher.find()) {
+												name = name.replace("%translateId:" + matcher.group(1) + "%",
+														Translate.getTranslation(lang, matcher.group(1)));
+											}
+											matcher = null;
+										}
+										newlore += name;
+										name = null;
+									}
+									meta.setLore(formatForLore(newlore));
+									newlore = null;
+								}
+								CraftItemStack.setItemMeta(iS, meta);
+								lang = null;
 							}
-							CraftItemStack.setItemMeta(iS, meta);
 							c.set(setSlot, iS);
-							lang = null;
 							meta = null;
 							iS = null;
 						}
