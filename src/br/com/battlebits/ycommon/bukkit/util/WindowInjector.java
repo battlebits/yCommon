@@ -2,6 +2,8 @@ package br.com.battlebits.ycommon.bukkit.util;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftItemStack;
@@ -20,6 +22,8 @@ import net.minecraft.server.v1_7_R4.PacketPlayOutSetSlot;
 import net.minecraft.server.v1_7_R4.PacketPlayOutWindowItems;
 
 public class WindowInjector {
+
+	private static Pattern translateFinder = Pattern.compile("%translateId:\\s*([a-zA-Z0-9_-]+)\\s*%");
 
 	public static void inject(BukkitMain main) {
 		PacketListenerAPI.addListener(new PacketListener() {
@@ -40,27 +44,30 @@ public class WindowInjector {
 						ItemMeta meta = CraftItemStack.getItemMeta(iS);
 						if (meta.hasDisplayName()) {
 							String name = meta.getDisplayName();
-							if (name.startsWith("translateId:")) {
-								name = name.replace("translateId:", "");
-								String translation = Translate.getTranslation(lang, name);
-								if (translation == null)
-									translation = name;
-								meta.setDisplayName(translation);
-								translation = null;
+							Matcher matcher = translateFinder.matcher(name);
+							while (matcher.find()) {
+								name = name.replace("%translateId:" + matcher.group(1) + "%", Translate.getTranslation(lang, matcher.group(1)));
 							}
+							matcher = null;
+							meta.setDisplayName(name);
 							name = null;
 						}
 						if (meta.hasLore()) {
-							String name = meta.getLore().get(0);
-							if (name.startsWith("translateId:")) {
-								name = name.replace("translateId:", "");
-								String translation = Translate.getTranslation(lang, name);
-								if (translation == null)
-									translation = name;
-								meta.setLore(formatForLore(translation));
-								translation = null;
+							String newlore = "";
+							for (String name : meta.getLore()) {
+								if (!newlore.isEmpty()) {
+									newlore += "\\n";
+								}
+								Matcher matcher = translateFinder.matcher(name);
+								while (matcher.find()) {
+									name = name.replace("%translateId:" + matcher.group(1) + "%", Translate.getTranslation(lang, matcher.group(1)));
+								}
+								matcher = null;
+								newlore += name;
+								name = null;
 							}
-							name = null;
+							meta.setLore(formatForLore(newlore));
+							newlore = null;
 						}
 						CraftItemStack.setItemMeta(iS, meta);
 						array.add(iS);
@@ -84,27 +91,30 @@ public class WindowInjector {
 							Language lang = BattlebitsAPI.getAccountCommon().getBattlePlayer(pacote.getPlayer().getUniqueId()).getLanguage();
 							if (meta.hasDisplayName()) {
 								String name = meta.getDisplayName();
-								if (name.startsWith("translateId:")) {
-									name = name.replace("translateId:", "");
-									String translation = Translate.getTranslation(lang, name);
-									if (translation == null)
-										translation = name;
-									meta.setDisplayName(translation);
-									translation = null;
+								Matcher matcher = translateFinder.matcher(name);
+								while (matcher.find()) {
+									name = name.replace("%translateId:" + matcher.group(1) + "%", Translate.getTranslation(lang, matcher.group(1)));
 								}
+								matcher = null;
+								meta.setDisplayName(name);
 								name = null;
 							}
 							if (meta.hasLore()) {
-								String name = meta.getLore().get(0);
-								if (name.startsWith("translateId:")) {
-									name = name.replace("translateId:", "");
-									String translation = Translate.getTranslation(lang, name);
-									if (translation == null)
-										translation = name;
-									meta.setLore(formatForLore(translation));
-									translation = null;
+								String newlore = "";
+								for (String name : meta.getLore()) {
+									if (!newlore.isEmpty()) {
+										newlore += "\\n";
+									}
+									Matcher matcher = translateFinder.matcher(name);
+									while (matcher.find()) {
+										name = name.replace("%translateId:" + matcher.group(1) + "%", Translate.getTranslation(lang, matcher.group(1)));
+									}
+									matcher = null;
+									newlore += name;
+									name = null;
 								}
-								name = null;
+								meta.setLore(formatForLore(newlore));
+								newlore = null;
 							}
 							CraftItemStack.setItemMeta(iS, meta);
 							c.set(setSlot, iS);
@@ -124,17 +134,17 @@ public class WindowInjector {
 						Field c = openWindow.getClass().getDeclaredField("c");
 						c.setAccessible(true);
 						String name = (String) c.get(openWindow);
-						if (name != null)
-							if (name.startsWith("translateId:")) {
-								name = name.replace("translateId:", "");
-								Language lang = BattlebitsAPI.getAccountCommon().getBattlePlayer(pacote.getPlayer().getUniqueId()).getLanguage();
-								String translation = Translate.getTranslation(lang, name);
-								if (translation == null)
-									translation = name;
-								c.set(openWindow, translation);
-								translation = null;
-								lang = null;
+						if (name != null) {
+							Matcher matcher = translateFinder.matcher(name);
+							while (matcher.find()) {
+								name = name.replace("%translateId:" + matcher.group(1) + "%",
+										Translate.getTranslation(
+												BattlebitsAPI.getAccountCommon().getBattlePlayer(pacote.getPlayer().getUniqueId()).getLanguage(),
+												matcher.group(1)));
 							}
+							matcher = null;
+							c.set(openWindow, name);
+						}
 						name = null;
 						c = null;
 					} catch (Exception e) {
@@ -158,7 +168,8 @@ public class WindowInjector {
 		string = "";
 		ArrayList<String> newString = new ArrayList<String>();
 		for (int i = 0; i < split.length; i++) {
-			if (ChatColor.stripColor(string).length() > 25 || ChatColor.stripColor(string).endsWith(".") || ChatColor.stripColor(string).endsWith("!")) {
+			if (ChatColor.stripColor(string).length() > 25 || ChatColor.stripColor(string).endsWith(".")
+					|| ChatColor.stripColor(string).endsWith("!")) {
 				newString.add("§7" + string);
 				if (string.endsWith(".") || string.endsWith("!"))
 					newString.add("");

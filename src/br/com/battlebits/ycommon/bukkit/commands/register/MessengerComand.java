@@ -37,7 +37,7 @@ public class MessengerComand extends CommandClass {
 						if (t.getUniqueId() != p.getUniqueId()) {
 							BukkitPlayer bt = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(t.getUniqueId());
 							if (!bt.getConfiguration().isIgnoreAll()) {
-								if (!bt.getBlockedPlayers().containsKey(t.getUniqueId())) {
+								if (!bt.getBlockedPlayers().containsKey(p.getUniqueId())) {
 									if (bt.getConfiguration().isTellEnabled()) {
 										TextComponent[] toPlayer = new TextComponent[args.getArgs().length];
 										TextComponent to = new TextComponent(
@@ -119,7 +119,7 @@ public class MessengerComand extends CommandClass {
 					if (t != null) {
 						BukkitPlayer bt = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(t.getUniqueId());
 						if (!bt.getConfiguration().isIgnoreAll()) {
-							if (!bt.getBlockedPlayers().containsKey(t.getUniqueId())) {
+							if (!bt.getBlockedPlayers().containsKey(p.getUniqueId())) {
 								if (bt.getConfiguration().isTellEnabled()) {
 									TextComponent[] toPlayer = new TextComponent[args.getArgs().length + 1];
 									TextComponent to = new TextComponent(
@@ -205,6 +205,7 @@ public class MessengerComand extends CommandClass {
 								id = BattlebitsAPI.getUUIDOf(args.getArgs()[0]);
 							} catch (Exception e) {
 								p.sendMessage(Translate.getTranslation(bp.getLanguage(), "ignore-player-not-found"));
+								return;
 							}
 						}
 						if (id != null) {

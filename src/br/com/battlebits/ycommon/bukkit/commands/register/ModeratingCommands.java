@@ -1,9 +1,15 @@
 package br.com.battlebits.ycommon.bukkit.commands.register;
 
+import java.util.Arrays;
+
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
+import br.com.battlebits.ycommon.bukkit.api.inventory.menu.MenuInventory;
 import br.com.battlebits.ycommon.bukkit.commands.CommandClass;
 import br.com.battlebits.ycommon.bukkit.commands.CommandFramework.Command;
 import br.com.battlebits.ycommon.bukkit.commands.CommandFramework.CommandArgs;
@@ -20,20 +26,23 @@ public class ModeratingCommands extends CommandClass {
 		if (args.isPlayer()) {
 			BattlePlayer bp = BattlebitsAPI.getAccountCommon().getBattlePlayer(args.getPlayer().getUniqueId());
 			if (args.getArgs().length == 0) {
-				Translate.getTranslation(bp.getLanguage(), "gamemode-help");
+				args.getPlayer().sendMessage(Translate.getTranslation(bp.getLanguage(), "gamemode-help"));
 			} else {
-				GameMode gm = GameMode.valueOf(args.getArgs()[0].toUpperCase());
-				if (gm == null) {
+				GameMode gm = null;
+				try {
+					gm = GameMode.valueOf(args.getArgs()[0].toUpperCase());
+				} catch (Exception e) {
 					try {
 						gm = GameMode.getByValue(Integer.parseInt(args.getArgs()[0]));
-					} catch (Exception e) {
+					} catch (Exception ex) {
 					}
 				}
 				if (gm != null) {
 					if (args.getArgs().length == 1) {
 						if (args.getPlayer().getGameMode() != gm) {
 							args.getPlayer().setGameMode(gm);
-							args.getPlayer().sendMessage(Translate.getTranslation(bp.getLanguage(), "gamemode-changed-you").replace("%gamemode%", gm.name()));
+							args.getPlayer().sendMessage(Translate.getTranslation(bp.getLanguage(), "gamemode-changed-you").replace("%gamemode%",
+									Translate.getTranslation(bp.getLanguage(), "gamemode-name-" + gm.name().toLowerCase())));
 						} else {
 							args.getPlayer().sendMessage(Translate.getTranslation(bp.getLanguage(), "gamemode-already-you"));
 						}
@@ -42,7 +51,8 @@ public class ModeratingCommands extends CommandClass {
 						if (t != null) {
 							if (t.getGameMode() != gm) {
 								t.setGameMode(gm);
-								args.getPlayer().sendMessage(Translate.getTranslation(bp.getLanguage(), "gamemode-changed-you").replace("%gamemode%", gm.name()));
+								args.getPlayer().sendMessage(Translate.getTranslation(bp.getLanguage(), "gamemode-changed-other").replace(
+										"%gamemode%", Translate.getTranslation(bp.getLanguage(), "gamemode-name-" + gm.name().toLowerCase())));
 							} else {
 								args.getPlayer().sendMessage(Translate.getTranslation(bp.getLanguage(), "gamemode-already-other"));
 							}
@@ -60,9 +70,14 @@ public class ModeratingCommands extends CommandClass {
 		}
 	}
 
-	@Command(name = "tp", aliases = { "teleport", "teleportar" }, groupToUse = Group.TRIAL, noPermMessageId = "teleport-no-access")
+	@Command(name = "tp", aliases = { "teleport", "teleportar" }, groupToUse = Group.NORMAL, noPermMessageId = "teleport-no-access")
 	public void tp(CommandArgs args) {
-
+		ItemStack stack = new ItemStack(Material.ANVIL, 1);
+		ItemMeta meta = stack.getItemMeta();
+		meta.setDisplayName("%translateId:gamemode-player-notfound%");
+		meta.setLore(Arrays.asList("%translateId:gamemode-changed-you%", "Oi", "%translateId:gamemode-changed-other%"));
+		stack.setItemMeta(meta);
+		args.getPlayer().getInventory().addItem(stack);
 	}
 
 }

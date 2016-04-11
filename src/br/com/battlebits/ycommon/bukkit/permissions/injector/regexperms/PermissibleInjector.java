@@ -1,5 +1,9 @@
 package br.com.battlebits.ycommon.bukkit.permissions.injector.regexperms;
 
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.logging.Logger;
+
 /**
  * Este codigo nao pertence ao autor do plugin.
  * Este codigo pertence ao criador do PermissionEX
@@ -8,10 +12,6 @@ package br.com.battlebits.ycommon.bukkit.permissions.injector.regexperms;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.PermissibleBase;
-
-import java.lang.reflect.Field;
-import java.util.List;
-import java.util.logging.Logger;
 
 public abstract class PermissibleInjector {
 	protected final String clazzName, fieldName;

@@ -66,7 +66,9 @@ public class MenuInventory {
 	}
 
 	public void open(Player p) {
-		if (p.getOpenInventory() == null || p.getOpenInventory().getTopInventory().getType() != InventoryType.CHEST || p.getOpenInventory().getTopInventory().getSize() < rows * 9 || p.getOpenInventory().getTopInventory().getHolder() == null || !(p.getOpenInventory().getTopInventory().getHolder() instanceof MenuHolder)) {
+		if (p.getOpenInventory() == null || p.getOpenInventory().getTopInventory().getType() != InventoryType.CHEST
+				|| p.getOpenInventory().getTopInventory().getSize() < rows * 9 || p.getOpenInventory().getTopInventory().getHolder() == null
+				|| !(p.getOpenInventory().getTopInventory().getHolder() instanceof MenuHolder)) {
 			createAndOpenInventory(p);
 		} else {
 			// Update the current inventory of player
@@ -86,7 +88,8 @@ public class MenuInventory {
 
 	public void updateTitle(Player p) {
 		EntityPlayer ep = ((CraftPlayer) p).getHandle();
-		PacketPlayOutOpenWindow openWindow = new PacketPlayOutOpenWindow(ep.activeContainer.windowId, 0, (isTranslateId ? "translateId:" : "") + title, rows * 9, false);
+		PacketPlayOutOpenWindow openWindow = new PacketPlayOutOpenWindow(ep.activeContainer.windowId, 0,
+				(isTranslateId ? "%translateId:" : "") + this.title + (isTranslateId ? "%" : ""), rows * 9, false);
 		ep.playerConnection.sendPacket(openWindow);
 		ep.updateInventory(ep.activeContainer);
 		// Garbage Colector
@@ -96,7 +99,8 @@ public class MenuInventory {
 
 	public void createAndOpenInventory(Player p) {
 		// Create a New Inventory
-		Inventory playerInventory = Bukkit.createInventory(new MenuHolder(this), rows * 9, (isTranslateId ? "translateId:" : "") + this.title);
+		Inventory playerInventory = Bukkit.createInventory(new MenuHolder(this), rows * 9,
+				(isTranslateId ? "%translateId:" : "") + this.title + (isTranslateId ? "%" : ""));
 		for (Entry<Integer, MenuItem> entry : slotItem.entrySet()) {
 			playerInventory.setItem(entry.getKey(), entry.getValue().getStack());
 		}
