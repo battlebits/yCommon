@@ -59,7 +59,13 @@ public class Translate {
 	}
 
 	public static void loadTranslations(Language lang, String json) {
-		languageTranslations.put(lang, BattlebitsAPI.getGson().fromJson(json, BattlebitsAPI.getTypeUtils().getTranslateMap()));
+		languageTranslations.put(lang, 
+				BattlebitsAPI
+				.getGson().
+				fromJson(json, 
+						BattlebitsAPI
+						.getTypeUtils()
+						.getTranslateMap()));
 	}
 
 	/*

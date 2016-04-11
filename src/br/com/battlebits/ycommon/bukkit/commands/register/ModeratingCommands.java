@@ -33,8 +33,7 @@ public class ModeratingCommands extends CommandClass {
 					if (args.getArgs().length == 1) {
 						if (args.getPlayer().getGameMode() != gm) {
 							args.getPlayer().setGameMode(gm);
-							args.getPlayer()
-									.sendMessage(Translate.getTranslation(bp.getLanguage(), "gamemode-changed-you").replace("%gamemode%", gm.name()));
+							args.getPlayer().sendMessage(Translate.getTranslation(bp.getLanguage(), "gamemode-changed-you").replace("%gamemode%", gm.name()));
 						} else {
 							args.getPlayer().sendMessage(Translate.getTranslation(bp.getLanguage(), "gamemode-already-you"));
 						}
@@ -43,8 +42,7 @@ public class ModeratingCommands extends CommandClass {
 						if (t != null) {
 							if (t.getGameMode() != gm) {
 								t.setGameMode(gm);
-								args.getPlayer().sendMessage(
-										Translate.getTranslation(bp.getLanguage(), "gamemode-changed-you").replace("%gamemode%", gm.name()));
+								args.getPlayer().sendMessage(Translate.getTranslation(bp.getLanguage(), "gamemode-changed-you").replace("%gamemode%", gm.name()));
 							} else {
 								args.getPlayer().sendMessage(Translate.getTranslation(bp.getLanguage(), "gamemode-already-other"));
 							}
@@ -61,10 +59,10 @@ public class ModeratingCommands extends CommandClass {
 			bp = null;
 		}
 	}
-	
-	@Command(name = "tp", aliases = {"teleport", "teleportar"}, groupToUse = Group.TRIAL, noPermMessageId = "teleport-no-access")
+
+	@Command(name = "tp", aliases = { "teleport", "teleportar" }, groupToUse = Group.TRIAL, noPermMessageId = "teleport-no-access")
 	public void tp(CommandArgs args) {
-		
+
 	}
 
 }

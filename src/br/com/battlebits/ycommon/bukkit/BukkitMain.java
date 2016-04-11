@@ -12,11 +12,13 @@ import br.com.battlebits.ycommon.bukkit.bungee.MessageListener;
 import br.com.battlebits.ycommon.bukkit.commands.CommandFramework;
 import br.com.battlebits.ycommon.bukkit.commands.CommandLoader;
 import br.com.battlebits.ycommon.bukkit.event.UpdateScheduler;
+import br.com.battlebits.ycommon.bukkit.injector.Injector;
 import br.com.battlebits.ycommon.bukkit.listeners.ChatListener;
 import br.com.battlebits.ycommon.bukkit.listeners.PlayerListener;
 import br.com.battlebits.ycommon.bukkit.networking.BukkitHandler;
 import br.com.battlebits.ycommon.bukkit.networking.PacketSender;
 import br.com.battlebits.ycommon.bukkit.permissions.PermissionManager;
+import br.com.battlebits.ycommon.bukkit.util.WindowInjector;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.enums.BattleInstance;
@@ -30,7 +32,6 @@ public class BukkitMain extends JavaPlugin {
 
 	private static BukkitMain plugin;
 	private static String SERVERNAME = "";
-	private CommandFramework commandFramework;
 
 	private BukkitAccount accountManager;
 	private PermissionManager permissionManager;
@@ -47,6 +48,7 @@ public class BukkitMain extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		Injector.createTinyProtocol(this);
 		packetHandler = new BukkitHandler();
 		this.getServer().getMessenger().registerOutgoingPluginChannel(this, BattlebitsAPI.getBungeeChannel());
 		this.getServer().getMessenger().registerIncomingPluginChannel(this, BattlebitsAPI.getBungeeChannel(), new MessageListener());
@@ -65,9 +67,9 @@ public class BukkitMain extends JavaPlugin {
 		enableCommonManagement();
 		registerListeners();
 		getServer().getPluginManager().registerEvents(new MenuListener(), this);
-		commandFramework = new CommandFramework(this);
-		new CommandLoader(commandFramework).registerAbilityListeners();
+		new CommandLoader(new CommandFramework(this)).registerAbilityListeners();
 		getServer().getScheduler().runTaskTimer(this, new UpdateScheduler(), 1, 1);
+		WindowInjector.inject(this);
 	}
 
 	@Override

@@ -17,7 +17,6 @@ import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
 import br.com.battlebits.ycommon.bukkit.permissions.PermissionManager;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
@@ -47,7 +46,7 @@ public class LoginListener implements Listener {
 	}
 	
 	private Group getServerGroup(Player player) {
-		return ((BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId())).getServerGroup();
+		return BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId()).getServerGroup();
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)

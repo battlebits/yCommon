@@ -28,6 +28,9 @@ public class BukkitPlayer extends BattlePlayer {
 	private Tag tag;
 	private UUID lastTellUUID;
 
+	public BukkitPlayer() {
+	}
+	
 	public Tag getTag() {
 		if (tag == null)
 			tag = TagManager.getPlayerDefaultTag(this);

@@ -10,9 +10,6 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import br.com.battlebits.ycommon.common.BattlebitsAPI;
-import br.com.battlebits.ycommon.common.account.BattlePlayer;
-import br.com.battlebits.ycommon.common.translate.Translate;
 import net.minecraft.server.v1_7_R4.EntityPlayer;
 import net.minecraft.server.v1_7_R4.PacketPlayOutOpenWindow;
 
@@ -20,12 +17,18 @@ public class MenuInventory {
 
 	private HashMap<Integer, MenuItem> slotItem;
 	private int rows;
-	private String titletranslateid;
+	private String title;
+	private boolean isTranslateId;
 
 	public MenuInventory(String title, int rows) {
+		this(title, rows, false);
+	}
+
+	public MenuInventory(String title, int rows, boolean isTranslated) {
 		this.slotItem = new HashMap<>();
 		this.rows = rows;
-		this.titletranslateid = title;
+		this.title = title;
+		this.isTranslateId = isTranslated;
 	}
 
 	public void addItem(MenuItem item) {
@@ -63,9 +66,7 @@ public class MenuInventory {
 	}
 
 	public void open(Player p) {
-		if (p.getOpenInventory() == null || p.getOpenInventory().getTopInventory().getType() != InventoryType.CHEST
-				|| p.getOpenInventory().getTopInventory().getSize() < rows * 9 || p.getOpenInventory().getTopInventory().getHolder() == null
-				|| !(p.getOpenInventory().getTopInventory().getHolder() instanceof MenuHolder)) {
+		if (p.getOpenInventory() == null || p.getOpenInventory().getTopInventory().getType() != InventoryType.CHEST || p.getOpenInventory().getTopInventory().getSize() < rows * 9 || p.getOpenInventory().getTopInventory().getHolder() == null || !(p.getOpenInventory().getTopInventory().getHolder() instanceof MenuHolder)) {
 			createAndOpenInventory(p);
 		} else {
 			// Update the current inventory of player
@@ -84,36 +85,23 @@ public class MenuInventory {
 	}
 
 	public void updateTitle(Player p) {
-		BattlePlayer bp = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
 		EntityPlayer ep = ((CraftPlayer) p).getHandle();
-		PacketPlayOutOpenWindow openWindow = new PacketPlayOutOpenWindow(ep.activeContainer.windowId, 0,
-				Translate.getTranslation(bp.getLanguage(), titletranslateid), rows * 9, false);
+		PacketPlayOutOpenWindow openWindow = new PacketPlayOutOpenWindow(ep.activeContainer.windowId, 0, (isTranslateId ? "translateId:" : "") + title, rows * 9, false);
 		ep.playerConnection.sendPacket(openWindow);
 		ep.updateInventory(ep.activeContainer);
 		// Garbage Colector
 		openWindow = null;
 		ep = null;
-		bp = null;
 	}
 
 	public void createAndOpenInventory(Player p) {
 		// Create a New Inventory
-		Inventory playerInventory = Bukkit.createInventory(new MenuHolder(this), rows * 9, this.titletranslateid);
+		Inventory playerInventory = Bukkit.createInventory(new MenuHolder(this), rows * 9, (isTranslateId ? "translateId:" : "") + this.title);
 		for (Entry<Integer, MenuItem> entry : slotItem.entrySet()) {
 			playerInventory.setItem(entry.getKey(), entry.getValue().getStack());
 		}
 		p.openInventory(playerInventory);
-		BattlePlayer bp = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
-		// Update Inventory Title
-		EntityPlayer ep = ((CraftPlayer) p).getHandle();
-		PacketPlayOutOpenWindow openWindow = new PacketPlayOutOpenWindow(ep.activeContainer.windowId, 0,
-				Translate.getTranslation(bp.getLanguage(), titletranslateid), rows * 9, false);
-		ep.playerConnection.sendPacket(openWindow);
-		ep.updateInventory(ep.activeContainer);
 		// Garbage Colector
-		openWindow = null;
-		ep = null;
-		bp = null;
 		p = null;
 	}
 
