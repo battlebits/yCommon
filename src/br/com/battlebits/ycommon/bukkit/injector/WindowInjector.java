@@ -2,6 +2,9 @@ package br.com.battlebits.ycommon.bukkit.injector;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,10 +21,20 @@ import net.minecraft.server.v1_7_R4.Packet;
 import net.minecraft.server.v1_7_R4.PacketPlayOutOpenWindow;
 import net.minecraft.server.v1_7_R4.PacketPlayOutSetSlot;
 import net.minecraft.server.v1_7_R4.PacketPlayOutWindowItems;
+import net.minecraft.util.com.google.common.cache.Cache;
+import net.minecraft.util.com.google.common.cache.CacheBuilder;
+import net.minecraft.util.com.google.common.cache.CacheLoader;
 
 public class WindowInjector {
 
 	private static Pattern translateFinder = Pattern.compile("%translateId:\\s*([a-zA-Z0-9_-]+)\\s*%");
+	private static Cache<String, Cache<Language, String>> translations = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.DAYS)
+			.build(new CacheLoader<String, Cache<Language, String>>() {
+				@Override
+				public Cache<Language, String> load(String original) throws Exception {
+					return getLanguageForCache(original);
+				}
+			});
 
 	public static void inject(BukkitMain main) {
 		PacketListenerAPI.addListener(new PacketListener() {
@@ -42,14 +55,7 @@ public class WindowInjector {
 						ItemMeta meta = CraftItemStack.getItemMeta(iS);
 						if (meta != null) {
 							if (meta.hasDisplayName() && meta.getDisplayName().contains("%translateId:")) {
-								String name = meta.getDisplayName();
-								Matcher matcher = translateFinder.matcher(name);
-								while (matcher.find()) {
-									name = name.replace("%translateId:" + matcher.group(1) + "%", Translate.getTranslation(lang, matcher.group(1)));
-								}
-								matcher = null;
-								meta.setDisplayName(name);
-								name = null;
+								meta.setDisplayName(getTranslation(meta.getDisplayName(), lang));
 							}
 							if (meta.hasLore()) {
 								String newlore = "";
@@ -72,15 +78,15 @@ public class WindowInjector {
 								newlore = null;
 							}
 							CraftItemStack.setItemMeta(iS, meta);
+							lang = null;
+							meta = null;
 						}
 						array.add(iS);
-						meta = null;
 						iS = null;
 					}
 					pacote.setPacket(new PacketPlayOutWindowItems(items.a, array));
 					array.clear();
 					array = null;
-					lang = null;
 					items = null;
 				} else if (packet instanceof PacketPlayOutSetSlot) {
 					PacketPlayOutSetSlot setSlot = (PacketPlayOutSetSlot) packet;
@@ -94,15 +100,7 @@ public class WindowInjector {
 							if (meta != null) {
 								Language lang = BattlebitsAPI.getAccountCommon().getBattlePlayer(pacote.getPlayer().getUniqueId()).getLanguage();
 								if (meta.hasDisplayName() && meta.getDisplayName().contains("%translateId:")) {
-									String name = meta.getDisplayName();
-									Matcher matcher = translateFinder.matcher(name);
-									while (matcher.find()) {
-										name = name.replace("%translateId:" + matcher.group(1) + "%",
-												Translate.getTranslation(lang, matcher.group(1)));
-									}
-									matcher = null;
-									meta.setDisplayName(name);
-									name = null;
+									meta.setDisplayName(getTranslation(meta.getDisplayName(), lang));
 								}
 								if (meta.hasLore()) {
 									String newlore = "";
@@ -111,12 +109,7 @@ public class WindowInjector {
 											newlore += "\\n";
 										}
 										if (name.contains("%translateId:")) {
-											Matcher matcher = translateFinder.matcher(name);
-											while (matcher.find()) {
-												name = name.replace("%translateId:" + matcher.group(1) + "%",
-														Translate.getTranslation(lang, matcher.group(1)));
-											}
-											matcher = null;
+											name = getTranslation(name, lang);
 										}
 										newlore += name;
 										name = null;
@@ -126,9 +119,9 @@ public class WindowInjector {
 								}
 								CraftItemStack.setItemMeta(iS, meta);
 								lang = null;
+								meta = null;
 							}
 							c.set(setSlot, iS);
-							meta = null;
 							iS = null;
 						}
 						item = null;
@@ -144,15 +137,8 @@ public class WindowInjector {
 						c.setAccessible(true);
 						String name = (String) c.get(openWindow);
 						if (name != null) {
-							Matcher matcher = translateFinder.matcher(name);
-							while (matcher.find()) {
-								name = name.replace("%translateId:" + matcher.group(1) + "%",
-										Translate.getTranslation(
-												BattlebitsAPI.getAccountCommon().getBattlePlayer(pacote.getPlayer().getUniqueId()).getLanguage(),
-												matcher.group(1)));
-							}
-							matcher = null;
-							c.set(openWindow, name);
+							c.set(openWindow, getTranslation(name,
+									BattlebitsAPI.getAccountCommon().getBattlePlayer(pacote.getPlayer().getUniqueId()).getLanguage()));
 						}
 						name = null;
 						c = null;
@@ -197,5 +183,44 @@ public class WindowInjector {
 		}
 		newString.add("§7" + string);
 		return newString;
+	}
+
+	private static String getTranslation(String original, Language lang) {
+		try {
+			return translations.get(original, new Callable<Cache<Language, String>>() {
+				@Override
+				public Cache<Language, String> call() throws Exception {
+					return getLanguageForCache(original);
+				}
+			}).get(lang, new Callable<String>() {
+				@Override
+				public String call() throws Exception {
+					return getTranslationForCache(original, lang);
+				}
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "";
+		}
+	}
+
+	private static Cache<Language, String> getLanguageForCache(String original) {
+		return CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.DAYS).build(new CacheLoader<Language, String>() {
+			@Override
+			public String load(Language lang) throws Exception {
+				return getTranslationForCache(original, lang);
+			}
+		});
+	}
+
+	private static String getTranslationForCache(String original, Language lang) {
+		String message = original;
+		Matcher matcher = translateFinder.matcher(message);
+		while (matcher.find()) {
+			message = message.replace("%translateId:" + matcher.group(1) + "%", Translate.getTranslation(lang, matcher.group(1)));
+		}
+		matcher = null;
+		lang = null;
+		return message;
 	}
 }
