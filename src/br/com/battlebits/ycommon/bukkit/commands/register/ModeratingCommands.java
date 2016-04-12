@@ -1,6 +1,7 @@
 package br.com.battlebits.ycommon.bukkit.commands.register;
 
 import java.util.Arrays;
+import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -9,7 +10,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import br.com.battlebits.ycommon.bukkit.api.inventory.menu.ClickType;
 import br.com.battlebits.ycommon.bukkit.api.inventory.menu.MenuInventory;
+import br.com.battlebits.ycommon.bukkit.api.inventory.menu.MenuItem;
+import br.com.battlebits.ycommon.bukkit.api.inventory.menu.clickhandler.MenuClickHandler;
 import br.com.battlebits.ycommon.bukkit.commands.CommandClass;
 import br.com.battlebits.ycommon.bukkit.commands.CommandFramework.Command;
 import br.com.battlebits.ycommon.bukkit.commands.CommandFramework.CommandArgs;
@@ -74,10 +78,19 @@ public class ModeratingCommands extends CommandClass {
 	public void tp(CommandArgs args) {
 		ItemStack stack = new ItemStack(Material.ANVIL, 1);
 		ItemMeta meta = stack.getItemMeta();
-		meta.setDisplayName("%translateId:gamemode-player-notfound%");
-		meta.setLore(Arrays.asList("%translateId:gamemode-changed-you%", "Oi", "%translateId:gamemode-changed-other%"));
+		meta.setDisplayName("%msgId:gamemode-player-notfound%");
+		meta.setLore(Arrays.asList("%msgId:gamemode-changed-you%", "Oi", "%msgId:gamemode-changed-other%"));
 		stack.setItemMeta(meta);
-		args.getPlayer().getInventory().addItem(stack);
+		MenuInventory menu = new MenuInventory("%msgId:gamemode-player-notfound%", 1, false);
+		menu.setItem(new MenuItem(stack, new MenuClickHandler() {
+
+			@Override
+			public void onClick(Player p, MenuInventory menu, ClickType type, ItemStack stack) {
+				p.sendMessage(stack.getItemMeta().getDisplayName());
+				stack.setType(Material.values()[new Random().nextInt(Material.values().length - 1)]);
+			}
+		}), 1);
+		menu.open(args.getPlayer());
 	}
 
 }

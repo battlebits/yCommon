@@ -19,13 +19,21 @@ class MenuHolder implements InventoryHolder {
 		this.menu = menu;
 	}
 
+	public boolean isOnePerPlayer() {
+		return menu.isOnePerPlayer();
+	}
+
 	public void destroy() {
 		menu = null;
 	}
 
 	@Override
 	public Inventory getInventory() {
-		return null;
+		if (isOnePerPlayer()) {
+			return null;
+		} else {
+			return menu.getInventory();
+		}
 	}
 
 }

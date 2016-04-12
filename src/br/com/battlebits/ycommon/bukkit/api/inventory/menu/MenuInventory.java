@@ -18,25 +18,25 @@ public class MenuInventory {
 	private HashMap<Integer, MenuItem> slotItem;
 	private int rows;
 	private String title;
-	private boolean isTranslateId;
+	private Inventory inv;
+	private boolean onePerPlayer;
 
 	public MenuInventory(String title, int rows) {
 		this(title, rows, false);
 	}
 
-	public MenuInventory(String title, int rows, boolean isTranslated) {
+	public MenuInventory(String title, int rows, boolean onePerPlayer) {
 		this.slotItem = new HashMap<>();
 		this.rows = rows;
 		this.title = title;
-		this.isTranslateId = isTranslated;
+		this.onePerPlayer = onePerPlayer;
+		if (!onePerPlayer) {
+			this.inv = Bukkit.createInventory(new MenuHolder(this), rows * 9, "");
+		}
 	}
 
 	public void addItem(MenuItem item) {
 		setItem(item, firstEmpty());
-	}
-
-	public void setItem(MenuItem item, int slot) {
-		this.slotItem.put(slot, item);
 	}
 
 	public void addItem(ItemStack item) {
@@ -44,17 +44,27 @@ public class MenuInventory {
 	}
 
 	public void setItem(ItemStack item, int slot) {
-		MenuItem mItem = new MenuItem(item);
-		this.slotItem.put(slot, mItem);
+		setItem(new MenuItem(item), slot);
+	}
+
+	public void setItem(MenuItem item, int slot) {
+		this.slotItem.put(slot, item);
+		if (!onePerPlayer) {
+			inv.setItem(slot, item.getStack());
+		}
 	}
 
 	public int firstEmpty() {
-		for (int i = 0; i < rows * 9; i++) {
-			if (!slotItem.containsKey(i)) {
-				return i;
+		if (!onePerPlayer) {
+			return inv.firstEmpty();
+		} else {
+			for (int i = 0; i < rows * 9; i++) {
+				if (!slotItem.containsKey(i)) {
+					return i;
+				}
 			}
+			return -1;
 		}
-		return -1;
 	}
 
 	public boolean hasItem(int slot) {
@@ -66,30 +76,35 @@ public class MenuInventory {
 	}
 
 	public void open(Player p) {
-		if (p.getOpenInventory() == null || p.getOpenInventory().getTopInventory().getType() != InventoryType.CHEST
-				|| p.getOpenInventory().getTopInventory().getSize() < rows * 9 || p.getOpenInventory().getTopInventory().getHolder() == null
-				|| !(p.getOpenInventory().getTopInventory().getHolder() instanceof MenuHolder)) {
-			createAndOpenInventory(p);
-		} else {
-			// Update the current inventory of player
-			for (int i = 0; i < rows * 9; i++) {
-				if (slotItem.containsKey(i)) {
-					p.getOpenInventory().getTopInventory().setItem(i, slotItem.get(i).getStack());
-				} else {
-					p.getOpenInventory().getTopInventory().setItem(i, null);
-				}
-			}
+		if (!onePerPlayer) {
+			p.openInventory(inv);
 			updateTitle(p);
+		} else {
+			if (p.getOpenInventory() == null || p.getOpenInventory().getTopInventory().getType() != InventoryType.CHEST
+					|| p.getOpenInventory().getTopInventory().getSize() < rows * 9 || p.getOpenInventory().getTopInventory().getHolder() == null
+					|| !(p.getOpenInventory().getTopInventory().getHolder() instanceof MenuHolder)
+					|| !(((MenuHolder) p.getOpenInventory().getTopInventory().getHolder()).isOnePerPlayer())) {
+				createAndOpenInventory(p);
+			} else {
+				// Update the current inventory of player
+				for (int i = 0; i < rows * 9; i++) {
+					if (slotItem.containsKey(i)) {
+						p.getOpenInventory().getTopInventory().setItem(i, slotItem.get(i).getStack());
+					} else {
+						p.getOpenInventory().getTopInventory().setItem(i, null);
+					}
+				}
+				updateTitle(p);
+			}
+			((MenuHolder) p.getOpenInventory().getTopInventory().getHolder()).setMenu(this);
 		}
-		((MenuHolder) p.getOpenInventory().getTopInventory().getHolder()).setMenu(this);
 		// Garbage Colector
 		p = null;
 	}
 
 	public void updateTitle(Player p) {
 		EntityPlayer ep = ((CraftPlayer) p).getHandle();
-		PacketPlayOutOpenWindow openWindow = new PacketPlayOutOpenWindow(ep.activeContainer.windowId, 0,
-				(isTranslateId ? "%translateId:" : "") + this.title + (isTranslateId ? "%" : ""), rows * 9, false);
+		PacketPlayOutOpenWindow openWindow = new PacketPlayOutOpenWindow(ep.activeContainer.windowId, 0, this.title, rows * 9, false);
 		ep.playerConnection.sendPacket(openWindow);
 		ep.updateInventory(ep.activeContainer);
 		// Garbage Colector
@@ -99,19 +114,21 @@ public class MenuInventory {
 
 	public void createAndOpenInventory(Player p) {
 		// Create a New Inventory
-		Inventory playerInventory = Bukkit.createInventory(new MenuHolder(this), rows * 9,
-				(isTranslateId ? "%translateId:" : "") + this.title + (isTranslateId ? "%" : ""));
+		Inventory playerInventory = Bukkit.createInventory(new MenuHolder(this), rows * 9, "");
 		for (Entry<Integer, MenuItem> entry : slotItem.entrySet()) {
 			playerInventory.setItem(entry.getKey(), entry.getValue().getStack());
 		}
 		p.openInventory(playerInventory);
+		updateTitle(p);
 		// Garbage Colector
 		p = null;
 	}
 
 	public void close(Player p) {
-		destroy(p);
-		p = null;
+		if (onePerPlayer) {
+			destroy(p);
+			p = null;
+		}
 	}
 
 	public void destroy(Player p) {
@@ -126,6 +143,14 @@ public class MenuInventory {
 		}
 		this.slotItem.clear();
 		this.slotItem = null;
+	}
+
+	public boolean isOnePerPlayer() {
+		return onePerPlayer;
+	}
+
+	public Inventory getInventory() {
+		return inv;
 	}
 
 }

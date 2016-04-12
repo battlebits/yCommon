@@ -3,11 +3,11 @@ package br.com.battlebits.ycommon.bukkit.injector;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -27,7 +27,7 @@ import net.minecraft.util.com.google.common.cache.CacheLoader;
 
 public class WindowInjector {
 
-	private static Pattern translateFinder = Pattern.compile("%translateId:\\s*([a-zA-Z0-9_-]+)\\s*%");
+	private static Pattern translateFinder = Pattern.compile("%msgId:\\s*([a-zA-Z0-9_-]+)\\s*%");
 	private static Cache<String, Cache<Language, String>> translations = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.DAYS)
 			.build(new CacheLoader<String, Cache<Language, String>>() {
 				@Override
@@ -54,7 +54,7 @@ public class WindowInjector {
 						ItemStack iS = CraftItemStack.copyNMSStack(item, item.count);
 						ItemMeta meta = CraftItemStack.getItemMeta(iS);
 						if (meta != null) {
-							if (meta.hasDisplayName() && meta.getDisplayName().contains("%translateId:")) {
+							if (meta.hasDisplayName() && meta.getDisplayName().contains("%msgId:")) {
 								meta.setDisplayName(getTranslation(meta.getDisplayName(), lang));
 							}
 							if (meta.hasLore()) {
@@ -63,13 +63,8 @@ public class WindowInjector {
 									if (!newlore.isEmpty()) {
 										newlore += "\\n";
 									}
-									if (name.contains("%translateId:")) {
-										Matcher matcher = translateFinder.matcher(name);
-										while (matcher.find()) {
-											name = name.replace("%translateId:" + matcher.group(1) + "%",
-													Translate.getTranslation(lang, matcher.group(1)));
-										}
-										matcher = null;
+									if (name.contains("%msgId:")) {
+										name = getTranslation(name, lang);
 									}
 									newlore += name;
 									name = null;
@@ -99,7 +94,7 @@ public class WindowInjector {
 							ItemMeta meta = CraftItemStack.getItemMeta(iS);
 							if (meta != null) {
 								Language lang = BattlebitsAPI.getAccountCommon().getBattlePlayer(pacote.getPlayer().getUniqueId()).getLanguage();
-								if (meta.hasDisplayName() && meta.getDisplayName().contains("%translateId:")) {
+								if (meta.hasDisplayName() && meta.getDisplayName().contains("%msgId:")) {
 									meta.setDisplayName(getTranslation(meta.getDisplayName(), lang));
 								}
 								if (meta.hasLore()) {
@@ -108,7 +103,7 @@ public class WindowInjector {
 										if (!newlore.isEmpty()) {
 											newlore += "\\n";
 										}
-										if (name.contains("%translateId:")) {
+										if (name.contains("%msgId:")) {
 											name = getTranslation(name, lang);
 										}
 										newlore += name;
@@ -136,7 +131,7 @@ public class WindowInjector {
 						Field c = openWindow.getClass().getDeclaredField("c");
 						c.setAccessible(true);
 						String name = (String) c.get(openWindow);
-						if (name != null) {
+						if (name != null && name.contains("%msgId:")) {
 							c.set(openWindow, getTranslation(name,
 									BattlebitsAPI.getAccountCommon().getBattlePlayer(pacote.getPlayer().getUniqueId()).getLanguage()));
 						}
@@ -199,7 +194,6 @@ public class WindowInjector {
 				}
 			});
 		} catch (Exception e) {
-			e.printStackTrace();
 			return "";
 		}
 	}
@@ -214,13 +208,17 @@ public class WindowInjector {
 	}
 
 	private static String getTranslationForCache(String original, Language lang) {
-		String message = original;
-		Matcher matcher = translateFinder.matcher(message);
-		while (matcher.find()) {
-			message = message.replace("%translateId:" + matcher.group(1) + "%", Translate.getTranslation(lang, matcher.group(1)));
+		try {
+			String message = original;
+			Matcher matcher = translateFinder.matcher(message);
+			while (matcher.find()) {
+				message = message.replace("%msgId:" + matcher.group(1) + "%", Translate.getTranslation(lang, matcher.group(1)));
+			}
+			matcher = null;
+			lang = null;
+			return message;
+		} catch (Exception e) {
+			return "";
 		}
-		matcher = null;
-		lang = null;
-		return message;
 	}
 }
