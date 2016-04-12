@@ -29,8 +29,9 @@ public class ModeratingCommands extends CommandClass {
 	public void gamemode(CommandArgs args) {
 		if (args.isPlayer()) {
 			BattlePlayer bp = BattlebitsAPI.getAccountCommon().getBattlePlayer(args.getPlayer().getUniqueId());
+			String prefix = Translate.getTranslation(bp.getLanguage(), "command-gamemode-prefix");
 			if (args.getArgs().length == 0) {
-				args.getPlayer().sendMessage(Translate.getTranslation(bp.getLanguage(), "gamemode-help"));
+				args.getPlayer().sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-gamemode-help"));
 			} else {
 				GameMode gm = null;
 				try {
@@ -45,36 +46,37 @@ public class ModeratingCommands extends CommandClass {
 					if (args.getArgs().length == 1) {
 						if (args.getPlayer().getGameMode() != gm) {
 							args.getPlayer().setGameMode(gm);
-							args.getPlayer().sendMessage(Translate.getTranslation(bp.getLanguage(), "gamemode-changed-you").replace("%gamemode%",
-									Translate.getTranslation(bp.getLanguage(), "gamemode-name-" + gm.name().toLowerCase())));
+							args.getPlayer().sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-gamemode-changed-you")
+									.replace("%gamemode%", Translate.getTranslation(bp.getLanguage(), "name-gamemode-" + gm.name().toLowerCase())));
 						} else {
-							args.getPlayer().sendMessage(Translate.getTranslation(bp.getLanguage(), "gamemode-already-you"));
+							args.getPlayer().sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-gamemode-already-you"));
 						}
 					} else {
 						Player t = Bukkit.getPlayer(args.getArgs()[1]);
 						if (t != null) {
 							if (t.getGameMode() != gm) {
 								t.setGameMode(gm);
-								args.getPlayer().sendMessage(Translate.getTranslation(bp.getLanguage(), "gamemode-changed-other").replace(
-										"%gamemode%", Translate.getTranslation(bp.getLanguage(), "gamemode-name-" + gm.name().toLowerCase())));
+								args.getPlayer().sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-gamemode-changed-other").replace(
+										"%gamemode%", Translate.getTranslation(bp.getLanguage(), "name-gamemode-" + gm.name().toLowerCase())));
 							} else {
-								args.getPlayer().sendMessage(Translate.getTranslation(bp.getLanguage(), "gamemode-already-other"));
+								args.getPlayer().sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-gamemode-already-other"));
 							}
 						} else {
-							args.getPlayer().sendMessage(Translate.getTranslation(bp.getLanguage(), "gamemode-player-notfound"));
+							args.getPlayer().sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-gamemode-player-notfound"));
 						}
 						t = null;
 					}
 				} else {
-					args.getPlayer().sendMessage(Translate.getTranslation(bp.getLanguage(), "gamemode-unknown"));
+					args.getPlayer().sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-gamemode-unknown"));
 				}
 				gm = null;
 			}
+			prefix = null;
 			bp = null;
 		}
 	}
 
-	@Command(name = "tp", aliases = { "teleport", "teleportar" }, groupToUse = Group.NORMAL, noPermMessageId = "teleport-no-access")
+	@Command(name = "tp", aliases = { "teleport", "teleportar" }, groupToUse = Group.TRIAL, noPermMessageId = "command-teleport-no-access")
 	public void tp(CommandArgs args) {
 		ItemStack stack = new ItemStack(Material.ANVIL, 1);
 		ItemMeta meta = stack.getItemMeta();

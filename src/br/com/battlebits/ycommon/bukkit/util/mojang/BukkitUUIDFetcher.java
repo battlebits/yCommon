@@ -61,8 +61,7 @@ public class BukkitUUIDFetcher extends UUIDFetcher {
 			streamReader.close();
 			is.close();
 		} catch (Exception e) {
-			BattlebitsAPI.getLogger()
-					.warning("Erro ao tentar obter UUID do jogador " + name + " utilizando a API da Mojang!");
+			BattlebitsAPI.getLogger().warning("Erro ao tentar obter UUID do jogador " + name + " utilizando a API da Mojang!");
 		}
 		return id;
 	}
@@ -92,16 +91,11 @@ public class BukkitUUIDFetcher extends UUIDFetcher {
 
 	@Override
 	public UUID getUuid(String name) throws Exception {
-		Player t = Bukkit.getPlayerExact(name);
-		if (t != null) {
-			return t.getUniqueId();
-		} else {
-			return nameUUID.get(name, new Callable<UUID>() {
-				@Override
-				public UUID call() throws Exception {
-					return loadUUID(name);
-				}
-			});
-		}
+		return nameUUID.get(name, new Callable<UUID>() {
+			@Override
+			public UUID call() throws Exception {
+				return loadUUID(name);
+			}
+		});
 	}
 }

@@ -28,8 +28,10 @@ public class MessengerComand extends CommandClass {
 		if (args.isPlayer()) {
 			Player p = args.getPlayer();
 			BukkitPlayer bp = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
+			String prefix = Translate.getTranslation(bp.getLanguage(), "command-tell-prefix");
 			if (args.getArgs().length <= 1) {
-				p.sendMessage(Translate.getTranslation(bp.getLanguage(), "tell-help").replace("%command%", args.getLabel().toLowerCase()));
+				p.sendMessage(
+						prefix + Translate.getTranslation(bp.getLanguage(), "command-tell-help").replace("%command%", args.getLabel().toLowerCase()));
 			} else {
 				if (bp.getConfiguration().isTellEnabled()) {
 					Player t = Bukkit.getPlayer(args.getArgs()[0]);
@@ -40,18 +42,20 @@ public class MessengerComand extends CommandClass {
 								if (!bt.getBlockedPlayers().containsKey(p.getUniqueId())) {
 									if (bt.getConfiguration().isTellEnabled()) {
 										TextComponent[] toPlayer = new TextComponent[args.getArgs().length];
-										TextComponent to = new TextComponent(
-												Translate.getTranslation(bp.getLanguage(), "tell-me-player").replace("%player%", t.getName()));
+										TextComponent to = new TextComponent(Translate.getTranslation(bp.getLanguage(), "command-tell-me-player")
+												.replace("%player%", t.getName()));
 										to.setClickEvent(new ClickEvent(Action.SUGGEST_COMMAND,
 												"/" + args.getLabel().toLowerCase() + " " + t.getName() + " "));
-										to.setHoverEvent(new HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT,
-												new TextComponent[] { new TextComponent(Translate
-														.getTranslation(bp.getLanguage(), "tell-hover-another").replace("%player%", t.getName())) }));
+										to.setHoverEvent(
+												new HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT,
+														new TextComponent[] { new TextComponent(
+																Translate.getTranslation(bp.getLanguage(), "command-tell-hover-another")
+																		.replace("%player%", t.getName())) }));
 										toPlayer[0] = to;
 										to = null;
 										TextComponent[] toTarget = new TextComponent[args.getArgs().length];
-										TextComponent from = new TextComponent(
-												Translate.getTranslation(bt.getLanguage(), "tell-player-me").replace("%player%", p.getName()));
+										TextComponent from = new TextComponent(Translate.getTranslation(bt.getLanguage(), "command-tell-player-me")
+												.replace("%player%", p.getName()));
 										from.setClickEvent(new ClickEvent(Action.SUGGEST_COMMAND, "/r "));
 										from.setHoverEvent(new HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT,
 												new TextComponent[] { new TextComponent(Translate.getTranslation(bt.getLanguage(), "tell-hover-reply")
@@ -81,26 +85,27 @@ public class MessengerComand extends CommandClass {
 										toTarget = null;
 										toPlayer = null;
 									} else {
-										p.sendMessage(Translate.getTranslation(bp.getLanguage(), "tell-player-disabled"));
+										p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-tell-player-disabled"));
 									}
 								} else {
-									p.sendMessage(Translate.getTranslation(bp.getLanguage(), "tell-ignore-you"));
+									p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-tell-ignore-you"));
 								}
 							} else {
-								p.sendMessage(Translate.getTranslation(bp.getLanguage(), "tell-ignore-all"));
+								p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-tell-ignore-all"));
 							}
 							bt = null;
 						} else {
-							p.sendMessage(Translate.getTranslation(bp.getLanguage(), "tell-send-to-me"));
+							p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-tell-send-to-me"));
 						}
 					} else {
-						p.sendMessage(Translate.getTranslation(bp.getLanguage(), "tell-not-found"));
+						p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-tell-not-found"));
 					}
 					t = null;
 				} else {
-					p.sendMessage(Translate.getTranslation(bp.getLanguage(), "tell-disabled"));
+					p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-tell-disabled"));
 				}
 			}
+			prefix = null;
 			bp = null;
 			p = null;
 		}
@@ -111,8 +116,9 @@ public class MessengerComand extends CommandClass {
 		if (args.isPlayer()) {
 			Player p = args.getPlayer();
 			BukkitPlayer bp = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
+			String prefix = Translate.getTranslation(bp.getLanguage(), "command-tell-prefix");
 			if (args.getArgs().length == 0) {
-				p.sendMessage(Translate.getTranslation(bp.getLanguage(), "reply-use"));
+				p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-reply-use"));
 			} else {
 				if (bp.hasLastTell()) {
 					Player t = Bukkit.getPlayer(bp.getLastTellUUID());
@@ -123,7 +129,7 @@ public class MessengerComand extends CommandClass {
 								if (bt.getConfiguration().isTellEnabled()) {
 									TextComponent[] toPlayer = new TextComponent[args.getArgs().length + 1];
 									TextComponent to = new TextComponent(
-											Translate.getTranslation(bp.getLanguage(), "tell-me-player").replace("%player%", t.getName()));
+											Translate.getTranslation(bp.getLanguage(), "command-tell-me-player").replace("%player%", t.getName()));
 									to.setClickEvent(new ClickEvent(Action.SUGGEST_COMMAND, "/tell " + t.getName() + " "));
 									to.setHoverEvent(new HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT,
 											new TextComponent[] { new TextComponent(Translate.getTranslation(bp.getLanguage(), "tell-hover-another")
@@ -132,7 +138,7 @@ public class MessengerComand extends CommandClass {
 									to = null;
 									TextComponent[] toTarget = new TextComponent[args.getArgs().length + 1];
 									TextComponent from = new TextComponent(
-											Translate.getTranslation(bt.getLanguage(), "tell-player-me").replace("%player%", p.getName()));
+											Translate.getTranslation(bt.getLanguage(), "command-tell-player-me").replace("%player%", p.getName()));
 									from.setClickEvent(new ClickEvent(Action.SUGGEST_COMMAND, "/r "));
 									from.setHoverEvent(new HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT,
 											new TextComponent[] { new TextComponent(Translate.getTranslation(bt.getLanguage(), "tell-hover-reply")
@@ -161,23 +167,24 @@ public class MessengerComand extends CommandClass {
 									toTarget = null;
 									toPlayer = null;
 								} else {
-									p.sendMessage(Translate.getTranslation(bp.getLanguage(), "reply-tell-off"));
+									p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-reply-tell-off"));
 								}
 							} else {
-								p.sendMessage(Translate.getTranslation(bp.getLanguage(), "tell-ignore-you"));
+								p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-tell-ignore-you"));
 							}
 						} else {
-							p.sendMessage(Translate.getTranslation(bp.getLanguage(), "tell-ignore-all"));
+							p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-tell-ignore-all"));
 						}
 						bt = null;
 					} else {
-						p.sendMessage(Translate.getTranslation(bp.getLanguage(), "reply-offline"));
+						p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-reply-offline"));
 					}
 					t = null;
 				} else {
-					p.sendMessage(Translate.getTranslation(bp.getLanguage(), "reply-none"));
+					p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-reply-none"));
 				}
 			}
+			prefix = null;
 			bp = null;
 			p = null;
 		}
@@ -191,8 +198,9 @@ public class MessengerComand extends CommandClass {
 				public void run() {
 					Player p = args.getPlayer();
 					BukkitPlayer bp = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
+					String prefix = Translate.getTranslation(bp.getLanguage(), "command-ignore-prefix");
 					if (args.getArgs().length == 0) {
-						p.sendMessage(Translate.getTranslation(bp.getLanguage(), "ignore-invalid"));
+						p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-ignore-invalid"));
 					} else {
 						UUID id = null;
 						Player t = Bukkit.getPlayerExact(args.getArgs()[0]);
@@ -204,7 +212,7 @@ public class MessengerComand extends CommandClass {
 							try {
 								id = BattlebitsAPI.getUUIDOf(args.getArgs()[0]);
 							} catch (Exception e) {
-								p.sendMessage(Translate.getTranslation(bp.getLanguage(), "ignore-player-not-found"));
+								p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-ignore-player-not-found"));
 								return;
 							}
 						}
@@ -213,18 +221,18 @@ public class MessengerComand extends CommandClass {
 								if (!bp.getBlockedPlayers().containsKey(id)) {
 									bp.getBlockedPlayers().put(id, new Blocked());
 									// TODO: BLOCKED?
-									p.sendMessage(
-											Translate.getTranslation(bp.getLanguage(), "ignore-you-ignore").replace("%player%", args.getArgs()[0]));
+									p.sendMessage(prefix
+											+ Translate.getTranslation(bp.getLanguage(), "command-ignore-you-ignore").replace("%player%", args.getArgs()[0]));
 								} else {
 									bp.getBlockedPlayers().remove(id);
-									p.sendMessage(
-											Translate.getTranslation(bp.getLanguage(), "ignore-not-ignore").replace("%player%", args.getArgs()[0]));
+									p.sendMessage(prefix
+											+ Translate.getTranslation(bp.getLanguage(), "command-ignore-not-ignore").replace("%player%", args.getArgs()[0]));
 								}
 							} else {
-								p.sendMessage(Translate.getTranslation(bp.getLanguage(), "ignore-cant-you"));
+								p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-ignore-cant-you"));
 							}
 						} else {
-							p.sendMessage(Translate.getTranslation(bp.getLanguage(), "ignore-player-not-found"));
+							p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-ignore-player-not-found"));
 						}
 						id = null;
 					}
