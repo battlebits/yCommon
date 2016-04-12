@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
@@ -71,6 +72,11 @@ public class BukkitUUIDFetcher extends UUIDFetcher{
 
 	@Override
 	public UUID getUuid(String name) throws Exception {
-		return nameUUID.get(name, null);
+		return nameUUID.get(name, new Callable<UUID>() {
+			@Override
+			public UUID call() throws Exception {
+				return loadFromMojang(name);
+			}
+		});
 	}
 }
