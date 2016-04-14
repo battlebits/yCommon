@@ -78,7 +78,6 @@ public class MenuInventory {
 	public void open(Player p) {
 		if (!onePerPlayer) {
 			p.openInventory(inv);
-			updateTitle(p);
 		} else {
 			if (p.getOpenInventory() == null || p.getOpenInventory().getTopInventory().getType() != InventoryType.CHEST
 					|| p.getOpenInventory().getTopInventory().getSize() < rows * 9 || p.getOpenInventory().getTopInventory().getHolder() == null
@@ -94,10 +93,10 @@ public class MenuInventory {
 						p.getOpenInventory().getTopInventory().setItem(i, null);
 					}
 				}
-				updateTitle(p);
 			}
 			((MenuHolder) p.getOpenInventory().getTopInventory().getHolder()).setMenu(this);
 		}
+		updateTitle(p);
 		// Garbage Colector
 		p = null;
 	}

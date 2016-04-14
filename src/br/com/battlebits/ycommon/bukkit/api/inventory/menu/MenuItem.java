@@ -3,8 +3,6 @@ package br.com.battlebits.ycommon.bukkit.api.inventory.menu;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import br.com.battlebits.ycommon.bukkit.api.inventory.menu.clickhandler.MenuClickHandler;
-
 public class MenuItem {
 
 	private ItemStack stack;
