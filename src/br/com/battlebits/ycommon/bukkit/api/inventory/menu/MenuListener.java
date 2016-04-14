@@ -24,9 +24,9 @@ public class MenuListener implements Listener {
 									if (menu.hasItem(e.getSlot())) {
 										Player p = (Player) e.getWhoClicked();
 										MenuItem item = menu.getItem(e.getSlot());
-										item.getHandler().onClick(p, menu,
+										item.getHandler().onClick(p, e.getInventory(),
 												((e.getAction() == InventoryAction.PICKUP_HALF) ? ClickType.RIGHT : ClickType.LEFT),
-												e.getCurrentItem());
+												e.getCurrentItem(), e.getSlot());
 										item = null;
 										p = null;
 									}

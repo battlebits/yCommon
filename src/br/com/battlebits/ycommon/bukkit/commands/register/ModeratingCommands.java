@@ -16,6 +16,7 @@ import br.com.battlebits.ycommon.bukkit.api.inventory.menu.MenuInventory;
 import br.com.battlebits.ycommon.bukkit.api.inventory.menu.MenuItem;
 import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandFramework.Command;
 import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandFramework.CommandArgs;
+import br.com.battlebits.ycommon.bukkit.menu.PreferencesMenu;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.commands.CommandClass;
@@ -24,6 +25,8 @@ import br.com.battlebits.ycommon.common.translate.Translate;
 
 public class ModeratingCommands extends CommandClass {
 
+	private PreferencesMenu menu = new PreferencesMenu();
+	
 	@SuppressWarnings("deprecation")
 	@Command(name = "gamemode", aliases = { "gm" }, groupToUse = Group.ADMIN, noPermMessageId = "gamemode-no-access")
 	public void gamemode(CommandArgs args) {
@@ -79,20 +82,6 @@ public class ModeratingCommands extends CommandClass {
 	@Command(name = "tp", aliases = { "teleport", "teleportar" }, groupToUse = Group.TRIAL, noPermMessageId = "command-teleport-no-access")
 	public void tp(CommandArgs args) {
 		long now = System.currentTimeMillis();
-		ItemStack stack = new ItemStack(Material.ANVIL, 1);
-		ItemMeta meta = stack.getItemMeta();
-		meta.setDisplayName("%msgId:gamemode-player-notfound%");
-		meta.setLore(Arrays.asList("%msgId:gamemode-changed-you%", "Oi", "%msgId:gamemode-changed-other%"));
-		stack.setItemMeta(meta);
-		MenuInventory menu = new MenuInventory("%msgId:gamemode-player-notfound%", 1, false);
-		menu.setItem(new MenuItem(stack, new MenuClickHandler() {
-
-			@Override
-			public void onClick(Player p, MenuInventory menu, ClickType type, ItemStack stack) {
-				p.sendMessage(stack.getItemMeta().getDisplayName());
-				stack.setType(Material.values()[new Random().nextInt(Material.values().length - 1)]);
-			}
-		}), 1);
 		menu.open(args.getPlayer());
 		args.getPlayer().sendMessage("Took " + (System.currentTimeMillis() - now) + "ms");
 	}
