@@ -23,8 +23,6 @@ import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
-import net.md_5.bungee.scheduler.BungeeScheduler;
-import net.md_5.bungee.scheduler.BungeeTask;
 
 public class BungeeMain extends Plugin {
 
