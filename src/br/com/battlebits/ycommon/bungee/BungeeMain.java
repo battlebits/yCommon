@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.concurrent.TimeUnit;
 
+import br.com.battlebits.ycommon.bungee.commands.BungeeCommandFramework;
+import br.com.battlebits.ycommon.bungee.commands.BungeeCommandLoader;
 import br.com.battlebits.ycommon.bungee.event.UpdateScheduler;
 import br.com.battlebits.ycommon.bungee.listeners.LoginListener;
 import br.com.battlebits.ycommon.bungee.listeners.PlayerListener;
@@ -21,6 +23,8 @@ import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
+import net.md_5.bungee.scheduler.BungeeScheduler;
+import net.md_5.bungee.scheduler.BungeeTask;
 
 public class BungeeMain extends Plugin {
 
@@ -37,6 +41,8 @@ public class BungeeMain extends Plugin {
 
 	private CommonServer commonServer;
 	private BanManager banManager;
+	private BungeeCommandFramework commandFramework;
+	private BungeeCommandLoader commandLoader;
 
 	{
 		plugin = this;
@@ -71,6 +77,14 @@ public class BungeeMain extends Plugin {
 		getProxy().getScheduler().schedule(this, new UpdateScheduler(), 0, 50, TimeUnit.MILLISECONDS);
 		getProxy().registerChannel(BattlebitsAPI.getBungeeChannel());
 		loadListeners();
+		try {
+			commandFramework = new BungeeCommandFramework(plugin);
+			commandLoader = new BungeeCommandLoader(commandFramework);
+			commandLoader.loadCommandsFromPackage("br.com.battlebits.ycommon.bungee.commands.register");
+		} catch (Exception e) {
+			BattlebitsAPI.getLogger().warning("Erro ao carregar o commandFramework!");
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -85,6 +99,7 @@ public class BungeeMain extends Plugin {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		getProxy().getScheduler().cancel(plugin);
 		config = null;
 		commonServer = null;
 		plugin = null;
@@ -148,6 +163,10 @@ public class BungeeMain extends Plugin {
 
 	public BanManager getBanManager() {
 		return banManager;
+	}
+
+	public BungeeCommandLoader getCommandLoader() {
+		return commandLoader;
 	}
 
 	public static BungeeMain getPlugin() {

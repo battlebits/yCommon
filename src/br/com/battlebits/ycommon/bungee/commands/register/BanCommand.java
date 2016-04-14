@@ -3,12 +3,13 @@ package br.com.battlebits.ycommon.bungee.commands.register;
 import java.util.UUID;
 
 import br.com.battlebits.ycommon.bungee.BungeeMain;
-import br.com.battlebits.ycommon.bungee.commands.CommandFramework.Command;
-import br.com.battlebits.ycommon.bungee.commands.CommandFramework.CommandArgs;
+import br.com.battlebits.ycommon.bungee.commands.BungeeCommandFramework.Command;
+import br.com.battlebits.ycommon.bungee.commands.BungeeCommandFramework.CommandArgs;
 import br.com.battlebits.ycommon.bungee.managers.BanManager;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.banmanager.constructors.Ban;
+import br.com.battlebits.ycommon.common.commands.CommandClass;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
@@ -18,7 +19,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-public class BanCommand {
+public class BanCommand extends CommandClass {
 
 	@Command(name = "ban", usage = "/<command> <player> <reason>", aliases = { "banir" })
 	public void ban(CommandArgs cmdArgs) {
@@ -29,7 +30,8 @@ public class BanCommand {
 			BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId());
 			lang = player.getLanguage();
 			if (!player.hasGroupPermission(Group.TRIAL)) {
-				cmdArgs.getPlayer().sendMessage(TextComponent.fromLegacyText(Translate.getTranslation(lang, "ban-prefix") + " " + Translate.getTranslation(lang, "no-permission")));
+				cmdArgs.getPlayer().sendMessage(TextComponent
+						.fromLegacyText(Translate.getTranslation(lang, "ban-prefix") + " " + Translate.getTranslation(lang, "no-permission")));
 				return;
 			}
 		}
@@ -56,7 +58,8 @@ public class BanCommand {
 				BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(uuid);
 				if (player == null) {
 					if (sender instanceof ProxiedPlayer) {
-						if (BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup().equals(Group.TRIAL)) {
+						if (BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup()
+								.equals(Group.TRIAL)) {
 							sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "trial-no-prefix")));
 							return;
 						}

@@ -42,7 +42,7 @@ import br.com.battlebits.ycommon.common.translate.Translate;
  * 
  * @author minnymin3
  */
-public class CommandFramework {
+public class BukkitCommandFramework {
 
 	private final Map<String, Entry<Method, Object>> commandMap = new HashMap<String, Entry<Method, Object>>();
 	private CommandMap map;
@@ -53,7 +53,7 @@ public class CommandFramework {
 	 * 
 	 * @param plugin
 	 */
-	public CommandFramework(Plugin plugin) {
+	public BukkitCommandFramework(Plugin plugin) {
 		this.plugin = plugin;
 		if (plugin.getServer().getPluginManager() instanceof SimplePluginManager) {
 			SimplePluginManager manager = (SimplePluginManager) plugin.getServer().getPluginManager();

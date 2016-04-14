@@ -8,13 +8,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
-import br.com.battlebits.ycommon.bukkit.commands.CommandClass;
-import br.com.battlebits.ycommon.bukkit.commands.CommandFramework.Command;
-import br.com.battlebits.ycommon.bukkit.commands.CommandFramework.CommandArgs;
+import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandFramework.Command;
+import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandFramework.CommandArgs;
 import br.com.battlebits.ycommon.bukkit.networking.PacketSender;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.banmanager.constructors.Ban;
+import br.com.battlebits.ycommon.common.commands.CommandClass;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketBanPlayer;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.translate.Translate;

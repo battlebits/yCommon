@@ -11,14 +11,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import br.com.battlebits.ycommon.bukkit.api.inventory.menu.ClickType;
+import br.com.battlebits.ycommon.bukkit.api.inventory.menu.MenuClickHandler;
 import br.com.battlebits.ycommon.bukkit.api.inventory.menu.MenuInventory;
 import br.com.battlebits.ycommon.bukkit.api.inventory.menu.MenuItem;
-import br.com.battlebits.ycommon.bukkit.api.inventory.menu.clickhandler.MenuClickHandler;
-import br.com.battlebits.ycommon.bukkit.commands.CommandClass;
-import br.com.battlebits.ycommon.bukkit.commands.CommandFramework.Command;
-import br.com.battlebits.ycommon.bukkit.commands.CommandFramework.CommandArgs;
+import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandFramework.Command;
+import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandFramework.CommandArgs;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
+import br.com.battlebits.ycommon.common.commands.CommandClass;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.translate.Translate;
 
@@ -78,6 +78,7 @@ public class ModeratingCommands extends CommandClass {
 
 	@Command(name = "tp", aliases = { "teleport", "teleportar" }, groupToUse = Group.TRIAL, noPermMessageId = "command-teleport-no-access")
 	public void tp(CommandArgs args) {
+		long now = System.currentTimeMillis();
 		ItemStack stack = new ItemStack(Material.ANVIL, 1);
 		ItemMeta meta = stack.getItemMeta();
 		meta.setDisplayName("%msgId:gamemode-player-notfound%");
@@ -93,6 +94,7 @@ public class ModeratingCommands extends CommandClass {
 			}
 		}), 1);
 		menu.open(args.getPlayer());
+		args.getPlayer().sendMessage("Took " + (System.currentTimeMillis() - now) + "ms");
 	}
 
 }

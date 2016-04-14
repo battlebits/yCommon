@@ -12,29 +12,19 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import br.com.battlebits.ycommon.common.commands.CommandClass;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 
-public class CommandFramework {
+public class BungeeCommandFramework {
 
 	private final Map<String, Entry<Method, Object>> commandMap = new HashMap<String, Entry<Method, Object>>();
-	private Map<String, net.md_5.bungee.api.plugin.Command> map;
 	private final Plugin plugin;
 
-	public CommandFramework(Plugin plugin) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+	public BungeeCommandFramework(Plugin plugin) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		this.plugin = plugin;
-		map = getCommandMap();
-	}
-
-	@SuppressWarnings("unchecked")
-	private Map<String, net.md_5.bungee.api.plugin.Command> getCommandMap() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		Class<?> pluginManager = plugin.getProxy().getPluginManager().getClass();
-		Field field = pluginManager.getField("commandMap");
-		field.setAccessible(true);
-		Object obj = field.get(plugin.getProxy().getPluginManager());
-		return (HashMap<String, net.md_5.bungee.api.plugin.Command>) obj;
 	}
 
 	public boolean handleCommand(CommandSender sender, String label, String[] args) {
@@ -64,17 +54,17 @@ public class CommandFramework {
 		return true;
 	}
 
-	public void registerCommands(Object obj) {
-		for (Method m : obj.getClass().getMethods()) {
+	public void registerCommands(CommandClass cls) {
+		for (Method m : cls.getClass().getMethods()) {
 			if (m.getAnnotation(Command.class) != null) {
 				Command command = m.getAnnotation(Command.class);
 				if (m.getParameterTypes().length > 1 || m.getParameterTypes()[0] != CommandArgs.class) {
 					System.out.println("Unable to register command " + m.getName() + ". Unexpected method arguments");
 					continue;
 				}
-				registerCommand(command, command.name(), m, obj);
+				registerCommand(command, command.name(), m, cls);
 				for (String alias : command.aliases()) {
-					registerCommand(command, alias, m, obj);
+					registerCommand(command, alias, m, cls);
 				}
 			}
 		}
@@ -88,10 +78,8 @@ public class CommandFramework {
 		Entry<Method, Object> entry = new AbstractMap.SimpleEntry<Method, Object>(m, obj);
 		commandMap.put(label.toLowerCase(), entry);
 		String cmdLabel = label.replace(".", ",").split(",")[0].toLowerCase();
-		if (map.get(cmdLabel) == null) {
-			net.md_5.bungee.api.plugin.Command cmd = new BungeeCommand(cmdLabel);
-			plugin.getProxy().getPluginManager().registerCommand(plugin, cmd);
-		}
+		net.md_5.bungee.api.plugin.Command cmd = new BungeeCommand(cmdLabel);
+		plugin.getProxy().getPluginManager().registerCommand(plugin, cmd);
 	}
 
 	private void defaultCommand(CommandArgs args) {

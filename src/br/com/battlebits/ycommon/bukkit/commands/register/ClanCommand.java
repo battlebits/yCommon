@@ -1,8 +1,8 @@
 package br.com.battlebits.ycommon.bukkit.commands.register;
 
-import br.com.battlebits.ycommon.bukkit.commands.CommandClass;
-import br.com.battlebits.ycommon.bukkit.commands.CommandFramework.Command;
-import br.com.battlebits.ycommon.bukkit.commands.CommandFramework.CommandArgs;
+import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandFramework.Command;
+import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandFramework.CommandArgs;
+import br.com.battlebits.ycommon.common.commands.CommandClass;
 
 public class ClanCommand extends CommandClass {
 

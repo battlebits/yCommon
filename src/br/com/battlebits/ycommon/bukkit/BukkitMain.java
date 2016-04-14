@@ -9,8 +9,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitAccount;
 import br.com.battlebits.ycommon.bukkit.api.inventory.menu.MenuListener;
 import br.com.battlebits.ycommon.bukkit.bungee.MessageListener;
-import br.com.battlebits.ycommon.bukkit.commands.CommandFramework;
-import br.com.battlebits.ycommon.bukkit.commands.CommandLoader;
+import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandFramework;
+import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandLoader;
 import br.com.battlebits.ycommon.bukkit.event.UpdateScheduler;
 import br.com.battlebits.ycommon.bukkit.injector.Injector;
 import br.com.battlebits.ycommon.bukkit.injector.WindowInjector;
@@ -36,6 +36,9 @@ public class BukkitMain extends JavaPlugin {
 	private BukkitAccount accountManager;
 	private PermissionManager permissionManager;
 	private CommonHandler packetHandler;
+	
+	private BukkitCommandLoader bukkitCommandLoader;
+	private BukkitCommandFramework bukkitCommandFramework;
 
 	{
 		plugin = this;
@@ -67,7 +70,9 @@ public class BukkitMain extends JavaPlugin {
 		enableCommonManagement();
 		registerListeners();
 		getServer().getPluginManager().registerEvents(new MenuListener(), this);
-		new CommandLoader(new CommandFramework(this)).registerAbilityListeners();
+		bukkitCommandFramework = new BukkitCommandFramework(this);
+		bukkitCommandLoader = new BukkitCommandLoader(bukkitCommandFramework);
+		bukkitCommandLoader.loadCommandsFromPackage("br.com.battlebits.ycommon.bukkit.commands.register");
 		getServer().getScheduler().runTaskTimer(this, new UpdateScheduler(), 1, 1);
 		WindowInjector.inject(this);
 	}
@@ -123,6 +128,10 @@ public class BukkitMain extends JavaPlugin {
 		return accountManager;
 	}
 
+	public BukkitCommandLoader getBukkitCommandLoader() {
+		return bukkitCommandLoader;
+	}
+	
 	public static BukkitMain getPlugin() {
 		return plugin;
 	}

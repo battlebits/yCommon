@@ -9,10 +9,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
-import br.com.battlebits.ycommon.bukkit.commands.CommandClass;
-import br.com.battlebits.ycommon.bukkit.commands.CommandFramework.Command;
-import br.com.battlebits.ycommon.bukkit.commands.CommandFramework.CommandArgs;
+import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandFramework.Command;
+import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandFramework.CommandArgs;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
+import br.com.battlebits.ycommon.common.commands.CommandClass;
 import br.com.battlebits.ycommon.common.friends.block.Blocked;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.utils.string.StringURLUtils;
@@ -111,7 +111,7 @@ public class MessengerComand extends CommandClass {
 		}
 	}
 
-	@Command(name = "reply", aliases = { "r", "responder" })
+	@Command(name = "reply", aliases = { "r", "responder" }, description = "reply")
 	public void reply(CommandArgs args) {
 		if (args.isPlayer()) {
 			Player p = args.getPlayer();
