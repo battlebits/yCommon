@@ -36,6 +36,8 @@ public class BattlebitsAPI {
 	public final static String HUNGERGAMES_ADDRESS = "battle-hg.com";
 	public static Language defaultLanguage = Language.PORTUGUES;
 
+	//Teste
+	
 	public static AccountCommon getAccountCommon() {
 		return accountCommon;
 	}
