@@ -202,31 +202,18 @@ public class MessengerComand extends CommandClass {
 					if (args.getArgs().length == 0) {
 						p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-ignore-invalid"));
 					} else {
-						UUID id = null;
-						Player t = Bukkit.getPlayerExact(args.getArgs()[0]);
-						if (t != null) {
-							id = t.getUniqueId();
-						}
-						t = null;
-						if (id == null) {
-							try {
-								id = BattlebitsAPI.getUUIDOf(args.getArgs()[0]);
-							} catch (Exception e) {
-								p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-ignore-player-not-found"));
-								return;
-							}
-						}
+						UUID id = BattlebitsAPI.getUUIDOf(args.getArgs()[0]);
 						if (id != null) {
 							if (id != p.getUniqueId()) {
 								if (!bp.getBlockedPlayers().containsKey(id)) {
 									bp.getBlockedPlayers().put(id, new Blocked());
 									// TODO: BLOCKED?
-									p.sendMessage(prefix
-											+ Translate.getTranslation(bp.getLanguage(), "command-ignore-you-ignore").replace("%player%", args.getArgs()[0]));
+									p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-ignore-you-ignore").replace("%player%",
+											args.getArgs()[0]));
 								} else {
 									bp.getBlockedPlayers().remove(id);
-									p.sendMessage(prefix
-											+ Translate.getTranslation(bp.getLanguage(), "command-ignore-not-ignore").replace("%player%", args.getArgs()[0]));
+									p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-ignore-not-ignore").replace("%player%",
+											args.getArgs()[0]));
 								}
 							} else {
 								p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-ignore-cant-you"));

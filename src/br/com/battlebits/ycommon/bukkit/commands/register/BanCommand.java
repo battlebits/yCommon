@@ -51,7 +51,7 @@ public class BanCommand extends CommandClass  {
 					uuid = target.getUniqueId();
 				} else {
 					try {
-						uuid = UUIDFetcher.getUUIDOf(args[0]);
+						uuid = BattlebitsAPI.getUUIDOf(args[0]);
 					} catch (Exception e) {
 						sender.sendMessage(banPrefix + Translate.getTranslation(language, "player-not-exist"));
 						return;

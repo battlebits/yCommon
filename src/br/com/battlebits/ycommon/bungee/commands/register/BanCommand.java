@@ -1,4 +1,4 @@
-package br.com.battlebits.ycommon.bungee.commands.register;
+ package br.com.battlebits.ycommon.bungee.commands.register;
 
 import java.util.UUID;
 
@@ -49,7 +49,7 @@ public class BanCommand extends CommandClass {
 					uuid = target.getUniqueId();
 				} else {
 					try {
-						uuid = UUIDFetcher.getUUIDOf(args[0]);
+						uuid = BattlebitsAPI.getUUIDOf(args[0]);
 					} catch (Exception e) {
 						sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "player-not-exist")));
 						return;
