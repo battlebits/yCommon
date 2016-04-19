@@ -72,8 +72,8 @@ public class BattlebitsAPI {
 		return battleInstance;
 	}
 
-	public static UUID getUUIDOf(String name) throws Exception {
-		return uuidFetcher.getUuid(name);
+	public static UUID getUUIDOf(String name) {
+		return uuidFetcher.getUUID(name);
 	}
 
 	public static void setDefaultLanguange(Language language) {

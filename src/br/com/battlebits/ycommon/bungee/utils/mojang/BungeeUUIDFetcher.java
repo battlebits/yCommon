@@ -21,19 +21,16 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class BungeeUUIDFetcher extends UUIDFetcher {
 
-	private static JsonParser parser = new JsonParser();
-	private static String mojangURL = "https://api.mojang.com/users/profiles/minecraft";
-	private static String craftApiURL = "https://craftapi.com/api/user/uuid";
+	private JsonParser parser = new JsonParser();
 
-	private static Cache<String, UUID> nameUUID = CacheBuilder.newBuilder().expireAfterWrite(1L, TimeUnit.DAYS)
-			.build(new CacheLoader<String, UUID>() {
-				@Override
-				public UUID load(String name) throws Exception {
-					return loadUUID(name);
-				}
-			});
+	private Cache<String, UUID> nameUUID = CacheBuilder.newBuilder().expireAfterWrite(1L, TimeUnit.DAYS).build(new CacheLoader<String, UUID>() {
+		@Override
+		public UUID load(String name) throws Exception {
+			return loadUUID(name);
+		}
+	});
 
-	private static UUID loadUUID(String name) {
+	private UUID loadUUID(String name) {
 		UUID id = null;
 		ProxiedPlayer pp = BungeeCord.getInstance().getPlayer(name);
 		if (pp != null) {
@@ -41,14 +38,14 @@ public class BungeeUUIDFetcher extends UUIDFetcher {
 			pp = null;
 		} else {
 			id = loadFromMojang(name);
-			if(id == null){
+			if (id == null) {
 				id = loadFromCraftAPI(name);
 			}
 		}
 		return id;
 	}
 
-	private static UUID loadFromMojang(String name) {
+	private UUID loadFromMojang(String name) {
 		UUID id = null;
 		try {
 			URL url = new URL(mojangURL + "/" + name);
@@ -61,13 +58,12 @@ public class BungeeUUIDFetcher extends UUIDFetcher {
 			streamReader.close();
 			is.close();
 		} catch (Exception e) {
-			BattlebitsAPI.getLogger()
-					.warning("Erro ao tentar obter UUID do jogador " + name + " utilizando a API da Mojang!");
+			BattlebitsAPI.getLogger().warning("Erro ao tentar obter UUID do jogador " + name + " utilizando a API da Mojang!");
 		}
 		return id;
 	}
 
-	private static UUID loadFromCraftAPI(String name) {
+	private UUID loadFromCraftAPI(String name) {
 		UUID id = null;
 		try {
 			URL url = new URL(craftApiURL + "/" + name);
@@ -85,18 +81,17 @@ public class BungeeUUIDFetcher extends UUIDFetcher {
 		return id;
 	}
 
-	public static UUID getUUIDFromString(String id) {
-		return UUID.fromString(id.substring(0, 8) + "-" + id.substring(8, 12) + "-" + id.substring(12, 16) + "-" + id.substring(16, 20) + "-"
-				+ id.substring(20, 32));
-	}
-
 	@Override
-	public UUID getUuid(String name) throws Exception {
-		return nameUUID.get(name, new Callable<UUID>() {
-			@Override
-			public UUID call() throws Exception {
-				return loadUUID(name);
-			}
-		});
+	public UUID getUUID(String name) {
+		try {
+			return nameUUID.get(name, new Callable<UUID>() {
+				@Override
+				public UUID call() throws Exception {
+					return loadUUID(name);
+				}
+			});
+		} catch (Exception e) {
+			return null;
+		}
 	}
 }
