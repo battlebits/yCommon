@@ -57,6 +57,10 @@ public class BungeeUUIDFetcher extends UUIDFetcher {
 			}
 			streamReader.close();
 			is.close();
+			object = null;
+			streamReader = null;
+			is = null;
+			url = null;
 		} catch (Exception e) {
 			BattlebitsAPI.getLogger().warning("Erro ao tentar obter UUID do jogador " + name + " utilizando a API da Mojang!");
 		}
@@ -75,6 +79,10 @@ public class BungeeUUIDFetcher extends UUIDFetcher {
 			}
 			streamReader.close();
 			is.close();
+			object = null;
+			streamReader = null;
+			is = null;
+			url = null;
 		} catch (Exception e) {
 			BattlebitsAPI.getLogger().warning("Erro ao tentar obter UUID do jogador " + name + " utilizando a CraftAPI!");
 		}

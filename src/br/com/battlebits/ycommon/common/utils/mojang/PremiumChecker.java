@@ -4,26 +4,34 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.charset.Charset;
 
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 
-public class PremiumChecker {
+public abstract class PremiumChecker {
 
-	public static boolean isPremium(String userName) {
+	public boolean checkInMojang(String username) {
 		boolean isPremium = false;
 		try {
-			URL url = new URL("https://minecraft.net/haspaid.jsp?user=" + userName);
+			URL url = new URL("https://minecraft.net/haspaid.jsp?user=" + username);
 			InputStream stream = url.openStream();
-			BufferedReader br = new BufferedReader(new InputStreamReader(stream));
-			if (br.readLine().equals("true"))
+			InputStreamReader streamReader = new InputStreamReader(stream, Charset.forName("UTF-8"));
+			BufferedReader bufferedReader = new BufferedReader(streamReader);
+			if (bufferedReader.readLine().equals("true")) {
 				isPremium = true;
-			br.close();
+			}
+			bufferedReader.close();
+			streamReader.close();
 			stream.close();
+			bufferedReader = null;
+			streamReader = null;
+			stream = null;
+			url = null;
 		} catch (Exception e) {
-			BattlebitsAPI.getLogger().warning("Erro ao saber se Usuário " + userName + " é Premium!");
+			BattlebitsAPI.getLogger().warning("Não foi possível verificar se o jogador " + username + " é Premium!");
 		}
 		return isPremium;
 	}
 
-	// http://wiki.vg/Mojang_API
+	public abstract boolean isPremium(String username);
 }
