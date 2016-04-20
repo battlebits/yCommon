@@ -40,8 +40,6 @@ public class BattlebitsAPI {
 	public final static String HUNGERGAMES_ADDRESS = "battle-hg.com";
 	public static Language defaultLanguage = Language.PORTUGUES;
 
-	// Teste
-
 	public static AccountCommon getAccountCommon() {
 		return accountCommon;
 	}
@@ -81,8 +79,8 @@ public class BattlebitsAPI {
 	public static UUID getUUIDOf(String name) {
 		return uuidFetcher.getUUID(name);
 	}
-	
-	public static boolean isPremium(String username){
+
+	public static boolean isPremium(String username) {
 		return premiumChecker.isPremium(username.toLowerCase());
 	}
 

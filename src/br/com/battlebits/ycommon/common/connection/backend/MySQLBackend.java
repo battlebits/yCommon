@@ -2,6 +2,7 @@ package br.com.battlebits.ycommon.common.connection.backend;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.concurrent.locks.ReentrantLock;
@@ -12,7 +13,7 @@ import br.com.battlebits.ycommon.common.connection.BattleConnection;
 public class MySQLBackend extends BattleConnection {
 
 	private Connection connection;
-	public static ReentrantLock lock = new ReentrantLock(true);
+	public ReentrantLock lock = new ReentrantLock(true);
 	private String hostname;
 	private int port;
 	private String database;
@@ -34,8 +35,9 @@ public class MySQLBackend extends BattleConnection {
 	}
 
 	public void update(String sqlString) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		if(!isConnected())
+		if (!isConnected()) {
 			recallConnection();
+		}
 		Statement stmt = connection.createStatement();
 		stmt.executeUpdate(sqlString);
 		stmt.close();
@@ -47,12 +49,19 @@ public class MySQLBackend extends BattleConnection {
 			connection.close();
 	}
 
+	public PreparedStatement prepareStatment(String sql) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+		if (!isConnected()) {
+			recallConnection();
+		}
+		return connection.prepareStatement(sql);
+	}
+
 	public void recallConnection() throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
-		if (isConnected())
-			return;
-		BattlebitsAPI.getLogger().info("Reconectando ao MySQL");
-		Class.forName("com.mysql.jdbc.Driver").newInstance();
-		connection = DriverManager.getConnection("jdbc:mysql://" + hostname + ":" + port + "/" + database, username, password);
+		if (!isConnected()) {
+			BattlebitsAPI.getLogger().info("Reconectando ao MySQL");
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			connection = DriverManager.getConnection("jdbc:mysql://" + hostname + ":" + port + "/" + database, username, password);
+		}
 	}
 
 	public boolean isConnected() throws SQLException {
@@ -64,8 +73,9 @@ public class MySQLBackend extends BattleConnection {
 	}
 
 	public Connection getConnection() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		if(isConnected())
+		if (!isConnected()) {
 			recallConnection();
+		}
 		return connection;
 	}
 
