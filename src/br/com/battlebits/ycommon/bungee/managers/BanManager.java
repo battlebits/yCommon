@@ -33,7 +33,11 @@ public class BanManager {
 		for(ProxiedPlayer proxiedP : BungeeCord.getInstance().getPlayers()) {
 			BattlePlayer pl = BattlebitsAPI.getAccountCommon().getBattlePlayer(proxiedP.getUniqueId());
 			if(pl.hasGroupPermission(Group.TRIAL)) {
-				proxiedP.sendMessage(TextComponent.fromLegacyText(Translate.getTranslation(pl.getLanguage(), "ban-success")));
+				String banSuccess = Translate.getTranslation(pl.getLanguage(), "ban-success");
+				banSuccess = banSuccess.replace("%player%", player.getUserName());
+				banSuccess = banSuccess.replace("%banned-By%", ban.getBannedBy());
+				banSuccess = banSuccess.replace("%reason%", ban.getReason());
+				proxiedP.sendMessage(TextComponent.fromLegacyText(banSuccess));
 			}
 		}
 	}

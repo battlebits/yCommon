@@ -13,7 +13,6 @@ import br.com.battlebits.ycommon.common.commands.CommandClass;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
-import br.com.battlebits.ycommon.common.utils.mojang.UUIDFetcher;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -31,7 +30,7 @@ public class BanCommand extends CommandClass {
 			lang = player.getLanguage();
 			if (!player.hasGroupPermission(Group.TRIAL)) {
 				cmdArgs.getPlayer().sendMessage(TextComponent
-						.fromLegacyText(Translate.getTranslation(lang, "ban-prefix") + " " + Translate.getTranslation(lang, "no-permission")));
+						.fromLegacyText(Translate.getTranslation(lang, "command-no-access")));
 				return;
 			}
 		}
@@ -60,7 +59,7 @@ public class BanCommand extends CommandClass {
 					if (sender instanceof ProxiedPlayer) {
 						if (BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup()
 								.equals(Group.TRIAL)) {
-							sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "trial-no-prefix")));
+							sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "trial-ban-offline")));
 							return;
 						}
 					}
