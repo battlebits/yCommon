@@ -69,44 +69,44 @@ public class BanCommand extends CommandClass {
 						sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "cant-request-offline")));
 						return;
 					}
-					Ban actualBan = player.getBanHistory().getActualBan();
-					if (actualBan != null && !actualBan.isUnbanned() && actualBan.isPermanent()) {
-						sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "already-banned")));
+				}
+				Ban actualBan = player.getBanHistory().getActualBan();
+				if (actualBan != null && !actualBan.isUnbanned() && actualBan.isPermanent()) {
+					sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "already-banned")));
+					return;
+				}
+				if (player.isStaff()) {
+					Group group = BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup();
+					if (group != Group.DONO || group != Group.ADMIN) {
+						sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "ban-staff")));
 						return;
 					}
-					if (player.isStaff()) {
-						Group group = BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup();
-						if (group != Group.DONO || group != Group.ADMIN) {
-							sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "ban-staff")));
-							return;
-						}
-					}
-					StringBuilder builder = new StringBuilder();
-					for (int i = 1; i < args.length; i++) {
-						String espaco = " ";
-						if (i >= args.length - 1)
-							espaco = "";
-						builder.append(args[i] + espaco);
-					}
-					Ban ban = null;
-					String playerIp = "";
-					if (player.isOnline()) {
-						playerIp = player.getIpAddress().getHostString();
-					} else {
-						playerIp = "OFFLINE";
-					}
-					if (cmdArgs.isPlayer()) {
-						ProxiedPlayer bannedBy = cmdArgs.getPlayer();
-						ban = new Ban(uuid, bannedBy.getName(), bannedBy.getUniqueId(), playerIp, player.getServerConnected(), builder.toString());
-						bannedBy = null;
-					} else {
-						ban = new Ban(uuid, "CONSOLE", playerIp, player.getServerConnected(), builder.toString());
-					}
-					BungeeMain.getPlugin().getBanManager().ban(player, ban);
-					ProxiedPlayer p = BungeeCord.getInstance().getPlayer(player.getUuid());
-					if (p != null)
-						p.disconnect(BanManager.getBanKickMessage(ban, player.getLanguage()));
 				}
+				StringBuilder builder = new StringBuilder();
+				for (int i = 1; i < args.length; i++) {
+					String espaco = " ";
+					if (i >= args.length - 1)
+						espaco = "";
+					builder.append(args[i] + espaco);
+				}
+				Ban ban = null;
+				String playerIp = "";
+				if (player.isOnline()) {
+					playerIp = player.getIpAddress().getHostString();
+				} else {
+					playerIp = "OFFLINE";
+				}
+				if (cmdArgs.isPlayer()) {
+					ProxiedPlayer bannedBy = cmdArgs.getPlayer();
+					ban = new Ban(uuid, bannedBy.getName(), bannedBy.getUniqueId(), playerIp, player.getServerConnected(), builder.toString());
+					bannedBy = null;
+				} else {
+					ban = new Ban(uuid, "CONSOLE", playerIp, player.getServerConnected(), builder.toString());
+				}
+				BungeeMain.getPlugin().getBanManager().ban(player, ban);
+				ProxiedPlayer p = BungeeCord.getInstance().getPlayer(player.getUuid());
+				if (p != null)
+					p.disconnect(BanManager.getBanKickMessage(ban, player.getLanguage()));
 			}
 		});
 	}
