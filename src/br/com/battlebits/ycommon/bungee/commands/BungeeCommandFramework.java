@@ -11,7 +11,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.bukkit.entity.Player;
+
+import br.com.battlebits.ycommon.common.BattlebitsAPI;
+import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.commands.CommandClass;
+import br.com.battlebits.ycommon.common.permissions.enums.Group;
+import br.com.battlebits.ycommon.common.translate.Translate;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -37,9 +43,15 @@ public class BungeeCommandFramework {
 			if (commandMap.containsKey(cmdLabel)) {
 				Entry<Method, Object> entry = commandMap.get(cmdLabel);
 				Command command = entry.getKey().getAnnotation(Command.class);
-				if (!sender.hasPermission(command.permission())) {
-					sender.sendMessage(TextComponent.fromLegacyText(command.noPerm()));
-					return true;
+				if (sender instanceof ProxiedPlayer) {
+					ProxiedPlayer p = (ProxiedPlayer) sender;
+					BattlePlayer bp = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
+					if (!bp.hasGroupPermission(command.groupToUse())) {
+						p.sendMessage(TextComponent.fromLegacyText(Translate.getTranslation(bp.getLanguage(), command.noPermMessageId())));
+						return true;
+					}
+					bp = null;
+					p = null;
 				}
 				try {
 					entry.getKey().invoke(entry.getValue(), new CommandArgs(sender, label, args, cmdLabel.split("\\.").length - 1));
@@ -104,9 +116,9 @@ public class BungeeCommandFramework {
 
 		public String name();
 
-		public String permission() default "";
+		public Group groupToUse() default Group.NORMAL;
 
-		public String noPerm() default "You do not have permission to perform that action";
+		public String noPermMessageId() default "command-no-access";
 
 		public String[] aliases() default {};
 

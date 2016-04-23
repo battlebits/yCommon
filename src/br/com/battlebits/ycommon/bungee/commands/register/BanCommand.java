@@ -20,7 +20,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class BanCommand extends CommandClass {
 
-	@Command(name = "ban", usage = "/<command> <player> <reason>", aliases = { "banir" })
+	@Command(name = "ban", usage = "/<command> <player> <reason>", aliases = { "banir" }, groupToUse = Group.TRIAL)
 	public void ban(CommandArgs cmdArgs) {
 		final CommandSender sender = cmdArgs.getSender();
 		final String[] args = cmdArgs.getArgs();
@@ -56,7 +56,8 @@ public class BanCommand extends CommandClass {
 				BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(uuid);
 				if (player == null) {
 					if (sender instanceof ProxiedPlayer) {
-						if (BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup().equals(Group.TRIAL)) {
+						if (BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup()
+								.equals(Group.TRIAL)) {
 							sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "trial-ban-offline")));
 							return;
 						}
