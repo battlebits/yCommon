@@ -1,4 +1,4 @@
- package br.com.battlebits.ycommon.bungee.commands.register;
+package br.com.battlebits.ycommon.bungee.commands.register;
 
 import java.util.UUID;
 
@@ -29,8 +29,7 @@ public class BanCommand extends CommandClass {
 			BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId());
 			lang = player.getLanguage();
 			if (!player.hasGroupPermission(Group.TRIAL)) {
-				cmdArgs.getPlayer().sendMessage(TextComponent
-						.fromLegacyText(Translate.getTranslation(lang, "command-no-access")));
+				cmdArgs.getPlayer().sendMessage(TextComponent.fromLegacyText(Translate.getTranslation(lang, "command-no-access")));
 				return;
 			}
 		}
@@ -57,8 +56,7 @@ public class BanCommand extends CommandClass {
 				BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(uuid);
 				if (player == null) {
 					if (sender instanceof ProxiedPlayer) {
-						if (BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup()
-								.equals(Group.TRIAL)) {
+						if (BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup().equals(Group.TRIAL)) {
 							sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "trial-ban-offline")));
 							return;
 						}
@@ -106,7 +104,7 @@ public class BanCommand extends CommandClass {
 					BungeeMain.getPlugin().getBanManager().ban(player, ban);
 					ProxiedPlayer p = BungeeCord.getInstance().getPlayer(player.getUuid());
 					if (p != null)
-						p.disconnect(TextComponent.fromLegacyText(BanManager.getBanKickMessage(ban, player.getLanguage())));
+						p.disconnect(BanManager.getBanKickMessage(ban, player.getLanguage()));
 				}
 			}
 		});
