@@ -6,11 +6,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
+import br.com.battlebits.ycommon.bungee.managers.BanManager;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.banmanager.constructors.Mute;
-import br.com.battlebits.ycommon.common.translate.Translate;
-import br.com.battlebits.ycommon.common.utils.DateUtils;
 
 public class ChatListener implements Listener {
 
@@ -21,23 +20,8 @@ public class ChatListener implements Listener {
 		Mute mute = player.getBanHistory().getActualMute();
 		if (mute == null)
 			return;
-		String message = "";
-		if (mute.isPermanent()) {
-			message = Translate.getTranslation(player.getLanguage(), "muted-permanent");
-			// VOCE FOI MUTADO PERMANENTE POR %muted-By% DURANTE %duration%. Motivo: %reason%.
-			// COMPRE UNMUTE EM %store%;
-		} else {
-			message = Translate.getTranslation(player.getLanguage(), "muted-temp");
-			// VOCE FOI MUTADO TEMPORARIAMENTE POR %muted-By% DURANTE %duration%. Motivo: %reason%.
-		}
-		message = message.replace("%duration%", DateUtils.formatDifference(player.getLanguage(), (mute.getDuration() - System.currentTimeMillis()) / 1000));
-		message = message.replace("%forum%", BattlebitsAPI.FORUM_WEBSITE);
-		message = message.replace("%store%", BattlebitsAPI.STORE);
-		message = message.replace("%muted-By%", mute.getMutedBy());
-		message = message.replace("%reason%", mute.getReason());
-		p.sendMessage(message);
+		p.sendMessage(BanManager.getMuteMessage(mute, player.getLanguage()));
 		event.setCancelled(true);
-		message = null;
 		mute = null;
 		p = null;
 		player = null;

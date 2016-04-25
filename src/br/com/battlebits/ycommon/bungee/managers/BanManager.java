@@ -7,11 +7,14 @@ import java.util.concurrent.TimeUnit;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 
 import br.com.battlebits.ycommon.bungee.BungeeMain;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.banmanager.constructors.Ban;
+import br.com.battlebits.ycommon.common.banmanager.constructors.Mute;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
@@ -76,6 +79,35 @@ public class BanManager {
 		BattlebitsAPI.getAccountCommon().saveBattlePlayer(player);
 	}
 
+	public void mute(BattlePlayer player, Mute mute) {
+		player.getBanHistory().getMuteHistory().add(mute);
+		for (ProxiedPlayer proxiedP : BungeeCord.getInstance().getPlayers()) {
+			BattlePlayer pl = BattlebitsAPI.getAccountCommon().getBattlePlayer(proxiedP.getUniqueId());
+			String banSuccess = "";
+			if (mute.isPermanent()) {
+				banSuccess = Translate.getTranslation(pl.getLanguage(), "mute-prefix") + " " + Translate.getTranslation(pl.getLanguage(), "mute-perm-success");
+			} else {
+				banSuccess = Translate.getTranslation(pl.getLanguage(), "mute-prefix") + " " + Translate.getTranslation(pl.getLanguage(), "mute-temp-success");
+			}
+			banSuccess = banSuccess.replace("%player%", player.getUserName() + "(" + player.getUuid().toString().replace("-", "") + ")");
+			banSuccess = banSuccess.replace("%muted-By%", mute.getMutedBy());
+			banSuccess = banSuccess.replace("%reason%", mute.getReason());
+			banSuccess = banSuccess.replace("%duration%", DateUtils.formatDifference(pl.getLanguage(), mute.getDuration() / 1000));
+			if (pl.hasGroupPermission(Group.TRIAL)) {
+				proxiedP.sendMessage(TextComponent.fromLegacyText(banSuccess));
+			}
+		}
+		if (!player.isOnline())
+			BattlebitsAPI.getAccountCommon().saveBattlePlayer(player);
+		ProxiedPlayer pPlayer = BungeeMain.getPlugin().getProxy().getPlayer(player.getUuid());
+		if (pPlayer != null) {
+			ByteArrayDataOutput out = ByteStreams.newDataOutput();
+			out.writeUTF("Mute");
+			out.writeUTF(BattlebitsAPI.getGson().toJson(mute));
+			pPlayer.getServer().sendData(BattlebitsAPI.getBungeeChannel(), out.toByteArray());
+		}
+	}
+
 	public Ban getIpBan(InetSocketAddress address) {
 		return banCache.asMap().get(address);
 	}
@@ -96,6 +128,21 @@ public class BanManager {
 		reason = reason.replace("%forum%", BattlebitsAPI.FORUM_WEBSITE);
 		reason = reason.replace("%store%", BattlebitsAPI.STORE);
 		return reason;
+	}
+	
+	public static String getMuteMessage(Mute mute, Language lang) {
+		String message = "";
+		if (mute.isPermanent()) {
+			message = Translate.getTranslation(lang, "muted-permanent");
+		} else {
+			message = Translate.getTranslation(lang, "muted-temp");
+		}
+		message = message.replace("%duration%", DateUtils.formatDifference(lang, (mute.getExpire() - System.currentTimeMillis()) / 1000));
+		message = message.replace("%forum%", BattlebitsAPI.FORUM_WEBSITE);
+		message = message.replace("%store%", BattlebitsAPI.STORE);
+		message = message.replace("%muted-By%", mute.getMutedBy());
+		message = message.replace("%reason%", mute.getReason());
+		return message;
 	}
 
 	public static BaseComponent[] getBanKickMessageBase(Ban ban, Language lang) {
