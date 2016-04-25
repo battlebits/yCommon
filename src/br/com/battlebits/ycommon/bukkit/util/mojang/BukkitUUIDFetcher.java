@@ -91,6 +91,10 @@ public class BukkitUUIDFetcher extends UUIDFetcher {
 
 	@Override
 	public UUID getUUID(String name) {
+		if(name.length() == 32)
+			return getUUIDFromString(name);
+		if(name.length() == 36)
+			return UUID.fromString(name);
 		try {
 			return nameUUID.get(name, new Callable<UUID>() {
 				@Override

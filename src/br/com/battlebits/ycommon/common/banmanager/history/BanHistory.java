@@ -19,8 +19,9 @@ public class BanHistory {
 		for (Ban ban : banHistory) {
 			if (ban.isUnbanned())
 				continue;
-			if (ban.getExpire() == -1 || ban.getExpire() > System.currentTimeMillis())
-				return ban;
+			if (ban.hasExpired())
+				continue;
+			return ban;
 		}
 		return null;
 	}
@@ -29,8 +30,9 @@ public class BanHistory {
 		for (Mute mute : muteHistory) {
 			if (mute.isUnmuted())
 				continue;
-			if (mute.getExpire() == -1 || mute.getExpire() > System.currentTimeMillis())
-				return mute;
+			if (mute.hasExpired())
+				continue;
+			return mute;
 		}
 		return null;
 	}

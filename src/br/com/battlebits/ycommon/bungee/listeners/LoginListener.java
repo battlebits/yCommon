@@ -6,10 +6,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Calendar;
 import java.util.UUID;
 
 import br.com.battlebits.ycommon.bungee.BungeeMain;
+import br.com.battlebits.ycommon.bungee.managers.BanManager;
 import br.com.battlebits.ycommon.bungee.utils.GeoIpUtils;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
@@ -18,7 +18,6 @@ import br.com.battlebits.ycommon.common.payment.constructors.Expire;
 import br.com.battlebits.ycommon.common.payment.enums.RankType;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.translate.Translate;
-import br.com.battlebits.ycommon.common.utils.DateUtils;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.event.LoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -83,34 +82,7 @@ public class LoginListener implements Listener {
 				Ban ban = player.getBanHistory().getActualBan();
 				if (ban != null) {
 					event.setCancelled(true);
-
-					String reason = "";
-					if (ban.isPermanent()) {
-						reason = Translate.getTranslation(player.getLanguage(), "banned-permanent");
-						// VOCE FOI BANIDO(A) PERMANENTEMENTE
-						// POR %banned-By% NO DIA %day%
-						// MOTIVO: %reason%
-						//
-						// BANIDO(A) INCORRETAMENTE? PEÇA APPEAL: %forum%
-						// COMPRE UNBAN EM %store% PARA ACESSAR NOVAMENTE
-					} else {
-						reason = Translate.getTranslation(player.getLanguage(), "banned-temp");
-						// VOCE FOI BANIDO(A) TEMPORARIAMENTE
-						// POR %banned-By% NO DIA %day%
-						// MOTIVO: %reason%
-						//
-						// DURAÇAO DE BANIMENTO: %duration%
-					}
-					Calendar calendar = Calendar.getInstance();
-					calendar.setTimeInMillis(ban.getBanTime());
-					reason = reason.replace("%day%", calendar.getTime().toString());
-					reason = reason.replace("%banned-By%", ban.getBannedBy());
-					reason = reason.replace("%reason%", ban.getReason());
-					reason = reason.replace("%duration%", DateUtils.formatDifference(player.getLanguage(), (ban.getDuration() - System.currentTimeMillis()) / 1000));
-					reason = reason.replace("%forum%", BattlebitsAPI.FORUM_WEBSITE);
-					reason = reason.replace("%store%", BattlebitsAPI.STORE);
-					event.setCancelReason(reason);
-					reason = null;
+					event.setCancelReason(BanManager.getBanKickMessage(ban, player.getLanguage()));
 				}
 				BattlebitsAPI.debug("BANNING > FINISHED");
 				event.completeIntent(BungeeMain.getPlugin());

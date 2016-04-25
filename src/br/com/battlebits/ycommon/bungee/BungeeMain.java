@@ -12,6 +12,7 @@ import br.com.battlebits.ycommon.bungee.event.UpdateScheduler;
 import br.com.battlebits.ycommon.bungee.listeners.LoginListener;
 import br.com.battlebits.ycommon.bungee.listeners.PlayerListener;
 import br.com.battlebits.ycommon.bungee.listeners.QuitListener;
+import br.com.battlebits.ycommon.bungee.managers.AccountManager;
 import br.com.battlebits.ycommon.bungee.managers.BanManager;
 import br.com.battlebits.ycommon.bungee.networking.CommonServer;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
@@ -38,6 +39,7 @@ public class BungeeMain extends Plugin {
 	private Configuration config;
 
 	private CommonServer commonServer;
+	private AccountManager accountManager;
 	private BanManager banManager;
 	private BungeeCommandFramework commandFramework;
 	private BungeeCommandLoader commandLoader;
@@ -55,6 +57,7 @@ public class BungeeMain extends Plugin {
 	public void onEnable() {
 		// loadConfiguration();
 		banManager = new BanManager();
+		accountManager = new AccountManager();
 		try {
 			getProxy().getScheduler().runAsync(this, commonServer = new CommonServer());
 		} catch (Exception e) {
@@ -108,6 +111,7 @@ public class BungeeMain extends Plugin {
 		username = null;
 		password = null;
 		banManager = null;
+		accountManager = null;
 	}
 
 	private void loadListeners() {
@@ -159,6 +163,10 @@ public class BungeeMain extends Plugin {
 		return mysql;
 	}
 
+	public AccountManager getAccountManager() {
+		return accountManager;
+	}
+	
 	public BanManager getBanManager() {
 		return banManager;
 	}

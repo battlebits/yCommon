@@ -15,6 +15,7 @@ public enum Group {
 	TRIAL, //
 	MOD, //
 	STREAMER, //
+	MANAGER, //
 	ADMIN, //
 	DONO;
 
