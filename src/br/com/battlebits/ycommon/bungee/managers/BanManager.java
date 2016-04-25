@@ -118,6 +118,7 @@ public class BanManager {
 			BattlePlayer pl = BattlebitsAPI.getAccountCommon().getBattlePlayer(proxiedP.getUniqueId());
 			String unbanSuccess = Translate.getTranslation(pl.getLanguage(), "unmute-prefix") + " " + Translate.getTranslation(pl.getLanguage(), "unmute-success");
 			unbanSuccess = unbanSuccess.replace("%player%", player.getUserName() + "(" + player.getUuid().toString().replace("-", "") + ")");
+			unbanSuccess = unbanSuccess.replace("%unmutedBy%", mute.getUnmutedBy());
 			if (pl.hasGroupPermission(Group.TRIAL)) {
 				proxiedP.sendMessage(TextComponent.fromLegacyText(unbanSuccess));
 			}
