@@ -30,8 +30,9 @@ public class BattlebitsAPI {
 	private static TypeUtils typeUtils;
 	private static UUIDFetcher uuidFetcher;
 	private static PremiumChecker premiumChecker;
-	private static Logger logger = Logger.getLogger("Minecraft");
+	private static Logger logger;
 	private static boolean debugMode = true;
+	private static boolean useRedisBungee = false;
 	public final static String FORUM_WEBSITE = "http://forum.battlebits.com.br";
 	public final static String WEBSITE = "http://battlebits.com.br";
 	public final static String STORE = "http://loja.battlebits.com.br";
@@ -96,12 +97,14 @@ public class BattlebitsAPI {
 			typeUtils = new TypeBukkitUtils();
 			uuidFetcher = new BukkitUUIDFetcher();
 			premiumChecker = new BukkitPremiumChecker();
+			logger = org.bukkit.Bukkit.getLogger();
 			break;
 		case BUNGEECORD:
 			gson = new GsonBungee();
 			typeUtils = new TypeBungeeUtils();
 			uuidFetcher = new BungeeUUIDFetcher();
 			premiumChecker = new BungeePremiumChecker();
+			logger = net.md_5.bungee.BungeeCord.getInstance().getLogger();
 			break;
 		}
 	}
@@ -109,6 +112,10 @@ public class BattlebitsAPI {
 	public static void debug(String debugStr) {
 		if (debugMode)
 			logger.info("[DEBUG] " + debugStr);
+	}
+
+	public static String getBungeeCordChannel() {
+		return ((useRedisBungee) ? "RedisBungee" : "BungeeCord");
 	}
 
 }
