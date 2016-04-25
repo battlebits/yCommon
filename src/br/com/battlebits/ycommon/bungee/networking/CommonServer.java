@@ -63,9 +63,11 @@ public class CommonServer implements Runnable {
 
 	public void stopServer() throws IOException {
 		RUNNING = false;
-		server.close();
+		if (server != null)
+			server.close();
 		server = null;
-		client.close();
+		if (client != null)
+			client.close();
 		client = null;
 	}
 
