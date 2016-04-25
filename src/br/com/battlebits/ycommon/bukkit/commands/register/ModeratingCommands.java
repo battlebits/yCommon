@@ -135,10 +135,11 @@ public class ModeratingCommands extends CommandClass {
 							Location loc = getLocationBased(target.getLocation(), argX, argY, argZ);
 							if (loc != null) {
 								target.teleport(loc);
-								p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-teleport-to-location")
+								p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-teleport-to-location-other")
 										.replace("%x%", locationFormater.format(loc.getX())).replace("%y%", locationFormater.format(loc.getY()))
-										.replace("%z%", locationFormater.format(loc.getZ())));
+										.replace("%z%", locationFormater.format(loc.getZ())).replace("%target%", target.getName()));
 								loc = null;
+								target = null;
 							} else {
 								p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-teleport-invalid-location"));
 							}
@@ -161,9 +162,56 @@ public class ModeratingCommands extends CommandClass {
 		// TODO: ALERT STAFFS
 	}
 
-	@Command(name = "tpall", aliases = { "teleportall" }, groupToUse = Group.MOD, noPermMessageId="command-teleportall-no-access")
+	@SuppressWarnings("deprecation")
+	@Command(name = "tpall", aliases = { "teleportall" }, groupToUse = Group.MOD, noPermMessageId = "command-teleportall-no-access")
 	public void tpall(CommandArgs command) {
-
+		if (command.isPlayer()) {
+			Player p = command.getPlayer();
+			String[] args = command.getArgs();
+			BattlePlayer bp = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
+			String prefix = Translate.getTranslation(bp.getLanguage(), "command-teleportall-prefix");
+			if (args.length == 0) {
+				int i = 0;
+				for (Player on : Bukkit.getOnlinePlayers()) {
+					if (on != null && on.isOnline() && on.getUniqueId() != p.getUniqueId()) {
+						on.teleport(p.getLocation());
+						on.setFallDistance(0.0F);
+						on.sendMessage(prefix
+								+ Translate.getTranslation(bp.getLanguage(), "command-teleportall-teleported").replace("%target%", p.getName()));
+						i++;
+					}
+					on = null;
+				}
+				p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-teleportall-success").replace("%players%", i + ""));
+			} else if (args.length == 1) {
+				Player t = Bukkit.getPlayer(args[0]);
+				if (t != null) {
+					int i = 0;
+					for (Player on : Bukkit.getOnlinePlayers()) {
+						if (on != null && on.isOnline() && on.getUniqueId() != t.getUniqueId() && on.getUniqueId() != p.getUniqueId()) {
+							on.teleport(t.getLocation());
+							on.setFallDistance(0.0F);
+							on.sendMessage(prefix
+									+ Translate.getTranslation(bp.getLanguage(), "command-teleportall-teleported").replace("%target%", t.getName()));
+							i++;
+						}
+						on = null;
+					}
+					p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-teleportall-success-other")
+							.replace("%players%", i + "").replace("%target%", t.getName()));
+					t = null;
+				} else {
+					p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "player-not-found"));
+				}
+			}
+			prefix = null;
+			bp = null;
+			args = null;
+			p = null;
+		} else {
+			command.getSender().sendMessage("§4§lERRO §fComando disponivel apenas §c§lin-game");
+		}
+		// TODO: ALERT STAFFS
 	}
 
 	private Location getLocationBased(Location loc, String argX, String argY, String argZ) {
