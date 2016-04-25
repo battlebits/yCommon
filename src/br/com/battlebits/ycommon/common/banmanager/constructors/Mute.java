@@ -123,9 +123,13 @@ public class Mute {
 	}
 
 	public void unmute(BattlePlayer unmutePlayer) {
+		unmute(unmutePlayer.getUuid(), unmutePlayer.getUserName());
+	}
+	
+	public void unmute(UUID unmuteUuid, String unmuteName) {
 		this.unmuted = true;
-		this.unmutedBy = unmutePlayer.getUserName();
-		this.unmutedByUUID = unmutePlayer.getUuid();
+		this.unmutedBy = unmuteName;
+		this.unmutedByUUID = unmuteUuid;
 		this.unmuteTime = System.currentTimeMillis();
 	}
 

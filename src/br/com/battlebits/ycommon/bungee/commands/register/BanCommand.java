@@ -302,14 +302,133 @@ public class BanCommand extends CommandClass {
 		});
 	}
 
-	@Command(name = "tempmute")
-	public void tempmute(CommandArgs args) {
-
+	@Command(name = "tempmute", usage = "/<command> <player> <time> <reason>", aliases = { "tempmutar" }, groupToUse = Group.TRIAL)
+	public void tempmute(CommandArgs cmdArgs) {
+		final CommandSender sender = cmdArgs.getSender();
+		final String[] args = cmdArgs.getArgs();
+		Language lang = BattlebitsAPI.getDefaultLanguage();
+		final Language language = lang;
+		final String banPrefix = Translate.getTranslation(lang, "mute-prefix") + " ";
+		if (args.length < 3) {
+			sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(lang, "tempmute-usage")));
+			return;
+		}
+		BungeeCord.getInstance().getScheduler().runAsync(BungeeMain.getPlugin(), new Runnable() {
+			public void run() {
+				UUID uuid = BattlebitsAPI.getUUIDOf(args[0]);
+				if (uuid == null) {
+					sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "player-not-exist")));
+					return;
+				}
+				BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(uuid);
+				if (player == null) {
+					if (sender instanceof ProxiedPlayer) {
+						if (BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup().equals(Group.TRIAL)) {
+							sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "trial-mute-offline")));
+							return;
+						}
+					}
+					try {
+						player = BungeeMain.getPlugin().getAccountManager().loadBattlePlayer(uuid);
+					} catch (Exception e) {
+						e.printStackTrace();
+						sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "cant-request-offline")));
+						return;
+					}
+					if (player == null) {
+						sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "player-never-joined")));
+						return;
+					}
+				}
+				Mute actualMute = player.getBanHistory().getActualMute();
+				if (actualMute != null && !actualMute.isUnmuted() && actualMute.isPermanent()) {
+					sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "already-muted")));
+					return;
+				}
+				if (player.isStaff()) {
+					Group group = BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup();
+					if (group != Group.DONO && group != Group.ADMIN) {
+						sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "mute-staff")));
+						return;
+					}
+				}
+				long expiresCheck;
+				try {
+					expiresCheck = DateUtils.parseDateDiff(args[1], true);
+				} catch (Exception e1) {
+					sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "invalid-format")));
+					return;
+				}
+				StringBuilder builder = new StringBuilder();
+				for (int i = 2; i < args.length; i++) {
+					String espaco = " ";
+					if (i >= args.length - 1)
+						espaco = "";
+					builder.append(args[i] + espaco);
+				}
+				Mute mute = null;
+				String playerIp = "";
+				if (player.isOnline() && player.getIpAddress() != null && player.getIpAddress().getHostString() != null) {
+					playerIp = player.getIpAddress().getHostString();
+				} else {
+					playerIp = "OFFLINE";
+				}
+				if (cmdArgs.isPlayer()) {
+					ProxiedPlayer bannedBy = cmdArgs.getPlayer();
+					mute = new Mute(uuid, bannedBy.getName(), bannedBy.getUniqueId(), playerIp, player.getServerConnected(), builder.toString(), expiresCheck);
+					bannedBy = null;
+				} else {
+					mute = new Mute(uuid, "CONSOLE", playerIp, player.getServerConnected(), builder.toString(), expiresCheck);
+				}
+				BungeeMain.getPlugin().getBanManager().mute(player, mute);
+			}
+		});
 	}
 
-	@Command(name = "unmute")
-	public void unmute(CommandArgs args) {
-
+	@Command(name = "unmute", usage = "/<command> <player>", aliases = { "desmutar" }, groupToUse = Group.MANAGER)
+	public void unmute(CommandArgs cmdArgs) {
+		final CommandSender sender = cmdArgs.getSender();
+		final String[] args = cmdArgs.getArgs();
+		Language lang = BattlebitsAPI.getDefaultLanguage();
+		final Language language = lang;
+		final String banPrefix = Translate.getTranslation(lang, "unmute-prefix") + " ";
+		if (args.length != 1) {
+			sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(lang, "unmute-usage")));
+			return;
+		}
+		BungeeCord.getInstance().getScheduler().runAsync(BungeeMain.getPlugin(), new Runnable() {
+			public void run() {
+				UUID uuid = BattlebitsAPI.getUUIDOf(args[0]);
+				if (uuid == null) {
+					sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "player-not-exist")));
+					return;
+				}
+				BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(uuid);
+				if (player == null) {
+					try {
+						player = BungeeMain.getPlugin().getAccountManager().loadBattlePlayer(uuid);
+					} catch (Exception e) {
+						e.printStackTrace();
+						sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "cant-request-offline")));
+						return;
+					}
+					if (player == null) {
+						sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "player-never-joined")));
+						return;
+					}
+				}
+				Mute actualMute = player.getBanHistory().getActualMute();
+				if (actualMute == null) {
+					sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "player-not-muted")));
+					return;
+				}
+				BattlePlayer unbannedBy = null;
+				if (cmdArgs.isPlayer()) {
+					unbannedBy = BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId());
+				}
+				BungeeMain.getPlugin().getBanManager().unmute(unbannedBy, player, actualMute);
+			}
+		});
 	}
 
 }

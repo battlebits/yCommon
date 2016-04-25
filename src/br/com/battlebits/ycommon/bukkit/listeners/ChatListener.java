@@ -13,7 +13,7 @@ import br.com.battlebits.ycommon.common.banmanager.constructors.Mute;
 
 public class ChatListener implements Listener {
 
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onChat(AsyncPlayerChatEvent event) {
 		Player p = event.getPlayer();
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
