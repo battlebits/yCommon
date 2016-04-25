@@ -13,6 +13,7 @@ import br.com.battlebits.ycommon.common.networking.CommonPacket;
 public class CommonServer implements Runnable {
 
 	private ServerSocket server;
+	private Socket client;
 	public static final int PORT = 57966;
 	public static final String ADDRESS = "localhost";
 
@@ -29,7 +30,7 @@ public class CommonServer implements Runnable {
 	public void run() {
 		while (RUNNING) {
 			try {
-				Socket client = server.accept();
+				client = server.accept();
 
 				DataInputStream inputStream = new DataInputStream(client.getInputStream());
 				DataOutputStream outputStream = new DataOutputStream(client.getOutputStream());
@@ -64,6 +65,8 @@ public class CommonServer implements Runnable {
 		RUNNING = false;
 		server.close();
 		server = null;
+		client.close();
+		client = null;
 	}
 
 }
