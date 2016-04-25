@@ -224,5 +224,20 @@ public class BanCommand extends CommandClass {
 			}
 		});
 	}
+	
+	@Command(name = "mute")
+	public void mute(CommandArgs args) {
+
+	}
+
+	@Command(name = "tempmute")
+	public void tempmute(CommandArgs args) {
+
+	}
+
+	@Command(name = "unmute")
+	public void unmute(CommandArgs args) {
+
+	}
 
 }

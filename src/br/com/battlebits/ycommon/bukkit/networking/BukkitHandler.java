@@ -11,7 +11,6 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketAddFriend;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAddFriendRequest;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAddGroup;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAddRank;
-import br.com.battlebits.ycommon.common.networking.packets.CPacketBanPlayer;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeFichas;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLanguage;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLiga;
@@ -26,7 +25,6 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveGroup;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveRank;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketTranslationsLoad;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketTranslationsRequest;
-import br.com.battlebits.ycommon.common.networking.packets.CPacketUnbanPlayer;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketUpdateClan;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketUpdateGameStatus;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketUpdateProfile;
@@ -132,18 +130,6 @@ public class BukkitHandler extends CommonHandler {
 
 	@Override
 	public void handleRemoveRank(CPacketRemoveRank packet) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void handleBanPlayer(CPacketBanPlayer packet) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void handleUnbanPlayer(CPacketUnbanPlayer packet) {
 		// TODO Auto-generated method stub
 
 	}

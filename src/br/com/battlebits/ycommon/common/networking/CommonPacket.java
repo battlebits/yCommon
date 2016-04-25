@@ -13,7 +13,6 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketAddFriend;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAddFriendRequest;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAddGroup;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAddRank;
-import br.com.battlebits.ycommon.common.networking.packets.CPacketBanPlayer;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeFichas;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLanguage;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLiga;
@@ -29,7 +28,6 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveGroup;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveRank;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketTranslationsLoad;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketTranslationsRequest;
-import br.com.battlebits.ycommon.common.networking.packets.CPacketUnbanPlayer;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketUpdateClan;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketUpdateGameStatus;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketUpdateProfile;
@@ -81,9 +79,6 @@ public abstract class CommonPacket {
 		register((byte) 0x61, CPacketJoinParty.class);
 		register((byte) 0x62, CPacketDisbandParty.class);
 
-		/** 0x7X: Bans **/
-		register((byte) 0x70, CPacketBanPlayer.class);
-		register((byte) 0x71, CPacketUnbanPlayer.class);
 	}
 
 	private static void register(byte i, Class<? extends CommonPacket> c, short v) {
