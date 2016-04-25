@@ -105,6 +105,8 @@ public class BukkitUUIDFetcher extends UUIDFetcher {
 			} catch (Exception e) {
 				return null;
 			}
+		if(!validate(name))
+			return null;
 		try {
 			return nameUUID.get(name, new Callable<UUID>() {
 				@Override
