@@ -31,7 +31,7 @@ public class MessengerComand extends CommandClass {
 			String prefix = Translate.getTranslation(bp.getLanguage(), "command-tell-prefix");
 			if (args.getArgs().length <= 1) {
 				p.sendMessage(
-						prefix + Translate.getTranslation(bp.getLanguage(), "command-tell-help").replace("%command%", args.getLabel().toLowerCase()));
+						prefix + Translate.getTranslation(bp.getLanguage(), "command-tell-usage").replace("%command%", args.getLabel().toLowerCase()));
 			} else {
 				if (bp.getConfiguration().isTellEnabled()) {
 					Player t = Bukkit.getPlayer(args.getArgs()[0]);
@@ -98,7 +98,7 @@ public class MessengerComand extends CommandClass {
 							p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-tell-send-to-me"));
 						}
 					} else {
-						p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-tell-not-found"));
+						p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "player-not-found"));
 					}
 					t = null;
 				} else {
@@ -118,7 +118,7 @@ public class MessengerComand extends CommandClass {
 			BukkitPlayer bp = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
 			String prefix = Translate.getTranslation(bp.getLanguage(), "command-tell-prefix");
 			if (args.getArgs().length == 0) {
-				p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-reply-use"));
+				p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-reply-usage"));
 			} else {
 				if (bp.hasLastTell()) {
 					Player t = Bukkit.getPlayer(bp.getLastTellUUID());
@@ -219,7 +219,7 @@ public class MessengerComand extends CommandClass {
 								p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-ignore-cant-you"));
 							}
 						} else {
-							p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-ignore-player-not-found"));
+							p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "player-not-exist"));
 						}
 						id = null;
 					}

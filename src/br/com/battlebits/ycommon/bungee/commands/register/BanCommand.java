@@ -21,7 +21,8 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class BanCommand extends CommandClass {
 
-	@Command(name = "ban", usage = "/<command> <player> <reason>", aliases = { "banir" }, groupToUse = Group.TRIAL)
+	@Command(name = "ban", usage = "/<command> <player> <reason>", aliases = {
+			"banir" }, groupToUse = Group.TRIAL, noPermMessageId = "command-ban-no-access")
 	public void ban(CommandArgs cmdArgs) {
 		final CommandSender sender = cmdArgs.getSender();
 		final String[] args = cmdArgs.getArgs();
@@ -29,7 +30,7 @@ public class BanCommand extends CommandClass {
 		final Language language = lang;
 		final String banPrefix = Translate.getTranslation(lang, "ban-prefix") + " ";
 		if (args.length < 2) {
-			sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(lang, "ban-usage")));
+			sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(lang, "command-ban-usage")));
 			return;
 		}
 		BungeeCord.getInstance().getScheduler().runAsync(BungeeMain.getPlugin(), new Runnable() {
@@ -42,7 +43,8 @@ public class BanCommand extends CommandClass {
 				BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(uuid);
 				if (player == null) {
 					if (sender instanceof ProxiedPlayer) {
-						if (BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup().equals(Group.TRIAL)) {
+						if (BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup()
+								.equals(Group.TRIAL)) {
 							sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "trial-ban-offline")));
 							return;
 						}
@@ -97,7 +99,8 @@ public class BanCommand extends CommandClass {
 		});
 	}
 
-	@Command(name = "tempban", usage = "/<command> <player> <time> <reason>", aliases = { "tempbanir" }, groupToUse = Group.TRIAL)
+	@Command(name = "tempban", usage = "/<command> <player> <time> <reason>", aliases = {
+			"tempbanir" }, groupToUse = Group.TRIAL, noPermMessageId = "command-tempban-no-access")
 	public void tempban(CommandArgs cmdArgs) {
 		final CommandSender sender = cmdArgs.getSender();
 		final String[] args = cmdArgs.getArgs();
@@ -105,7 +108,7 @@ public class BanCommand extends CommandClass {
 		final Language language = lang;
 		final String banPrefix = Translate.getTranslation(lang, "ban-prefix") + " ";
 		if (args.length < 3) {
-			sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(lang, "tempban-usage")));
+			sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(lang, "command-tempban-usage")));
 			return;
 		}
 		BungeeCord.getInstance().getScheduler().runAsync(BungeeMain.getPlugin(), new Runnable() {
@@ -118,7 +121,8 @@ public class BanCommand extends CommandClass {
 				BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(uuid);
 				if (player == null) {
 					if (sender instanceof ProxiedPlayer) {
-						if (BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup().equals(Group.TRIAL)) {
+						if (BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup()
+								.equals(Group.TRIAL)) {
 							sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "trial-ban-offline")));
 							return;
 						}
@@ -170,7 +174,8 @@ public class BanCommand extends CommandClass {
 				}
 				if (cmdArgs.isPlayer()) {
 					ProxiedPlayer bannedBy = cmdArgs.getPlayer();
-					ban = new Ban(uuid, bannedBy.getName(), bannedBy.getUniqueId(), playerIp, player.getServerConnected(), builder.toString(), expiresCheck);
+					ban = new Ban(uuid, bannedBy.getName(), bannedBy.getUniqueId(), playerIp, player.getServerConnected(), builder.toString(),
+							expiresCheck);
 					bannedBy = null;
 				} else {
 					ban = new Ban(uuid, "CONSOLE", playerIp, player.getServerConnected(), builder.toString(), expiresCheck);
@@ -180,7 +185,8 @@ public class BanCommand extends CommandClass {
 		});
 	}
 
-	@Command(name = "unban", usage = "/<command> <player>", aliases = { "desbanir" }, groupToUse = Group.MANAGER)
+	@Command(name = "unban", usage = "/<command> <player>", aliases = {
+			"desbanir" }, groupToUse = Group.MANAGER, noPermMessageId = "command-unban-no-access")
 	public void unban(CommandArgs cmdArgs) {
 		final CommandSender sender = cmdArgs.getSender();
 		final String[] args = cmdArgs.getArgs();
@@ -188,7 +194,7 @@ public class BanCommand extends CommandClass {
 		final Language language = lang;
 		final String banPrefix = Translate.getTranslation(lang, "unban-prefix") + " ";
 		if (args.length != 1) {
-			sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(lang, "unban-usage")));
+			sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(lang, "command-unban-usage")));
 			return;
 		}
 		BungeeCord.getInstance().getScheduler().runAsync(BungeeMain.getPlugin(), new Runnable() {
@@ -225,8 +231,9 @@ public class BanCommand extends CommandClass {
 			}
 		});
 	}
-	
-	@Command(name = "mute", usage = "/<command> <player> <reason>", aliases = { "mutar" }, groupToUse = Group.TRIAL)
+
+	@Command(name = "mute", usage = "/<command> <player> <reason>", aliases = {
+			"mutar" }, groupToUse = Group.TRIAL, noPermMessageId = "command-mute-no-access")
 	public void mute(CommandArgs cmdArgs) {
 		final CommandSender sender = cmdArgs.getSender();
 		final String[] args = cmdArgs.getArgs();
@@ -234,7 +241,7 @@ public class BanCommand extends CommandClass {
 		final Language language = lang;
 		final String banPrefix = Translate.getTranslation(lang, "mute-prefix") + " ";
 		if (args.length < 2) {
-			sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(lang, "mute-usage")));
+			sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(lang, "command-mute-usage")));
 			return;
 		}
 		BungeeCord.getInstance().getScheduler().runAsync(BungeeMain.getPlugin(), new Runnable() {
@@ -247,7 +254,8 @@ public class BanCommand extends CommandClass {
 				BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(uuid);
 				if (player == null) {
 					if (sender instanceof ProxiedPlayer) {
-						if (BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup().equals(Group.TRIAL)) {
+						if (BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup()
+								.equals(Group.TRIAL)) {
 							sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "trial-mute-offline")));
 							return;
 						}
@@ -302,7 +310,8 @@ public class BanCommand extends CommandClass {
 		});
 	}
 
-	@Command(name = "tempmute", usage = "/<command> <player> <time> <reason>", aliases = { "tempmutar" }, groupToUse = Group.TRIAL)
+	@Command(name = "tempmute", usage = "/<command> <player> <time> <reason>", aliases = {
+			"tempmutar" }, groupToUse = Group.TRIAL, noPermMessageId = "command-unmute-no-access")
 	public void tempmute(CommandArgs cmdArgs) {
 		final CommandSender sender = cmdArgs.getSender();
 		final String[] args = cmdArgs.getArgs();
@@ -310,7 +319,7 @@ public class BanCommand extends CommandClass {
 		final Language language = lang;
 		final String banPrefix = Translate.getTranslation(lang, "mute-prefix") + " ";
 		if (args.length < 3) {
-			sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(lang, "tempmute-usage")));
+			sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(lang, "command-tempmute-usage")));
 			return;
 		}
 		BungeeCord.getInstance().getScheduler().runAsync(BungeeMain.getPlugin(), new Runnable() {
@@ -323,7 +332,8 @@ public class BanCommand extends CommandClass {
 				BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(uuid);
 				if (player == null) {
 					if (sender instanceof ProxiedPlayer) {
-						if (BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup().equals(Group.TRIAL)) {
+						if (BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup()
+								.equals(Group.TRIAL)) {
 							sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "trial-mute-offline")));
 							return;
 						}
@@ -375,7 +385,8 @@ public class BanCommand extends CommandClass {
 				}
 				if (cmdArgs.isPlayer()) {
 					ProxiedPlayer bannedBy = cmdArgs.getPlayer();
-					mute = new Mute(uuid, bannedBy.getName(), bannedBy.getUniqueId(), playerIp, player.getServerConnected(), builder.toString(), expiresCheck);
+					mute = new Mute(uuid, bannedBy.getName(), bannedBy.getUniqueId(), playerIp, player.getServerConnected(), builder.toString(),
+							expiresCheck);
 					bannedBy = null;
 				} else {
 					mute = new Mute(uuid, "CONSOLE", playerIp, player.getServerConnected(), builder.toString(), expiresCheck);
@@ -385,7 +396,8 @@ public class BanCommand extends CommandClass {
 		});
 	}
 
-	@Command(name = "unmute", usage = "/<command> <player>", aliases = { "desmutar" }, groupToUse = Group.MANAGER)
+	@Command(name = "unmute", usage = "/<command> <player>", aliases = {
+			"desmutar" }, groupToUse = Group.MANAGER, noPermMessageId = "command-unmute-no-access")
 	public void unmute(CommandArgs cmdArgs) {
 		final CommandSender sender = cmdArgs.getSender();
 		final String[] args = cmdArgs.getArgs();
@@ -393,7 +405,7 @@ public class BanCommand extends CommandClass {
 		final Language language = lang;
 		final String banPrefix = Translate.getTranslation(lang, "unmute-prefix") + " ";
 		if (args.length != 1) {
-			sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(lang, "unmute-usage")));
+			sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(lang, "command-unmute-usage")));
 			return;
 		}
 		BungeeCord.getInstance().getScheduler().runAsync(BungeeMain.getPlugin(), new Runnable() {

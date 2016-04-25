@@ -1,7 +1,10 @@
 package br.com.battlebits.ycommon.bukkit.commands.register;
 
+import java.text.DecimalFormat;
+
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandFramework.Command;
@@ -14,8 +17,10 @@ import br.com.battlebits.ycommon.common.translate.Translate;
 
 public class ModeratingCommands extends CommandClass {
 
+	private DecimalFormat locationFormater = new DecimalFormat("######.##");
+
 	@SuppressWarnings("deprecation")
-	@Command(name = "gamemode", aliases = { "gm" }, groupToUse = Group.ADMIN, noPermMessageId = "gamemode-no-access")
+	@Command(name = "gamemode", aliases = { "gm" }, groupToUse = Group.ADMIN, noPermMessageId = "command-gamemode-no-access")
 	public void gamemode(CommandArgs command) {
 		if (command.isPlayer()) {
 			Player p = command.getPlayer();
@@ -23,7 +28,7 @@ public class ModeratingCommands extends CommandClass {
 			BattlePlayer bp = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
 			String prefix = Translate.getTranslation(bp.getLanguage(), "command-gamemode-prefix");
 			if (args.length == 0) {
-				p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-gamemode-help"));
+				p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-gamemode-usage"));
 			} else {
 				GameMode gm = null;
 				try {
@@ -54,7 +59,7 @@ public class ModeratingCommands extends CommandClass {
 								p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-gamemode-already-other"));
 							}
 						} else {
-							p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-gamemode-player-notfound"));
+							p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "player-not-found"));
 						}
 						t = null;
 					}
@@ -70,6 +75,7 @@ public class ModeratingCommands extends CommandClass {
 		} else {
 			command.getSender().sendMessage("§4§lERRO §fComando disponivel apenas §c§lin-game");
 		}
+		// TODO: ALERT STAFFS
 	}
 
 	@Command(name = "tp", aliases = { "teleport", "teleportar" }, groupToUse = Group.TRIAL, noPermMessageId = "command-teleport-no-access")
@@ -77,11 +83,138 @@ public class ModeratingCommands extends CommandClass {
 		if (command.isPlayer()) {
 			Player p = command.getPlayer();
 			String[] args = command.getArgs();
+			BattlePlayer bp = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
+			String prefix = Translate.getTranslation(bp.getLanguage(), "command-teleport-prefix");
+			if (args.length == 0) {
+				p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-teleport-usage"));
+			} else if (args.length == 1 || !bp.hasGroupPermission(Group.MOD)) {
+				Player t = Bukkit.getPlayer(args[0]);
+				if (t != null) {
+					p.teleport(t.getLocation());
+					p.sendMessage(prefix
+							+ Translate.getTranslation(bp.getLanguage(), "command-teleport-teleported-to-player").replace("%player%", t.getName()));
+					t = null;
+				} else {
+					p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "player-not-found"));
+				}
+			} else if (bp.hasGroupPermission(Group.MOD)) {
+				if (args.length == 2) {
+					Player player = Bukkit.getPlayer(args[0]);
+					if (player != null) {
+						Player target = Bukkit.getPlayer(args[1]);
+						if (target != null) {
+							player.teleport(target);
+							p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-teleport-teleported-other-player")
+									.replace("%player%", player.getName()).replace("%target%", target.getName()));
+							target = null;
+						} else {
+							p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "player-not-found"));
+						}
+						player = null;
+					} else {
+						p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "player-not-found"));
+					}
+				} else if (args.length >= 3) {
+					String argX = args[0];
+					String argY = args[1];
+					String argZ = args[2];
+					if (args.length == 3) {
+						Location loc = getLocationBased(p.getLocation(), argX, argY, argZ);
+						if (loc != null) {
+							p.teleport(loc);
+							p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-teleport-to-location")
+									.replace("%x%", locationFormater.format(loc.getX())).replace("%y%", locationFormater.format(loc.getY()))
+									.replace("%z%", locationFormater.format(loc.getZ())));
+							loc = null;
+						} else {
+							p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-teleport-invalid-location"));
+						}
+					} else {
+						Player target = Bukkit.getPlayer(args[3]);
+						if (target != null) {
+							Location loc = getLocationBased(target.getLocation(), argX, argY, argZ);
+							if (loc != null) {
+								target.teleport(loc);
+								p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-teleport-to-location")
+										.replace("%x%", locationFormater.format(loc.getX())).replace("%y%", locationFormater.format(loc.getY()))
+										.replace("%z%", locationFormater.format(loc.getZ())));
+								loc = null;
+							} else {
+								p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-teleport-invalid-location"));
+							}
+						} else {
+							p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "player-not-found"));
+						}
+					}
+					argZ = null;
+					argY = null;
+					argX = null;
+				}
+			}
+			prefix = null;
+			bp = null;
 			args = null;
 			p = null;
 		} else {
 			command.getSender().sendMessage("§4§lERRO §fComando disponivel apenas §c§lin-game");
 		}
+		// TODO: ALERT STAFFS
+	}
+
+	@Command(name = "tpall", aliases = { "teleportall" }, groupToUse = Group.MOD, noPermMessageId="command-teleportall-no-access")
+	public void tpall(CommandArgs command) {
+
+	}
+
+	private Location getLocationBased(Location loc, String argX, String argY, String argZ) {
+		double x = 0;
+		double y = 0;
+		double z = 0;
+		if (!argX.startsWith("~")) {
+			try {
+				x = Integer.parseInt(argX);
+			} catch (Exception e) {
+				return null;
+			}
+		} else {
+			x = loc.getX();
+			try {
+				x += Integer.parseInt(argX.substring(1, argX.length()));
+			} catch (Exception e) {
+			}
+		}
+		if (!argY.startsWith("~")) {
+			try {
+				y = Integer.parseInt(argY);
+			} catch (Exception e) {
+				return null;
+			}
+		} else {
+			y = loc.getY();
+			try {
+				y += Integer.parseInt(argY.substring(1, argY.length()));
+			} catch (Exception e) {
+			}
+		}
+		if (!argZ.startsWith("~")) {
+			try {
+				z = Integer.parseInt(argZ);
+			} catch (Exception e) {
+				return null;
+			}
+		} else {
+			z = loc.getZ();
+			try {
+				z += Integer.parseInt(argZ.substring(1, argZ.length()));
+			} catch (Exception e) {
+			}
+		}
+		Location l = loc.clone();
+		l.setX(x);
+		l.setY(y);
+		l.setZ(z);
+		loc = null;
+		return l;
 	}
 
 }
