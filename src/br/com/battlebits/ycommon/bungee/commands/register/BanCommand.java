@@ -324,7 +324,7 @@ public class BanCommand extends CommandClass {
 	}
 
 	@Command(name = "tempmute", usage = "/<command> <player> <time> <reason>", aliases = {
-			"tempmutar" }, groupToUse = Group.TRIAL, noPermMessageId = "command-unmute-no-access")
+			"tempmutar" }, groupToUse = Group.TRIAL, noPermMessageId = "command-tempmute-no-access")
 	public void tempmute(CommandArgs cmdArgs) {
 		final CommandSender sender = cmdArgs.getSender();
 		final String[] args = cmdArgs.getArgs();
