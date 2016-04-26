@@ -3,8 +3,7 @@ package br.com.battlebits.ycommon.common.enums;
 public enum ServerType {
 	NETWORK, HUNGERGAMES, BATTLECRAFT, SKYWARS, LOBBY, RAID, GARTICCRAFT, TESTSERVER, NONE;
 
-	@Override
-	public String toString() {
+	public String getName() {
 		return getServerName(super.toString().toLowerCase());
 	}
 
