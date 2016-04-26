@@ -78,6 +78,8 @@ public class GroupCommand extends CommandClass {
 				}
 
 				if (group == Group.NORMAL) {
+					if (player.getGroups().containsKey(ServerType.NETWORK) && battleSender.getServerGroup() == Group.DONO)
+						serverType = ServerType.NETWORK;
 					player.getGroups().remove(serverType);
 				} else {
 					player.getGroups().put(serverType, group);
