@@ -33,7 +33,8 @@ public class BanCommand extends CommandClass {
 		final Language language = lang;
 		final String banPrefix = Translate.getTranslation(lang, "command-ban-prefix") + " ";
 		if (args.length < 2) {
-			sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(lang, "command-ban-usage")));
+			sender.sendMessage(TextComponent
+					.fromLegacyText(banPrefix + Translate.getTranslation(lang, "command-ban-usage").replace("%command%", cmdArgs.getLabel())));
 			return;
 		}
 		BungeeCord.getInstance().getScheduler().runAsync(BungeeMain.getPlugin(), new Runnable() {
@@ -48,7 +49,8 @@ public class BanCommand extends CommandClass {
 					if (sender instanceof ProxiedPlayer) {
 						if (BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup()
 								.equals(Group.TRIAL)) {
-							sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "command-ban-trial-offline")));
+							sender.sendMessage(
+									TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "command-ban-trial-offline")));
 							return;
 						}
 					}
@@ -86,9 +88,9 @@ public class BanCommand extends CommandClass {
 				}
 				Ban ban = null;
 				String playerIp = "";
-				try{
+				try {
 					playerIp = player.getIpAddress().getHostString();
-				} catch(Exception ex){
+				} catch (Exception ex) {
 					playerIp = "OFFLINE";
 				}
 				if (cmdArgs.isPlayer()) {
@@ -115,7 +117,8 @@ public class BanCommand extends CommandClass {
 		final Language language = lang;
 		final String banPrefix = Translate.getTranslation(lang, "command-tempban-prefix") + " ";
 		if (args.length < 3) {
-			sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(lang, "command-tempban-usage")));
+			sender.sendMessage(TextComponent
+					.fromLegacyText(banPrefix + Translate.getTranslation(lang, "command-tempban-usage").replace("%command%", cmdArgs.getLabel())));
 			return;
 		}
 		BungeeCord.getInstance().getScheduler().runAsync(BungeeMain.getPlugin(), new Runnable() {
@@ -130,7 +133,8 @@ public class BanCommand extends CommandClass {
 					if (sender instanceof ProxiedPlayer) {
 						if (BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup()
 								.equals(Group.TRIAL)) {
-							sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "command-ban-trial-offline")));
+							sender.sendMessage(
+									TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "command-ban-trial-offline")));
 							return;
 						}
 					}
@@ -175,9 +179,9 @@ public class BanCommand extends CommandClass {
 				}
 				Ban ban = null;
 				String playerIp = "";
-				try{
+				try {
 					playerIp = player.getIpAddress().getHostString();
-				} catch(Exception ex){
+				} catch (Exception ex) {
 					playerIp = "OFFLINE";
 				}
 				if (cmdArgs.isPlayer()) {
@@ -205,7 +209,8 @@ public class BanCommand extends CommandClass {
 		final Language language = lang;
 		final String banPrefix = Translate.getTranslation(lang, "command-unban-prefix") + " ";
 		if (args.length != 1) {
-			sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(lang, "command-unban-usage")));
+			sender.sendMessage(TextComponent
+					.fromLegacyText(banPrefix + Translate.getTranslation(lang, "command-unban-usage").replace("%command%", cmdArgs.getLabel())));
 			return;
 		}
 		BungeeCord.getInstance().getScheduler().runAsync(BungeeMain.getPlugin(), new Runnable() {
@@ -253,7 +258,8 @@ public class BanCommand extends CommandClass {
 		final Language language = lang;
 		final String banPrefix = Translate.getTranslation(lang, "command-mute-prefix") + " ";
 		if (args.length < 2) {
-			sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(lang, "command-mute-usage")));
+			sender.sendMessage(TextComponent
+					.fromLegacyText(banPrefix + Translate.getTranslation(lang, "command-mute-usage").replace("%command%", cmdArgs.getLabel())));
 			return;
 		}
 		BungeeCord.getInstance().getScheduler().runAsync(BungeeMain.getPlugin(), new Runnable() {
@@ -268,7 +274,8 @@ public class BanCommand extends CommandClass {
 					if (sender instanceof ProxiedPlayer) {
 						if (BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup()
 								.equals(Group.TRIAL)) {
-							sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "command-mute-trial-offline")));
+							sender.sendMessage(
+									TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "command-mute-trial-offline")));
 							return;
 						}
 					}
@@ -306,9 +313,9 @@ public class BanCommand extends CommandClass {
 				}
 				Mute mute = null;
 				String playerIp = "";
-				try{
+				try {
 					playerIp = player.getIpAddress().getHostString();
-				} catch(Exception ex){
+				} catch (Exception ex) {
 					playerIp = "OFFLINE";
 				}
 				if (cmdArgs.isPlayer()) {
@@ -335,7 +342,8 @@ public class BanCommand extends CommandClass {
 		}
 		final String banPrefix = Translate.getTranslation(lang, "command-tempmute-prefix") + " ";
 		if (args.length < 3) {
-			sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(lang, "command-tempmute-usage")));
+			sender.sendMessage(TextComponent
+					.fromLegacyText(banPrefix + Translate.getTranslation(lang, "command-tempmute-usage").replace("%command%", cmdArgs.getLabel())));
 			return;
 		}
 		BungeeCord.getInstance().getScheduler().runAsync(BungeeMain.getPlugin(), new Runnable() {
@@ -350,7 +358,8 @@ public class BanCommand extends CommandClass {
 					if (sender instanceof ProxiedPlayer) {
 						if (BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup()
 								.equals(Group.TRIAL)) {
-							sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "command-mute-trial-offline")));
+							sender.sendMessage(
+									TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "command-mute-trial-offline")));
 							return;
 						}
 					}
@@ -395,9 +404,9 @@ public class BanCommand extends CommandClass {
 				}
 				Mute mute = null;
 				String playerIp = "";
-				try{
+				try {
 					playerIp = player.getIpAddress().getHostString();
-				} catch(Exception ex){
+				} catch (Exception ex) {
 					playerIp = "OFFLINE";
 				}
 				if (cmdArgs.isPlayer()) {
@@ -425,7 +434,7 @@ public class BanCommand extends CommandClass {
 		final Language language = lang;
 		final String banPrefix = Translate.getTranslation(lang, "command-unmute-prefix") + " ";
 		if (args.length != 1) {
-			sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(lang, "command-unmute-usage")));
+			sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(lang, "command-unmute-usage").replace("%command%", cmdArgs.getLabel())));
 			return;
 		}
 		BungeeCord.getInstance().getScheduler().runAsync(BungeeMain.getPlugin(), new Runnable() {

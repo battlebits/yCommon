@@ -20,13 +20,13 @@ public class ModeratingCommands extends CommandClass {
 	private DecimalFormat locationFormater = new DecimalFormat("######.##");
 
 	@SuppressWarnings("deprecation")
-	@Command(name = "gamemode", aliases = { "gm" }, groupToUse = Group.ADMIN, noPermMessageId = "command-gamemode-no-access")
+	@Command(name = "gamemode", aliases = { "gm" }, groupToUse = Group.ADMIN, noPermMessageId = "command-gamemode-no-access", runAsync = true)
 	public void gamemode(CommandArgs command) {
 		if (command.isPlayer()) {
 			Player p = command.getPlayer();
 			String[] args = command.getArgs();
 			BattlePlayer bp = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
-			String prefix = Translate.getTranslation(bp.getLanguage(), "command-gamemode-prefix");
+			String prefix = Translate.getTranslation(bp.getLanguage(), "command-gamemode-prefix") + " ";
 			if (args.length == 0) {
 				p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-gamemode-usage"));
 			} else {
@@ -78,13 +78,13 @@ public class ModeratingCommands extends CommandClass {
 		// TODO: ALERT STAFFS
 	}
 
-	@Command(name = "tp", aliases = { "teleport", "teleportar" }, groupToUse = Group.TRIAL, noPermMessageId = "command-teleport-no-access")
-	public void tp(CommandArgs command) {
-		if (command.isPlayer()) {
-			Player p = command.getPlayer();
-			String[] args = command.getArgs();
+	@Command(name = "tp", aliases = { "teleport", "teleportar" }, groupToUse = Group.TRIAL, noPermMessageId = "command-teleport-no-access", runAsync = false)
+	public void tp(CommandArgs cmdArgs) {
+		if (cmdArgs.isPlayer()) {
+			Player p = cmdArgs.getPlayer();
+			String[] args = cmdArgs.getArgs();
 			BattlePlayer bp = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
-			String prefix = Translate.getTranslation(bp.getLanguage(), "command-teleport-prefix");
+			String prefix = Translate.getTranslation(bp.getLanguage(), "command-teleport-prefix") + " ";
 			if (args.length == 0) {
 				p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-teleport-usage"));
 			} else if (args.length == 1 || !bp.hasGroupPermission(Group.MOD)) {
@@ -151,19 +151,19 @@ public class ModeratingCommands extends CommandClass {
 			args = null;
 			p = null;
 		} else {
-			command.getSender().sendMessage("§4§lERRO §fComando disponivel apenas §c§lin-game");
+			cmdArgs.getSender().sendMessage("§4§lERRO §fComando disponivel apenas §c§lin-game");
 		}
 		// TODO: ALERT STAFFS
 	}
 
 	@SuppressWarnings("deprecation")
-	@Command(name = "tpall", aliases = { "teleportall" }, groupToUse = Group.MOD, noPermMessageId = "command-teleportall-no-access")
-	public void tpall(CommandArgs command) {
-		if (command.isPlayer()) {
-			Player p = command.getPlayer();
-			String[] args = command.getArgs();
+	@Command(name = "tpall", aliases = { "teleportall" }, groupToUse = Group.MOD, noPermMessageId = "command-teleportall-no-access", runAsync = false)
+	public void tpall(CommandArgs cmdArgs) {
+		if (cmdArgs.isPlayer()) {
+			Player p = cmdArgs.getPlayer();
+			String[] args = cmdArgs.getArgs();
 			BattlePlayer bp = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
-			String prefix = Translate.getTranslation(bp.getLanguage(), "command-teleportall-prefix");
+			String prefix = Translate.getTranslation(bp.getLanguage(), "command-teleportall-prefix") + " ";
 			if (args.length == 0) {
 				int i = 0;
 				for (Player on : Bukkit.getOnlinePlayers()) {
@@ -203,9 +203,13 @@ public class ModeratingCommands extends CommandClass {
 			args = null;
 			p = null;
 		} else {
-			command.getSender().sendMessage("§4§lERRO §fComando disponivel apenas §c§lin-game");
+			cmdArgs.getSender().sendMessage("§4§lERRO §fComando disponivel apenas §c§lin-game");
 		}
 		// TODO: ALERT STAFFS
+	}
+	
+	public void tphere(CommandArgs cmdArgs){
+		
 	}
 
 	private Location getLocationBased(Location loc, String argX, String argY, String argZ) {
