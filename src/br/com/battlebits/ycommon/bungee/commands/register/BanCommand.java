@@ -203,7 +203,6 @@ public class BanCommand extends CommandClass {
 			lang = BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getLanguage();
 		}
 		final Language language = lang;
-		lang = null;
 		final String banPrefix = Translate.getTranslation(lang, "command-unban-prefix") + " ";
 		if (args.length != 1) {
 			sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(lang, "command-unban-usage")));
