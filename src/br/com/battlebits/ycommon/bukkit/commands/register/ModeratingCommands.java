@@ -115,11 +115,8 @@ public class ModeratingCommands extends CommandClass {
 						p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "player-not-found"));
 					}
 				} else if (args.length >= 3) {
-					String argX = args[0];
-					String argY = args[1];
-					String argZ = args[2];
 					if (args.length == 3) {
-						Location loc = getLocationBased(p.getLocation(), argX, argY, argZ);
+						Location loc = getLocationBased(p.getLocation(), args[0], args[1], args[2]);
 						if (loc != null) {
 							p.teleport(loc);
 							p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-teleport-to-location")
@@ -130,9 +127,9 @@ public class ModeratingCommands extends CommandClass {
 							p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-teleport-invalid-location"));
 						}
 					} else {
-						Player target = Bukkit.getPlayer(args[3]);
+						Player target = Bukkit.getPlayer(args[0]);
 						if (target != null) {
-							Location loc = getLocationBased(target.getLocation(), argX, argY, argZ);
+							Location loc = getLocationBased(target.getLocation(), args[1], args[2], args[3]);
 							if (loc != null) {
 								target.teleport(loc);
 								p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-teleport-to-location-other")
@@ -147,9 +144,6 @@ public class ModeratingCommands extends CommandClass {
 							p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "player-not-found"));
 						}
 					}
-					argZ = null;
-					argY = null;
-					argX = null;
 				}
 			}
 			prefix = null;

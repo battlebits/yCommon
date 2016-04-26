@@ -42,9 +42,9 @@ public class BanManager {
 			BattlePlayer pl = BattlebitsAPI.getAccountCommon().getBattlePlayer(proxiedP.getUniqueId());
 			String banSuccess = "";
 			if (ban.isPermanent()) {
-				banSuccess = Translate.getTranslation(pl.getLanguage(), "ban-prefix") + " " + Translate.getTranslation(pl.getLanguage(), "ban-perm-success");
+				banSuccess = Translate.getTranslation(pl.getLanguage(), "command-ban-prefix") + " " + Translate.getTranslation(pl.getLanguage(), "ban-perm-success");
 			} else {
-				banSuccess = Translate.getTranslation(pl.getLanguage(), "ban-prefix") + " " + Translate.getTranslation(pl.getLanguage(), "ban-temp-success");
+				banSuccess = Translate.getTranslation(pl.getLanguage(), "command-ban-prefix") + " " + Translate.getTranslation(pl.getLanguage(), "ban-temp-success");
 			}
 			banSuccess = banSuccess.replace("%player%", player.getUserName() + "(" + player.getUuid().toString().replace("-", "") + ")");
 			banSuccess = banSuccess.replace("%banned-By%", ban.getBannedBy());
@@ -70,7 +70,7 @@ public class BanManager {
 			ban.unban();
 		for (ProxiedPlayer proxiedP : BungeeCord.getInstance().getPlayers()) {
 			BattlePlayer pl = BattlebitsAPI.getAccountCommon().getBattlePlayer(proxiedP.getUniqueId());
-			String unbanSuccess = Translate.getTranslation(pl.getLanguage(), "unban-prefix") + " " + Translate.getTranslation(pl.getLanguage(), "unban-success");
+			String unbanSuccess = Translate.getTranslation(pl.getLanguage(), "command-unban-prefix") + " " + Translate.getTranslation(pl.getLanguage(), "command-unban-success");
 			unbanSuccess = unbanSuccess.replace("%player%", player.getUserName() + "(" + player.getUuid().toString().replace("-", "") + ")");
 			unbanSuccess = unbanSuccess.replace("%unbannedBy%", ban.getUnbannedBy());
 			if (pl.hasGroupPermission(Group.TRIAL)) {
@@ -86,9 +86,9 @@ public class BanManager {
 			BattlePlayer pl = BattlebitsAPI.getAccountCommon().getBattlePlayer(proxiedP.getUniqueId());
 			String banSuccess = "";
 			if (mute.isPermanent()) {
-				banSuccess = Translate.getTranslation(pl.getLanguage(), "mute-prefix") + " " + Translate.getTranslation(pl.getLanguage(), "mute-perm-success");
+				banSuccess = Translate.getTranslation(pl.getLanguage(), "command-mute-prefix") + " " + Translate.getTranslation(pl.getLanguage(), "mute-perm-success");
 			} else {
-				banSuccess = Translate.getTranslation(pl.getLanguage(), "mute-prefix") + " " + Translate.getTranslation(pl.getLanguage(), "mute-temp-success");
+				banSuccess = Translate.getTranslation(pl.getLanguage(), "command-mute-prefix") + " " + Translate.getTranslation(pl.getLanguage(), "mute-temp-success");
 			}
 			banSuccess = banSuccess.replace("%player%", player.getUserName() + "(" + player.getUuid().toString().replace("-", "") + ")");
 			banSuccess = banSuccess.replace("%muted-By%", mute.getMutedBy());
@@ -116,7 +116,7 @@ public class BanManager {
 			mute.unmute();
 		for (ProxiedPlayer proxiedP : BungeeCord.getInstance().getPlayers()) {
 			BattlePlayer pl = BattlebitsAPI.getAccountCommon().getBattlePlayer(proxiedP.getUniqueId());
-			String unbanSuccess = Translate.getTranslation(pl.getLanguage(), "unmute-prefix") + " " + Translate.getTranslation(pl.getLanguage(), "unmute-success");
+			String unbanSuccess = Translate.getTranslation(pl.getLanguage(), "command-unmute-prefix") + " " + Translate.getTranslation(pl.getLanguage(), "command-unmute-success");
 			unbanSuccess = unbanSuccess.replace("%player%", player.getUserName() + "(" + player.getUuid().toString().replace("-", "") + ")");
 			unbanSuccess = unbanSuccess.replace("%unmutedBy%", mute.getUnmutedBy());
 			if (pl.hasGroupPermission(Group.TRIAL)) {
@@ -162,7 +162,7 @@ public class BanManager {
 	}
 	
 	public static String getMuteMessage(Mute mute, Language lang) {
-		String message = Translate.getTranslation(lang, "mute-prefix") + " ";
+		String message = Translate.getTranslation(lang, "command-mute-prefix") + " ";
 		if (mute.isPermanent()) {
 			message = message + Translate.getTranslation(lang, "muted-permanent");
 		} else {

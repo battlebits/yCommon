@@ -27,8 +27,11 @@ public class BanCommand extends CommandClass {
 		final CommandSender sender = cmdArgs.getSender();
 		final String[] args = cmdArgs.getArgs();
 		Language lang = BattlebitsAPI.getDefaultLanguage();
+		if (cmdArgs.isPlayer()) {
+			lang = BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getLanguage();
+		}
 		final Language language = lang;
-		final String banPrefix = Translate.getTranslation(lang, "ban-prefix") + " ";
+		final String banPrefix = Translate.getTranslation(lang, "command-ban-prefix") + " ";
 		if (args.length < 2) {
 			sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(lang, "command-ban-usage")));
 			return;
@@ -45,7 +48,7 @@ public class BanCommand extends CommandClass {
 					if (sender instanceof ProxiedPlayer) {
 						if (BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup()
 								.equals(Group.TRIAL)) {
-							sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "trial-ban-offline")));
+							sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "command-ban-trial-offline")));
 							return;
 						}
 					}
@@ -53,7 +56,8 @@ public class BanCommand extends CommandClass {
 						player = BungeeMain.getPlugin().getAccountManager().loadBattlePlayer(uuid);
 					} catch (Exception e) {
 						e.printStackTrace();
-						sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "cant-request-offline")));
+						sender.sendMessage(
+								TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "player-cant-request-offline")));
 						return;
 					}
 					if (player == null) {
@@ -63,13 +67,13 @@ public class BanCommand extends CommandClass {
 				}
 				Ban actualBan = player.getBanHistory().getActualBan();
 				if (actualBan != null && !actualBan.isUnbanned() && actualBan.isPermanent()) {
-					sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "already-banned")));
+					sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "command-ban-already-banned")));
 					return;
 				}
 				if (player.isStaff()) {
 					Group group = BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup();
 					if (group != Group.DONO && group != Group.ADMIN) {
-						sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "ban-staff")));
+						sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "command-ban-cant-staff")));
 						return;
 					}
 				}
@@ -82,9 +86,9 @@ public class BanCommand extends CommandClass {
 				}
 				Ban ban = null;
 				String playerIp = "";
-				if (player.isOnline() && player.getIpAddress() != null && player.getIpAddress().getHostString() != null) {
+				try{
 					playerIp = player.getIpAddress().getHostString();
-				} else {
+				} catch(Exception ex){
 					playerIp = "OFFLINE";
 				}
 				if (cmdArgs.isPlayer()) {
@@ -105,8 +109,11 @@ public class BanCommand extends CommandClass {
 		final CommandSender sender = cmdArgs.getSender();
 		final String[] args = cmdArgs.getArgs();
 		Language lang = BattlebitsAPI.getDefaultLanguage();
+		if (cmdArgs.isPlayer()) {
+			lang = BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getLanguage();
+		}
 		final Language language = lang;
-		final String banPrefix = Translate.getTranslation(lang, "ban-prefix") + " ";
+		final String banPrefix = Translate.getTranslation(lang, "command-ban-prefix") + " ";
 		if (args.length < 3) {
 			sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(lang, "command-tempban-usage")));
 			return;
@@ -123,7 +130,7 @@ public class BanCommand extends CommandClass {
 					if (sender instanceof ProxiedPlayer) {
 						if (BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup()
 								.equals(Group.TRIAL)) {
-							sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "trial-ban-offline")));
+							sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "command-ban-trial-offline")));
 							return;
 						}
 					}
@@ -131,7 +138,8 @@ public class BanCommand extends CommandClass {
 						player = BungeeMain.getPlugin().getAccountManager().loadBattlePlayer(uuid);
 					} catch (Exception e) {
 						e.printStackTrace();
-						sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "cant-request-offline")));
+						sender.sendMessage(
+								TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "player-cant-request-offline")));
 						return;
 					}
 					if (player == null) {
@@ -141,13 +149,13 @@ public class BanCommand extends CommandClass {
 				}
 				Ban actualBan = player.getBanHistory().getActualBan();
 				if (actualBan != null && !actualBan.isUnbanned() && actualBan.isPermanent()) {
-					sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "already-banned")));
+					sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "command-ban-already-banned")));
 					return;
 				}
 				if (player.isStaff()) {
 					Group group = BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup();
 					if (group != Group.DONO && group != Group.ADMIN) {
-						sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "ban-staff")));
+						sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "command-ban-cant-staff")));
 						return;
 					}
 				}
@@ -191,8 +199,12 @@ public class BanCommand extends CommandClass {
 		final CommandSender sender = cmdArgs.getSender();
 		final String[] args = cmdArgs.getArgs();
 		Language lang = BattlebitsAPI.getDefaultLanguage();
+		if (cmdArgs.isPlayer()) {
+			lang = BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getLanguage();
+		}
 		final Language language = lang;
-		final String banPrefix = Translate.getTranslation(lang, "unban-prefix") + " ";
+		lang = null;
+		final String banPrefix = Translate.getTranslation(lang, "command-unban-prefix") + " ";
 		if (args.length != 1) {
 			sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(lang, "command-unban-usage")));
 			return;
@@ -210,7 +222,8 @@ public class BanCommand extends CommandClass {
 						player = BungeeMain.getPlugin().getAccountManager().loadBattlePlayer(uuid);
 					} catch (Exception e) {
 						e.printStackTrace();
-						sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "cant-request-offline")));
+						sender.sendMessage(
+								TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "player-cant-request-offline")));
 						return;
 					}
 					if (player == null) {
@@ -239,7 +252,7 @@ public class BanCommand extends CommandClass {
 		final String[] args = cmdArgs.getArgs();
 		Language lang = BattlebitsAPI.getDefaultLanguage();
 		final Language language = lang;
-		final String banPrefix = Translate.getTranslation(lang, "mute-prefix") + " ";
+		final String banPrefix = Translate.getTranslation(lang, "command-mute-prefix") + " ";
 		if (args.length < 2) {
 			sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(lang, "command-mute-usage")));
 			return;
@@ -256,7 +269,7 @@ public class BanCommand extends CommandClass {
 					if (sender instanceof ProxiedPlayer) {
 						if (BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup()
 								.equals(Group.TRIAL)) {
-							sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "trial-mute-offline")));
+							sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "command-mute-trial-offline")));
 							return;
 						}
 					}
@@ -264,7 +277,8 @@ public class BanCommand extends CommandClass {
 						player = BungeeMain.getPlugin().getAccountManager().loadBattlePlayer(uuid);
 					} catch (Exception e) {
 						e.printStackTrace();
-						sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "cant-request-offline")));
+						sender.sendMessage(
+								TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "player-cant-request-offline")));
 						return;
 					}
 					if (player == null) {
@@ -280,7 +294,7 @@ public class BanCommand extends CommandClass {
 				if (player.isStaff()) {
 					Group group = BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup();
 					if (group != Group.DONO && group != Group.ADMIN) {
-						sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "mute-staff")));
+						sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "command-mute-cant-staff")));
 						return;
 					}
 				}
@@ -317,7 +331,10 @@ public class BanCommand extends CommandClass {
 		final String[] args = cmdArgs.getArgs();
 		Language lang = BattlebitsAPI.getDefaultLanguage();
 		final Language language = lang;
-		final String banPrefix = Translate.getTranslation(lang, "mute-prefix") + " ";
+		if (cmdArgs.isPlayer()) {
+			lang = BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getLanguage();
+		}
+		final String banPrefix = Translate.getTranslation(lang, "command-mute-prefix") + " ";
 		if (args.length < 3) {
 			sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(lang, "command-tempmute-usage")));
 			return;
@@ -334,7 +351,7 @@ public class BanCommand extends CommandClass {
 					if (sender instanceof ProxiedPlayer) {
 						if (BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup()
 								.equals(Group.TRIAL)) {
-							sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "trial-mute-offline")));
+							sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "command-mute-trial-offline")));
 							return;
 						}
 					}
@@ -342,7 +359,8 @@ public class BanCommand extends CommandClass {
 						player = BungeeMain.getPlugin().getAccountManager().loadBattlePlayer(uuid);
 					} catch (Exception e) {
 						e.printStackTrace();
-						sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "cant-request-offline")));
+						sender.sendMessage(
+								TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "player-cant-request-offline")));
 						return;
 					}
 					if (player == null) {
@@ -358,7 +376,7 @@ public class BanCommand extends CommandClass {
 				if (player.isStaff()) {
 					Group group = BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup();
 					if (group != Group.DONO && group != Group.ADMIN) {
-						sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "mute-staff")));
+						sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "command-mute-cant-staff")));
 						return;
 					}
 				}
@@ -402,8 +420,11 @@ public class BanCommand extends CommandClass {
 		final CommandSender sender = cmdArgs.getSender();
 		final String[] args = cmdArgs.getArgs();
 		Language lang = BattlebitsAPI.getDefaultLanguage();
+		if (cmdArgs.isPlayer()) {
+			lang = BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getLanguage();
+		}
 		final Language language = lang;
-		final String banPrefix = Translate.getTranslation(lang, "unmute-prefix") + " ";
+		final String banPrefix = Translate.getTranslation(lang, "command-unmute-prefix") + " ";
 		if (args.length != 1) {
 			sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(lang, "command-unmute-usage")));
 			return;
@@ -421,7 +442,8 @@ public class BanCommand extends CommandClass {
 						player = BungeeMain.getPlugin().getAccountManager().loadBattlePlayer(uuid);
 					} catch (Exception e) {
 						e.printStackTrace();
-						sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "cant-request-offline")));
+						sender.sendMessage(
+								TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "player-cant-request-offline")));
 						return;
 					}
 					if (player == null) {

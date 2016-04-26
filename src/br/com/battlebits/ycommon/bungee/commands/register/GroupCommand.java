@@ -71,7 +71,8 @@ public class GroupCommand extends CommandClass {
 				ServerType serverType = battleSender.getServerConnectedType();
 				Group actualGroup = player.getGroups().containsKey(serverType) ? player.getGroups().get(serverType) : Group.NORMAL;
 				if (actualGroup == group) {
-					sender.sendMessage(TextComponent.fromLegacyText(groupSetPrefix + Translate.getTranslation(language, "command-groupset-player-already-group")));
+					sender.sendMessage(TextComponent
+							.fromLegacyText(groupSetPrefix + Translate.getTranslation(language, "command-groupset-player-already-group")));
 					return;
 				}
 
@@ -80,12 +81,12 @@ public class GroupCommand extends CommandClass {
 				} else {
 					player.getGroups().put(serverType, group);
 				}
-				if(!player.isOnline()) {
+				if (!player.isOnline()) {
 					BattlebitsAPI.getAccountCommon().saveBattlePlayer(player);
 				}
 				String message = groupSetPrefix + Translate.getTranslation(language, "command-groupset-change-group");
-				message = message.replace("%player%", serverType.toString());
-				message = message.replace("%group%", serverType.toString());
+				message = message.replace("%player%", player.getUserName() + "(" + player.getUuid().toString().replace("-", "") + ")");
+				message = message.replace("%group%", group.name());
 				message = message.replace("%serverType%", serverType.toString());
 				sender.sendMessage(TextComponent.fromLegacyText(message));
 
