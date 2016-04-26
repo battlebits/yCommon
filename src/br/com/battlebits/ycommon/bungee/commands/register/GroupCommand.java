@@ -69,10 +69,11 @@ public class GroupCommand extends CommandClass {
 					}
 				}
 				ServerType serverType = battleSender.getServerConnectedType();
+				if (group.ordinal() > Group.STREAMER.ordinal())
+					serverType = ServerType.NETWORK;
 				Group actualGroup = player.getGroups().containsKey(serverType) ? player.getGroups().get(serverType) : Group.NORMAL;
 				if (actualGroup == group) {
-					sender.sendMessage(TextComponent
-							.fromLegacyText(groupSetPrefix + Translate.getTranslation(language, "command-groupset-player-already-group")));
+					sender.sendMessage(TextComponent.fromLegacyText(groupSetPrefix + Translate.getTranslation(language, "command-groupset-player-already-group")));
 					return;
 				}
 
@@ -87,7 +88,7 @@ public class GroupCommand extends CommandClass {
 				String message = groupSetPrefix + Translate.getTranslation(language, "command-groupset-change-group");
 				message = message.replace("%player%", player.getUserName() + "(" + player.getUuid().toString().replace("-", "") + ")");
 				message = message.replace("%group%", group.name());
-				message = message.replace("%serverType%", serverType.toString());
+				message = message.replace("%serverType%", serverType != null ? serverType.toString() : "null");
 				sender.sendMessage(TextComponent.fromLegacyText(message));
 
 			}
