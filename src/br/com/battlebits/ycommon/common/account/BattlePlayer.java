@@ -202,33 +202,26 @@ public class BattlePlayer {
 
 	public Group getServerGroup() {
 		Group group = Group.NORMAL;
-		System.out.println(groups);
-		System.out.println(ranks);
 		if (!getGroups().isEmpty()) {
-			System.out.println("Possui Grupo");
-			if (getGroups().containsKey(serverConnectedType)) {
-				System.out.println("Tem Grupo no servidor conectado");
-				group = getGroups().get(serverConnectedType);
-			} else if (getGroups().containsKey(ServerType.NETWORK)) {
+			if (getGroups().containsKey(ServerType.NETWORK)) {
 				group = getGroups().get(ServerType.NETWORK);
-				System.out.println("Tem Grupo na network");
+			} else if (getGroups().containsKey(serverConnectedType)) {
+				group = getGroups().get(serverConnectedType);
 			}
 		}
-		if (group == Group.NORMAL)
-			if (!getRanks().isEmpty()) {
-				System.out.println("Ranking n está empty");
-				Collection<Expire> expires = getRanks().values();
-				Expire expire = null;
-				for (Expire expireRank : expires) {
-					if (expire == null) {
-						expire = expireRank;
-					} else if (expireRank.getRankType().ordinal() > expire.getRankType().ordinal()) {
-						expire = expireRank;
-					}
+		if (group == Group.NORMAL) {
+			Collection<Expire> expires = getRanks().values();
+			Expire expire = null;
+			for (Expire expireRank : expires) {
+				if (expire == null) {
+					expire = expireRank;
+				} else if (expireRank.getRankType().ordinal() > expire.getRankType().ordinal()) {
+					expire = expireRank;
 				}
-				if (expire != null)
-					group = Group.valueOf(expire.getRankType().name());
 			}
+			if (expire != null)
+				group = Group.valueOf(expire.getRankType().name());
+		}
 		return group;
 	}
 
