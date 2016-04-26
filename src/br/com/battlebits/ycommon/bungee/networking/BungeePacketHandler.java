@@ -110,14 +110,26 @@ public class BungeePacketHandler extends CommonHandler {
 
 	@Override
 	public void handleBlockPlayer(CPacketAddBlockedPlayer packet) {
-		// TODO Auto-generated method stub
-
+		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(packet.getPlayerUUID());
+		if (player != null) {
+			BattlebitsAPI.debug("ADD BLOCK>" + packet.getPlayerUUID() + "/" + packet.getBlocked().getPlayerUUID());
+			player.getBlockedPlayers().put(packet.getBlocked().getPlayerUUID(), packet.getBlocked());
+			player = null;
+		} else {
+			BattlebitsAPI.getLogger().warning("Ocorreu um erro ao tentar adicionar o block do jogador " + packet.getPlayerUUID() + "!");
+		}
 	}
 
 	@Override
 	public void handleUnblockPlayer(CPacketRemoveBlockedPlayer packet) {
-		// TODO Auto-generated method stub
-
+		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(packet.getPlayer());
+		if (player != null) {
+			BattlebitsAPI.debug("REMOVE BLOCK>" + packet.getPlayer() + "/" + packet.getUnblocked());
+			player.getBlockedPlayers().remove(packet.getUnblocked());
+			player = null;
+		} else {
+			BattlebitsAPI.getLogger().warning("Ocorreu um erro ao tentar remover o block do jogador " + packet.getPlayer() + "!");
+		}
 	}
 
 	@Override
