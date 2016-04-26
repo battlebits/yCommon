@@ -30,6 +30,8 @@ import org.bukkit.help.HelpTopicComparator;
 import org.bukkit.help.IndexHelpTopic;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.SimplePluginManager;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
@@ -46,14 +48,14 @@ public class BukkitCommandFramework {
 
 	private final Map<String, Entry<Method, Object>> commandMap = new HashMap<String, Entry<Method, Object>>();
 	private CommandMap map;
-	private final Plugin plugin;
+	private final JavaPlugin plugin;
 
 	/**
 	 * Initializes the command framework and sets up the command maps
 	 * 
 	 * @param plugin
 	 */
-	public BukkitCommandFramework(Plugin plugin) {
+	public BukkitCommandFramework(JavaPlugin plugin) {
 		this.plugin = plugin;
 		if (plugin.getServer().getPluginManager() instanceof SimplePluginManager) {
 			SimplePluginManager manager = (SimplePluginManager) plugin.getServer().getPluginManager();
@@ -93,19 +95,32 @@ public class BukkitCommandFramework {
 				Entry<Method, Object> entry = commandMap.get(cmdLabel);
 				Command command = entry.getKey().getAnnotation(Command.class);
 				if (sender instanceof Player) {
-					Player p = (Player)sender;
+					Player p = (Player) sender;
 					BattlePlayer bp = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
-					if(!bp.hasGroupPermission(command.groupToUse())){
+					if (!bp.hasGroupPermission(command.groupToUse())) {
 						p.sendMessage(Translate.getTranslation(bp.getLanguage(), command.noPermMessageId()));
 						return true;
 					}
 					bp = null;
 					p = null;
 				}
-				try {
-					entry.getKey().invoke(entry.getValue(), new CommandArgs(sender, cmd, label, args, cmdLabel.split("\\.").length - 1));
-				} catch (IllegalArgumentException | InvocationTargetException | IllegalAccessException e) {
-					e.printStackTrace();
+				if (command.runAsync()) {
+					new BukkitRunnable() {
+						@Override
+						public void run() {
+							try {
+								entry.getKey().invoke(entry.getValue(), new CommandArgs(sender, cmd, label, args, cmdLabel.split("\\.").length - 1));
+							} catch (IllegalArgumentException | InvocationTargetException | IllegalAccessException e) {
+								e.printStackTrace();
+							}
+						}
+					}.runTaskAsynchronously(plugin);
+				} else {
+					try {
+						entry.getKey().invoke(entry.getValue(), new CommandArgs(sender, cmd, label, args, cmdLabel.split("\\.").length - 1));
+					} catch (IllegalArgumentException | InvocationTargetException | IllegalAccessException e) {
+						e.printStackTrace();
+					}
 				}
 				return true;
 			}
@@ -278,6 +293,8 @@ public class BukkitCommandFramework {
 		 * @return
 		 */
 		public String usage() default "";
+
+		public boolean runAsync() default false;
 	}
 
 	/**
