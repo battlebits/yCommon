@@ -36,6 +36,10 @@ public class BukkitPlayer extends BattlePlayer {
 			tag = TagManager.getPlayerDefaultTag(this);
 		return tag;
 	}
+	
+	public void setTag(Tag tag) {
+		this.tag = tag;
+	}
 
 	@Override
 	public void setFakeName(String fakeName) {

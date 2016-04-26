@@ -415,7 +415,8 @@ public class BattlePlayer {
 	public void setLeaveData() {
 		lastLoggedIn = System.currentTimeMillis();
 		onlineTime = getOnlineTime();
-		lastIpAddress = ipAddress.getHostString();
+		if (ipAddress != null)
+			lastIpAddress = ipAddress.getHostString();
 		ipAddress = null;
 		actualParty = null;
 		this.cacheExpire = System.currentTimeMillis() + (60 * 15 * 1000);

@@ -5,6 +5,8 @@ import java.util.UUID;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
+import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
+import br.com.battlebits.ycommon.bukkit.tagmanager.TagManager;
 import br.com.battlebits.ycommon.bungee.managers.BanManager;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
@@ -45,12 +47,13 @@ public class MessageListener implements PluginMessageListener {
 		case "Groupset": {
 			Group group = Group.valueOf(in.readUTF());
 			ServerType serverType = ServerType.valueOf(in.readUTF());
-			BattlePlayer bP = BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId());
+			BukkitPlayer bP = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId());
 			if (group == Group.NORMAL) {
 				bP.getGroups().remove(serverType);
 			} else {
 				bP.getGroups().put(serverType, group);
 			}
+			bP.setTag(TagManager.getPlayerDefaultTag(bP));
 			break;
 		}
 		case "UnmuteConsole": {
