@@ -175,9 +175,9 @@ public class BanCommand extends CommandClass {
 				}
 				Ban ban = null;
 				String playerIp = "";
-				if (player.isOnline() && player.getIpAddress() != null && player.getIpAddress().getHostString() != null) {
+				try{
 					playerIp = player.getIpAddress().getHostString();
-				} else {
+				} catch(Exception ex){
 					playerIp = "OFFLINE";
 				}
 				if (cmdArgs.isPlayer()) {
@@ -307,9 +307,9 @@ public class BanCommand extends CommandClass {
 				}
 				Mute mute = null;
 				String playerIp = "";
-				if (player.isOnline() && player.getIpAddress() != null && player.getIpAddress().getHostString() != null) {
+				try{
 					playerIp = player.getIpAddress().getHostString();
-				} else {
+				} catch(Exception ex){
 					playerIp = "OFFLINE";
 				}
 				if (cmdArgs.isPlayer()) {
@@ -396,9 +396,9 @@ public class BanCommand extends CommandClass {
 				}
 				Mute mute = null;
 				String playerIp = "";
-				if (player.isOnline() && player.getIpAddress() != null && player.getIpAddress().getHostString() != null) {
+				try{
 					playerIp = player.getIpAddress().getHostString();
-				} else {
+				} catch(Exception ex){
 					playerIp = "OFFLINE";
 				}
 				if (cmdArgs.isPlayer()) {
