@@ -2,6 +2,9 @@ package br.com.battlebits.ycommon.bungee.commands.register;
 
 import java.util.UUID;
 
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
+
 import br.com.battlebits.ycommon.bungee.BungeeMain;
 import br.com.battlebits.ycommon.bungee.commands.BungeeCommandFramework.Command;
 import br.com.battlebits.ycommon.bungee.commands.BungeeCommandFramework.CommandArgs;
@@ -15,6 +18,7 @@ import br.com.battlebits.ycommon.common.translate.languages.Language;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class GroupCommand extends CommandClass {
 
@@ -86,6 +90,14 @@ public class GroupCommand extends CommandClass {
 				}
 				if (!player.isOnline()) {
 					BattlebitsAPI.getAccountCommon().saveBattlePlayer(player);
+				}
+				ProxiedPlayer pPlayer = BungeeMain.getPlugin().getProxy().getPlayer(player.getUuid());
+				if (pPlayer != null) {
+					ByteArrayDataOutput out = ByteStreams.newDataOutput();
+					out.writeUTF("Groupset");
+					out.writeUTF(group.toString());
+					out.writeUTF(serverType.toString());
+					pPlayer.getServer().sendData(BattlebitsAPI.getBungeeChannel(), out.toByteArray());
 				}
 				String message = groupSetPrefix + Translate.getTranslation(language, "command-groupset-change-group");
 				message = message.replace("%player%", player.getUserName() + "(" + player.getUuid().toString().replace("-", "") + ")");

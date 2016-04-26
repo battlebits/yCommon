@@ -9,6 +9,8 @@ import br.com.battlebits.ycommon.bungee.managers.BanManager;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.banmanager.constructors.Mute;
+import br.com.battlebits.ycommon.common.enums.ServerType;
+import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import net.minecraft.util.com.google.common.io.ByteArrayDataInput;
 import net.minecraft.util.com.google.common.io.ByteStreams;
@@ -38,6 +40,17 @@ public class MessageListener implements PluginMessageListener {
 			String msg = Translate.getTranslation(bP.getLanguage(), "command-unmute-prefix") + " " + Translate.getTranslation(bP.getLanguage(), "command-unmute-player");
 			msg = msg.replace("%unmutedBy%", userName);
 			player.sendMessage(msg);
+			break;
+		}
+		case "Groupset": {
+			Group group = Group.valueOf(in.readUTF());
+			ServerType serverType = ServerType.valueOf(in.readUTF());
+			BattlePlayer bP = BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId());
+			if (group == Group.NORMAL) {
+				bP.getGroups().remove(serverType);
+			} else {
+				bP.getGroups().put(serverType, group);
+			}
 			break;
 		}
 		case "UnmuteConsole": {
