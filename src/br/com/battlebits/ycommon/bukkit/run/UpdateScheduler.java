@@ -1,8 +1,9 @@
-package br.com.battlebits.ycommon.bukkit.event;
+package br.com.battlebits.ycommon.bukkit.run;
 
 import org.bukkit.Bukkit;
 
-import br.com.battlebits.ycommon.bukkit.event.UpdateEvent.UpdateType;
+import br.com.battlebits.ycommon.bukkit.event.update.UpdateEvent;
+import br.com.battlebits.ycommon.bukkit.event.update.UpdateEvent.UpdateType;
 
 public class UpdateScheduler implements Runnable {
 

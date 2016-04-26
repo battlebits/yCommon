@@ -1,4 +1,4 @@
-package br.com.battlebits.ycommon.bukkit.event;
+package br.com.battlebits.ycommon.bukkit.event.update;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
