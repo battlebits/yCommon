@@ -113,7 +113,7 @@ public class BanCommand extends CommandClass {
 			lang = BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getLanguage();
 		}
 		final Language language = lang;
-		final String banPrefix = Translate.getTranslation(lang, "command-ban-prefix") + " ";
+		final String banPrefix = Translate.getTranslation(lang, "command-tempban-prefix") + " ";
 		if (args.length < 3) {
 			sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(lang, "command-tempban-usage")));
 			return;
@@ -333,7 +333,7 @@ public class BanCommand extends CommandClass {
 		if (cmdArgs.isPlayer()) {
 			lang = BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getLanguage();
 		}
-		final String banPrefix = Translate.getTranslation(lang, "command-mute-prefix") + " ";
+		final String banPrefix = Translate.getTranslation(lang, "command-tempmute-prefix") + " ";
 		if (args.length < 3) {
 			sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(lang, "command-tempmute-usage")));
 			return;
