@@ -1,12 +1,13 @@
 package br.com.battlebits.ycommon.bukkit.accounts;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 
 import br.com.battlebits.ycommon.bukkit.networking.PacketSender;
-import br.com.battlebits.ycommon.bukkit.tagmanager.Tag;
+import br.com.battlebits.ycommon.bukkit.tag.Tag;
 import br.com.battlebits.ycommon.bukkit.tagmanager.TagManager;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.account.game.GameStatus;
@@ -27,16 +28,15 @@ public class BukkitPlayer extends BattlePlayer {
 
 	private Tag tag;
 	private UUID lastTellUUID;
+	private ArrayList<Tag> tags;
 
 	public BukkitPlayer() {
 	}
-	
+
 	public Tag getTag() {
-		if (tag == null)
-			tag = TagManager.getPlayerDefaultTag(this);
 		return tag;
 	}
-	
+
 	public void setTag(Tag tag) {
 		this.tag = tag;
 	}
@@ -139,6 +139,17 @@ public class BukkitPlayer extends BattlePlayer {
 	public void injectConfiguration() {
 		setConfiguration(new BukkitConfiguration(this));
 	}
+	
+	public void loadTags(){
+		tag = TagManager.getPlayerDefaultTag(this);
+		tags = new ArrayList<>();
+		for (Tag t : tag.values()) {
+			if (((t.isExclusive() && ((t.getGroupToUse() == getServerGroup()) || (getServerGroup().ordinal() >= Group.ADMIN.ordinal())))
+					|| (!t.isExclusive() && getServerGroup().ordinal() >= t.getGroupToUse().ordinal()))) {
+				tags.add(t);
+			}
+		}
+	}
 
 	public void updateConfiguration() {
 		try {
@@ -158,6 +169,10 @@ public class BukkitPlayer extends BattlePlayer {
 
 	public boolean hasLastTell() {
 		return this.lastTellUUID != null;
+	}
+
+	public ArrayList<Tag> getTags() {
+		return tags;
 	}
 
 }

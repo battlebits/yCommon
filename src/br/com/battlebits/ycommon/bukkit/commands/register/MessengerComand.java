@@ -113,6 +113,8 @@ public class MessengerComand extends CommandClass {
 			bp = null;
 			args = null;
 			p = null;
+		} else {
+			cmdArgs.getSender().sendMessage("§4§lERRO §fComando disponivel apenas §c§lin-game");
 		}
 	}
 
@@ -194,6 +196,8 @@ public class MessengerComand extends CommandClass {
 			bp = null;
 			args = null;
 			p = null;
+		} else {
+			cmdArgs.getSender().sendMessage("§4§lERRO §fComando disponivel apenas §c§lin-game");
 		}
 	}
 
@@ -243,6 +247,8 @@ public class MessengerComand extends CommandClass {
 			args = null;
 			bp = null;
 			p = null;
+		} else {
+			cmdArgs.getSender().sendMessage("§4§lERRO §fComando disponivel apenas §c§lin-game");
 		}
 	}
 

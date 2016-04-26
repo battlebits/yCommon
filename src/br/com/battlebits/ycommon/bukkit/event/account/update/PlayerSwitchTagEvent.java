@@ -3,7 +3,7 @@ package br.com.battlebits.ycommon.bukkit.event.account.update;
 import org.bukkit.entity.Player;
 
 import br.com.battlebits.ycommon.bukkit.event.PlayerCancellableEvent;
-import br.com.battlebits.ycommon.bukkit.tagmanager.Tag;
+import br.com.battlebits.ycommon.bukkit.tag.Tag;
 
 public class PlayerSwitchTagEvent extends PlayerCancellableEvent {
 

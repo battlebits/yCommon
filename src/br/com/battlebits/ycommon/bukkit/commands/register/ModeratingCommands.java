@@ -21,10 +21,10 @@ public class ModeratingCommands extends CommandClass {
 
 	@SuppressWarnings("deprecation")
 	@Command(name = "gamemode", aliases = { "gm" }, groupToUse = Group.ADMIN, noPermMessageId = "command-gamemode-no-access", runAsync = true)
-	public void gamemode(CommandArgs command) {
-		if (command.isPlayer()) {
-			Player p = command.getPlayer();
-			String[] args = command.getArgs();
+	public void gamemode(CommandArgs cmdArgs) {
+		if (cmdArgs.isPlayer()) {
+			Player p = cmdArgs.getPlayer();
+			String[] args = cmdArgs.getArgs();
 			BattlePlayer bp = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
 			String prefix = Translate.getTranslation(bp.getLanguage(), "command-gamemode-prefix") + " ";
 			if (args.length == 0) {
@@ -73,7 +73,7 @@ public class ModeratingCommands extends CommandClass {
 			args = null;
 			p = null;
 		} else {
-			command.getSender().sendMessage("§4§lERRO §fComando disponivel apenas §c§lin-game");
+			cmdArgs.getSender().sendMessage("§4§lERRO §fComando disponivel apenas §c§lin-game");
 		}
 		// TODO: ALERT STAFFS
 	}

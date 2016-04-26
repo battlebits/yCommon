@@ -54,6 +54,7 @@ public class MessageListener implements PluginMessageListener {
 				bP.getGroups().put(serverType, group);
 			}
 			bP.setTag(TagManager.getPlayerDefaultTag(bP));
+			bP.loadTags();
 			break;
 		}
 		case "UnmuteConsole": {
