@@ -288,7 +288,7 @@ public class BanCommand extends CommandClass {
 				}
 				Mute actualMute = player.getBanHistory().getActualMute();
 				if (actualMute != null && !actualMute.isUnmuted() && actualMute.isPermanent()) {
-					sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "already-muted")));
+					sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "command-mute-already-muted")));
 					return;
 				}
 				if (player.isStaff()) {
@@ -370,7 +370,7 @@ public class BanCommand extends CommandClass {
 				}
 				Mute actualMute = player.getBanHistory().getActualMute();
 				if (actualMute != null && !actualMute.isUnmuted() && actualMute.isPermanent()) {
-					sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "already-muted")));
+					sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "command-mute-already-muted")));
 					return;
 				}
 				if (player.isStaff()) {
