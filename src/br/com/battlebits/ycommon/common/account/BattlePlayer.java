@@ -408,6 +408,7 @@ public class BattlePlayer {
 		joinTime = System.currentTimeMillis();
 		this.countryCode = countryCode;
 		this.online = true;
+		this.serverConnectedType = ServerType.NONE;
 		updateCache();
 	}
 
@@ -419,7 +420,6 @@ public class BattlePlayer {
 		actualParty = null;
 		this.cacheExpire = System.currentTimeMillis() + (60 * 15 * 1000);
 		this.online = false;
-		this.serverConnectedType = ServerType.NONE;
 	}
 
 	@Override
