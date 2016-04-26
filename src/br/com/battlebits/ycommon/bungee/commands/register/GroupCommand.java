@@ -25,10 +25,6 @@ public class GroupCommand extends CommandClass {
 	@Command(name = "groupset", usage = "/<command> <player> <group>", groupToUse = Group.MANAGER, noPermMessageId = "command-groupset-no-access")
 	public void groupset(CommandArgs cmdArgs) {
 		final CommandSender sender = cmdArgs.getSender();
-		if (!cmdArgs.isPlayer()) {
-			sender.sendMessage(TextComponent.fromLegacyText("§4§lERRO §fComando disponivel apenas §c§lin-game"));
-			return;
-		}
 		final String[] args = cmdArgs.getArgs();
 		Language lang = BattlebitsAPI.getDefaultLanguage();
 		final Language language = lang;
@@ -45,12 +41,23 @@ public class GroupCommand extends CommandClass {
 			return;
 		}
 		final Group group = grupo;
-		BattlePlayer battleSender = BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId());
-		if (battleSender.getServerGroup() != Group.DONO)
+		boolean owner = false;
+		ServerType type = ServerType.NONE;
+		if (cmdArgs.isPlayer()) {
+			BattlePlayer battleSender = BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId());
+			type = battleSender.getServerConnectedType();
+			if (battleSender.getServerGroup() == Group.DONO)
+				owner = true;
+		} else {
+			owner = true;
+			type = ServerType.NETWORK;
+		}
+		if (!owner)
 			if (group.ordinal() > Group.STREAMER.ordinal()) {
 				sender.sendMessage(TextComponent.fromLegacyText(groupSetPrefix + Translate.getTranslation(lang, "command-groupset-group-not-owner")));
 				return;
 			}
+		final ServerType typep = type;
 		BungeeCord.getInstance().getScheduler().runAsync(BungeeMain.getPlugin(), new Runnable() {
 			public void run() {
 				UUID uuid = BattlebitsAPI.getUUIDOf(args[0]);
@@ -72,7 +79,7 @@ public class GroupCommand extends CommandClass {
 						return;
 					}
 				}
-				ServerType serverType = battleSender.getServerConnectedType();
+				ServerType serverType = typep;
 				if (group.ordinal() > Group.STREAMER.ordinal())
 					serverType = ServerType.NETWORK;
 				Group actualGroup = player.getGroups().containsKey(serverType) ? player.getGroups().get(serverType) : Group.NORMAL;
@@ -82,8 +89,9 @@ public class GroupCommand extends CommandClass {
 				}
 
 				if (group == Group.NORMAL) {
-					if (player.getGroups().containsKey(ServerType.NETWORK) && battleSender.getServerGroup() == Group.DONO)
-						serverType = ServerType.NETWORK;
+					if (serverType != ServerType.NETWORK)
+						if (player.getGroups().containsKey(ServerType.NETWORK) && cmdArgs.isPlayer() && BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).isOnline())
+							serverType = ServerType.NETWORK;
 					player.getGroups().remove(serverType);
 				} else {
 					player.getGroups().put(serverType, group);
