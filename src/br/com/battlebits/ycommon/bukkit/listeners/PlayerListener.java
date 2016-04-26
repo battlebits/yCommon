@@ -18,7 +18,7 @@ public class PlayerListener implements Listener {
 	// [CLAN] RANK Nick (LigaSymbol) >>
 	// [TEMPO] DONO GustavoInacio (*) >>
 
-	@EventHandler(ignoreCancelled = true)
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
 	public void onPreProcessCommand(PlayerCommandPreprocessEvent event) {
 		if (event.getMessage().toLowerCase().startsWith("/me ")) {
 			event.getPlayer().sendMessage(ChatColor.RED + "Voce nao pode utilizar o comando 'me'");
@@ -34,20 +34,26 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onChat(AsyncPlayerChatEvent event) {
 		BukkitPlayer player = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(event.getPlayer().getUniqueId());
-		String format = null;
 		for (Player r : Bukkit.getOnlinePlayers()) {
 			BukkitPlayer receiver = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(r.getUniqueId());
-			format = "";
-			if (player.getActualClan() == null) {
-				format = player.getTag().getPrefix(receiver.getLanguage()) + " " + ChatColor.WHITE + player.getUserName() + ChatColor.GRAY + " (" + player.getLiga().getSymbol() + ChatColor.GRAY + ") " + ChatColor.GOLD + ">> " + ChatColor.WHITE;
-			} else {
-				format = "[" + player.getActualClan().getAbbreviation() + "] " + player.getTag().getPrefix(receiver.getLanguage()) + " " + ChatColor.WHITE + player.getUserName() + ChatColor.GRAY + " (" + player.getLiga().getSymbol() + ChatColor.GRAY + ") " + ChatColor.GOLD + ">> " + ChatColor.WHITE;
+			if ((!receiver.getConfiguration().isIgnoreAll()) && (!receiver.getBlockedPlayers().containsKey(player.getUuid())
+					&& (!player.getBlockedPlayers().containsKey(receiver.getUuid())))) {
+				String format = "";
+				if (player.getActualClan() == null) {
+					format = player.getTag().getPrefix(receiver.getLanguage()) + " " + ChatColor.WHITE + player.getUserName() + ChatColor.GRAY + " ("
+							+ player.getLiga().getSymbol() + ChatColor.GRAY + ") " + ChatColor.GOLD + ">> " + ChatColor.WHITE;
+				} else {
+					format = "[" + player.getActualClan().getAbbreviation() + "] " + player.getTag().getPrefix(receiver.getLanguage()) + " "
+							+ ChatColor.WHITE + player.getUserName() + ChatColor.GRAY + " (" + player.getLiga().getSymbol() + ChatColor.GRAY + ") "
+							+ ChatColor.GOLD + ">> " + ChatColor.WHITE;
+				}
+				r.sendMessage(format + event.getMessage());
+				format = null;
 			}
-			r.sendMessage(format + event.getMessage());
+			receiver = null;
 		}
 		BukkitMain.getPlugin().getLogger().info("<" + player.getUserName() + "> " + event.getMessage());
 		event.setCancelled(true);
-		format = null;
 		player = null;
 	}
 
