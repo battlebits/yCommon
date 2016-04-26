@@ -30,11 +30,11 @@ public class BungeeMain extends Plugin {
 	private static BungeeMain plugin;
 	private MySQLBackend mysql;
 	// MYSQL DATA
-	private String hostname = "localhost";
+	private String hostname = "ycommon";
 	private int port = 3306;
 	private String database = "ycommon";
 	private String username = "root";
-	private String password = "saobestanime";
+	private String password = "qhu6fvCu5X8ZH7TY";
 
 	private Configuration config;
 
