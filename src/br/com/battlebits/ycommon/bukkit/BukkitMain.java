@@ -15,10 +15,13 @@ import br.com.battlebits.ycommon.bukkit.injector.Injector;
 import br.com.battlebits.ycommon.bukkit.injector.WindowInjector;
 import br.com.battlebits.ycommon.bukkit.listeners.ChatListener;
 import br.com.battlebits.ycommon.bukkit.listeners.PlayerListener;
+import br.com.battlebits.ycommon.bukkit.listeners.ScoreboardListener;
+import br.com.battlebits.ycommon.bukkit.listeners.TagListener;
 import br.com.battlebits.ycommon.bukkit.networking.BukkitHandler;
 import br.com.battlebits.ycommon.bukkit.networking.PacketSender;
 import br.com.battlebits.ycommon.bukkit.permissions.PermissionManager;
 import br.com.battlebits.ycommon.bukkit.run.UpdateScheduler;
+import br.com.battlebits.ycommon.bukkit.scoreboard.BattleScoreboard;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.enums.BattleInstance;
@@ -39,6 +42,8 @@ public class BukkitMain extends JavaPlugin {
 	
 	private BukkitCommandLoader bukkitCommandLoader;
 	private BukkitCommandFramework bukkitCommandFramework;
+	
+	private BattleScoreboard battleScoreboard;
 
 	{
 		plugin = this;
@@ -57,6 +62,7 @@ public class BukkitMain extends JavaPlugin {
 		this.getServer().getMessenger().registerIncomingPluginChannel(this, BattlebitsAPI.getBungeeChannel(), new MessageListener());
 		this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 		this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new MessageListener());
+		battleScoreboard = new BattleScoreboard();
 		try {
 			loadTranslations();
 		} catch (IOException e) {
@@ -88,6 +94,8 @@ public class BukkitMain extends JavaPlugin {
 	private void registerListeners() {
 		getServer().getPluginManager().registerEvents(new ChatListener(), this);
 		getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+		getServer().getPluginManager().registerEvents(new ScoreboardListener(), this);
+		getServer().getPluginManager().registerEvents(new TagListener(this), this);
 	}
 
 	private void registerCommonManagement() {
@@ -126,6 +134,10 @@ public class BukkitMain extends JavaPlugin {
 
 	public BukkitAccount getAccountManager() {
 		return accountManager;
+	}
+	
+	public BattleScoreboard getBattleScoreboard() {
+		return battleScoreboard;
 	}
 
 	public BukkitCommandLoader getBukkitCommandLoader() {
