@@ -12,7 +12,6 @@ import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.commands.CommandClass;
 import br.com.battlebits.ycommon.common.enums.ServerType;
-import br.com.battlebits.ycommon.common.payment.constructors.Expire;
 import br.com.battlebits.ycommon.common.payment.enums.RankType;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.translate.Translate;
@@ -174,12 +173,12 @@ public class GroupCommand extends CommandClass {
 					sender.sendMessage(TextComponent.fromLegacyText(giveVipPrefix + Translate.getTranslation(language, "command-givevip-rank-not-exist")));
 					return;
 				}
+				long newAdd = System.currentTimeMillis();
 				if (player.getRanks().containsKey(rank)) {
-					player.getRanks().get(rank).addLong(expiresCheck);
-				} else {
-					player.getRanks().put(rank, new Expire(player.getUuid(), expiresCheck, rank));
+					newAdd = player.getRanks().get(rank);
 				}
-
+				newAdd = newAdd + expiresCheck;
+				player.getRanks().put(rank, newAdd);
 				if (!player.isOnline()) {
 					BattlebitsAPI.getAccountCommon().saveBattlePlayer(player);
 				}

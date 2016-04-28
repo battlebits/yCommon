@@ -6,13 +6,12 @@ import br.com.battlebits.ycommon.common.account.BattlePlayer;
 
 public class Ban {
 
-	private UUID bannedPlayer;
 	private String bannedBy;
+	private UUID bannedByUUID;
 	private String bannedIp;
 
 	private String server;
 
-	private UUID bannedByUUID;
 	private long banTime;
 	private String reason;
 
@@ -24,24 +23,23 @@ public class Ban {
 	private long expire;
 	private long duration;
 
-	public Ban(UUID bannedPlayer, String bannedBy, String bannedIp, String server, String reason, long duration) {
-		this(bannedPlayer, bannedBy, null, bannedIp, server, reason, duration);
+	public Ban(String bannedBy, String bannedIp, String server, String reason, long duration) {
+		this(bannedBy, null, bannedIp, server, reason, duration);
 	}
 
-	public Ban(UUID bannedPlayer, String bannedBy, UUID bannedByUuid, String bannedIp, String server, String reason, long expire) {
-		this(bannedPlayer, bannedBy, bannedIp, server, bannedByUuid, System.currentTimeMillis(), reason, false, null, null, -1, expire, expire - System.currentTimeMillis());
+	public Ban(String bannedBy, UUID bannedByUuid, String bannedIp, String server, String reason, long expire) {
+		this(bannedBy, bannedIp, server, bannedByUuid, System.currentTimeMillis(), reason, false, null, null, -1, expire, expire - System.currentTimeMillis());
 	}
 
-	public Ban(UUID bannedPlayer, String bannedBy, String bannedIp, String server, String reason) {
-		this(bannedPlayer, bannedBy, null, bannedIp, server, reason);
+	public Ban(String bannedBy, String bannedIp, String server, String reason) {
+		this(bannedBy, null, bannedIp, server, reason);
 	}
 
-	public Ban(UUID bannedPlayer, String bannedBy, UUID bannedByUuid, String bannedIp, String server, String reason) {
-		this(bannedPlayer, bannedBy, bannedIp, server, bannedByUuid, System.currentTimeMillis(), reason, false, null, null, -1, -1, -1);
+	public Ban(String bannedBy, UUID bannedByUuid, String bannedIp, String server, String reason) {
+		this(bannedBy, bannedIp, server, bannedByUuid, System.currentTimeMillis(), reason, false, null, null, -1, -1, -1);
 	}
 
-	public Ban(UUID bannedPlayer, String bannedBy, String bannedIp, String server, UUID bannedByUUID, long banTime, String reason, boolean unbanned, String unbannedBy, UUID unbannedByUUID, long unbanTime, long expire, long duration) {
-		this.bannedPlayer = bannedPlayer;
+	public Ban(String bannedBy, String bannedIp, String server, UUID bannedByUUID, long banTime, String reason, boolean unbanned, String unbannedBy, UUID unbannedByUUID, long unbanTime, long expire, long duration) {
 		this.bannedBy = bannedBy;
 		this.bannedIp = bannedIp;
 		this.bannedByUUID = bannedByUUID;
@@ -54,10 +52,6 @@ public class Ban {
 		this.unbanTime = unbanTime;
 		this.expire = expire;
 		this.duration = duration;
-	}
-
-	public UUID getBannedPlayer() {
-		return bannedPlayer;
 	}
 
 	public String getBannedBy() {

@@ -6,7 +6,6 @@ import br.com.battlebits.ycommon.common.account.BattlePlayer;
 
 public class Mute {
 
-	private UUID mutedPlayer;
 	private String mutedBy;
 	private String mutedIp;
 
@@ -24,24 +23,23 @@ public class Mute {
 	private long expire;
 	private long duration;
 
-	public Mute(UUID mutedPlayer, String mutedBy, String mutedIp, String server, String reason, long duration) {
-		this(mutedPlayer, mutedBy, null, mutedIp, server, reason, duration);
+	public Mute(String mutedBy, String mutedIp, String server, String reason, long duration) {
+		this(mutedBy, null, mutedIp, server, reason, duration);
 	}
 
-	public Mute(UUID mutedPlayer, String mutedBy, UUID mutedByUuid, String mutedIp, String server, String reason, long expire) {
-		this(mutedPlayer, mutedBy, mutedIp, server, mutedByUuid, System.currentTimeMillis(), reason, false, null, null, -1, expire, expire - System.currentTimeMillis());
+	public Mute(String mutedBy, UUID mutedByUuid, String mutedIp, String server, String reason, long expire) {
+		this(mutedBy, mutedIp, server, mutedByUuid, System.currentTimeMillis(), reason, false, null, null, -1, expire, expire - System.currentTimeMillis());
 	}
 
-	public Mute(UUID mutedPlayer, String mutedBy, String mutedIp, String server, String reason) {
-		this(mutedPlayer, mutedBy, null, mutedIp, server, reason);
+	public Mute(String mutedBy, String mutedIp, String server, String reason) {
+		this(mutedBy, null, mutedIp, server, reason);
 	}
 
-	public Mute(UUID mutedPlayer, String mutedBy, UUID mutedByUuid, String mutedIp, String server, String reason) {
-		this(mutedPlayer, mutedBy, mutedIp, server, mutedByUuid, System.currentTimeMillis(), reason, false, null, null, -1, -1, -1);
+	public Mute(String mutedBy, UUID mutedByUuid, String mutedIp, String server, String reason) {
+		this(mutedBy, mutedIp, server, mutedByUuid, System.currentTimeMillis(), reason, false, null, null, -1, -1, -1);
 	}
 
-	public Mute(UUID mutedPlayer, String mutedBy, String mutedIp, String server, UUID mutedByUUID, long muteTime, String reason, boolean unmuted, String unmutedBy, UUID unmutedByUUID, long unmuteTime, long expire, long duration) {
-		this.mutedPlayer = mutedPlayer;
+	public Mute(String mutedBy, String mutedIp, String server, UUID mutedByUUID, long muteTime, String reason, boolean unmuted, String unmutedBy, UUID unmutedByUUID, long unmuteTime, long expire, long duration) {
 		this.mutedBy = mutedBy;
 		this.mutedIp = mutedIp;
 		this.mutedByUUID = mutedByUUID;
@@ -54,10 +52,6 @@ public class Mute {
 		this.unmuteTime = unmuteTime;
 		this.expire = expire;
 		this.duration = duration;
-	}
-
-	public UUID getMutedPlayer() {
-		return mutedPlayer;
 	}
 
 	public String getMutedBy() {
@@ -125,7 +119,7 @@ public class Mute {
 	public void unmute(BattlePlayer unmutePlayer) {
 		unmute(unmutePlayer.getUuid(), unmutePlayer.getUserName());
 	}
-	
+
 	public void unmute(UUID unmuteUuid, String unmuteName) {
 		this.unmuted = true;
 		this.unmutedBy = unmuteName;

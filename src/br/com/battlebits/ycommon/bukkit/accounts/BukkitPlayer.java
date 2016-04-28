@@ -19,7 +19,6 @@ import br.com.battlebits.ycommon.common.friends.block.Blocked;
 import br.com.battlebits.ycommon.common.friends.request.Request;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAccountConfiguration;
 import br.com.battlebits.ycommon.common.party.Party;
-import br.com.battlebits.ycommon.common.payment.constructors.Expire;
 import br.com.battlebits.ycommon.common.payment.enums.RankType;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.translate.Translate;
@@ -68,7 +67,7 @@ public class BukkitPlayer extends BattlePlayer {
 	}
 
 	@Override
-	public void updateRanks(Map<RankType, Expire> ranks) {
+	public void updateRanks(Map<RankType, Long> ranks) {
 		super.updateRanks(ranks);
 	}
 
@@ -140,13 +139,12 @@ public class BukkitPlayer extends BattlePlayer {
 	public void injectConfiguration() {
 		setConfiguration(new BukkitConfiguration(this));
 	}
-	
-	public void loadTags(){
+
+	public void loadTags() {
 		tag = TagManager.getPlayerDefaultTag(this);
 		tags = new ArrayList<>();
 		for (Tag t : Tag.values()) {
-			if (((t.isExclusive() && ((t.getGroupToUse() == getServerGroup()) || (getServerGroup().ordinal() >= Group.ADMIN.ordinal())))
-					|| (!t.isExclusive() && getServerGroup().ordinal() >= t.getGroupToUse().ordinal()))) {
+			if (((t.isExclusive() && ((t.getGroupToUse() == getServerGroup()) || (getServerGroup().ordinal() >= Group.ADMIN.ordinal()))) || (!t.isExclusive() && getServerGroup().ordinal() >= t.getGroupToUse().ordinal()))) {
 				tags.add(t);
 			}
 		}

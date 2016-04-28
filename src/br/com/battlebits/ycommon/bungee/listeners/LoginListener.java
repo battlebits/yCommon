@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import br.com.battlebits.ycommon.bungee.BungeeMain;
@@ -73,10 +74,10 @@ public class LoginListener implements Listener {
 				BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(event.getConnection().getUniqueId());
 
 				if (player.getBanHistory().getActualBan() == null) {
-					Ban ipBan = BungeeMain.getPlugin().getBanManager().getIpBan(ipAdress);
+					Entry<UUID, Ban> ipBan = BungeeMain.getPlugin().getBanManager().getIpBan(ipAdress);
 					if (ipBan != null) {
-						if (!ipBan.getBannedPlayer().equals(player.getUuid()))
-							BungeeMain.getPlugin().getBanManager().ban(player, new Ban(player.getUuid(), "CONSOLE", ipAdress.getHostString(), Translate.getTranslation(player.getLanguage(), "alt-account"), "proxy"));
+						if (!ipBan.getKey().equals(player.getUuid()))
+							BungeeMain.getPlugin().getBanManager().ban(player, new Ban("CONSOLE", ipAdress.getHostString(), Translate.getTranslation(player.getLanguage(), "alt-account"), "proxy"));
 					}
 				}
 				Ban ban = player.getBanHistory().getActualBan();

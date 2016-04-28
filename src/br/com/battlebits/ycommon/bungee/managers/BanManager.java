@@ -1,7 +1,10 @@
 package br.com.battlebits.ycommon.bungee.managers;
 
 import java.net.InetSocketAddress;
+import java.util.AbstractMap;
 import java.util.Calendar;
+import java.util.Map.Entry;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.cache.Cache;
@@ -25,12 +28,12 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class BanManager {
-	private Cache<InetSocketAddress, Ban> banCache;
+	private Cache<InetSocketAddress, Entry<UUID, Ban>> banCache;
 
 	public BanManager() {
-		banCache = CacheBuilder.newBuilder().expireAfterWrite(30L, TimeUnit.MINUTES).build(new CacheLoader<InetSocketAddress, Ban>() {
+		banCache = CacheBuilder.newBuilder().expireAfterWrite(30L, TimeUnit.MINUTES).build(new CacheLoader<InetSocketAddress, Entry<UUID, Ban>>() {
 			@Override
-			public Ban load(InetSocketAddress name) throws Exception {
+			public Entry<UUID, Ban> load(InetSocketAddress name) throws Exception {
 				return null;
 			}
 		});
@@ -63,10 +66,10 @@ public class BanManager {
 				out.writeUTF("Ban");
 				pPlayer.getServer().sendData(BattlebitsAPI.getBungeeChannel(), out.toByteArray());
 			}
+			if (player.getIpAddress() != null)
+				banCache.put(player.getIpAddress(), new AbstractMap.SimpleEntry<UUID, Ban>(player.getUuid(), ban));
 			pPlayer.disconnect(getBanKickMessageBase(ban, player.getLanguage()));
 		}
-		if (player.getIpAddress() != null)
-			banCache.put(player.getIpAddress(), ban);
 	}
 
 	public void unban(BattlePlayer bannedByPlayer, BattlePlayer player, Ban ban) {
@@ -145,7 +148,7 @@ public class BanManager {
 		}
 	}
 
-	public Ban getIpBan(InetSocketAddress address) {
+	public Entry<UUID, Ban> getIpBan(InetSocketAddress address) {
 		return banCache.asMap().get(address);
 	}
 

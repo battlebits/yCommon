@@ -14,7 +14,6 @@ import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.banmanager.constructors.Mute;
 import br.com.battlebits.ycommon.common.enums.ServerType;
-import br.com.battlebits.ycommon.common.payment.constructors.Expire;
 import br.com.battlebits.ycommon.common.payment.enums.RankType;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.translate.Translate;
@@ -74,11 +73,12 @@ public class MessageListener implements PluginMessageListener {
 			BattlePlayer bP = BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId());
 			RankType rank = RankType.valueOf(in.readUTF());
 			long expiresCheck = in.readLong();
+			long newAdd = System.currentTimeMillis();
 			if (bP.getRanks().containsKey(rank)) {
-				bP.getRanks().get(rank).addLong(expiresCheck);
-			} else {
-				bP.getRanks().put(rank, new Expire(bP.getUuid(), expiresCheck, rank));
+				newAdd = bP.getRanks().get(rank);
 			}
+			newAdd = newAdd + expiresCheck;
+			bP.getRanks().put(rank, newAdd);
 			String givevip = Translate.getTranslation(bP.getLanguage(), "command-givevip-player-added");
 			givevip = givevip.replace("%rank%", Tag.valueOf(rank.name()).getPrefix(bP.getLanguage()));
 			givevip = givevip.replace("%duration%", DateUtils.formatDifference(bP.getLanguage(), expiresCheck / 1000));

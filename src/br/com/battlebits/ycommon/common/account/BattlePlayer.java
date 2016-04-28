@@ -2,10 +2,10 @@ package br.com.battlebits.ycommon.common.account;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
@@ -18,7 +18,6 @@ import br.com.battlebits.ycommon.common.friends.Friend;
 import br.com.battlebits.ycommon.common.friends.block.Blocked;
 import br.com.battlebits.ycommon.common.friends.request.Request;
 import br.com.battlebits.ycommon.common.party.Party;
-import br.com.battlebits.ycommon.common.payment.constructors.Expire;
 import br.com.battlebits.ycommon.common.payment.enums.RankType;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
@@ -49,7 +48,7 @@ public class BattlePlayer {
 
 	// GRUPOS
 	private Map<ServerType, Group> groups;
-	private Map<RankType, Expire> ranks;
+	private Map<RankType, Long> ranks;
 
 	// AMIGOS
 	private Map<UUID, Friend> friends;
@@ -211,17 +210,16 @@ public class BattlePlayer {
 			}
 		}
 		if (group == Group.NORMAL) {
-			Collection<Expire> expires = getRanks().values();
-			Expire expire = null;
-			for (Expire expireRank : expires) {
+			RankType expire = null;
+			for (Entry<RankType, Long> expireRank : getRanks().entrySet()) {
 				if (expire == null) {
-					expire = expireRank;
-				} else if (expireRank.getRankType().ordinal() > expire.getRankType().ordinal()) {
-					expire = expireRank;
+					expire = expireRank.getKey();
+				} else if (expireRank.getKey().ordinal() > expire.ordinal()) {
+					expire = expireRank.getKey();
 				}
 			}
 			if (expire != null)
-				group = Group.valueOf(expire.getRankType().name());
+				group = Group.valueOf(expire.name());
 		}
 		return group;
 	}
@@ -239,7 +237,7 @@ public class BattlePlayer {
 		return false;
 	}
 
-	public Map<RankType, Expire> getRanks() {
+	public Map<RankType, Long> getRanks() {
 		return ranks;
 	}
 
@@ -335,7 +333,7 @@ public class BattlePlayer {
 		this.groups = groups;
 	}
 
-	public void updateRanks(Map<RankType, Expire> ranks) {
+	public void updateRanks(Map<RankType, Long> ranks) {
 		this.ranks = ranks;
 	}
 
