@@ -37,7 +37,8 @@ public class PlayerListener implements Listener {
 		for (Player r : Bukkit.getOnlinePlayers()) {
 			BukkitPlayer receiver = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(r.getUniqueId());
 			if ((!receiver.getConfiguration().isIgnoreAll()) && (!receiver.getBlockedPlayers().containsKey(player.getUuid()) && (!player.getBlockedPlayers().containsKey(receiver.getUuid())))) {
-				String format = player.getTag().getPrefix(receiver.getLanguage()) + " " + player.getUserName() + ChatColor.GRAY + " (" + player.getLiga().getSymbol() + ChatColor.GRAY + ") " + ChatColor.WHITE + ": ";
+				String tag = player.getTag().getPrefix(receiver.getLanguage());
+				String format = tag + (ChatColor.stripColor(tag).trim().length() > 0 ? " " : "") + player.getTag().getPrefix(receiver.getLanguage()) + " " + player.getUserName() + ChatColor.GRAY + " (" + player.getLiga().getSymbol() + ChatColor.GRAY + ") " + ChatColor.WHITE + ": ";
 				if (player.getActualClan() != null) {
 					format = "[" + player.getActualClan().getAbbreviation() + "] " + format;
 				}

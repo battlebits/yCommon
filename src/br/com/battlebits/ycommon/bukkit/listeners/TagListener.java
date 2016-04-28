@@ -1,6 +1,7 @@
 package br.com.battlebits.ycommon.bukkit.listeners;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -37,7 +38,8 @@ public class TagListener implements Listener {
 					if (o.getPlayer().getUniqueId() != e.getPlayer().getUniqueId()) {
 						BukkitPlayer bp = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(o.getUniqueId());
 						String id2 = getTeamName(bp.getTag(), bp.getLiga());
-						main.getBattleScoreboard().createTeam(p, id2, bp.getTag().getPrefix(player.getLanguage()) + " ", " §7(" + bp.getLiga().getSymbol() + "§7)");
+						String tag = player.getTag().getPrefix(player.getLanguage());
+						main.getBattleScoreboard().createTeam(p, id2, tag + (ChatColor.stripColor(tag).trim().length() > 0 ? " " : ""), " §7(" + bp.getLiga().getSymbol() + "§7)");
 						main.getBattleScoreboard().joinTeam(p, o, id2);
 						bp = null;
 					}
@@ -57,7 +59,8 @@ public class TagListener implements Listener {
 		String id = getTeamName(e.getNewTag(), player.getLiga());
 		for (Player o : Bukkit.getOnlinePlayers()) {
 			BukkitPlayer bp = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(o.getUniqueId());
-			main.getBattleScoreboard().createTeam(o, id, e.getNewTag().getPrefix(bp.getLanguage()) + " ", " §7(" + player.getLiga().getSymbol() + "§7)");
+			String tag = e.getNewTag().getPrefix(bp.getLanguage());
+			main.getBattleScoreboard().createTeam(o, id, tag + (ChatColor.stripColor(tag).trim().length() > 0 ? " " : ""), " §7(" + player.getLiga().getSymbol() + "§7)");
 			main.getBattleScoreboard().joinTeam(o, p, id);
 			bp = null;
 			o = null;
