@@ -73,18 +73,14 @@ public class MessageListener implements PluginMessageListener {
 			BattlePlayer bP = BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId());
 			RankType rank = RankType.valueOf(in.readUTF());
 			long expiresCheck = in.readLong();
-			Expire expire = null;
 			if (bP.getRanks().containsKey(rank)) {
-				expire = bP.getRanks().get(rank);
-				expire.addLong(expiresCheck);
+				bP.getRanks().get(rank).addLong(expiresCheck);
 			} else {
-				expire = new Expire(bP.getUuid(), expiresCheck, rank);
-				bP.getRanks().put(rank, expire);
+				bP.getRanks().put(rank, new Expire(bP.getUuid(), expiresCheck, rank));
 			}
 			String givevip = Translate.getTranslation(bP.getLanguage(), "command-givevip-player-added");
-			givevip = givevip.replace("%player%", bP.getUserName() + "(" + bP.getUuid().toString().replace("-", "") + ")");
 			givevip = givevip.replace("%rank%", rank.name());
-			givevip = givevip.replace("%duration%", DateUtils.formatDifference(bP.getLanguage(), expire.getDuration() / 1000));
+			givevip = givevip.replace("%duration%", DateUtils.formatDifference(bP.getLanguage(), expiresCheck / 1000));
 			player.sendMessage("");
 			player.sendMessage(givevip);
 			player.sendMessage("");

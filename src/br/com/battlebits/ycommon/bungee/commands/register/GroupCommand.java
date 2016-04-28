@@ -174,13 +174,10 @@ public class GroupCommand extends CommandClass {
 					sender.sendMessage(TextComponent.fromLegacyText(giveVipPrefix + Translate.getTranslation(language, "command-givevip-rank-not-exist")));
 					return;
 				}
-				Expire expire = null;
 				if (player.getRanks().containsKey(rank)) {
-					expire = player.getRanks().get(rank);
-					expire.addLong(expiresCheck);
+					player.getRanks().get(rank).addLong(expiresCheck);
 				} else {
-					expire = new Expire(uuid, expiresCheck, rank);
-					player.getRanks().put(rank, expire);
+					player.getRanks().put(rank, new Expire(player.getUuid(), expiresCheck, rank));
 				}
 
 				if (!player.isOnline()) {
@@ -197,7 +194,7 @@ public class GroupCommand extends CommandClass {
 				String message = giveVipPrefix + Translate.getTranslation(language, "command-givevip-added");
 				message = message.replace("%player%", player.getUserName() + "(" + player.getUuid().toString().replace("-", "") + ")");
 				message = message.replace("%rank%", rank.name());
-				message = message.replace("%duration%", DateUtils.formatDifference(language, expire.getDuration() / 1000));
+				message = message.replace("%duration%", DateUtils.formatDifference(language, expiresCheck / 1000));
 				sender.sendMessage(TextComponent.fromLegacyText(message));
 
 			}
