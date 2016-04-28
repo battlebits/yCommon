@@ -3,7 +3,6 @@ package br.com.battlebits.ycommon.bungee.utils;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
@@ -31,35 +30,16 @@ public class GeoIpUtils {
 		return null;
 	}
 
-	private static String getUrlSource(String url) {
-		URL url2 = null;
-		try {
-			url2 = new URL(url);
-		} catch (MalformedURLException localMalformedURLException) {
-		}
-		URLConnection yc = null;
-		try {
-			yc = url2.openConnection();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		BufferedReader in = null;
-		try {
-			in = new BufferedReader(new InputStreamReader(yc.getInputStream(), "UTF-8"));
-		} catch (IOException localIOException1) {
-		}
+	private static String getUrlSource(String url) throws IOException {
+		URL url2 = new URL(url);
+		URLConnection yc = url2.openConnection();
+		BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream(), "UTF-8"));
 		StringBuilder a = new StringBuilder();
-		try {
-			String inputLine;
-			while ((inputLine = in.readLine()) != null) {
-				a.append(inputLine);
-			}
-		} catch (IOException localIOException2) {
+		String inputLine;
+		while ((inputLine = in.readLine()) != null) {
+			a.append(inputLine);
 		}
-		try {
-			in.close();
-		} catch (IOException localIOException3) {
-		}
+		in.close();
 		return a.toString();
 	}
 
