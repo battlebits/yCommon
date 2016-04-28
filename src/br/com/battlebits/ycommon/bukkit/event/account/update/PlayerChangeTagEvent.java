@@ -5,12 +5,12 @@ import org.bukkit.entity.Player;
 import br.com.battlebits.ycommon.bukkit.event.PlayerCancellableEvent;
 import br.com.battlebits.ycommon.bukkit.tag.Tag;
 
-public class PlayerSwitchTagEvent extends PlayerCancellableEvent {
+public class PlayerChangeTagEvent extends PlayerCancellableEvent {
 
 	private Tag oldTag;
 	private Tag newTag;
 
-	public PlayerSwitchTagEvent(Player p, Tag oldTag, Tag newTag) {
+	public PlayerChangeTagEvent(Player p, Tag oldTag, Tag newTag) {
 		super(p);
 		this.oldTag = oldTag;
 		this.newTag = newTag;
