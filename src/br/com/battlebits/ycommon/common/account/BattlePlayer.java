@@ -20,6 +20,7 @@ import br.com.battlebits.ycommon.common.friends.request.Request;
 import br.com.battlebits.ycommon.common.party.Party;
 import br.com.battlebits.ycommon.common.payment.enums.RankType;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
+import br.com.battlebits.ycommon.common.tag.Tag;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
 
 public class BattlePlayer {
@@ -34,6 +35,7 @@ public class BattlePlayer {
 	private int money;
 	private int xp;
 	private Liga liga;
+	private Tag tag;
 
 	// ENDEREÇOS E NETWORKING
 	private InetSocketAddress ipAddress;
@@ -98,6 +100,7 @@ public class BattlePlayer {
 		this.money = 0;
 		this.xp = 0;
 		this.liga = Liga.FIRST;
+		this.tag = Tag.valueOf(getServerGroup().toString());
 
 		this.ipAddress = ipAddress;
 		this.lastIpAddress = ipAddress.getHostString();
@@ -420,6 +423,15 @@ public class BattlePlayer {
 		ipAddress = null;
 	}
 
+	public Tag getTag() {
+		return tag;
+	}
+	
+	public boolean setTag(Tag tag) {
+		this.tag = tag;
+		return true;
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -437,6 +449,8 @@ public class BattlePlayer {
 		builder.append("XP > " + xp);
 		builder.append(" | ");
 		builder.append("LIGA > " + liga.toString());
+		builder.append(" | ");
+		builder.append("TAG > " + tag.toString());
 		builder.append(" | ");
 
 		builder.append("ADDRESSIP > " + ipAddress.getHostString());

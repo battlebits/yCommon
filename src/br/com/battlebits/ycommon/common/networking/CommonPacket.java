@@ -17,6 +17,7 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeFichas;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLanguage;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLiga;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeMoney;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeTag;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeXp;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketCreateParty;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketDisbandParty;
@@ -54,6 +55,7 @@ public abstract class CommonPacket {
 		register((byte) 0x22, CPacketChangeFichas.class);
 		register((byte) 0x23, CPacketChangeLiga.class);
 		register((byte) 0x24, CPacketChangeMoney.class);
+		register((byte) 0x25, CPacketChangeTag.class);
 
 		/** 0x3X: Update **/
 		register((byte) 0x31, CPacketUpdateGameStatus.class);

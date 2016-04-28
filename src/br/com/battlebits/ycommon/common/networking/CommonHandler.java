@@ -12,6 +12,7 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeFichas;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLanguage;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLiga;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeMoney;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeTag;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeXp;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketCreateParty;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketDisbandParty;
@@ -78,4 +79,7 @@ public abstract class CommonHandler {
 
 	public abstract void handleChangeLanguage(CPacketChangeLanguage packet) throws Exception;
 
+	public abstract void handleChangeTag(CPacketChangeTag packet) throws Exception;
+	
+	
 }

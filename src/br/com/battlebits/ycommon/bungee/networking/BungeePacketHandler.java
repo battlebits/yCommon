@@ -15,6 +15,7 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeFichas;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLanguage;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLiga;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeMoney;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeTag;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeXp;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketCreateParty;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketDisbandParty;
@@ -202,6 +203,11 @@ public class BungeePacketHandler extends CommonHandler {
 	public void handleChangeLanguage(CPacketChangeLanguage packet) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void handleChangeTag(CPacketChangeTag packet) throws Exception {
+		//TODO: HANDLE CHANGE TAG
 	}
 
 }

@@ -27,22 +27,18 @@ import br.com.battlebits.ycommon.common.translate.languages.Language;
 
 public class BukkitPlayer extends BattlePlayer {
 
-	private Tag tag;
 	private UUID lastTellUUID;
 	private ArrayList<Tag> tags;
 
 	public BukkitPlayer() {
 	}
 
-	public Tag getTag() {
-		return tag;
-	}
-
+	@Override
 	public boolean setTag(Tag tag) {
 		PlayerChangeTagEvent event = new PlayerChangeTagEvent(Bukkit.getPlayer(getUuid()), getTag(), tag);
 		BukkitMain.getPlugin().getServer().getPluginManager().callEvent(event);
 		if (!event.isCancelled()) {
-			this.tag = tag;
+			super.setTag(tag);
 		}
 		return !event.isCancelled();
 	}
@@ -149,7 +145,8 @@ public class BukkitPlayer extends BattlePlayer {
 	public void loadTags() {
 		tags = new ArrayList<>();
 		for (Tag t : Tag.values()) {
-			if (((t.isExclusive() && ((t.getGroupToUse() == getServerGroup()) || (getServerGroup().ordinal() >= Group.ADMIN.ordinal()))) || (!t.isExclusive() && getServerGroup().ordinal() >= t.getGroupToUse().ordinal()))) {
+			if (((t.isExclusive() && ((t.getGroupToUse() == getServerGroup()) || (getServerGroup().ordinal() >= Group.ADMIN.ordinal())))
+					|| (!t.isExclusive() && getServerGroup().ordinal() >= t.getGroupToUse().ordinal()))) {
 				tags.add(t);
 			}
 		}
