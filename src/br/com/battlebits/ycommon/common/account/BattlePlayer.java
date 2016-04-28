@@ -413,14 +413,13 @@ public class BattlePlayer {
 	}
 
 	public void setLeaveData() {
+		this.online = false;
 		lastLoggedIn = System.currentTimeMillis();
 		onlineTime = getOnlineTime();
+		actualParty = null;
 		if (ipAddress != null)
 			lastIpAddress = ipAddress.getHostString();
 		ipAddress = null;
-		actualParty = null;
-		updateCache();
-		this.online = false;
 	}
 
 	@Override

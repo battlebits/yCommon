@@ -22,6 +22,7 @@ public class PlayerListener implements Listener {
 			if (BungeeCord.getInstance().getPlayer(player.getUuid()) == null) {
 				if (player.isCacheExpired()) {
 					players.remove();
+					BattlebitsAPI.debug("REMOVENDO BATTLEPLAYER " + player.getUserName() + " DO CACHE");
 				}
 			}
 		}

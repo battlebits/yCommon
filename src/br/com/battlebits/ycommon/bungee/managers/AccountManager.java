@@ -20,7 +20,6 @@ public class AccountManager {
 			BattlebitsAPI.debug("ACCOUNT > EXCUTED");
 			if (result.next()) {
 				BattlePlayer player = BattlebitsAPI.getGson().fromJson(result.getString("json"), BattlePlayer.class);
-				player.updateCache();
 				BattlebitsAPI.getAccountCommon().loadBattlePlayer(uuid, player);
 				BattlebitsAPI.debug("ACCOUNT > LOADED");
 			}
