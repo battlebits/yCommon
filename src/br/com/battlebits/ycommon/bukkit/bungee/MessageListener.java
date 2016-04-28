@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
-import br.com.battlebits.ycommon.bukkit.tag.Tag;
 import br.com.battlebits.ycommon.bukkit.tagmanager.TagManager;
 import br.com.battlebits.ycommon.bungee.managers.BanManager;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
@@ -16,6 +15,7 @@ import br.com.battlebits.ycommon.common.banmanager.constructors.Mute;
 import br.com.battlebits.ycommon.common.enums.ServerType;
 import br.com.battlebits.ycommon.common.payment.enums.RankType;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
+import br.com.battlebits.ycommon.common.tag.Tag;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.utils.DateUtils;
 import net.minecraft.util.com.google.common.io.ByteArrayDataInput;

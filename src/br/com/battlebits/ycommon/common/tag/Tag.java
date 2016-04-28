@@ -1,4 +1,4 @@
-package br.com.battlebits.ycommon.bukkit.tag;
+package br.com.battlebits.ycommon.common.tag;
 
 import org.bukkit.ChatColor;
 

@@ -7,7 +7,6 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 
 import br.com.battlebits.ycommon.bukkit.networking.PacketSender;
-import br.com.battlebits.ycommon.bukkit.tag.Tag;
 import br.com.battlebits.ycommon.bukkit.tagmanager.TagManager;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.account.game.GameStatus;
@@ -21,6 +20,7 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketAccountConfigu
 import br.com.battlebits.ycommon.common.party.Party;
 import br.com.battlebits.ycommon.common.payment.enums.RankType;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
+import br.com.battlebits.ycommon.common.tag.Tag;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
 

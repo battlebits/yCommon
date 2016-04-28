@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import br.com.battlebits.ycommon.bukkit.BukkitCommon;
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
-import br.com.battlebits.ycommon.bukkit.tag.Tag;
+import br.com.battlebits.ycommon.common.tag.Tag;
 
 public class TagManager extends BukkitCommon {
 	public TagManager(BukkitMain main) {

@@ -1,15 +1,19 @@
 package br.com.battlebits.ycommon.bukkit.commands.register;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.entity.Player;
 
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
 import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandFramework.Command;
 import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandFramework.CommandArgs;
+import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandFramework.Completer;
 import br.com.battlebits.ycommon.bukkit.event.account.update.PlayerChangeTagEvent;
-import br.com.battlebits.ycommon.bukkit.tag.Tag;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.commands.CommandClass;
+import br.com.battlebits.ycommon.common.tag.Tag;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -47,10 +51,10 @@ public class AccountCommand extends CommandClass {
 				int i = max - 1;
 				for (Tag t : player.getTags()) {
 					if (i < max - 1) {
-						message[i] = new TextComponent("§7, ");
+						message[i] = new TextComponent("§f, ");
 						i -= 1;
 					}
-					TextComponent component = new TextComponent(t.name().toUpperCase());
+					TextComponent component = new TextComponent((t == Tag.NORMAL) ? "§7§lNORMAL" : t.getPrefix(player.getLanguage()));
 					component.setHoverEvent(new HoverEvent(Action.SHOW_TEXT,
 							new TextComponent[] { new TextComponent(Translate.getTranslation(player.getLanguage(), "command-tag-click-select")) }));
 					component.setClickEvent(new ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.RUN_COMMAND, "/tag " + t.name()));
@@ -65,7 +69,7 @@ public class AccountCommand extends CommandClass {
 				try {
 					tag = Tag.valueOf(args[0].toUpperCase());
 				} catch (Exception ex) {
-					p.sendMessage(Translate.getTranslation(player.getLanguage(), "command-tag-not-found"));
+					p.sendMessage(prefix + Translate.getTranslation(player.getLanguage(), "command-tag-not-found"));
 					return;
 				}
 				if (tag != null) {
@@ -75,19 +79,19 @@ public class AccountCommand extends CommandClass {
 							BukkitMain.getPlugin().getServer().getPluginManager().callEvent(event);
 							if (!event.isCancelled()) {
 								player.setTag(tag);
-								p.sendMessage(Translate.getTranslation(player.getLanguage(), "command-tag-selected").replace("%tag%",
-										tag.getPrefix(player.getLanguage())));
+								p.sendMessage(prefix + Translate.getTranslation(player.getLanguage(), "command-tag-selected").replace("%tag%",
+										((tag == Tag.NORMAL) ? "§7§lNORMAL" : tag.getPrefix(player.getLanguage()))));
 							}
 							event = null;
 						} else {
-							p.sendMessage(Translate.getTranslation(player.getLanguage(), "command-tag-current"));
+							p.sendMessage(prefix + Translate.getTranslation(player.getLanguage(), "command-tag-current"));
 						}
 					} else {
-						p.sendMessage(Translate.getTranslation(player.getLanguage(), "command-tag-no-access"));
+						p.sendMessage(prefix + Translate.getTranslation(player.getLanguage(), "command-tag-no-access"));
 					}
 					tag = null;
 				} else {
-					p.sendMessage(Translate.getTranslation(player.getLanguage(), "command-tag-not-found"));
+					p.sendMessage(prefix + Translate.getTranslation(player.getLanguage(), "command-tag-not-found"));
 				}
 			}
 			prefix = null;
@@ -96,6 +100,30 @@ public class AccountCommand extends CommandClass {
 			p = null;
 		} else {
 			cmdArgs.getSender().sendMessage("§4§lERRO §fComando disponivel apenas §c§lin-game");
+		}
+	}
+
+	@Completer(name = "tag")
+	public List<String> tagCompleter(CommandArgs cmdArgs) {
+		if (cmdArgs.isPlayer()) {
+			ArrayList<String> tags = new ArrayList<>();
+			String[] args = cmdArgs.getArgs();
+			if (args.length == 1) {
+				Player p = cmdArgs.getPlayer();
+				BukkitPlayer player = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
+				String s = args[0].toUpperCase();
+				for (Tag t : player.getTags()) {
+					if (t.name().startsWith(s)) {
+						tags.add(t.name());
+					}
+				}
+				player = null;
+				p = null;
+			}
+			args = null;
+			return tags;
+		} else {
+			return new ArrayList<>();
 		}
 	}
 
