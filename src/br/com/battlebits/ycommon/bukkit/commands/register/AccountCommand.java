@@ -50,7 +50,7 @@ public class AccountCommand extends CommandClass {
 						message[i] = new TextComponent("§7, ");
 						i -= 1;
 					}
-					TextComponent component = new TextComponent(t.getPrefix(player.getLanguage()));
+					TextComponent component = new TextComponent(t.name().toUpperCase());
 					component.setHoverEvent(new HoverEvent(Action.SHOW_TEXT,
 							new TextComponent[] { new TextComponent(Translate.getTranslation(player.getLanguage(), "command-tag-click-select")) }));
 					component.setClickEvent(new ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.RUN_COMMAND, "/tag " + t.name()));

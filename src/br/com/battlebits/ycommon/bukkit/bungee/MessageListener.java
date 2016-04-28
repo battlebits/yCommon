@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
+import br.com.battlebits.ycommon.bukkit.tag.Tag;
 import br.com.battlebits.ycommon.bukkit.tagmanager.TagManager;
 import br.com.battlebits.ycommon.bungee.managers.BanManager;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
@@ -79,7 +80,7 @@ public class MessageListener implements PluginMessageListener {
 				bP.getRanks().put(rank, new Expire(bP.getUuid(), expiresCheck, rank));
 			}
 			String givevip = Translate.getTranslation(bP.getLanguage(), "command-givevip-player-added");
-			givevip = givevip.replace("%rank%", rank.name());
+			givevip = givevip.replace("%rank%", Tag.valueOf(rank.name()).getPrefix(bP.getLanguage()));
 			givevip = givevip.replace("%duration%", DateUtils.formatDifference(bP.getLanguage(), expiresCheck / 1000));
 			player.sendMessage("");
 			player.sendMessage(givevip);

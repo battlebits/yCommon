@@ -410,7 +410,6 @@ public class BattlePlayer {
 		this.countryCode = countryCode;
 		this.online = true;
 		this.serverConnectedType = ServerType.NONE;
-		updateCache();
 	}
 
 	public void setLeaveData() {
