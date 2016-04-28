@@ -5,12 +5,10 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 
-import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
 import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandFramework.Command;
 import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandFramework.CommandArgs;
 import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandFramework.Completer;
-import br.com.battlebits.ycommon.bukkit.event.account.update.PlayerChangeTagEvent;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.commands.CommandClass;
 import br.com.battlebits.ycommon.common.tag.Tag;
@@ -75,14 +73,10 @@ public class AccountCommand extends CommandClass {
 				if (tag != null) {
 					if (player.getTags().contains(tag)) {
 						if (player.getTag() != tag) {
-							PlayerChangeTagEvent event = new PlayerChangeTagEvent(p, player.getTag(), tag);
-							BukkitMain.getPlugin().getServer().getPluginManager().callEvent(event);
-							if (!event.isCancelled()) {
-								player.setTag(tag);
+							if (player.setTag(tag)) {
 								p.sendMessage(prefix + Translate.getTranslation(player.getLanguage(), "command-tag-selected").replace("%tag%",
 										((tag == Tag.NORMAL) ? "§7§lNORMAL" : tag.getPrefix(player.getLanguage()))));
 							}
-							event = null;
 						} else {
 							p.sendMessage(prefix + Translate.getTranslation(player.getLanguage(), "command-tag-current"));
 						}

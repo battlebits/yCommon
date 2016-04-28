@@ -6,8 +6,9 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 
+import br.com.battlebits.ycommon.bukkit.BukkitMain;
+import br.com.battlebits.ycommon.bukkit.event.account.update.PlayerChangeTagEvent;
 import br.com.battlebits.ycommon.bukkit.networking.PacketSender;
-import br.com.battlebits.ycommon.bukkit.tagmanager.TagManager;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.account.game.GameStatus;
 import br.com.battlebits.ycommon.common.banmanager.history.BanHistory;
@@ -37,8 +38,13 @@ public class BukkitPlayer extends BattlePlayer {
 		return tag;
 	}
 
-	public void setTag(Tag tag) {
-		this.tag = tag;
+	public boolean setTag(Tag tag) {
+		PlayerChangeTagEvent event = new PlayerChangeTagEvent(Bukkit.getPlayer(getUuid()), getTag(), tag);
+		BukkitMain.getPlugin().getServer().getPluginManager().callEvent(event);
+		if (!event.isCancelled()) {
+			this.tag = tag;
+		}
+		return !event.isCancelled();
 	}
 
 	@Override
@@ -141,7 +147,6 @@ public class BukkitPlayer extends BattlePlayer {
 	}
 
 	public void loadTags() {
-		tag = TagManager.getPlayerDefaultTag(this);
 		tags = new ArrayList<>();
 		for (Tag t : Tag.values()) {
 			if (((t.isExclusive() && ((t.getGroupToUse() == getServerGroup()) || (getServerGroup().ordinal() >= Group.ADMIN.ordinal()))) || (!t.isExclusive() && getServerGroup().ordinal() >= t.getGroupToUse().ordinal()))) {
