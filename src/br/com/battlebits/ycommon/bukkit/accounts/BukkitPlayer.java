@@ -18,6 +18,7 @@ import br.com.battlebits.ycommon.common.friends.Friend;
 import br.com.battlebits.ycommon.common.friends.block.Blocked;
 import br.com.battlebits.ycommon.common.friends.request.Request;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAccountConfiguration;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeTag;
 import br.com.battlebits.ycommon.common.party.Party;
 import br.com.battlebits.ycommon.common.payment.enums.RankType;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
@@ -39,6 +40,12 @@ public class BukkitPlayer extends BattlePlayer {
 		BukkitMain.getPlugin().getServer().getPluginManager().callEvent(event);
 		if (!event.isCancelled()) {
 			super.setTag(tag);
+			try {
+				PacketSender.sendPacket(new CPacketChangeTag(getUuid(), tag));
+			} catch (Exception e) {
+				Bukkit.getPlayer(getUuid()).sendMessage(Translate.getTranslation(getLanguage(), "command-tag-prefix") + " "
+						+ Translate.getTranslation(getLanguage(), "error-try-again-please"));
+			}
 		}
 		return !event.isCancelled();
 	}
@@ -149,6 +156,9 @@ public class BukkitPlayer extends BattlePlayer {
 					|| (!t.isExclusive() && getServerGroup().ordinal() >= t.getGroupToUse().ordinal()))) {
 				tags.add(t);
 			}
+		}
+		if (!getTags().contains(getTag())) {
+			setTag(Tag.valueOf(getServerGroup().toString()));
 		}
 	}
 

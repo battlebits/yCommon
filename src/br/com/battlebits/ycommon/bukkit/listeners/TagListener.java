@@ -12,7 +12,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
 import br.com.battlebits.ycommon.bukkit.event.account.update.PlayerChangeTagEvent;
-import br.com.battlebits.ycommon.bukkit.tagmanager.TagManager;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.enums.Liga;
 import br.com.battlebits.ycommon.common.tag.Tag;
@@ -33,7 +32,7 @@ public class TagListener implements Listener {
 			public void run() {
 				Player p = e.getPlayer();
 				BukkitPlayer player = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(e.getPlayer().getUniqueId());
-				player.setTag(TagManager.getPlayerDefaultTag(player));
+				String id = getTeamName(player.getTag(), player.getLiga());
 				for (Player o : Bukkit.getOnlinePlayers()) {
 					if (o.getPlayer().getUniqueId() != e.getPlayer().getUniqueId()) {
 						BukkitPlayer bp = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(o.getUniqueId());
@@ -42,6 +41,9 @@ public class TagListener implements Listener {
 						main.getBattleScoreboard().createTeam(p, id2, tag + (ChatColor.stripColor(tag).trim().length() > 0 ? " " : ""),
 								" §7(" + bp.getLiga().getSymbol() + "§7)");
 						main.getBattleScoreboard().joinTeam(p, o, id2);
+						main.getBattleScoreboard().createTeam(o, id, tag + (ChatColor.stripColor(tag).trim().length() > 0 ? " " : ""),
+								" §7(" + player.getLiga().getSymbol() + "§7)");
+						main.getBattleScoreboard().joinTeam(o, p, id);
 						bp = null;
 					}
 					o = null;

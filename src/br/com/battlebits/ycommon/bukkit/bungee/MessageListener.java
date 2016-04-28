@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
-import br.com.battlebits.ycommon.bukkit.tagmanager.TagManager;
 import br.com.battlebits.ycommon.bungee.managers.BanManager;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
@@ -51,7 +50,8 @@ public class MessageListener implements PluginMessageListener {
 			String userName = in.readUTF();
 			BattlePlayer bP = BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId());
 			bP.getBanHistory().getActualMute().unmute(uuid, userName);
-			String msg = Translate.getTranslation(bP.getLanguage(), "command-unmute-prefix") + " " + Translate.getTranslation(bP.getLanguage(), "command-unmute-player");
+			String msg = Translate.getTranslation(bP.getLanguage(), "command-unmute-prefix") + " "
+					+ Translate.getTranslation(bP.getLanguage(), "command-unmute-player");
 			msg = msg.replace("%unmutedBy%", userName);
 			player.sendMessage(msg);
 			break;
@@ -65,7 +65,7 @@ public class MessageListener implements PluginMessageListener {
 			} else {
 				bP.getGroups().put(serverType, group);
 			}
-			bP.setTag(TagManager.getPlayerDefaultTag(bP));
+			bP.setTag(Tag.valueOf(group.toString()));
 			bP.loadTags();
 			break;
 		}
@@ -85,14 +85,15 @@ public class MessageListener implements PluginMessageListener {
 			player.sendMessage("");
 			player.sendMessage(givevip);
 			player.sendMessage("");
-			bP.setTag(TagManager.getPlayerDefaultTag(bP));
+			bP.setTag(Tag.valueOf(bP.getServerGroup().toString()));
 			bP.loadTags();
 			break;
 		}
 		case "UnmuteConsole": {
 			BattlePlayer bP = BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId());
 			bP.getBanHistory().getActualMute().unmute();
-			String msg = Translate.getTranslation(bP.getLanguage(), "command-unmute-prefix") + " " + Translate.getTranslation(bP.getLanguage(), "command-unmute-player");
+			String msg = Translate.getTranslation(bP.getLanguage(), "command-unmute-prefix") + " "
+					+ Translate.getTranslation(bP.getLanguage(), "command-unmute-player");
 			msg = msg.replace("%unmutedBy%", "CONSOLE");
 			player.sendMessage(msg);
 			break;
