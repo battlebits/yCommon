@@ -100,7 +100,6 @@ public class BattlePlayer {
 		this.money = 0;
 		this.xp = 0;
 		this.liga = Liga.FIRST;
-		this.tag = Tag.valueOf(getServerGroup().toString());
 
 		this.ipAddress = ipAddress;
 		this.lastIpAddress = ipAddress.getHostString();
@@ -137,6 +136,8 @@ public class BattlePlayer {
 
 		this.serverConnected = "";
 		this.serverConnectedType = ServerType.NONE;
+		
+		this.tag = Tag.valueOf(getServerGroup().toString());
 	}
 
 	public String getUserName() {
