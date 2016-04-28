@@ -2,6 +2,7 @@ package br.com.battlebits.ycommon.bukkit.bungee;
 
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
@@ -12,13 +13,17 @@ import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.banmanager.constructors.Mute;
 import br.com.battlebits.ycommon.common.enums.ServerType;
+import br.com.battlebits.ycommon.common.payment.constructors.Expire;
+import br.com.battlebits.ycommon.common.payment.enums.RankType;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.translate.Translate;
+import br.com.battlebits.ycommon.common.utils.DateUtils;
 import net.minecraft.util.com.google.common.io.ByteArrayDataInput;
 import net.minecraft.util.com.google.common.io.ByteStreams;
 
 public class MessageListener implements PluginMessageListener {
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onPluginMessageReceived(String channel, Player player, byte[] message) {
 		if (!channel.equals(BattlebitsAPI.getBungeeChannel()))
@@ -27,6 +32,13 @@ public class MessageListener implements PluginMessageListener {
 		ByteArrayDataInput in = ByteStreams.newDataInput(message);
 		String subchannel = in.readUTF();
 		switch (subchannel) {
+		case "Ban": {
+			for (Player online : Bukkit.getOnlinePlayers()) {
+				BattlePlayer bP = BattlebitsAPI.getAccountCommon().getBattlePlayer(online.getUniqueId());
+				online.sendMessage(Translate.getTranslation(bP.getLanguage(), "command-ban-bukkit-banned").replace("%player%", player.getName()));
+			}
+			break;
+		}
 		case "Mute": {
 			Mute mute = BattlebitsAPI.getGson().fromJson(in.readUTF(), Mute.class);
 			BattlePlayer bP = BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId());
@@ -55,6 +67,27 @@ public class MessageListener implements PluginMessageListener {
 			}
 			bP.setTag(TagManager.getPlayerDefaultTag(bP));
 			bP.loadTags();
+			break;
+		}
+		case "Givevip": {
+			BattlePlayer bP = BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId());
+			RankType rank = RankType.valueOf(in.readUTF());
+			long expiresCheck = in.readLong();
+			Expire expire = null;
+			if (bP.getRanks().containsKey(rank)) {
+				expire = bP.getRanks().get(rank);
+				expire.addLong(expiresCheck);
+			} else {
+				expire = new Expire(bP.getUuid(), expiresCheck, rank);
+				bP.getRanks().put(rank, expire);
+			}
+			String givevip = Translate.getTranslation(bP.getLanguage(), "command-givevip-player-added");
+			givevip = givevip.replace("%player%", bP.getUserName() + "(" + bP.getUuid().toString().replace("-", "") + ")");
+			givevip = givevip.replace("%rank%", rank.name());
+			givevip = givevip.replace("%duration%", DateUtils.formatDifference(bP.getLanguage(), expire.getDuration() / 1000));
+			player.sendMessage("");
+			player.sendMessage(givevip);
+			player.sendMessage("");
 			break;
 		}
 		case "UnmuteConsole": {

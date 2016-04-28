@@ -7,11 +7,13 @@ import br.com.battlebits.ycommon.common.payment.enums.RankType;
 public class Expire {
 	private UUID uuid;
 	private long expire;
+	private long duration;
 	private RankType rankType;
 
-	public Expire(UUID uuid, long expire, RankType rankType) {
+	public Expire(UUID uuid, long duration, RankType rankType) {
 		this.uuid = uuid;
-		this.expire = expire;
+		this.duration = System.currentTimeMillis() + duration;
+		this.expire = duration;
 		this.rankType = rankType;
 	}
 
@@ -22,12 +24,17 @@ public class Expire {
 	public long getExpire() {
 		return expire;
 	}
+	
+	public long getDuration() {
+		return duration;
+	}
 
 	public RankType getRankType() {
 		return rankType;
 	}
 
-	public void addLong(long l) {
-		this.expire += l;
+	public void addLong(long duration) {
+		this.expire += duration;
+		this.duration += duration;
 	}
 }

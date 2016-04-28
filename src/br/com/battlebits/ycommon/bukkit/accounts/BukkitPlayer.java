@@ -20,6 +20,7 @@ import br.com.battlebits.ycommon.common.friends.request.Request;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAccountConfiguration;
 import br.com.battlebits.ycommon.common.party.Party;
 import br.com.battlebits.ycommon.common.payment.constructors.Expire;
+import br.com.battlebits.ycommon.common.payment.enums.RankType;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
@@ -67,7 +68,7 @@ public class BukkitPlayer extends BattlePlayer {
 	}
 
 	@Override
-	public void updateRanks(Map<Group, Expire> ranks) {
+	public void updateRanks(Map<RankType, Expire> ranks) {
 		super.updateRanks(ranks);
 	}
 

@@ -19,6 +19,7 @@ import br.com.battlebits.ycommon.common.friends.block.Blocked;
 import br.com.battlebits.ycommon.common.friends.request.Request;
 import br.com.battlebits.ycommon.common.party.Party;
 import br.com.battlebits.ycommon.common.payment.constructors.Expire;
+import br.com.battlebits.ycommon.common.payment.enums.RankType;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
 
@@ -48,7 +49,7 @@ public class BattlePlayer {
 
 	// GRUPOS
 	private Map<ServerType, Group> groups;
-	private Map<Group, Expire> ranks;
+	private Map<RankType, Expire> ranks;
 
 	// AMIGOS
 	private Map<UUID, Friend> friends;
@@ -238,7 +239,7 @@ public class BattlePlayer {
 		return false;
 	}
 
-	public Map<Group, Expire> getRanks() {
+	public Map<RankType, Expire> getRanks() {
 		return ranks;
 	}
 
@@ -334,7 +335,7 @@ public class BattlePlayer {
 		this.groups = groups;
 	}
 
-	public void updateRanks(Map<Group, Expire> ranks) {
+	public void updateRanks(Map<RankType, Expire> ranks) {
 		this.ranks = ranks;
 	}
 
