@@ -1,12 +1,6 @@
 package br.com.battlebits.ycommon.bukkit.commands.register;
 
-import java.util.Arrays;
-
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerAnimationType;
-
-import com.avaje.ebean.Transaction;
 
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
