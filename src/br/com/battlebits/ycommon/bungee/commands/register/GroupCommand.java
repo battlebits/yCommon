@@ -57,6 +57,11 @@ public class GroupCommand extends CommandClass {
 			owner = true;
 			type = ServerType.NETWORK;
 		}
+		if (group.ordinal() <= Group.YOUTUBER.ordinal() && group != Group.NORMAL) {
+			sender.sendMessage(TextComponent.fromLegacyText(groupSetPrefix + Translate.getTranslation(lang, "command-groupset-group-temporary")));
+			return;
+		}
+
 		if (!owner)
 			if (group.ordinal() > Group.STREAMER.ordinal()) {
 				sender.sendMessage(TextComponent.fromLegacyText(groupSetPrefix + Translate.getTranslation(lang, "command-groupset-group-not-owner")));
