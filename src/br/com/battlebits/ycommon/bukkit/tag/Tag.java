@@ -11,6 +11,7 @@ public enum Tag {
 	DONO(ChatColor.DARK_RED.toString() + ChatColor.BOLD + "%owner%" + ChatColor.DARK_RED, Group.DONO, false), //
 	ESTRELA(ChatColor.DARK_BLUE.toString() + ChatColor.BOLD + "%star%" + ChatColor.DARK_BLUE, Group.DONO, false), //
 	ADMIN(ChatColor.RED.toString() + ChatColor.BOLD + "%admin%" + ChatColor.RED, Group.ADMIN, false), //
+	MANAGER(ChatColor.RED.toString() + ChatColor.BOLD + "%manager%" + ChatColor.RED, Group.MANAGER, false), //
 	STREAMER(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "%streamer%" + ChatColor.DARK_PURPLE, Group.STREAMER, false), //
 	MOD(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "%mod%" + ChatColor.DARK_PURPLE, Group.MOD, false), //
 	TRIAL(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "%trial%" + ChatColor.DARK_PURPLE, Group.TRIAL, false), //
@@ -46,8 +47,7 @@ public enum Tag {
 
 	public String getPrefix(Language language) {
 		String tag = prefix;
-		for (String strTag : new String[] { "owner", "star", "admin", "streamer", "mod", "trial", "helper", "staff", "builder", "developer",
-				"youtuber", "tournament", "winner" })
+		for (String strTag : new String[] { "owner", "star", "admin", "manager", "streamer", "mod", "trial", "helper", "staff", "builder", "developer", "youtuber", "tournament", "winner" })
 			tag = tag.replace("%" + strTag + "%", Translate.getTranslation(language, strTag).toUpperCase());
 		return tag;
 	}
