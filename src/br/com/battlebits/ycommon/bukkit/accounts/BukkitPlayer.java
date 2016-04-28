@@ -13,14 +13,13 @@ import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.account.game.GameStatus;
 import br.com.battlebits.ycommon.common.banmanager.history.BanHistory;
 import br.com.battlebits.ycommon.common.clans.Clan;
-import br.com.battlebits.ycommon.common.enums.ServerType;
 import br.com.battlebits.ycommon.common.friends.Friend;
 import br.com.battlebits.ycommon.common.friends.block.Blocked;
 import br.com.battlebits.ycommon.common.friends.request.Request;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAccountConfiguration;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeAccount;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeTag;
 import br.com.battlebits.ycommon.common.party.Party;
-import br.com.battlebits.ycommon.common.payment.enums.RankType;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.tag.Tag;
 import br.com.battlebits.ycommon.common.translate.Translate;
@@ -45,6 +44,7 @@ public class BukkitPlayer extends BattlePlayer {
 			} catch (Exception e) {
 				Bukkit.getPlayer(getUuid()).sendMessage(Translate.getTranslation(getLanguage(), "command-tag-prefix") + " "
 						+ Translate.getTranslation(getLanguage(), "error-try-again-please"));
+				return false;
 			}
 		}
 		return !event.isCancelled();
@@ -58,26 +58,31 @@ public class BukkitPlayer extends BattlePlayer {
 	@Override
 	public void setFichas(int fichas) {
 		super.setFichas(fichas);
+		try {
+			PacketSender.sendPacket(new CPacketChangeAccount(this));
+		} catch (Exception ex) {
+			Bukkit.getPlayer(getUuid()).sendMessage(Translate.getTranslation(getLanguage(), "profile-fail-save"));
+		}
 	}
 
 	@Override
 	public void setMoney(int money) {
 		super.setMoney(money);
+		try {
+			PacketSender.sendPacket(new CPacketChangeAccount(this));
+		} catch (Exception ex) {
+			Bukkit.getPlayer(getUuid()).sendMessage(Translate.getTranslation(getLanguage(), "profile-fail-save"));
+		}
 	}
 
 	@Override
 	public void setXp(int xp) {
 		super.setXp(xp);
-	}
-
-	@Override
-	public void updateGroup(Map<ServerType, Group> groups) {
-		super.updateGroup(groups);
-	}
-
-	@Override
-	public void updateRanks(Map<RankType, Long> ranks) {
-		super.updateRanks(ranks);
+		try {
+			PacketSender.sendPacket(new CPacketChangeAccount(this));
+		} catch (Exception ex) {
+			Bukkit.getPlayer(getUuid()).sendMessage(Translate.getTranslation(getLanguage(), "profile-fail-save"));
+		}
 	}
 
 	@Override

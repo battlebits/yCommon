@@ -11,12 +11,10 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketAddFriend;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAddFriendRequest;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAddGroup;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAddRank;
-import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeFichas;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeAccount;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLanguage;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLiga;
-import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeMoney;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeTag;
-import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeXp;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketCreateParty;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketDisbandParty;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveBlockedPlayer;
@@ -155,24 +153,6 @@ public class BukkitHandler extends CommonHandler {
 	}
 
 	@Override
-	public void handleChangeXp(CPacketChangeXp packet) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void handleChangeMoney(CPacketChangeMoney packet) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void handleChangeFichas(CPacketChangeFichas packet) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void handleChangeLiga(CPacketChangeLiga packet) {
 		// TODO Auto-generated method stub
 
@@ -193,6 +173,11 @@ public class BukkitHandler extends CommonHandler {
 	@Override
 	public void handleChangeTag(CPacketChangeTag packet) throws Exception {
 		// PROVAVEL QUE NUNCA VAI TER
+		
+	}
+
+	@Override
+	public void handleChangeAccount(CPacketChangeAccount packet) throws Exception {
 		
 	}
 

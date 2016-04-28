@@ -8,12 +8,10 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketAddFriend;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAddFriendRequest;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAddGroup;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAddRank;
-import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeFichas;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeAccount;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLanguage;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLiga;
-import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeMoney;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeTag;
-import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeXp;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketCreateParty;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketDisbandParty;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveBlockedPlayer;
@@ -30,13 +28,13 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketUpdateProfile;
 public abstract class CommonHandler {
 
 	public abstract void handleAccountConfiguration(CPacketAccountConfiguration packet) throws Exception;
-	
+
 	public abstract void handleAccountRequest(CPacketAccountRequest packet) throws Exception;
 
 	public abstract void handleAccountLoad(CPacketAccountLoad packet) throws Exception;
 
 	public abstract void handleTranslationsRequest(CPacketTranslationsRequest packet) throws Exception;
-	
+
 	public abstract void handleTranslationsLoad(CPacketTranslationsLoad packet) throws Exception;
 
 	public abstract void handleCreateParty(CPacketCreateParty packet) throws Exception;
@@ -69,17 +67,12 @@ public abstract class CommonHandler {
 
 	public abstract void handleUpdateClan(CPacketUpdateClan packet) throws Exception;
 
-	public abstract void handleChangeXp(CPacketChangeXp packet) throws Exception;
-
-	public abstract void handleChangeMoney(CPacketChangeMoney packet) throws Exception;
-
-	public abstract void handleChangeFichas(CPacketChangeFichas packet) throws Exception;
+	public abstract void handleChangeAccount(CPacketChangeAccount packet) throws Exception;
 
 	public abstract void handleChangeLiga(CPacketChangeLiga packet) throws Exception;
 
 	public abstract void handleChangeLanguage(CPacketChangeLanguage packet) throws Exception;
 
 	public abstract void handleChangeTag(CPacketChangeTag packet) throws Exception;
-	
-	
+
 }
