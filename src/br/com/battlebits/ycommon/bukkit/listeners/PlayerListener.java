@@ -36,9 +36,11 @@ public class PlayerListener implements Listener {
 		BukkitPlayer player = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(event.getPlayer().getUniqueId());
 		for (Player r : Bukkit.getOnlinePlayers()) {
 			BukkitPlayer receiver = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(r.getUniqueId());
-			if ((!receiver.getConfiguration().isIgnoreAll()) && (!receiver.getBlockedPlayers().containsKey(player.getUuid()) && (!player.getBlockedPlayers().containsKey(receiver.getUuid())))) {
+			if ((!receiver.getConfiguration().isIgnoreAll()) && (!receiver.getBlockedPlayers().containsKey(player.getUuid())
+					&& (!player.getBlockedPlayers().containsKey(receiver.getUuid())))) {
 				String tag = player.getTag().getPrefix(receiver.getLanguage());
-				String format = tag + (ChatColor.stripColor(tag).trim().length() > 0 ? " " : "") + player.getTag().getPrefix(receiver.getLanguage()) + " " + player.getUserName() + ChatColor.GRAY + " (" + player.getLiga().getSymbol() + ChatColor.GRAY + ") " + ChatColor.WHITE + ": ";
+				String format = tag + (ChatColor.stripColor(tag).trim().length() > 0 ? " " : "") + player.getUserName() + ChatColor.GRAY + " ("
+						+ player.getLiga().getSymbol() + ChatColor.GRAY + ") " + ChatColor.WHITE + ": ";
 				if (player.getActualClan() != null) {
 					format = "[" + player.getActualClan().getAbbreviation() + "] " + format;
 				}
