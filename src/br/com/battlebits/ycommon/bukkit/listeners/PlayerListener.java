@@ -8,9 +8,12 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
+import br.com.battlebits.ycommon.bukkit.tagmanager.TagManager;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 
 public class PlayerListener implements Listener {
@@ -18,6 +21,17 @@ public class PlayerListener implements Listener {
 	// [CLAN] RANK Nick (LigaSymbol) >>
 	// [TEMPO] DONO GustavoInacio (*) >>
 
+	@EventHandler
+	public void onJoin(PlayerJoinEvent event) {
+		final BukkitPlayer player = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(event.getPlayer().getUniqueId());
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				player.setTag(TagManager.getPlayerDefaultTag(player));
+			}
+		}.runTaskAsynchronously(BukkitMain.getPlugin());
+	}
+	
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
 	public void onPreProcessCommand(PlayerCommandPreprocessEvent event) {
 		if (event.getMessage().toLowerCase().startsWith("/me ")) {

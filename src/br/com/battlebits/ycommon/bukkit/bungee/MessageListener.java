@@ -70,7 +70,7 @@ public class MessageListener implements PluginMessageListener {
 			break;
 		}
 		case "Givevip": {
-			BattlePlayer bP = BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId());
+			BukkitPlayer bP = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId());
 			RankType rank = RankType.valueOf(in.readUTF());
 			long expiresCheck = in.readLong();
 			long newAdd = System.currentTimeMillis();
@@ -85,6 +85,8 @@ public class MessageListener implements PluginMessageListener {
 			player.sendMessage("");
 			player.sendMessage(givevip);
 			player.sendMessage("");
+			bP.setTag(TagManager.getPlayerDefaultTag(bP));
+			bP.loadTags();
 			break;
 		}
 		case "UnmuteConsole": {
