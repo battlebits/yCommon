@@ -50,6 +50,8 @@ public class CommonServer implements Runnable {
 				outputStream = null;
 				inputStream = null;
 				client = null;
+			} catch (IOException e) {
+				BattlebitsAPI.debug("SOCKET FOI FECHADO");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

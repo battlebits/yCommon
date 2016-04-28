@@ -11,6 +11,7 @@ import java.util.UUID;
 import br.com.battlebits.ycommon.bungee.BungeeMain;
 import br.com.battlebits.ycommon.bungee.managers.BanManager;
 import br.com.battlebits.ycommon.bungee.utils.GeoIpUtils;
+import br.com.battlebits.ycommon.bungee.utils.GeoIpUtils.IpCityResponse;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.banmanager.constructors.Ban;
@@ -36,7 +37,9 @@ public class LoginListener implements Listener {
 			public void run() {
 				String countryCode = "-";
 				try {
-					countryCode = GeoIpUtils.getIpStatus(ipAdress.getHostString()).getCountryCode();
+					IpCityResponse responde = GeoIpUtils.getIpStatus(ipAdress.getHostString());
+					if (responde != null)
+						countryCode = responde.getCountryCode();
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
