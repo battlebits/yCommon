@@ -420,7 +420,7 @@ public class BattlePlayer {
 			lastIpAddress = ipAddress.getHostString();
 		ipAddress = null;
 		actualParty = null;
-		this.cacheExpire = System.currentTimeMillis() + (60 * 15 * 1000);
+		updateCache();
 		this.online = false;
 	}
 

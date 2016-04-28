@@ -12,8 +12,8 @@ public class Expire {
 
 	public Expire(UUID uuid, long duration, RankType rankType) {
 		this.uuid = uuid;
-		this.duration = System.currentTimeMillis() + duration;
-		this.expire = duration;
+		this.duration = duration;
+		this.expire = System.currentTimeMillis() + duration;
 		this.rankType = rankType;
 	}
 

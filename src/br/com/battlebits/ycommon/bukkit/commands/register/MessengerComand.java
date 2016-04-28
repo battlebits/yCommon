@@ -62,7 +62,7 @@ public class MessengerComand extends CommandClass {
 												.replace("%player%", p.getName()));
 										from.setClickEvent(new ClickEvent(Action.SUGGEST_COMMAND, "/r "));
 										from.setHoverEvent(new HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT,
-												new TextComponent[] { new TextComponent(Translate.getTranslation(bt.getLanguage(), "tell-hover-reply")
+												new TextComponent[] { new TextComponent(Translate.getTranslation(bt.getLanguage(), "command-tell-hover-reply")
 														.replace("%player%", p.getName())) }));
 										toTarget[0] = from;
 										from = null;

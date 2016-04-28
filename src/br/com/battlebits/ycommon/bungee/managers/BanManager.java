@@ -58,9 +58,11 @@ public class BanManager {
 			BattlebitsAPI.getAccountCommon().saveBattlePlayer(player);
 		ProxiedPlayer pPlayer = BungeeMain.getPlugin().getProxy().getPlayer(player.getUuid());
 		if (pPlayer != null) {
-			ByteArrayDataOutput out = ByteStreams.newDataOutput();
-			out.writeUTF("Ban");
-			pPlayer.getServer().sendData(BattlebitsAPI.getBungeeChannel(), out.toByteArray());
+			if (ban.isPermanent()) {
+				ByteArrayDataOutput out = ByteStreams.newDataOutput();
+				out.writeUTF("Ban");
+				pPlayer.getServer().sendData(BattlebitsAPI.getBungeeChannel(), out.toByteArray());
+			}
 			pPlayer.disconnect(getBanKickMessageBase(ban, player.getLanguage()));
 		}
 		if (player.getIpAddress() != null)
