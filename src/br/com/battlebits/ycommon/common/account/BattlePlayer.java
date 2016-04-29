@@ -206,7 +206,6 @@ public class BattlePlayer {
 	}
 
 	public Group getServerGroup() {
-		checkRanks();
 		Group group = Group.NORMAL;
 		if (!getGroups().isEmpty()) {
 			if (getGroups().containsKey(ServerType.NETWORK)) {
@@ -402,6 +401,7 @@ public class BattlePlayer {
 	}
 
 	public void connect(String serverIp, ServerType serverType) {
+		checkRanks();
 		this.serverConnected = serverIp;
 		this.serverConnectedType = serverType;
 	}
@@ -411,6 +411,7 @@ public class BattlePlayer {
 	}
 
 	public void setJoinData(InetSocketAddress ipAdrress, String countryCode) {
+		checkRanks();
 		this.ipAddress = ipAdrress;
 		joinTime = System.currentTimeMillis();
 		this.countryCode = countryCode;
