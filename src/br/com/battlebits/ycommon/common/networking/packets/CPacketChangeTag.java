@@ -8,28 +8,41 @@ import br.com.battlebits.ycommon.common.networking.CommonHandler;
 import br.com.battlebits.ycommon.common.networking.CommonPacket;
 import br.com.battlebits.ycommon.common.tag.Tag;
 
-public class CPacketChangeTag extends CommonPacket{
+public class CPacketChangeTag extends CommonPacket {
+	private UUID uniqueId;
+	private Tag tag;
+
+	public CPacketChangeTag() {
+	}
 
 	public CPacketChangeTag(UUID id, Tag tag) {
-		// TODO Auto-generated constructor stub
+		this.uniqueId = id;
+		this.tag = tag;
 	}
-	
+
 	@Override
 	public void read(DataInputStream in) throws Exception {
-		// TODO Auto-generated method stub
-		
+		this.uniqueId = UUID.fromString(in.readUTF());
+		this.tag = Tag.valueOf(in.readUTF());
 	}
 
 	@Override
 	public void write(DataOutputStream out) throws Exception {
-		// TODO Auto-generated method stub
-		
+		out.writeUTF(uniqueId.toString());
+		out.writeUTF(tag.toString());
 	}
 
 	@Override
 	public void handle(CommonHandler handler) throws Exception {
-		// TODO Auto-generated method stub
-		
+		handler.handleChangeTag(this);
+	}
+
+	public UUID getUniqueId() {
+		return uniqueId;
+	}
+
+	public Tag getTag() {
+		return tag;
 	}
 
 }

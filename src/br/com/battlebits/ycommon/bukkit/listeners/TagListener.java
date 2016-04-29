@@ -32,19 +32,14 @@ public class TagListener implements Listener {
 			public void run() {
 				Player p = e.getPlayer();
 				BukkitPlayer player = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(e.getPlayer().getUniqueId());
-				String id = getTeamName(player.getTag(), player.getLiga());
 				player.setTag(player.getTag());
 				for (Player o : Bukkit.getOnlinePlayers()) {
 					if (o.getPlayer().getUniqueId() != e.getPlayer().getUniqueId()) {
 						BukkitPlayer bp = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(o.getUniqueId());
 						String id2 = getTeamName(bp.getTag(), bp.getLiga());
-						String tag = player.getTag().getPrefix(player.getLanguage());
-						main.getBattleScoreboard().createTeam(p, id2, tag + (ChatColor.stripColor(tag).trim().length() > 0 ? " " : ""),
-								" §7(" + bp.getLiga().getSymbol() + "§7)");
+						String tag = bp.getTag().getPrefix(player.getLanguage());
+						main.getBattleScoreboard().createTeam(p, id2, tag + (ChatColor.stripColor(tag).trim().length() > 0 ? " " : ""), " §7(" + bp.getLiga().getSymbol() + "§7)");
 						main.getBattleScoreboard().joinTeam(p, o, id2);
-						main.getBattleScoreboard().createTeam(o, id, tag + (ChatColor.stripColor(tag).trim().length() > 0 ? " " : ""),
-								" §7(" + player.getLiga().getSymbol() + "§7)");
-						main.getBattleScoreboard().joinTeam(o, p, id);
 						bp = null;
 					}
 					o = null;
@@ -64,8 +59,8 @@ public class TagListener implements Listener {
 		for (Player o : Bukkit.getOnlinePlayers()) {
 			BukkitPlayer bp = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(o.getUniqueId());
 			String tag = e.getNewTag().getPrefix(bp.getLanguage());
-			main.getBattleScoreboard().createTeam(o, id, tag + (ChatColor.stripColor(tag).trim().length() > 0 ? " " : ""),
-					" §7(" + player.getLiga().getSymbol() + "§7)");
+			main.getBattleScoreboard().leaveTeam(o, p);
+			main.getBattleScoreboard().createTeam(o, id, tag + (ChatColor.stripColor(tag).trim().length() > 0 ? " " : ""), " §7(" + player.getLiga().getSymbol() + "§7)");
 			main.getBattleScoreboard().joinTeam(o, p, id);
 			bp = null;
 			o = null;
@@ -75,8 +70,7 @@ public class TagListener implements Listener {
 		p = null;
 	}
 
-	private static char[] chars = new char[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
-			'u', 'v', 'w', 'x', 'y', 'z' };
+	private static char[] chars = new char[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
 
 	public static String getTeamName(Tag tag, Liga liga) {
 		return chars[tag.ordinal()] + "-" + chars[Liga.values().length - liga.ordinal()];

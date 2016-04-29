@@ -25,6 +25,7 @@ public class PacketSender {
 
 	public static void sendPacketReturn(String hostName, int port, CommonPacket packet, CommonHandler handler) throws Exception {
 		Socket socket = new Socket(hostName, port);
+		socket.setSoTimeout(50);
 		BattlebitsAPI.debug("SOCKET>CONNECT");
 		DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
 		DataInputStream inputStream = new DataInputStream(socket.getInputStream());
@@ -51,6 +52,7 @@ public class PacketSender {
 
 	public static void sendPacket(String hostName, int port, CommonPacket packet) throws Exception {
 		Socket socket = new Socket(hostName, port);
+		socket.setSoTimeout(50);
 		BattlebitsAPI.debug("SOCKET>CONNECT");
 		DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
 		outputStream.writeByte(packet.id());
@@ -66,6 +68,7 @@ public class PacketSender {
 
 	public static BukkitPlayer getOfflinePlayer(UUID uuid) throws Exception {
 		Socket socket = new Socket(CommonServer.ADDRESS, CommonServer.PORT);
+		socket.setSoTimeout(50);
 		CommonPacket packet = new CPacketAccountRequest(uuid);
 		BattlebitsAPI.debug("SOCKET>CONNECT");
 		DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());

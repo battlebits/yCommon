@@ -1,5 +1,6 @@
 package br.com.battlebits.ycommon.bukkit.tagmanager;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import br.com.battlebits.ycommon.bukkit.BukkitCommon;
@@ -15,29 +16,12 @@ public class TagManager extends BukkitCommon {
 		registerListener(new TagListener(this));
 	}
 
-	public void updatePlayerTag(Player p) {
-		//BukkitPlayer player = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
-		
-	}
-
+	@SuppressWarnings("deprecation")
 	public void removePlayerTag(Player p) {
-
+		for (Player online : Bukkit.getOnlinePlayers()) {
+			BukkitMain.getPlugin().getBattleScoreboard().leaveTeam(online, p);
+		}
 	}
-
-//	public static boolean isNadhyneOuGustavo(UUID uuid) {
-//		if (uuid.toString().equals("2a759cc7-0b01-4b7c-8f4a-a081a74dfab7"))
-//			return true;
-//		if (uuid.toString().equals("e24695ad-6618-471e-826a-2438f043a293"))
-//			return true;
-//		return false;
-//	}
-//
-//	public static Tag getPlayerDefaultTag(BukkitPlayer p) {
-//		/*if (TagManager.isNadhyneOuGustavo(p.getUuid())) {
-//			return Tag.ESTRELA;
-//		}*/
-//		return Tag.valueOf(p.getServerGroup().toString());
-//	}
 
 	@SuppressWarnings("deprecation")
 	@Override

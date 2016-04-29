@@ -15,6 +15,7 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketAddGroup;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAddRank;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeAccount;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLanguage;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeTag;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketCreateParty;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketDisbandParty;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketJoinParty;
@@ -48,10 +49,11 @@ public abstract class CommonPacket {
 		/** 0x2X: Change Profile **/
 		register((byte) 0x20, CPacketChangeLanguage.class);
 		register((byte) 0x21, CPacketChangeAccount.class);
-		register((byte) 0x22, CPacketUpdateGameStatus.class);
-		register((byte) 0x23, CPacketUpdateProfile.class);
-		register((byte) 0x24, CPacketUpdateClan.class);
-		
+		register((byte) 0x22, CPacketChangeTag.class);
+		register((byte) 0x23, CPacketUpdateGameStatus.class);
+		register((byte) 0x24, CPacketUpdateProfile.class);
+		register((byte) 0x25, CPacketUpdateClan.class);
+
 		/** 0x4X: Friends **/
 		register((byte) 0x40, CPacketAddFriend.class);
 		register((byte) 0x41, CPacketRemoveFriend.class);

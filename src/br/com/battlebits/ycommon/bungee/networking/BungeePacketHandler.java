@@ -157,7 +157,7 @@ public class BungeePacketHandler extends CommonHandler {
 
 	@Override
 	public void handleUpdateProfile(CPacketUpdateProfile packet) {
-		
+
 	}
 
 	@Override
@@ -177,13 +177,14 @@ public class BungeePacketHandler extends CommonHandler {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	@Override
 	public void handleChangeAccount(CPacketChangeAccount packet) throws Exception {
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(packet.getUuid());
 		player.setXp(packet.getXp());
 		player.setFichas(packet.getFichas());
 		player.setMoney(packet.getMoney());
+		player = null;
 	}
 
 	@Override
@@ -194,7 +195,9 @@ public class BungeePacketHandler extends CommonHandler {
 
 	@Override
 	public void handleChangeTag(CPacketChangeTag packet) throws Exception {
-		// TODO: HANDLE CHANGE TAG
+		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(packet.getUniqueId());
+		player.setTag(packet.getTag());
+		player = null;
 	}
 
 }

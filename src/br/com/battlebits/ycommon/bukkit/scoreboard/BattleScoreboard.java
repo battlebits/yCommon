@@ -20,15 +20,14 @@ public class BattleScoreboard {
 		if (t == null) {
 			t = createTeam(p, id, "", "");
 		}
-		leaveTeam(p, join);
-		t.addEntry(join.getName());
+		t.addPlayer(join);
 		t = null;
 	}
 
 	public void leaveTeam(Player p, Player leave) {
 		Team t = p.getScoreboard().getPlayerTeam(leave);
 		if (t != null) {
-			t.removeEntry(leave.getName());
+			t.removePlayer(leave);
 			if (t.getSize() == 0) {
 				t.unregister();
 			}

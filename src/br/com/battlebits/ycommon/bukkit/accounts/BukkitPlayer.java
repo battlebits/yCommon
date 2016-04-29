@@ -38,13 +38,14 @@ public class BukkitPlayer extends BattlePlayer {
 		PlayerChangeTagEvent event = new PlayerChangeTagEvent(Bukkit.getPlayer(getUuid()), getTag(), tag);
 		BukkitMain.getPlugin().getServer().getPluginManager().callEvent(event);
 		if (!event.isCancelled()) {
+			if (tag != getTag())
+				try {
+					PacketSender.sendPacket(new CPacketChangeTag(getUuid(), tag));
+				} catch (Exception e) {
+					Bukkit.getPlayer(getUuid()).sendMessage(Translate.getTranslation(getLanguage(), "command-tag-prefix") + " " + Translate.getTranslation(getLanguage(), "error-try-again-please"));
+					return false;
+				}
 			super.setTag(tag);
-			try {
-				PacketSender.sendPacket(new CPacketChangeTag(getUuid(), tag));
-			} catch (Exception e) {
-				Bukkit.getPlayer(getUuid()).sendMessage(Translate.getTranslation(getLanguage(), "command-tag-prefix") + " " + Translate.getTranslation(getLanguage(), "error-try-again-please"));
-				return false;
-			}
 		}
 		return !event.isCancelled();
 	}
