@@ -78,8 +78,8 @@ public class ModeratingCommands extends CommandClass {
 		// TODO: ALERT STAFFS
 	}
 
-	@Command(name = "tp", aliases = { "teleport", "teleportar" }, groupToUse = Group.TRIAL, noPermMessageId = "command-teleport-no-access", runAsync = false)
-	public void tp(CommandArgs cmdArgs) {
+	@Command(name = "teleport", aliases = { "tp", "teleportar" }, groupToUse = Group.TRIAL, noPermMessageId = "command-teleport-no-access", runAsync = false)
+	public void teleport(CommandArgs cmdArgs) {
 		if (cmdArgs.isPlayer()) {
 			Player p = cmdArgs.getPlayer();
 			String[] args = cmdArgs.getArgs();
@@ -157,7 +157,7 @@ public class ModeratingCommands extends CommandClass {
 	}
 
 	@SuppressWarnings("deprecation")
-	@Command(name = "tpall", aliases = { "teleportall" }, groupToUse = Group.MOD, noPermMessageId = "command-teleportall-no-access", runAsync = false)
+	@Command(name = "teleportall", aliases = { "tpall" }, groupToUse = Group.MOD, noPermMessageId = "command-teleportall-no-access", runAsync = false)
 	public void tpall(CommandArgs cmdArgs) {
 		if (cmdArgs.isPlayer()) {
 			Player p = cmdArgs.getPlayer();
