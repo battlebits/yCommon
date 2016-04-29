@@ -136,7 +136,7 @@ public class BattlePlayer {
 
 		this.serverConnected = "";
 		this.serverConnectedType = ServerType.NONE;
-		
+
 		this.tag = Tag.valueOf(getServerGroup().toString());
 	}
 
@@ -214,16 +214,18 @@ public class BattlePlayer {
 			}
 		}
 		if (group == Group.NORMAL) {
-			RankType expire = null;
-			for (Entry<RankType, Long> expireRank : getRanks().entrySet()) {
-				if (expire == null) {
-					expire = expireRank.getKey();
-				} else if (expireRank.getKey().ordinal() > expire.ordinal()) {
-					expire = expireRank.getKey();
+			if (!getRanks().isEmpty()) {
+				RankType expire = null;
+				for (Entry<RankType, Long> expireRank : getRanks().entrySet()) {
+					if (expire == null) {
+						expire = expireRank.getKey();
+					} else if (expireRank.getKey().ordinal() > expire.ordinal()) {
+						expire = expireRank.getKey();
+					}
 				}
+				if (expire != null)
+					group = Group.valueOf(expire.name());
 			}
-			if (expire != null)
-				group = Group.valueOf(expire.name());
 		}
 		return group;
 	}
@@ -427,12 +429,12 @@ public class BattlePlayer {
 	public Tag getTag() {
 		return tag;
 	}
-	
+
 	public boolean setTag(Tag tag) {
 		this.tag = tag;
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
