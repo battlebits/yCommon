@@ -33,6 +33,7 @@ public class TagListener implements Listener {
 				Player p = e.getPlayer();
 				BukkitPlayer player = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(e.getPlayer().getUniqueId());
 				String id = getTeamName(player.getTag(), player.getLiga());
+				player.setTag(player.getTag());
 				for (Player o : Bukkit.getOnlinePlayers()) {
 					if (o.getPlayer().getUniqueId() != e.getPlayer().getUniqueId()) {
 						BukkitPlayer bp = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(o.getUniqueId());
