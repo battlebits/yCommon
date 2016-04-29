@@ -92,6 +92,8 @@ public class GroupCommand extends CommandClass {
 				ServerType serverType = typep;
 				if (group.ordinal() > Group.STREAMER.ordinal())
 					serverType = ServerType.NETWORK;
+				if (group == Group.NORMAL && player.getServerGroup().ordinal() > Group.STREAMER.ordinal())
+					serverType = ServerType.NETWORK;
 				Group actualGroup = player.getGroups().containsKey(serverType) ? player.getGroups().get(serverType) : Group.NORMAL;
 				if (actualGroup == group) {
 					sender.sendMessage(TextComponent.fromLegacyText(groupSetPrefix + Translate.getTranslation(language, "command-groupset-player-already-group")));

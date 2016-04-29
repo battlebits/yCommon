@@ -35,6 +35,9 @@ public class BukkitPlayer extends BattlePlayer {
 
 	@Override
 	public boolean setTag(Tag tag) {
+		if (!tags.contains(tag)) {
+			tag = Tag.valueOf(getServerGroup().name());
+		}
 		PlayerChangeTagEvent event = new PlayerChangeTagEvent(Bukkit.getPlayer(getUuid()), getTag(), tag);
 		BukkitMain.getPlugin().getServer().getPluginManager().callEvent(event);
 		if (!event.isCancelled()) {
