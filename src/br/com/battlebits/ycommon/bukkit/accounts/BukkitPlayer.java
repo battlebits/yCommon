@@ -42,8 +42,7 @@ public class BukkitPlayer extends BattlePlayer {
 			try {
 				PacketSender.sendPacket(new CPacketChangeTag(getUuid(), tag));
 			} catch (Exception e) {
-				Bukkit.getPlayer(getUuid()).sendMessage(Translate.getTranslation(getLanguage(), "command-tag-prefix") + " "
-						+ Translate.getTranslation(getLanguage(), "error-try-again-please"));
+				Bukkit.getPlayer(getUuid()).sendMessage(Translate.getTranslation(getLanguage(), "command-tag-prefix") + " " + Translate.getTranslation(getLanguage(), "error-try-again-please"));
 				return false;
 			}
 		}
@@ -157,13 +156,9 @@ public class BukkitPlayer extends BattlePlayer {
 	public void loadTags() {
 		tags = new ArrayList<>();
 		for (Tag t : Tag.values()) {
-			if (((t.isExclusive() && ((t.getGroupToUse() == getServerGroup()) || (getServerGroup().ordinal() >= Group.ADMIN.ordinal())))
-					|| (!t.isExclusive() && getServerGroup().ordinal() >= t.getGroupToUse().ordinal()))) {
+			if (((t.isExclusive() && ((t.getGroupToUse() == getServerGroup()) || (getServerGroup().ordinal() >= Group.ADMIN.ordinal()))) || (!t.isExclusive() && getServerGroup().ordinal() >= t.getGroupToUse().ordinal()))) {
 				tags.add(t);
 			}
-		}
-		if (!getTags().contains(getTag())) {
-			setTag(Tag.valueOf(getServerGroup().toString()));
 		}
 	}
 
