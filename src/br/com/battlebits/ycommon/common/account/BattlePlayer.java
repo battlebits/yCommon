@@ -3,6 +3,7 @@ package br.com.battlebits.ycommon.common.account;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -205,6 +206,7 @@ public class BattlePlayer {
 	}
 
 	public Group getServerGroup() {
+		checkRanks();
 		Group group = Group.NORMAL;
 		if (!getGroups().isEmpty()) {
 			if (getGroups().containsKey(ServerType.NETWORK)) {
@@ -433,6 +435,17 @@ public class BattlePlayer {
 	public boolean setTag(Tag tag) {
 		this.tag = tag;
 		return true;
+	}
+
+	public void checkRanks() {
+		if (!getRanks().isEmpty()) {
+			Iterator<Entry<RankType, Long>> it = getRanks().entrySet().iterator();
+			while (it.hasNext()) {
+				Entry<RankType, Long> entry = it.next();
+				if (System.currentTimeMillis() > entry.getValue())
+					it.remove();
+			}
+		}
 	}
 
 	@Override
