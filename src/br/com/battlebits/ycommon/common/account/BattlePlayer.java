@@ -328,12 +328,58 @@ public class BattlePlayer {
 		this.fichas = fichas;
 	}
 
+	public int addFichas(int fichas) {
+		this.fichas += fichas;
+		setFichas(this.fichas);
+		return this.fichas;
+	}
+
+	public int removeFichas(int fichas) {
+		this.fichas -= fichas;
+		if (this.fichas < 0)
+			this.fichas = 0;
+		setFichas(this.fichas);
+		return this.fichas;
+	}
+
 	public void setMoney(int money) {
 		this.money = money;
 	}
 
+	public int addMoney(int money) {
+		int multiplier = 1 + getLiga().ordinal() + (hasGroupPermission(Group.ULTIMATE) ? 1 : 0);
+		int plus = money * multiplier;
+		this.money += plus;
+		setMoney(this.money);
+		return plus;
+	}
+
+	public int removeMoney(int money) {
+		this.money -= money;
+		if (this.money < 0)
+			this.money = 0;
+		setMoney(this.money);
+		return this.money;
+	}
+
 	public void setXp(int xp) {
 		this.xp = xp;
+	}
+
+	public int addXp(int xp) {
+		int multiplier = 1 + (hasGroupPermission(Group.ULTIMATE) ? 1 : 0);
+		int plus = xp * multiplier;
+		this.xp += plus;
+		setXp(this.xp);
+		return plus;
+	}
+
+	public int removeXp(int xp) {
+		this.xp -= xp;
+		if (this.xp < 0)
+			this.xp = 0;
+		setXp(this.xp);
+		return this.xp;
 	}
 
 	public void updateGroup(Map<ServerType, Group> groups) {

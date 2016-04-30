@@ -61,31 +61,19 @@ public class BukkitPlayer extends BattlePlayer {
 	@Override
 	public void setFichas(int fichas) {
 		super.setFichas(fichas);
-		try {
-			PacketSender.sendPacket(new CPacketChangeAccount(this));
-		} catch (Exception ex) {
-			Bukkit.getPlayer(getUuid()).sendMessage(Translate.getTranslation(getLanguage(), "profile-fail-save"));
-		}
+		sendCPacketChangeAccount();
 	}
 
 	@Override
 	public void setMoney(int money) {
 		super.setMoney(money);
-		try {
-			PacketSender.sendPacket(new CPacketChangeAccount(this));
-		} catch (Exception ex) {
-			Bukkit.getPlayer(getUuid()).sendMessage(Translate.getTranslation(getLanguage(), "profile-fail-save"));
-		}
+		sendCPacketChangeAccount();
 	}
 
 	@Override
 	public void setXp(int xp) {
 		super.setXp(xp);
-		try {
-			PacketSender.sendPacket(new CPacketChangeAccount(this));
-		} catch (Exception ex) {
-			Bukkit.getPlayer(getUuid()).sendMessage(Translate.getTranslation(getLanguage(), "profile-fail-save"));
-		}
+		sendCPacketChangeAccount();
 	}
 
 	@Override
@@ -171,6 +159,14 @@ public class BukkitPlayer extends BattlePlayer {
 			PacketSender.sendPacket(new CPacketAccountConfiguration(getUuid(), getConfiguration()));
 		} catch (Exception ex) {
 			Bukkit.getPlayer(getUuid()).sendMessage(Translate.getTranslation(getLanguage(), "configuration-fail-save"));
+		}
+	}
+	
+	public void sendCPacketChangeAccount() {
+		try {
+			PacketSender.sendPacket(new CPacketChangeAccount(this));
+		} catch (Exception ex) {
+			Bukkit.getPlayer(getUuid()).sendMessage(Translate.getTranslation(getLanguage(), "profile-fail-save"));
 		}
 	}
 

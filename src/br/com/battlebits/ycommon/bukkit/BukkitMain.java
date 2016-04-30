@@ -39,10 +39,10 @@ public class BukkitMain extends JavaPlugin {
 	private BukkitAccount accountManager;
 	private PermissionManager permissionManager;
 	private CommonHandler packetHandler;
-	
+
 	private BukkitCommandLoader bukkitCommandLoader;
 	private BukkitCommandFramework bukkitCommandFramework;
-	
+
 	private BattleScoreboard battleScoreboard;
 
 	{
@@ -135,7 +135,7 @@ public class BukkitMain extends JavaPlugin {
 	public BukkitAccount getAccountManager() {
 		return accountManager;
 	}
-	
+
 	public BattleScoreboard getBattleScoreboard() {
 		return battleScoreboard;
 	}
@@ -143,13 +143,13 @@ public class BukkitMain extends JavaPlugin {
 	public BukkitCommandLoader getBukkitCommandLoader() {
 		return bukkitCommandLoader;
 	}
-	
+
 	public static BukkitMain getPlugin() {
 		return plugin;
 	}
 
 	public static ServerType getServerType() {
-		return null;
+		return ServerType.NONE;
 	}
 
 	public static void setServerName(String serverName) {
