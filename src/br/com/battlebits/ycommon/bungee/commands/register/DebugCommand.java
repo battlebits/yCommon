@@ -29,6 +29,6 @@ public class DebugCommand extends CommandClass {
 				++playersRemovidos;
 			}
 		}
-		cmdArgs.getSender().sendMessage(TextComponent.fromLegacyText(playersRemovidos + " players no cache"));
+		cmdArgs.getSender().sendMessage(TextComponent.fromLegacyText(playersRemovidos + " players removidos do cache"));
 	}
 }

@@ -31,7 +31,7 @@ public class BattlebitsAPI {
 	private static UUIDFetcher uuidFetcher;
 	private static PremiumChecker premiumChecker;
 	private static Logger logger;
-	private static boolean debugMode = true;
+	private static boolean debugMode = false;
 	private static boolean useRedisBungee = false;
 	public final static String FORUM_WEBSITE = "http://forum.battlebits.com.br";
 	public final static String WEBSITE = "http://battlebits.com.br";

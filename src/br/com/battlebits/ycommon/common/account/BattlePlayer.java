@@ -293,6 +293,8 @@ public class BattlePlayer {
 	}
 
 	public GameStatus getGameStatus() {
+		if (gameStatus == null)
+			gameStatus = new GameStatus();
 		return gameStatus;
 	}
 

@@ -162,12 +162,8 @@ public class BukkitPlayer extends BattlePlayer {
 	}
 
 	public void injectBukkitClass() {
-		setConfiguration(new BukkitConfiguration(this));
-		setGameStatus(new BukkitGameStatus(this));
-	}
-
-	public void injectGameStatus() {
-		setConfiguration(new BukkitConfiguration(this));
+		super.setConfiguration(new BukkitConfiguration(this));
+		super.setGameStatus(new BukkitGameStatus(this));
 	}
 
 	public void loadTags() {

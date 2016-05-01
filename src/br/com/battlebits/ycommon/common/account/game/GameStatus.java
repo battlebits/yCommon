@@ -15,13 +15,15 @@ public class GameStatus {
 	public Map<String, String> getMinigameStatus() {
 		return minigameStatus;
 	}
-	
+
 	public void setMinigameStatus(Map<String, String> status) {
 		this.minigameStatus = status;
 	}
 
 	public <T> T getMinigame(GameType type, Class<?> cls) {
-		T game = BattlebitsAPI.getGson().fromJson(minigameStatus.get(type).replace("\\", "\""), cls);
+		if (!minigameStatus.containsKey(type.getServerId()))
+			return null;
+		T game = BattlebitsAPI.getGson().fromJson(minigameStatus.get(type.getServerId()).replace("\\", "\""), cls);
 		return game;
 	}
 
@@ -32,5 +34,5 @@ public class GameStatus {
 	public void updateMinigame(String key, String mini) {
 		minigameStatus.put(key, mini.replace("\"", "\\"));
 	}
-	
+
 }
