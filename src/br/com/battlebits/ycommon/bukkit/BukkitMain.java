@@ -22,6 +22,7 @@ import br.com.battlebits.ycommon.bukkit.networking.PacketSender;
 import br.com.battlebits.ycommon.bukkit.permissions.PermissionManager;
 import br.com.battlebits.ycommon.bukkit.run.UpdateScheduler;
 import br.com.battlebits.ycommon.bukkit.scoreboard.BattleScoreboard;
+import br.com.battlebits.ycommon.bukkit.util.PluginUpdater;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.enums.BattleInstance;
@@ -44,6 +45,8 @@ public class BukkitMain extends JavaPlugin {
 	private BukkitCommandFramework bukkitCommandFramework;
 
 	private BattleScoreboard battleScoreboard;
+	
+	private boolean restart;
 
 	{
 		plugin = this;
@@ -51,11 +54,14 @@ public class BukkitMain extends JavaPlugin {
 
 	@Override
 	public void onLoad() {
+		restart = new PluginUpdater(this).run();
 		BattlebitsAPI.setBattleInstance(BattleInstance.BUKKIT);
 	}
 
 	@Override
 	public void onEnable() {
+		if(restart)
+			return;
 		Injector.createTinyProtocol(this);
 		packetHandler = new BukkitHandler();
 		this.getServer().getMessenger().registerOutgoingPluginChannel(this, BattlebitsAPI.getBungeeChannel());
@@ -150,6 +156,10 @@ public class BukkitMain extends JavaPlugin {
 
 	public static ServerType getServerType() {
 		return ServerType.NONE;
+	}
+	
+	public boolean isRestarting() {
+		return restart;
 	}
 
 	public static void setServerName(String serverName) {
