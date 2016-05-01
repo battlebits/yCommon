@@ -20,7 +20,7 @@ public class ModeratingCommands extends CommandClass {
 	private DecimalFormat locationFormater = new DecimalFormat("######.##");
 
 	@SuppressWarnings("deprecation")
-	@Command(name = "gamemode", aliases = { "gm" }, groupToUse = Group.ADMIN, noPermMessageId = "command-gamemode-no-access", runAsync = true)
+	@Command(name = "gamemode", aliases = { "gm" }, groupToUse = Group.TRIAL, noPermMessageId = "command-gamemode-no-access", runAsync = true)
 	public void gamemode(CommandArgs cmdArgs) {
 		if (cmdArgs.isPlayer()) {
 			Player p = cmdArgs.getPlayer();
