@@ -46,6 +46,7 @@ public class BukkitHandler extends CommonHandler {
 		BukkitPlayer battlePlayer = packet.getBukkitPlayer();
 		battlePlayer.injectBukkitClass();
 		battlePlayer.loadTags();
+		battlePlayer.connect(BukkitMain.getServerHostName());
 		BattlebitsAPI.getAccountCommon().loadBattlePlayer(packet.getBattlePlayer().getUuid(), battlePlayer);
 		BattlebitsAPI.debug("NEW BATTLEPLAYER>" + battlePlayer.getUserName() + "(" + battlePlayer.getUuid() + ")");
 		battlePlayer = null;

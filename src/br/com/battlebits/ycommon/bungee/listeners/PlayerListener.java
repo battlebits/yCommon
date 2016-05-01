@@ -7,7 +7,7 @@ import br.com.battlebits.ycommon.bungee.event.UpdateEvent.UpdateType;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import net.md_5.bungee.BungeeCord;
-import net.md_5.bungee.api.event.ServerConnectEvent;
+import net.md_5.bungee.api.event.ServerConnectedEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
@@ -29,11 +29,9 @@ public class PlayerListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = (byte) 128)
-	public void onConnect(ServerConnectEvent event) {
-		if(event.isCancelled())
-			return;
+	@EventHandler(priority = (byte) -128)
+	public void onConnect(ServerConnectedEvent event) {
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(event.getPlayer().getUniqueId());
-		player.connect(event.getTarget().getName());
+		player.connect(event.getServer().getClass().getName());
 	}
 }

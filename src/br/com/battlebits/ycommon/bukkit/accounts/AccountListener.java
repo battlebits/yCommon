@@ -9,6 +9,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
+import br.com.battlebits.ycommon.common.translate.Translate;
 
 public class AccountListener implements Listener {
 
@@ -19,8 +20,14 @@ public class AccountListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onRemoveAccount(AsyncPlayerPreLoginEvent event) {
-		if (event.getLoginResult() != Result.ALLOWED)
+		if(BattlebitsAPI.getAccountCommon().getBattlePlayer(event.getUniqueId()) == null){
+			event.setLoginResult(Result.KICK_OTHER);
+			event.setKickMessage(Translate.getTranslation(BattlebitsAPI.getDefaultLanguage(), "account-not-load"));
+		}
+		
+		if (event.getLoginResult() != Result.ALLOWED){
 			BattlebitsAPI.getAccountCommon().unloadBattlePlayer(event.getUniqueId());
+		}
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)

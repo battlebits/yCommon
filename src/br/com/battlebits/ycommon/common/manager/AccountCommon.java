@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import br.com.battlebits.ycommon.bungee.BungeeMain;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
@@ -47,7 +48,10 @@ public class AccountCommon {
 	}
 
 	public void unloadBattlePlayer(UUID uuid) {
-		players.remove(uuid);
+		if (players.containsKey(uuid))
+			players.remove(uuid);
+		else
+			BattlebitsAPI.getLogger().log(Level.SEVERE, "NAO FOI POSSIVEL ENCONTRAR " + uuid.toString());
 	}
 
 	public void saveBattlePlayer(BattlePlayer player) {
