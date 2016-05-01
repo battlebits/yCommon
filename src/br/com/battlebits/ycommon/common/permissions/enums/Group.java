@@ -1,7 +1,10 @@
 package br.com.battlebits.ycommon.common.permissions.enums;
 
 import br.com.battlebits.ycommon.common.permissions.groups.GroupInterface;
+import br.com.battlebits.ycommon.common.permissions.groups.ModeratorGroup;
+import br.com.battlebits.ycommon.common.permissions.groups.OwnerGroup;
 import br.com.battlebits.ycommon.common.permissions.groups.SimpleGroup;
+import br.com.battlebits.ycommon.common.permissions.groups.StreamerGroup;
 
 public enum Group {
 	NORMAL, //
@@ -13,12 +16,12 @@ public enum Group {
 	STAFF, //
 	HELPER, //
 	DEV, //
-	TRIAL, //
-	MOD, //
-	STREAMER, //
-	MANAGER, //
-	ADMIN, //
-	DONO;
+	TRIAL(new ModeratorGroup()), //
+	MOD(new ModeratorGroup()), //
+	STREAMER(new StreamerGroup()), //
+	MANAGER(new StreamerGroup()), //
+	ADMIN(new StreamerGroup()), //
+	DONO(new OwnerGroup());
 
 	private GroupInterface group;
 

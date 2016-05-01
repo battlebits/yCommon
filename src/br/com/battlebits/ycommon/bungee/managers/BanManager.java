@@ -152,6 +152,7 @@ public class BanManager {
 		return banCache.asMap().get(address);
 	}
 
+	@SuppressWarnings("deprecation")
 	public static String getBanKickMessage(Ban ban, Language lang) {
 		String reason = "";
 		if (ban.isPermanent()) {
@@ -161,7 +162,7 @@ public class BanManager {
 		}
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(ban.getBanTime());
-		reason = reason.replace("%day%", calendar.getTime().toString());
+		reason = reason.replace("%day%", calendar.getTime().getDay() + "/" + calendar.getTime().getMonth() + "/" + calendar.getTime().getYear());
 		reason = reason.replace("%banned-By%", ban.getBannedBy());
 		reason = reason.replace("%reason%", ban.getReason());
 		reason = reason.replace("%duration%", DateUtils.formatDifference(lang, (ban.getExpire() - System.currentTimeMillis()) / 1000));
