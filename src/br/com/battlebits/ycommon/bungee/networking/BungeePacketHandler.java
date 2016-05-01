@@ -16,6 +16,7 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeAccount;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLanguage;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLiga;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeTag;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketCommandRun;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketCreateParty;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketDisbandParty;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveBlockedPlayer;
@@ -208,9 +209,11 @@ public class BungeePacketHandler extends CommonHandler {
 	@Override
 	public void handleServerRequest(CPacketServerNameRequest packet) throws Exception {
 		String serverHostName = "none";
-		for(ServerInfo info : BungeeMain.getPlugin().getProxy().getServers().values()) {
-			String string = info.getAddress().getHostString() + info.getAddress().getPort();
-			if(string.equals(packet.getServerListening())) {
+		System.out.println(packet.getServerListening());
+		for (ServerInfo info : BungeeMain.getPlugin().getProxy().getServers().values()) {
+			String string = info.getAddress().getHostString() + ":" + info.getAddress().getPort();
+			System.out.println(string);
+			if (string.equals(packet.getServerListening())) {
 				serverHostName = info.getName();
 				break;
 			}
@@ -221,6 +224,11 @@ public class BungeePacketHandler extends CommonHandler {
 	@Override
 	public void handleServerLoad(CPacketServerNameLoad packet) throws Exception {
 		// PROVAVEL QUE NUNCA VAI ACONTECER
+	}
+
+	@Override
+	public void handleCommandRun(CPacketCommandRun packet) throws Exception {
+		BungeeMain.getPlugin().getProxy().getPluginManager().dispatchCommand(BungeeMain.getPlugin().getProxy().getConsole(), packet.getCommand());
 	}
 
 }

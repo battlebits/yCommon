@@ -16,6 +16,7 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeAccount;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLanguage;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLiga;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeTag;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketCommandRun;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketCreateParty;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketDisbandParty;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveBlockedPlayer;
@@ -192,6 +193,13 @@ public class BukkitHandler extends CommonHandler {
 	@Override
 	public void handleServerLoad(CPacketServerNameLoad packet) throws Exception {
 		BukkitMain.setServerName(packet.getServerHostName());
+		BattlebitsAPI.getLogger().info("SERVER HOST NAME > " + packet.getServerHostName());
+		BattlebitsAPI.getLogger().info("SERVER TYPE > " + BukkitMain.getServerType());
+	}
+
+	@Override
+	public void handleCommandRun(CPacketCommandRun packet) throws Exception {
+		// PROVAVEL QUE NUNCA VAI TER
 	}
 
 }

@@ -16,6 +16,7 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketAddRank;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeAccount;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLanguage;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeTag;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketCommandRun;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketCreateParty;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketDisbandParty;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketJoinParty;
@@ -45,7 +46,7 @@ public abstract class CommonPacket {
 		register((byte) 0x02, CPacketAccountConfiguration.class);
 		register((byte) 0x03, CPacketServerNameRequest.class);
 		register((byte) 0x04, CPacketServerNameLoad.class);
-
+		register((byte) 0x05, CPacketCommandRun.class);
 		/** 0x1X: Translations **/
 		register((byte) 0x10, CPacketTranslationsRequest.class);
 		register((byte) 0x11, CPacketTranslationsLoad.class);

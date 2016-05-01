@@ -77,7 +77,7 @@ public class BukkitMain extends JavaPlugin {
 		}
 
 		try {
-			PacketSender.sendPacketReturn(new CPacketServerNameRequest(), packetHandler);
+			PacketSender.sendPacketReturn(new CPacketServerNameRequest(getServer().getIp() + ":" + getServer().getPort()), packetHandler);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
