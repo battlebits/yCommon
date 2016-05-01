@@ -14,7 +14,7 @@ public enum Tag {
 	MOD("§5§l%mod%§5", Group.MOD, false), 
 	TRIAL("§5§l%trial%§5", Group.TRIAL, false), 
 	HELPER("§9§l%helper%§9", Group.HELPER, false), 
-	STAFF("§e§l%staff%§e", Group.HELPER, false), 
+	STAFF("§e§l%staff%§e", Group.STAFF, false), 
 	BUILDER("§e§l%builder%§e", Group.BUILDER, true),
 	DEV("§3§l%developer%§3", Group.DEV, true), 
 	YOUTUBER("§b§l%youtuber%§b", Group.YOUTUBER, true),

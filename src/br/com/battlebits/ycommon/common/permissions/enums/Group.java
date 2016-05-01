@@ -10,6 +10,7 @@ public enum Group {
 	ULTIMATE, //
 	YOUTUBER, //
 	BUILDER, //
+	STAFF, //
 	HELPER, //
 	DEV, //
 	TRIAL, //
