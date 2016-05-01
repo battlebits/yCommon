@@ -28,6 +28,7 @@ import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.enums.BattleInstance;
 import br.com.battlebits.ycommon.common.enums.ServerType;
 import br.com.battlebits.ycommon.common.networking.CommonHandler;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketServerNameRequest;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketTranslationsRequest;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
@@ -45,7 +46,7 @@ public class BukkitMain extends JavaPlugin {
 	private BukkitCommandFramework bukkitCommandFramework;
 
 	private BattleScoreboard battleScoreboard;
-	
+
 	private boolean restart;
 
 	{
@@ -60,7 +61,7 @@ public class BukkitMain extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		if(restart)
+		if (restart)
 			return;
 		Injector.createTinyProtocol(this);
 		packetHandler = new BukkitHandler();
@@ -74,10 +75,13 @@ public class BukkitMain extends JavaPlugin {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		/*
-		 * try { PacketSender.sendPacketReturn(new CPacketServerNameRequest(),
-		 * packetHandler); } catch (Exception e) { e.printStackTrace(); }
-		 */
+
+		try {
+			PacketSender.sendPacketReturn(new CPacketServerNameRequest(), packetHandler);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		registerCommonManagement();
 		enableCommonManagement();
 		registerListeners();
@@ -155,9 +159,9 @@ public class BukkitMain extends JavaPlugin {
 	}
 
 	public static ServerType getServerType() {
-		return ServerType.NONE;
+		return ServerType.getServerType(SERVERNAME);
 	}
-	
+
 	public boolean isRestarting() {
 		return restart;
 	}
@@ -166,7 +170,7 @@ public class BukkitMain extends JavaPlugin {
 		SERVERNAME = serverName;
 	}
 
-	public static String getServerName() {
+	public static String getServerHostName() {
 		return SERVERNAME;
 	}
 

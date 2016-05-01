@@ -19,6 +19,8 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveFriend;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveFriendRequest;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveGroup;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveRank;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketServerNameLoad;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketServerNameRequest;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketTranslationsLoad;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketTranslationsRequest;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketUpdateClan;
@@ -74,5 +76,9 @@ public abstract class CommonHandler {
 	public abstract void handleChangeLanguage(CPacketChangeLanguage packet) throws Exception;
 
 	public abstract void handleChangeTag(CPacketChangeTag packet) throws Exception;
+	
+	public abstract void handleServerRequest(CPacketServerNameRequest packet) throws Exception;
+
+	public abstract void handleServerLoad(CPacketServerNameLoad packet) throws Exception;
 
 }

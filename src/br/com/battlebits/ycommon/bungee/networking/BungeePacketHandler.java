@@ -1,5 +1,6 @@
 package br.com.battlebits.ycommon.bungee.networking;
 
+import br.com.battlebits.ycommon.bungee.BungeeMain;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.networking.CommonHandler;
@@ -22,6 +23,8 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveFriend;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveFriendRequest;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveGroup;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveRank;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketServerNameLoad;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketServerNameRequest;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketTranslationsLoad;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketTranslationsRequest;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketUpdateClan;
@@ -29,6 +32,7 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketUpdateGameStat
 import br.com.battlebits.ycommon.common.networking.packets.CPacketUpdateProfile;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
+import net.md_5.bungee.api.config.ServerInfo;
 
 public class BungeePacketHandler extends CommonHandler {
 
@@ -199,6 +203,24 @@ public class BungeePacketHandler extends CommonHandler {
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(packet.getUniqueId());
 		player.setTag(packet.getTag());
 		player = null;
+	}
+
+	@Override
+	public void handleServerRequest(CPacketServerNameRequest packet) throws Exception {
+		String serverHostName = "none";
+		for(ServerInfo info : BungeeMain.getPlugin().getProxy().getServers().values()) {
+			String string = info.getAddress().getHostString() + info.getAddress().getPort();
+			if(string.equals(packet.getServerListening())) {
+				serverHostName = info.getName();
+				break;
+			}
+		}
+		sender.sendPacket(new CPacketServerNameLoad(serverHostName));
+	}
+
+	@Override
+	public void handleServerLoad(CPacketServerNameLoad packet) throws Exception {
+		// PROVAVEL QUE NUNCA VAI ACONTECER
 	}
 
 }

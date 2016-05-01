@@ -1,7 +1,25 @@
 package br.com.battlebits.ycommon.common.enums;
 
 public enum ServerType {
-	NETWORK, HUNGERGAMES, BATTLECRAFT, SKYWARS, LOBBY, RAID, GARTICCRAFT, TESTSERVER, NONE;
+	NETWORK("bbits.com.br"), HUNGERGAMES("battle-hg.com"), BATTLECRAFT("pvp.battlebits.com.br"), SKYWARS("sw.battlebits.com.br"), LOBBY("lobby.battlebits.com.br"), RAID("raid.battlebits.com.br"), GARTICCRAFT("gc.battlebits.com.br"), TESTSERVER("teste.battlebits.com.br"), NONE("none");
+
+	private String suffix;
+
+	private ServerType(String ends) {
+		this.suffix = ends;
+	}
+
+	public String getSuffix() {
+		return suffix;
+	}
+
+	public static ServerType getServerType(String serverHostname) {
+		for (ServerType type : values()) {
+			if (serverHostname.endsWith(type.suffix))
+				return type;
+		}
+		return NONE;
+	}
 
 	public String getName() {
 		return getServerName(super.toString().toLowerCase());

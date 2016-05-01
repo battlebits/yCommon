@@ -1,5 +1,6 @@
 package br.com.battlebits.ycommon.bukkit.networking;
 
+import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.networking.CommonHandler;
@@ -22,6 +23,8 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveFriend;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveFriendRequest;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveGroup;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveRank;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketServerNameLoad;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketServerNameRequest;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketTranslationsLoad;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketTranslationsRequest;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketUpdateClan;
@@ -173,12 +176,22 @@ public class BukkitHandler extends CommonHandler {
 	@Override
 	public void handleChangeTag(CPacketChangeTag packet) throws Exception {
 		// PROVAVEL QUE NUNCA VAI TER
-		
+
 	}
 
 	@Override
 	public void handleChangeAccount(CPacketChangeAccount packet) throws Exception {
-		
+
+	}
+
+	@Override
+	public void handleServerRequest(CPacketServerNameRequest packet) throws Exception {
+		// PROVAVEL QUE NUNCA VAI TER
+	}
+
+	@Override
+	public void handleServerLoad(CPacketServerNameLoad packet) throws Exception {
+		BukkitMain.setServerName(packet.getServerHostName());
 	}
 
 }

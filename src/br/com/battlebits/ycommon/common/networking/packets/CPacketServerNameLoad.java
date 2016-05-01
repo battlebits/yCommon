@@ -8,22 +8,32 @@ import br.com.battlebits.ycommon.common.networking.CommonPacket;
 
 public class CPacketServerNameLoad extends CommonPacket {
 
+	private String serverName;
+
+	public CPacketServerNameLoad() {
+	}
+
+	public CPacketServerNameLoad(String serverName) {
+		this.serverName = serverName;
+	}
+
+	public String getServerHostName() {
+		return serverName;
+	}
+
 	@Override
 	public void read(DataInputStream in) throws Exception {
-		// TODO Auto-generated method stub
-
+		this.serverName = in.readUTF();
 	}
 
 	@Override
 	public void write(DataOutputStream out) throws Exception {
-		// TODO Auto-generated method stub
-
+		out.writeUTF(serverName);
 	}
 
 	@Override
 	public void handle(CommonHandler handler) throws Exception {
-		// TODO Auto-generated method stub
-
+		handler.handleServerLoad(this);
 	}
 
 }
