@@ -207,6 +207,9 @@ public class BattlePlayer {
 				group = getGroups().get(serverConnectedType);
 			}
 		}
+		if (group == Group.NORMAL)
+			if (isStaff())
+				group = Group.STAFF;
 		if (group == Group.NORMAL) {
 			if (!getRanks().isEmpty()) {
 				RankType expire = null;
@@ -430,7 +433,7 @@ public class BattlePlayer {
 	public void setConfiguration(AccountConfiguration config) {
 		this.configuration = config;
 	}
-	
+
 	public void setGameStatus(GameStatus status) {
 		this.gameStatus = status;
 	}
@@ -447,10 +450,10 @@ public class BattlePlayer {
 		this.banHistory = banHistory;
 	}
 
-	public void connect(String serverIp, ServerType serverType) {
+	public void connect(String serverIp) {
 		checkRanks();
 		this.serverConnected = serverIp;
-		this.serverConnectedType = serverType;
+		this.serverConnectedType = ServerType.getServerType(serverIp);
 	}
 
 	public void updateCache() {

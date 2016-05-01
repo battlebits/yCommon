@@ -68,7 +68,9 @@ public class BanCommand extends CommandClass {
 					return;
 				}
 				if (player.isStaff()) {
-					Group group = BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup();
+					Group group = Group.DONO;
+					if (cmdArgs.isPlayer())
+						group = BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getServerGroup();
 					if (group != Group.DONO && group != Group.ADMIN) {
 						sender.sendMessage(TextComponent.fromLegacyText(banPrefix + Translate.getTranslation(language, "command-ban-cant-staff")));
 						return;

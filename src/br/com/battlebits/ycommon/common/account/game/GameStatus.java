@@ -21,7 +21,7 @@ public class GameStatus {
 	}
 
 	public <T> T getMinigame(GameType type, Class<?> cls) {
-		T game = BattlebitsAPI.getGson().fromJson(minigameStatus.get(type), cls);
+		T game = BattlebitsAPI.getGson().fromJson(minigameStatus.get(type).replace("\\", "\""), cls);
 		return game;
 	}
 
@@ -30,7 +30,7 @@ public class GameStatus {
 	}
 
 	public void updateMinigame(String key, String mini) {
-		minigameStatus.put(key, mini);
+		minigameStatus.put(key, mini.replace("\"", "\\"));
 	}
 	
 }
