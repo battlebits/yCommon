@@ -162,8 +162,9 @@ public class BungeePacketHandler extends CommonHandler {
 
 	@Override
 	public void handleUpdateGameStatus(CPacketUpdateGameStatus packet) {
-		// TODO Auto-generated method stub
-
+		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(packet.getUuid());
+		player.getGameStatus().updateMinigame(packet.getGameType(), packet.getJson());
+		player = null;
 	}
 
 	@Override

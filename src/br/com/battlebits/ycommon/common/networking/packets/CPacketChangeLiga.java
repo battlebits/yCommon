@@ -2,22 +2,35 @@ package br.com.battlebits.ycommon.common.networking.packets;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.util.UUID;
 
+import br.com.battlebits.ycommon.common.enums.Liga;
 import br.com.battlebits.ycommon.common.networking.CommonHandler;
 import br.com.battlebits.ycommon.common.networking.CommonPacket;
 
-public class CPacketChangeLiga extends CommonPacket{
+public class CPacketChangeLiga extends CommonPacket {
+
+	private UUID uuid;
+	private Liga liga;
+
+	public CPacketChangeLiga() {
+	}
+
+	public CPacketChangeLiga(UUID uuid, Liga liga) {
+		this.uuid = uuid;
+		this.liga = liga;
+	}
 
 	@Override
 	public void read(DataInputStream in) throws Exception {
-		// TODO Auto-generated method stub
-		
+		this.uuid = UUID.fromString(in.readUTF());
+		this.liga = Liga.valueOf(in.readUTF());
 	}
 
 	@Override
 	public void write(DataOutputStream out) throws Exception {
-		// TODO Auto-generated method stub
-		
+		out.writeUTF(uuid.toString());
+		out.writeUTF(liga.toString());
 	}
 
 	@Override

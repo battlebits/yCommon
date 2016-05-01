@@ -26,6 +26,11 @@ public class GameStatus {
 	}
 
 	public void updateMinigame(GameType key, Object mini) {
-		minigameStatus.put(key.getServerId(), BattlebitsAPI.getGson().toJson(mini));
+		updateMinigame(key.getServerId(), BattlebitsAPI.getGson().toJson(mini));
 	}
+
+	public void updateMinigame(String key, String mini) {
+		minigameStatus.put(key, mini);
+	}
+	
 }

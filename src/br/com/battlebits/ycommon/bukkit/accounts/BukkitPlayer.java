@@ -7,17 +7,20 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
+import br.com.battlebits.ycommon.bukkit.event.account.update.PlayerChangeLeagueEvent;
 import br.com.battlebits.ycommon.bukkit.event.account.update.PlayerChangeTagEvent;
 import br.com.battlebits.ycommon.bukkit.networking.PacketSender;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.account.game.GameStatus;
 import br.com.battlebits.ycommon.common.banmanager.history.BanHistory;
 import br.com.battlebits.ycommon.common.clans.Clan;
+import br.com.battlebits.ycommon.common.enums.Liga;
 import br.com.battlebits.ycommon.common.friends.Friend;
 import br.com.battlebits.ycommon.common.friends.block.Blocked;
 import br.com.battlebits.ycommon.common.friends.request.Request;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAccountConfiguration;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeAccount;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLiga;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeTag;
 import br.com.battlebits.ycommon.common.party.Party;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
@@ -74,6 +77,23 @@ public class BukkitPlayer extends BattlePlayer {
 	public void setXp(int xp) {
 		super.setXp(xp);
 		sendCPacketChangeAccount();
+		if (getLiga().getMin() < getXp())
+			if (Liga.getLiga(xp) != getLiga())
+				setLiga(Liga.getLiga(xp));
+	}
+
+	@Override
+	public void setLiga(Liga liga) {
+		PlayerChangeLeagueEvent event = new PlayerChangeLeagueEvent(Bukkit.getPlayer(getUuid()), getLiga(), liga);
+		BukkitMain.getPlugin().getServer().getPluginManager().callEvent(event);
+		if (!event.isCancelled()) {
+			super.setLiga(liga);
+			try {
+				PacketSender.sendPacket(new CPacketChangeLiga(getUuid(), getLiga()));
+			} catch (Exception ex) {
+				Bukkit.getPlayer(getUuid()).sendMessage(Translate.getTranslation(getLanguage(), "liga-fail-save"));
+			}
+		}
 	}
 
 	@Override
@@ -145,7 +165,7 @@ public class BukkitPlayer extends BattlePlayer {
 		setConfiguration(new BukkitConfiguration(this));
 		setGameStatus(new BukkitGameStatus(this));
 	}
-	
+
 	public void injectGameStatus() {
 		setConfiguration(new BukkitConfiguration(this));
 	}
@@ -166,7 +186,7 @@ public class BukkitPlayer extends BattlePlayer {
 			Bukkit.getPlayer(getUuid()).sendMessage(Translate.getTranslation(getLanguage(), "configuration-fail-save"));
 		}
 	}
-	
+
 	public void sendCPacketChangeAccount() {
 		try {
 			PacketSender.sendPacket(new CPacketChangeAccount(this));
