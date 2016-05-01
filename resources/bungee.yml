@@ -1,4 +1,4 @@
 name: yCommon
-authors: [GustavoInacio, vitorrdgs]
+author: [GustavoInacio, vitorrdgs]
 main: br.com.battlebits.ycommon.bungee.BungeeMain
-version: 0.0.1-PREALPHA
+version: 1.0
