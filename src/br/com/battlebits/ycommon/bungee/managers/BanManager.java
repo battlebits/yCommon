@@ -1,8 +1,10 @@
 package br.com.battlebits.ycommon.bungee.managers;
 
 import java.net.InetSocketAddress;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.AbstractMap;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -152,7 +154,6 @@ public class BanManager {
 		return banCache.asMap().get(address);
 	}
 
-	@SuppressWarnings("deprecation")
 	public static String getBanKickMessage(Ban ban, Language lang) {
 		String reason = "";
 		if (ban.isPermanent()) {
@@ -160,9 +161,9 @@ public class BanManager {
 		} else {
 			reason = Translate.getTranslation(lang, "banned-temp");
 		}
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTimeInMillis(ban.getBanTime());
-		reason = reason.replace("%day%", calendar.getTime().getDay() + "/" + calendar.getTime().getMonth() + "/" + calendar.getTime().getYear());
+		Date date = new Date(ban.getBanTime());
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+		reason = reason.replace("%day%", df.format(date));
 		reason = reason.replace("%banned-By%", ban.getBannedBy());
 		reason = reason.replace("%reason%", ban.getReason());
 		reason = reason.replace("%duration%", DateUtils.formatDifference(lang, (ban.getExpire() - System.currentTimeMillis()) / 1000));

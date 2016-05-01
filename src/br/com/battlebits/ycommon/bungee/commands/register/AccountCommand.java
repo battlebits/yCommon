@@ -1,7 +1,9 @@
 package br.com.battlebits.ycommon.bungee.commands.register;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map.Entry;
-import java.util.Calendar;
 import java.util.UUID;
 
 import br.com.battlebits.ycommon.bungee.BungeeMain;
@@ -41,7 +43,6 @@ public class AccountCommand extends CommandClass {
 			return;
 		}
 		BungeeCord.getInstance().getScheduler().runAsync(BungeeMain.getPlugin(), new Runnable() {
-			@SuppressWarnings("deprecation")
 			public void run() {
 				UUID uuid = null;
 				if (args.length > 0) {
@@ -90,10 +91,9 @@ public class AccountCommand extends CommandClass {
 						String tempo = DateUtils.getDifferenceFormat(language, ban.getDuration());
 						sender.sendMessage(TextComponent.fromLegacyText(ChatColor.YELLOW + "Foi banido por " + ban.getBannedBy() + " e durara " + tempo + ". Motivo: " + ban.getReason()));
 					} else {
-						Calendar calendar = Calendar.getInstance();
-						calendar.setTimeInMillis(ban.getBanTime());
-						String message = calendar.getTime().getDay() + "/" + calendar.getTime().getMonth() + "/" + calendar.getTime().getYear();
-						sender.sendMessage(TextComponent.fromLegacyText(ChatColor.YELLOW + "Foi banido permanentemente por " + ban.getBannedBy() + " no dia " + message + ". Motivo: " + ban.getReason()));
+						Date date = new Date(ban.getBanTime());
+						DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+						sender.sendMessage(TextComponent.fromLegacyText(ChatColor.YELLOW + "Foi banido permanentemente por " + ban.getBannedBy() + " no dia " + df.format(date) + ". Motivo: " + ban.getReason()));
 					}
 				}
 				Mute mute = player.getBanHistory().getActualMute();
@@ -102,10 +102,9 @@ public class AccountCommand extends CommandClass {
 						String tempo = DateUtils.getDifferenceFormat(language, ban.getDuration());
 						sender.sendMessage(TextComponent.fromLegacyText(ChatColor.YELLOW + "Foi mutado por " + mute.getMutedBy() + " e durara " + tempo + ". Motivo: " + mute.getReason()));
 					} else {
-						Calendar calendar = Calendar.getInstance();
-						calendar.setTimeInMillis(mute.getMuteTime());
-						String message = calendar.getTime().getDay() + "/" + calendar.getTime().getMonth() + "/" + calendar.getTime().getYear();
-						sender.sendMessage(TextComponent.fromLegacyText(ChatColor.YELLOW + "Foi mutado permanentemente por " + mute.getMutedBy() + " no dia " + message + ". Motivo: " + mute.getReason()));
+						Date date = new Date(mute.getMuteTime());
+						DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+						sender.sendMessage(TextComponent.fromLegacyText(ChatColor.YELLOW + "Foi mutado permanentemente por " + mute.getMutedBy() + " no dia " + df.format(date) + ". Motivo: " + mute.getReason()));
 					}
 				}
 				sender.sendMessage(TextComponent.fromLegacyText(ChatColor.YELLOW.toString() + ChatColor.UNDERLINE + "---------------------------------------------"));

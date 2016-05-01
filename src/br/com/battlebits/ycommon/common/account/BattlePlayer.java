@@ -457,7 +457,7 @@ public class BattlePlayer {
 	}
 
 	public void updateCache() {
-		this.cacheExpire = System.currentTimeMillis() + (15 * 1000);
+		this.cacheExpire = System.currentTimeMillis() + (60 * 5 * 1000);
 	}
 
 	public void setJoinData(String userName, InetSocketAddress ipAdrress, String countryCode) {
