@@ -1,10 +1,8 @@
 package br.com.battlebits.ycommon.common.account;
 
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
@@ -80,7 +78,6 @@ public class BattlePlayer {
 	private GameStatus gameStatus;
 
 	// HISTORIA
-	private List<String> nameHistory;
 	private BanHistory banHistory;
 
 	private boolean online;
@@ -103,7 +100,8 @@ public class BattlePlayer {
 		this.liga = Liga.FIRST;
 
 		this.ipAddress = ipAddress;
-		this.lastIpAddress = ipAddress.getHostString();
+		if (ipAddress != null)
+			this.lastIpAddress = ipAddress.getHostString();
 
 		this.onlineTime = 0;
 		this.lastLoggedIn = System.currentTimeMillis();
@@ -132,7 +130,6 @@ public class BattlePlayer {
 
 		this.gameStatus = new GameStatus();
 
-		this.nameHistory = new ArrayList<>();
 		this.banHistory = new BanHistory();
 
 		this.serverConnected = "";
@@ -151,10 +148,6 @@ public class BattlePlayer {
 
 	public String getFakeName() {
 		return fakeName;
-	}
-
-	public List<String> getNameHistory() {
-		return nameHistory;
 	}
 
 	public int getFichas() {
@@ -237,7 +230,7 @@ public class BattlePlayer {
 
 	public boolean isStaff() {
 		for (Group group : getGroups().values()) {
-			if (group.ordinal() > 6) {
+			if (group.ordinal() > Group.HELPER.ordinal()) {
 				return true;
 			}
 		}
@@ -430,6 +423,10 @@ public class BattlePlayer {
 		this.steam = steam;
 	}
 
+	public void setLiga(Liga liga) {
+		this.liga = liga;
+	}
+
 	public void setConfiguration(AccountConfiguration config) {
 		this.configuration = config;
 	}
@@ -456,8 +453,9 @@ public class BattlePlayer {
 		this.cacheExpire = System.currentTimeMillis() + (15 * 1000);
 	}
 
-	public void setJoinData(InetSocketAddress ipAdrress, String countryCode) {
+	public void setJoinData(String userName, InetSocketAddress ipAdrress, String countryCode) {
 		checkRanks();
+		this.userName = userName;
 		this.ipAddress = ipAdrress;
 		joinTime = System.currentTimeMillis();
 		this.countryCode = countryCode;
@@ -571,8 +569,6 @@ public class BattlePlayer {
 		builder.append(" | ");
 
 		builder.append("BANHISTORY > " + banHistory);
-		builder.append(" | ");
-		builder.append("NAMEHISTORY > " + nameHistory);
 
 		return super.toString();
 	}

@@ -51,7 +51,7 @@ public class LoginListener implements Listener {
 					BattlebitsAPI.debug("ACCOUNT > EXCUTED");
 					if (result.next()) {
 						BattlePlayer player = BattlebitsAPI.getGson().fromJson(result.getString("json"), BattlePlayer.class);
-						player.setJoinData(ipAdress, countryCode);
+						player.setJoinData(userName, ipAdress, countryCode);
 						BattlebitsAPI.getAccountCommon().loadBattlePlayer(uuid, player);
 						BattlebitsAPI.debug("ACCOUNT > LOADED");
 					} else {
