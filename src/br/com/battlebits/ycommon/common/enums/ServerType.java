@@ -1,7 +1,7 @@
 package br.com.battlebits.ycommon.common.enums;
 
 public enum ServerType {
-	NETWORK("bbits.com.br"), HUNGERGAMES("battle-hg.com"), BATTLECRAFT("pvp.battlebits.com.br"), SKYWARS("sw.battlebits.com.br"), LOBBY("lobby.battlebits.com.br"), RAID("raid.battlebits.com.br"), GARTICCRAFT("gc.battlebits.com.br"), TESTSERVER("teste.battlebits.com.br"), NONE("none");
+	NETWORK("bbits.com.br"), HUNGERGAMES("battle-hg.com"), BATTLECRAFT("battlecraft.com.br"), SKYWARS("sw.battlebits.com.br"), LOBBY("lobby.battlebits.com.br"), RAID("raid.battlebits.com.br"), GARTICCRAFT("gc.battlebits.com.br"), TESTSERVER("teste.battlebits.com.br"), NONE("none");
 
 	private String suffix;
 
