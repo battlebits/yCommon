@@ -430,6 +430,10 @@ public class BattlePlayer {
 	public void setConfiguration(AccountConfiguration config) {
 		this.configuration = config;
 	}
+	
+	public void setGameStatus(GameStatus status) {
+		this.gameStatus = status;
+	}
 
 	public void setLanguage(Language language) {
 		this.language = language;

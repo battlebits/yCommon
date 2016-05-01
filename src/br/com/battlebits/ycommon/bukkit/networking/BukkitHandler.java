@@ -40,7 +40,7 @@ public class BukkitHandler extends CommonHandler {
 	@Override
 	public void handleAccountLoad(CPacketAccountLoad packet) {
 		BukkitPlayer battlePlayer = packet.getBukkitPlayer();
-		battlePlayer.injectConfiguration();
+		battlePlayer.injectBukkitClass();
 		battlePlayer.loadTags();
 		BattlebitsAPI.getAccountCommon().loadBattlePlayer(packet.getBattlePlayer().getUuid(), battlePlayer);
 		BattlebitsAPI.debug("NEW BATTLEPLAYER>" + battlePlayer.getUserName() + "(" + battlePlayer.getUuid() + ")");

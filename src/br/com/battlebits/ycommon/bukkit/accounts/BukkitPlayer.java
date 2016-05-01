@@ -141,7 +141,12 @@ public class BukkitPlayer extends BattlePlayer {
 		super.updateBanHistory(banHistory);
 	}
 
-	public void injectConfiguration() {
+	public void injectBukkitClass() {
+		setConfiguration(new BukkitConfiguration(this));
+		setGameStatus(new BukkitGameStatus(this));
+	}
+	
+	public void injectGameStatus() {
 		setConfiguration(new BukkitConfiguration(this));
 	}
 
