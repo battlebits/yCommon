@@ -22,7 +22,7 @@ public class DebugCommand extends CommandClass {
 	public void clearCache(CommandArgs cmdArgs) {
 		int playersRemovidos = 0;
 		Iterator<BattlePlayer> players = BattlebitsAPI.getAccountCommon().getPlayers().iterator();
-		if (players.hasNext()) {
+		while (players.hasNext()) {
 			BattlePlayer player = players.next();
 			if (BungeeCord.getInstance().getPlayer(player.getUuid()) == null) {
 				players.remove();

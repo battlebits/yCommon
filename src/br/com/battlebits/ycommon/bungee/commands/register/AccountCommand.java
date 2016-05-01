@@ -80,7 +80,7 @@ public class AccountCommand extends CommandClass {
 					sender.sendMessage(TextComponent.fromLegacyText(ChatColor.YELLOW + "Fichas: " + player.getFichas()));
 				}
 				for (Entry<RankType, Long> entry : player.getRanks().entrySet()) {
-					sender.sendMessage(TextComponent.fromLegacyText(Tag.valueOf(entry.getKey().toString()).getPrefix(language) + ChatColor.YELLOW + " expira em " + DateUtils.getDifferenceFormat(language, entry.getValue())));
+					sender.sendMessage(TextComponent.fromLegacyText(Tag.valueOf(entry.getKey().toString()).getPrefix(language) + ChatColor.YELLOW + " expira em " + DateUtils.getDifferenceFormat(language, entry.getValue() / 1000)));
 				}
 				for (Entry<ServerType, Group> staff : player.getGroups().entrySet()) {
 					sender.sendMessage(TextComponent.fromLegacyText(Tag.valueOf(staff.getValue().toString()).getPrefix(language) + ChatColor.YELLOW + " do server " + staff.getKey().toString()));
