@@ -1,5 +1,7 @@
 package br.com.battlebits.ycommon.bungee.commands.register;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import com.google.common.io.ByteArrayDataOutput;
@@ -8,6 +10,7 @@ import com.google.common.io.ByteStreams;
 import br.com.battlebits.ycommon.bungee.BungeeMain;
 import br.com.battlebits.ycommon.bungee.commands.BungeeCommandFramework.Command;
 import br.com.battlebits.ycommon.bungee.commands.BungeeCommandFramework.CommandArgs;
+import br.com.battlebits.ycommon.bungee.commands.BungeeCommandFramework.Completer;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.commands.CommandClass;
@@ -205,6 +208,38 @@ public class GroupCommand extends CommandClass {
 
 			}
 		});
+	}
+
+	@Completer(name = "groupset", aliases = { "setargrupo" })
+	public List<String> groupsetCompleter(CommandArgs args) {
+		if (args.isPlayer()) {
+			if (args.getArgs().length == 2) {
+				ArrayList<String> grupos = new ArrayList<>();
+				for (Group group : Group.values()) {
+					if (group.toString().toLowerCase().startsWith(args.getArgs()[1].toLowerCase())) {
+						grupos.add(group.toString());
+					}
+				}
+				return grupos;
+			}
+		}
+		return new ArrayList<>();
+	}
+
+	@Completer(name = "givevip", aliases = { "darvip" })
+	public List<String> givevipCompleter(CommandArgs args) {
+		if (args.isPlayer()) {
+			if (args.getArgs().length == 3) {
+				ArrayList<String> grupos = new ArrayList<>();
+				for (Group group : Group.values()) {
+					if (group.toString().toLowerCase().startsWith(args.getArgs()[2].toLowerCase())) {
+						grupos.add(group.toString());
+					}
+				}
+				return grupos;
+			}
+		}
+		return new ArrayList<>();
 	}
 
 }

@@ -17,7 +17,7 @@ public class TabCompleter extends CommandClass {
 			if (args.getArgs().length == 1) {
 				ArrayList<String> players = new ArrayList<>();
 				for (ProxiedPlayer p : BungeeMain.getPlugin().getProxy().getPlayers()) {
-					if (p.getName().toLowerCase().startsWith(args.getArgs()[0])) {
+					if (p.getName().toLowerCase().startsWith(args.getArgs()[0].toLowerCase())) {
 						players.add(p.getName());
 					}
 				}
