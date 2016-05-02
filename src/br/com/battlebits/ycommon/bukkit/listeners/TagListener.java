@@ -56,14 +56,25 @@ public class TagListener implements Listener {
 		Player p = e.getPlayer();
 		BukkitPlayer player = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(e.getPlayer().getUniqueId());
 		String id = getTeamName(e.getNewTag(), player.getLiga());
-		for (Player o : Bukkit.getOnlinePlayers()) {
-			BukkitPlayer bp = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(o.getUniqueId());
-			String tag = e.getNewTag().getPrefix(bp.getLanguage());
-			main.getBattleScoreboard().leaveTeam(o, p);
-			main.getBattleScoreboard().createTeam(o, id, tag + (ChatColor.stripColor(tag).trim().length() > 0 ? " " : ""), " §7(" + player.getLiga().getSymbol() + "§7)");
-			main.getBattleScoreboard().joinTeam(o, p, id);
-			bp = null;
-			o = null;
+		for (final Player o : Bukkit.getOnlinePlayers()) {
+			try {
+				BukkitPlayer bp = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(o.getUniqueId());
+				if (bp == null) {
+					new BukkitRunnable() {
+						@Override
+						public void run() {
+							o.kickPlayer("BUG");
+						}
+					}.runTask(BukkitMain.getPlugin());
+					continue;
+				}
+				String tag = e.getNewTag().getPrefix(bp.getLanguage());
+				main.getBattleScoreboard().leaveTeam(o, p);
+				main.getBattleScoreboard().createTeam(o, id, tag + (ChatColor.stripColor(tag).trim().length() > 0 ? " " : ""), " §7(" + player.getLiga().getSymbol() + "§7)");
+				main.getBattleScoreboard().joinTeam(o, p, id);
+				bp = null;
+			} catch (Exception e2) {
+			}
 		}
 		id = null;
 		player = null;

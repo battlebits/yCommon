@@ -1,5 +1,6 @@
 package br.com.battlebits.ycommon.bukkit.accounts;
 
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -15,6 +16,11 @@ public class AccountListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onAsync(AsyncPlayerPreLoginEvent event) throws Exception {
+		if(Bukkit.getPlayer(event.getUniqueId()) != null) {
+			event.setLoginResult(Result.KICK_OTHER);
+			event.setKickMessage("Already online");
+			return;
+		}
 		BukkitMain.getPlugin().getAccountManager().loadPlayer(event.getUniqueId());
 	}
 

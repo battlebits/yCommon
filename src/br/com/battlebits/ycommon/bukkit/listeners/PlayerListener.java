@@ -8,6 +8,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
@@ -36,21 +37,29 @@ public class PlayerListener implements Listener {
 		event.setCancelled(true);
 		BukkitPlayer player = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(event.getPlayer().getUniqueId());
 		for (Player r : Bukkit.getOnlinePlayers()) {
-			BukkitPlayer receiver = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(r.getUniqueId());
-			if (receiver == null) {
-				r.kickPlayer("BUG");
-				continue;
-			}
-			if ((!receiver.getConfiguration().isIgnoreAll()) && (!receiver.getBlockedPlayers().containsKey(player.getUuid()) && (!player.getBlockedPlayers().containsKey(receiver.getUuid())))) {
-				String tag = player.getTag().getPrefix(receiver.getLanguage());
-				String format = tag + (ChatColor.stripColor(tag).trim().length() > 0 ? " " : "") + event.getPlayer().getName() + ChatColor.GRAY + " (" + player.getLiga().getSymbol() + ChatColor.GRAY + ") " + ChatColor.WHITE + ": ";
-				if (player.getActualClan() != null) {
-					format = "[" + player.getActualClan().getAbbreviation() + "] " + format;
+			try {
+				BukkitPlayer receiver = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(r.getUniqueId());
+				if (receiver == null) {
+					new BukkitRunnable() {
+						@Override
+						public void run() {
+							r.kickPlayer("BUG");
+						}
+					}.runTask(BukkitMain.getPlugin());
+					continue;
 				}
-				r.sendMessage(format + event.getMessage());
-				format = null;
+				if ((!receiver.getConfiguration().isIgnoreAll()) && (!receiver.getBlockedPlayers().containsKey(player.getUuid()) && (!player.getBlockedPlayers().containsKey(receiver.getUuid())))) {
+					String tag = player.getTag().getPrefix(receiver.getLanguage());
+					String format = tag + (ChatColor.stripColor(tag).trim().length() > 0 ? " " : "") + event.getPlayer().getName() + ChatColor.GRAY + " (" + player.getLiga().getSymbol() + ChatColor.GRAY + ") " + ChatColor.WHITE + ": ";
+					if (player.getActualClan() != null) {
+						format = "[" + player.getActualClan().getAbbreviation() + "] " + format;
+					}
+					r.sendMessage(format + event.getMessage());
+					format = null;
+				}
+				receiver = null;
+			} catch (Exception e) {
 			}
-			receiver = null;
 		}
 		BukkitMain.getPlugin().getLogger().info("<" + player.getUserName() + "> " + event.getMessage());
 		player = null;
