@@ -8,6 +8,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.AbstractMap;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -19,15 +20,20 @@ import br.com.battlebits.ycommon.common.translate.Translate;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.event.TabCompleteEvent;
+import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
+import net.md_5.bungee.event.EventHandler;
 
 public class BungeeCommandFramework {
 
 	private final Map<String, Entry<Method, Object>> commandMap = new HashMap<String, Entry<Method, Object>>();
+	private final Map<String, Entry<Method, Object>> completers = new HashMap<String, Entry<Method, Object>>();
 	private final Plugin plugin;
 
 	public BungeeCommandFramework(Plugin plugin) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		this.plugin = plugin;
+		this.plugin.getProxy().getPluginManager().registerListener(plugin, new BungeeCompleter());
 	}
 
 	public boolean handleCommand(CommandSender sender, String label, String[] args) {
@@ -75,6 +81,20 @@ public class BungeeCommandFramework {
 				for (String alias : command.aliases()) {
 					registerCommand(command, alias, m, cls);
 				}
+			} else if (m.getAnnotation(Completer.class) != null) {
+				Completer comp = m.getAnnotation(Completer.class);
+				if (m.getParameterTypes().length > 1 || m.getParameterTypes().length == 0 || m.getParameterTypes()[0] != CommandArgs.class) {
+					System.out.println("Unable to register tab completer " + m.getName() + ". Unexpected method arguments");
+					continue;
+				}
+				if (m.getReturnType() != List.class) {
+					System.out.println("Unable to register tab completer " + m.getName() + ". Unexpected return type");
+					continue;
+				}
+				registerCompleter(comp.name(), m, cls);
+				for (String alias : comp.aliases()) {
+					registerCompleter(alias, m, cls);
+				}
 			}
 		}
 	}
@@ -89,6 +109,10 @@ public class BungeeCommandFramework {
 		String cmdLabel = label.replace(".", ",").split(",")[0].toLowerCase();
 		net.md_5.bungee.api.plugin.Command cmd = new BungeeCommand(cmdLabel);
 		plugin.getProxy().getPluginManager().registerCommand(plugin, cmd);
+	}
+
+	private void registerCompleter(String label, Method m, Object obj) {
+		completers.put(label, new AbstractMap.SimpleEntry<Method, Object>(m, obj));
 	}
 
 	private void defaultCommand(CommandArgs args) {
@@ -123,6 +147,29 @@ public class BungeeCommandFramework {
 		public String description() default "";
 
 		public String usage() default "";
+	}
+
+	@Target(ElementType.METHOD)
+	@Retention(RetentionPolicy.RUNTIME)
+	public @interface Completer {
+
+		/**
+		 * The command that this completer completes. If it is a sub command
+		 * then its values would be separated by periods. ie. a command that
+		 * would be a subcommand of test would be 'test.subcommandname'
+		 * 
+		 * @return
+		 */
+		String name();
+
+		/**
+		 * A list of alternate names that the completer is executed under. See
+		 * name() for details on how names work
+		 * 
+		 * @return
+		 */
+		String[] aliases() default {};
+
 	}
 
 	public class CommandArgs {
@@ -170,4 +217,41 @@ public class BungeeCommandFramework {
 			}
 		}
 	}
+
+	class BungeeCompleter implements Listener {
+
+		@SuppressWarnings("unchecked")
+		@EventHandler
+		public void onTabComplete(TabCompleteEvent event) {
+			if (!(event.getSender() instanceof ProxiedPlayer))
+				return;
+			ProxiedPlayer player = (ProxiedPlayer) event.getSender();
+			String[] split = event.getCursor().replaceAll("\\s+", " ").split(" ");
+			String[] args = new String[split.length - 1];
+			for (int i = 1; i < split.length; i++) {
+				args[i - 1] = split[i];
+			}
+			String label = split[0].substring(1);
+			for (int i = args.length; i >= 0; i--) {
+				StringBuilder buffer = new StringBuilder();
+				buffer.append(label.toLowerCase());
+				for (int x = 0; x < i; x++) {
+					if (!args[x].equals("") && !args[x].equals(" ")) {
+						buffer.append(".").append(args[x].toLowerCase());
+					}
+				}
+				String cmdLabel = buffer.toString();
+				if (completers.containsKey(cmdLabel)) {
+					Entry<Method, Object> entry = completers.get(cmdLabel);
+					try {
+						event.getSuggestions().clear();
+						event.getSuggestions().addAll((List<String>) entry.getKey().invoke(entry.getValue(), new CommandArgs(player, label, args, cmdLabel.split("\\.").length - 1)));
+					} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+	}
+
 }
