@@ -15,7 +15,7 @@ public class PlayerListener implements Listener {
 
 	@EventHandler
 	public void onUpdate(UpdateEvent event) {
-		if (event.getType() != UpdateType.TICK)
+		if (event.getType() != UpdateType.SECOND)
 			return;
 		Iterator<BattlePlayer> players = BattlebitsAPI.getAccountCommon().getPlayers().iterator();
 		if (players.hasNext()) {

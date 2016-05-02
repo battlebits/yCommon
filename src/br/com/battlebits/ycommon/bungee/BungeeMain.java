@@ -134,7 +134,7 @@ public class BungeeMain extends Plugin {
 		password = config.getString("database.password");
 	}
 
-	private void loadTranslations() {
+	public void loadTranslations() {
 		try {
 			BattlebitsAPI.debug("TRANSLATIONS > LOADING");
 			PreparedStatement stmt = null;

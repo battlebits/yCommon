@@ -72,9 +72,9 @@ public class LoginListener implements Listener {
 				}
 				BattlebitsAPI.debug("BANNING > STARTING");
 				BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(event.getConnection().getUniqueId());
-
+				
 				if (player.getBanHistory().getActualBan() == null) {
-					Entry<UUID, Ban> ipBan = BungeeMain.getPlugin().getBanManager().getIpBan(ipAdress);
+					Entry<UUID, Ban> ipBan = BungeeMain.getPlugin().getBanManager().getIpBan(ipAdress.getHostString());
 					if (ipBan != null) {
 						if (!ipBan.getKey().equals(player.getUuid()))
 							BungeeMain.getPlugin().getBanManager().ban(player, new Ban("CONSOLE", ipAdress.getHostString(), Translate.getTranslation(player.getLanguage(), "alt-account"), "proxy"));

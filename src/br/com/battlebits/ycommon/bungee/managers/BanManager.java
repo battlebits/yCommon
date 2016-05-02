@@ -1,6 +1,5 @@
 package br.com.battlebits.ycommon.bungee.managers;
 
-import java.net.InetSocketAddress;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.AbstractMap;
@@ -30,12 +29,12 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class BanManager {
-	private Cache<InetSocketAddress, Entry<UUID, Ban>> banCache;
+	private Cache<String, Entry<UUID, Ban>> banCache;
 
 	public BanManager() {
-		banCache = CacheBuilder.newBuilder().expireAfterWrite(30L, TimeUnit.MINUTES).build(new CacheLoader<InetSocketAddress, Entry<UUID, Ban>>() {
+		banCache = CacheBuilder.newBuilder().expireAfterWrite(30L, TimeUnit.MINUTES).build(new CacheLoader<String, Entry<UUID, Ban>>() {
 			@Override
-			public Entry<UUID, Ban> load(InetSocketAddress name) throws Exception {
+			public Entry<UUID, Ban> load(String name) throws Exception {
 				return null;
 			}
 		});
@@ -69,7 +68,7 @@ public class BanManager {
 				pPlayer.getServer().sendData(BattlebitsAPI.getBungeeChannel(), out.toByteArray());
 			}
 			if (player.getIpAddress() != null)
-				banCache.put(player.getIpAddress(), new AbstractMap.SimpleEntry<UUID, Ban>(player.getUuid(), ban));
+				banCache.put(player.getIpAddress().getHostString(), new AbstractMap.SimpleEntry<UUID, Ban>(player.getUuid(), ban));
 			pPlayer.disconnect(getBanKickMessageBase(ban, player.getLanguage()));
 		}
 	}
@@ -150,7 +149,7 @@ public class BanManager {
 		}
 	}
 
-	public Entry<UUID, Ban> getIpBan(InetSocketAddress address) {
+	public Entry<UUID, Ban> getIpBan(String address) {
 		return banCache.asMap().get(address);
 	}
 

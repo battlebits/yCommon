@@ -2,6 +2,7 @@ package br.com.battlebits.ycommon.bungee.commands.register;
 
 import java.util.Iterator;
 
+import br.com.battlebits.ycommon.bungee.BungeeMain;
 import br.com.battlebits.ycommon.bungee.commands.BungeeCommandFramework.Command;
 import br.com.battlebits.ycommon.bungee.commands.BungeeCommandFramework.CommandArgs;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
@@ -30,5 +31,11 @@ public class DebugCommand extends CommandClass {
 			}
 		}
 		cmdArgs.getSender().sendMessage(TextComponent.fromLegacyText(playersRemovidos + " players removidos do cache"));
+	}
+
+	@Command(name = "reloadbungeetranslation", usage = "/<command>", aliases = { "rlbungeetranslations", "rlbungee" }, groupToUse = Group.DONO, noPermMessageId = "command-no-access")
+	public void reloadbungeetranslation(CommandArgs cmdArgs) {
+		BungeeMain.getPlugin().loadTranslations();
+		cmdArgs.getSender().sendMessage(TextComponent.fromLegacyText("Traducoes recarregadas!"));
 	}
 }
