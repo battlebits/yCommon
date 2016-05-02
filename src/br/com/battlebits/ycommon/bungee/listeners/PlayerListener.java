@@ -32,6 +32,6 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority = (byte) -128)
 	public void onConnect(ServerConnectedEvent event) {
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(event.getPlayer().getUniqueId());
-		player.connect(event.getServer().getClass().getName());
+		player.connect(event.getServer().getInfo().getName());
 	}
 }
