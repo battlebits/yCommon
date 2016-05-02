@@ -113,7 +113,7 @@ public class BukkitMain extends JavaPlugin {
 		permissionManager = new PermissionManager(this);
 	}
 
-	private void loadTranslations() throws UnknownHostException, IOException {
+	public void loadTranslations() throws UnknownHostException, IOException {
 		for (Language lang : Language.values()) {
 			try {
 				PacketSender.sendPacketReturn(new CPacketTranslationsRequest(lang), packetHandler);
