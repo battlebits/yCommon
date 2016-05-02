@@ -11,7 +11,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class TabCompleter extends CommandClass {
 
-	@Completer(name = "account", aliases = { "ban", "banir", "tempban", "tempbanir", "mute", "mutar", "tempmute", "tempmutar", "unban", "desbanir", "unmute", "desmutar", "groupset", "setargrupo", "givevip", "darvip" })
+	@Completer(name = "account", aliases = { "ban", "banir", "tempban", "tempbanir", "mute", "mutar", "tempmute", "tempmutar", "unban", "desbanir", "unmute", "desmutar" })
 	public List<String> player(CommandArgs args) {
 		if (args.isPlayer()) {
 			if (args.getArgs().length == 1) {

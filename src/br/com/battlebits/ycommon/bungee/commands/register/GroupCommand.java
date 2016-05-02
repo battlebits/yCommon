@@ -213,7 +213,15 @@ public class GroupCommand extends CommandClass {
 	@Completer(name = "groupset", aliases = { "setargrupo" })
 	public List<String> groupsetCompleter(CommandArgs args) {
 		if (args.isPlayer()) {
-			if (args.getArgs().length == 2) {
+			if (args.getArgs().length == 1) {
+				ArrayList<String> players = new ArrayList<>();
+				for (ProxiedPlayer p : BungeeMain.getPlugin().getProxy().getPlayers()) {
+					if (p.getName().toLowerCase().startsWith(args.getArgs()[0].toLowerCase())) {
+						players.add(p.getName());
+					}
+				}
+				return players;
+			} else if (args.getArgs().length == 2) {
 				ArrayList<String> grupos = new ArrayList<>();
 				for (Group group : Group.values()) {
 					if (group.toString().toLowerCase().startsWith(args.getArgs()[1].toLowerCase())) {
@@ -229,7 +237,15 @@ public class GroupCommand extends CommandClass {
 	@Completer(name = "givevip", aliases = { "darvip" })
 	public List<String> givevipCompleter(CommandArgs args) {
 		if (args.isPlayer()) {
-			if (args.getArgs().length == 3) {
+			if (args.getArgs().length == 1) {
+				ArrayList<String> players = new ArrayList<>();
+				for (ProxiedPlayer p : BungeeMain.getPlugin().getProxy().getPlayers()) {
+					if (p.getName().toLowerCase().startsWith(args.getArgs()[0].toLowerCase())) {
+						players.add(p.getName());
+					}
+				}
+				return players;
+			} else if (args.getArgs().length == 3) {
 				ArrayList<String> grupos = new ArrayList<>();
 				for (Group group : Group.values()) {
 					if (group.toString().toLowerCase().startsWith(args.getArgs()[2].toLowerCase())) {

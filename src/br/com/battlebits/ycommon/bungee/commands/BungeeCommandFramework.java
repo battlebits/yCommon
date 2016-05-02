@@ -218,7 +218,7 @@ public class BungeeCommandFramework {
 		}
 	}
 
-	class BungeeCompleter implements Listener {
+	public class BungeeCompleter implements Listener {
 
 		@SuppressWarnings("unchecked")
 		@EventHandler
