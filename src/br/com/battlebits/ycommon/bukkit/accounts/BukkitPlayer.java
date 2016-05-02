@@ -56,6 +56,10 @@ public class BukkitPlayer extends BattlePlayer {
 		return !event.isCancelled();
 	}
 
+	public Tag getDefaultTag() {
+		return tags.get(tags.size() - 1);
+	}
+
 	@Override
 	public void setFakeName(String fakeName) {
 		super.setFakeName(fakeName);
@@ -169,6 +173,9 @@ public class BukkitPlayer extends BattlePlayer {
 	public void loadTags() {
 		tags = new ArrayList<>();
 		for (Tag t : Tag.values()) {
+			System.out.println("TAG: " + t);
+			System.out.println("GROUP: " + t.getGroupToUse());
+			System.out.println("ORDINAL: " + t.getGroupToUse().ordinal());
 			if (((t.isExclusive() && ((t.getGroupToUse() == getServerGroup()) || (getServerGroup().ordinal() >= Group.ADMIN.ordinal()))) || (!t.isExclusive() && getServerGroup().ordinal() >= t.getGroupToUse().ordinal()))) {
 				tags.add(t);
 			}

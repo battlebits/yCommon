@@ -31,6 +31,7 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketTranslationsRe
 import br.com.battlebits.ycommon.common.networking.packets.CPacketUpdateClan;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketUpdateGameStatus;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketUpdateProfile;
+import br.com.battlebits.ycommon.common.tag.Tag;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
 
@@ -47,6 +48,8 @@ public class BukkitHandler extends CommonHandler {
 		battlePlayer.connect(BukkitMain.getServerHostName());
 		battlePlayer.injectBukkitClass();
 		battlePlayer.loadTags();
+		if (battlePlayer.getTag() == Tag.STAFF)
+			battlePlayer.setTag(battlePlayer.getDefaultTag());
 		BattlebitsAPI.getAccountCommon().loadBattlePlayer(packet.getBattlePlayer().getUuid(), battlePlayer);
 		BattlebitsAPI.debug("NEW BATTLEPLAYER>" + battlePlayer.getUserName() + "(" + battlePlayer.getUuid() + ")");
 		battlePlayer = null;
