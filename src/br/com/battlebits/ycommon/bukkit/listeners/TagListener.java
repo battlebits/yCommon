@@ -38,8 +38,8 @@ public class TagListener implements Listener {
 						BukkitPlayer bp = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(o.getUniqueId());
 						String id2 = getTeamName(bp.getTag(), bp.getLiga());
 						String tag = bp.getTag().getPrefix(player.getLanguage());
-						main.getBattleScoreboard().createTeam(p, id2, tag + (ChatColor.stripColor(tag).trim().length() > 0 ? " " : ""), " §7(" + bp.getLiga().getSymbol() + "§7)");
-						main.getBattleScoreboard().joinTeam(p, o, id2);
+						main.getBattleBoard().joinTeam(main.getBattleBoard().createTeamIfNotExistsToPlayer(p, id2,
+								tag + (ChatColor.stripColor(tag).trim().length() > 0 ? " " : ""), " §7(" + player.getLiga().getSymbol() + "§7)"), o);
 						bp = null;
 					}
 					o = null;
@@ -69,9 +69,8 @@ public class TagListener implements Listener {
 					continue;
 				}
 				String tag = e.getNewTag().getPrefix(bp.getLanguage());
-				main.getBattleScoreboard().leaveTeam(o, p);
-				main.getBattleScoreboard().createTeam(o, id, tag + (ChatColor.stripColor(tag).trim().length() > 0 ? " " : ""), " §7(" + player.getLiga().getSymbol() + "§7)");
-				main.getBattleScoreboard().joinTeam(o, p, id);
+				main.getBattleBoard().joinTeam(main.getBattleBoard().createTeamIfNotExistsToPlayer(o, id,
+						tag + (ChatColor.stripColor(tag).trim().length() > 0 ? " " : ""), " §7(" + player.getLiga().getSymbol() + "§7)"), p);
 				bp = null;
 			} catch (Exception e2) {
 			}
@@ -81,7 +80,8 @@ public class TagListener implements Listener {
 		p = null;
 	}
 
-	private static char[] chars = new char[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
+	private static char[] chars = new char[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
+			'u', 'v', 'w', 'x', 'y', 'z' };
 
 	public static String getTeamName(Tag tag, Liga liga) {
 		return chars[tag.ordinal()] + "-" + chars[Liga.values().length - liga.ordinal()];

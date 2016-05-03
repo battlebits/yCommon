@@ -8,6 +8,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitAccount;
 import br.com.battlebits.ycommon.bukkit.api.inventory.menu.MenuListener;
+import br.com.battlebits.ycommon.bukkit.board.BattleBoard;
 import br.com.battlebits.ycommon.bukkit.bungee.MessageListener;
 import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandFramework;
 import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandLoader;
@@ -21,7 +22,6 @@ import br.com.battlebits.ycommon.bukkit.networking.BukkitHandler;
 import br.com.battlebits.ycommon.bukkit.networking.PacketSender;
 import br.com.battlebits.ycommon.bukkit.permissions.PermissionManager;
 import br.com.battlebits.ycommon.bukkit.run.UpdateScheduler;
-import br.com.battlebits.ycommon.bukkit.scoreboard.BattleScoreboard;
 import br.com.battlebits.ycommon.bukkit.util.PluginUpdater;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
@@ -45,7 +45,7 @@ public class BukkitMain extends JavaPlugin {
 	private BukkitCommandLoader bukkitCommandLoader;
 	private BukkitCommandFramework bukkitCommandFramework;
 
-	private BattleScoreboard battleScoreboard;
+	private BattleBoard battleBoard;
 
 	private boolean restart;
 
@@ -69,7 +69,7 @@ public class BukkitMain extends JavaPlugin {
 		this.getServer().getMessenger().registerIncomingPluginChannel(this, BattlebitsAPI.getBungeeChannel(), new MessageListener());
 		this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 		this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new MessageListener());
-		battleScoreboard = new BattleScoreboard();
+		battleBoard = new BattleBoard();
 		try {
 			loadTranslations();
 		} catch (IOException e) {
@@ -146,8 +146,8 @@ public class BukkitMain extends JavaPlugin {
 		return accountManager;
 	}
 
-	public BattleScoreboard getBattleScoreboard() {
-		return battleScoreboard;
+	public BattleBoard getBattleBoard() {
+		return battleBoard;
 	}
 
 	public BukkitCommandLoader getBukkitCommandLoader() {

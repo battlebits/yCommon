@@ -16,12 +16,9 @@ public class TagManager extends BukkitCommon {
 		registerListener(new TagListener(this));
 	}
 
-	@SuppressWarnings("deprecation")
 	public void removePlayerTag(Player p) {
-		for (Player online : Bukkit.getOnlinePlayers()) {
-			BukkitMain.getPlugin().getBattleScoreboard().leaveTeam(online, p);
-		}
-	}
+		BukkitMain.getPlugin().getBattleBoard().leaveCurrentTeamForOnlinePlayers(p);
+	}	
 
 	@SuppressWarnings("deprecation")
 	@Override

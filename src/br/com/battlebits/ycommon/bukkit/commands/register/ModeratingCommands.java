@@ -20,7 +20,7 @@ public class ModeratingCommands extends CommandClass {
 	private DecimalFormat locationFormater = new DecimalFormat("######.##");
 
 	@SuppressWarnings("deprecation")
-	@Command(name = "gamemode", aliases = { "gm" }, groupToUse = Group.TRIAL, noPermMessageId = "command-gamemode-no-access", runAsync = true)
+	@Command(name = "gamemode", aliases = { "gm" }, groupToUse = Group.MANAGER, noPermMessageId = "command-gamemode-no-access", runAsync = true)
 	public void gamemode(CommandArgs cmdArgs) {
 		if (cmdArgs.isPlayer()) {
 			Player p = cmdArgs.getPlayer();
@@ -157,7 +157,7 @@ public class ModeratingCommands extends CommandClass {
 	}
 
 	@SuppressWarnings("deprecation")
-	@Command(name = "teleportall", aliases = { "tpall" }, groupToUse = Group.MOD, noPermMessageId = "command-teleportall-no-access", runAsync = false)
+	@Command(name = "teleportall", aliases = { "tpall" }, groupToUse = Group.STREAMER, noPermMessageId = "command-teleportall-no-access", runAsync = false)
 	public void tpall(CommandArgs cmdArgs) {
 		if (cmdArgs.isPlayer()) {
 			Player p = cmdArgs.getPlayer();
