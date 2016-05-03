@@ -32,14 +32,24 @@ public class TagListener implements Listener {
 			public void run() {
 				Player p = e.getPlayer();
 				BukkitPlayer player = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(e.getPlayer().getUniqueId());
-				player.setTag(player.getTag());
+				String id = getTeamName(player.getTag(), player.getLiga());
+				String tagp = player.getTag().getPrefix(player.getLanguage());
+				main.getBattleBoard()
+						.joinTeam(main.getBattleBoard().createTeamIfNotExistsToPlayer(p, id,
+								tagp + (ChatColor.stripColor(tagp).trim().length() > 0 ? " " : ""), " §7(" + player.getLiga().getSymbol() + "§7)"),
+								p);
 				for (Player o : Bukkit.getOnlinePlayers()) {
-					if (o.getPlayer().getUniqueId() != e.getPlayer().getUniqueId()) {
+					if (o.getUniqueId() != p.getUniqueId()) {
 						BukkitPlayer bp = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(o.getUniqueId());
 						String id2 = getTeamName(bp.getTag(), bp.getLiga());
 						String tag = bp.getTag().getPrefix(player.getLanguage());
+						String tag2 = player.getTag().getPrefix(bp.getLanguage());
 						main.getBattleBoard().joinTeam(main.getBattleBoard().createTeamIfNotExistsToPlayer(p, id2,
 								tag + (ChatColor.stripColor(tag).trim().length() > 0 ? " " : ""), " §7(" + player.getLiga().getSymbol() + "§7)"), o);
+						main.getBattleBoard()
+								.joinTeam(main.getBattleBoard().createTeamIfNotExistsToPlayer(o, id,
+										tag2 + (ChatColor.stripColor(tag2).trim().length() > 0 ? " " : ""),
+										" §7(" + player.getLiga().getSymbol() + "§7)"), p);
 						bp = null;
 					}
 					o = null;
