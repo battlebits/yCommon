@@ -24,7 +24,7 @@ public class TagListener implements Listener {
 	@SuppressWarnings("deprecation")
 	public TagListener(TagManager manager) {
 		this.manager = manager;
-		for(Player p : manager.getServer().getOnlinePlayers()) {
+		for (Player p : manager.getServer().getOnlinePlayers()) {
 			BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
 			player.setTag(player.getTag());
 		}
@@ -63,8 +63,20 @@ public class TagListener implements Listener {
 	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onPlayerChangeTagListener(PlayerChangeTagEvent e) {
-		Player p = e.getPlayer();
-		BukkitPlayer player = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(e.getPlayer().getUniqueId());
+		final Player p = e.getPlayer();
+		if (p == null) {
+			return;
+		}
+		BukkitPlayer player = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
+		if (player == null) {
+			new BukkitRunnable() {
+				@Override
+				public void run() {
+					p.kickPlayer("BUG");
+				}
+			}.runTask(BukkitMain.getPlugin());
+			return;
+		}
 		String id = getTeamName(e.getNewTag(), player.getLiga());
 		for (final Player o : Bukkit.getOnlinePlayers()) {
 			try {
@@ -86,7 +98,6 @@ public class TagListener implements Listener {
 		}
 		id = null;
 		player = null;
-		p = null;
 	}
 
 	private static char[] chars = new char[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
