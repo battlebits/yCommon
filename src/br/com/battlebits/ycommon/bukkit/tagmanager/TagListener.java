@@ -43,13 +43,13 @@ public class TagListener implements Listener {
 			public void run() {
 				Player p = e.getPlayer();
 				BukkitPlayer player = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(e.getPlayer().getUniqueId());
-				player.setTag(player.getDefaultTag());
+				player.setTag(player.getTag());
 				for (Player o : Bukkit.getOnlinePlayers()) {
 					if (o.getUniqueId() != p.getUniqueId()) {
 						BukkitPlayer bp = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(o.getUniqueId());
-						String id2 = getTeamName(bp.getTag(), bp.getLiga());
+						String id = getTeamName(bp.getTag(), bp.getLiga());
 						String tag = bp.getTag().getPrefix(player.getLanguage());
-						manager.getPlugin().getBattleBoard().joinTeam(manager.getPlugin().getBattleBoard().createTeamIfNotExistsToPlayer(p, id2, tag + (ChatColor.stripColor(tag).trim().length() > 0 ? " " : ""), " §7(" + player.getLiga().getSymbol() + "§7)"), o);
+						manager.getPlugin().getBattleBoard().joinTeam(manager.getPlugin().getBattleBoard().createTeamIfNotExistsToPlayer(p, id, tag + (ChatColor.stripColor(tag).trim().length() > 0 ? " " : ""), " §7(" + bp.getLiga().getSymbol() + "§7)"), o);
 						bp = null;
 					}
 					o = null;

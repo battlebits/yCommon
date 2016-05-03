@@ -21,6 +21,7 @@ import br.com.battlebits.ycommon.bukkit.networking.BukkitHandler;
 import br.com.battlebits.ycommon.bukkit.networking.PacketSender;
 import br.com.battlebits.ycommon.bukkit.permissions.PermissionManager;
 import br.com.battlebits.ycommon.bukkit.run.UpdateScheduler;
+import br.com.battlebits.ycommon.bukkit.tagmanager.TagManager;
 import br.com.battlebits.ycommon.bukkit.util.PluginUpdater;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
@@ -40,6 +41,7 @@ public class BukkitMain extends JavaPlugin {
 	private BukkitAccount accountManager;
 	private PermissionManager permissionManager;
 	private CommonHandler packetHandler;
+	private TagManager tagManager;
 
 	private BukkitCommandLoader bukkitCommandLoader;
 	private BukkitCommandFramework bukkitCommandFramework;
@@ -96,8 +98,10 @@ public class BukkitMain extends JavaPlugin {
 	public void onDisable() {
 		accountManager.onDisable();
 		permissionManager.onDisable();
+		tagManager.onDisable();
 		accountManager = null;
 		permissionManager = null;
+		tagManager = null;
 	}
 
 	private void registerListeners() {
@@ -109,6 +113,7 @@ public class BukkitMain extends JavaPlugin {
 	private void registerCommonManagement() {
 		accountManager = new BukkitAccount(this);
 		permissionManager = new PermissionManager(this);
+		tagManager = new TagManager(this);
 	}
 
 	public void loadTranslations() throws UnknownHostException, IOException {
@@ -124,6 +129,7 @@ public class BukkitMain extends JavaPlugin {
 	private void enableCommonManagement() {
 		accountManager.onEnable();
 		permissionManager.onEnable();
+		tagManager.onEnable();
 	}
 
 	@SuppressWarnings("deprecation")

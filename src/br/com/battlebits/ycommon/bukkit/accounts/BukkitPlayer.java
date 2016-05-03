@@ -62,7 +62,7 @@ public class BukkitPlayer extends BattlePlayer {
 	}
 
 	public Tag getDefaultTag() {
-		return tags.get(tags.size() - 1);
+		return tags.get(0);
 	}
 
 	@Override
