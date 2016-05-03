@@ -17,7 +17,6 @@ import br.com.battlebits.ycommon.bukkit.injector.WindowInjector;
 import br.com.battlebits.ycommon.bukkit.listeners.ChatListener;
 import br.com.battlebits.ycommon.bukkit.listeners.PlayerListener;
 import br.com.battlebits.ycommon.bukkit.listeners.ScoreboardListener;
-import br.com.battlebits.ycommon.bukkit.listeners.TagListener;
 import br.com.battlebits.ycommon.bukkit.networking.BukkitHandler;
 import br.com.battlebits.ycommon.bukkit.networking.PacketSender;
 import br.com.battlebits.ycommon.bukkit.permissions.PermissionManager;
@@ -105,7 +104,6 @@ public class BukkitMain extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new ChatListener(), this);
 		getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 		getServer().getPluginManager().registerEvents(new ScoreboardListener(), this);
-		getServer().getPluginManager().registerEvents(new TagListener(this), this);
 	}
 
 	private void registerCommonManagement() {

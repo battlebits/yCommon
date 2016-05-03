@@ -1,6 +1,5 @@
 package br.com.battlebits.ycommon.bukkit.tagmanager;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import br.com.battlebits.ycommon.bukkit.BukkitCommon;
@@ -18,7 +17,7 @@ public class TagManager extends BukkitCommon {
 
 	public void removePlayerTag(Player p) {
 		BukkitMain.getPlugin().getBattleBoard().leaveCurrentTeamForOnlinePlayers(p);
-	}	
+	}
 
 	@SuppressWarnings("deprecation")
 	@Override
