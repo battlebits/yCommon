@@ -25,8 +25,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class MessengerComand extends CommandClass {
 
-	@Command(name = "tell", aliases = { "msg", "w", "pm", "privatemessage",
-			"whisper" }, runAsync = true, groupToUse = Group.NORMAL, description = "Mensagens privadas")
+	@Command(name = "tell", aliases = { "msg", "w", "pm", "privatemessage", "whisper" }, runAsync = true, groupToUse = Group.NORMAL, description = "Mensagens privadas")
 	public void tell(CommandArgs cmdArgs) {
 		if (cmdArgs.isPlayer()) {
 			Player p = cmdArgs.getPlayer();
@@ -34,8 +33,7 @@ public class MessengerComand extends CommandClass {
 			String[] args = cmdArgs.getArgs();
 			String prefix = Translate.getTranslation(bp.getLanguage(), "command-tell-prefix") + " ";
 			if (args.length <= 1) {
-				p.sendMessage(prefix
-						+ Translate.getTranslation(bp.getLanguage(), "command-tell-usage").replace("%command%", cmdArgs.getLabel().toLowerCase()));
+				p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-tell-usage").replace("%command%", cmdArgs.getLabel().toLowerCase()));
 			} else {
 				if (bp.getConfiguration().isTellEnabled()) {
 					Player t = Bukkit.getPlayer(args[0]);
@@ -46,24 +44,15 @@ public class MessengerComand extends CommandClass {
 								if (!bt.getBlockedPlayers().containsKey(p.getUniqueId())) {
 									if (bt.getConfiguration().isTellEnabled()) {
 										TextComponent[] toPlayer = new TextComponent[args.length];
-										TextComponent to = new TextComponent(Translate.getTranslation(bp.getLanguage(), "command-tell-me-player")
-												.replace("%player%", t.getName()));
-										to.setClickEvent(new ClickEvent(Action.SUGGEST_COMMAND,
-												"/" + cmdArgs.getLabel().toLowerCase() + " " + t.getName() + " "));
-										to.setHoverEvent(
-												new HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT,
-														new TextComponent[] { new TextComponent(
-																Translate.getTranslation(bp.getLanguage(), "command-tell-hover-another")
-																		.replace("%player%", t.getName())) }));
+										TextComponent to = new TextComponent(Translate.getTranslation(bp.getLanguage(), "command-tell-me-player").replace("%player%", t.getName()));
+										to.setClickEvent(new ClickEvent(Action.SUGGEST_COMMAND, "/" + cmdArgs.getLabel().toLowerCase() + " " + t.getName() + " "));
+										to.setHoverEvent(new HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT, new TextComponent[] { new TextComponent(Translate.getTranslation(bp.getLanguage(), "command-tell-hover-another").replace("%player%", t.getName())) }));
 										toPlayer[0] = to;
 										to = null;
 										TextComponent[] toTarget = new TextComponent[args.length];
-										TextComponent from = new TextComponent(Translate.getTranslation(bt.getLanguage(), "command-tell-player-me")
-												.replace("%player%", p.getName()));
+										TextComponent from = new TextComponent(Translate.getTranslation(bt.getLanguage(), "command-tell-player-me").replace("%player%", p.getName()));
 										from.setClickEvent(new ClickEvent(Action.SUGGEST_COMMAND, "/r "));
-										from.setHoverEvent(new HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT,
-												new TextComponent[] { new TextComponent(Translate.getTranslation(bt.getLanguage(), "command-tell-hover-reply")
-														.replace("%player%", p.getName())) }));
+										from.setHoverEvent(new HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT, new TextComponent[] { new TextComponent(Translate.getTranslation(bt.getLanguage(), "command-tell-hover-reply").replace("%player%", p.getName())) }));
 										toTarget[0] = from;
 										from = null;
 										for (int i = 1; i < args.length; i += 1) {
@@ -136,21 +125,15 @@ public class MessengerComand extends CommandClass {
 							if (!bt.getBlockedPlayers().containsKey(p.getUniqueId())) {
 								if (bt.getConfiguration().isTellEnabled()) {
 									TextComponent[] toPlayer = new TextComponent[args.length + 1];
-									TextComponent to = new TextComponent(
-											Translate.getTranslation(bp.getLanguage(), "command-tell-me-player").replace("%player%", t.getName()));
+									TextComponent to = new TextComponent(Translate.getTranslation(bp.getLanguage(), "command-tell-me-player").replace("%player%", t.getName()));
 									to.setClickEvent(new ClickEvent(Action.SUGGEST_COMMAND, "/tell " + t.getName() + " "));
-									to.setHoverEvent(new HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT,
-											new TextComponent[] { new TextComponent(Translate.getTranslation(bp.getLanguage(), "tell-hover-another")
-													.replace("%player%", t.getName())) }));
+									to.setHoverEvent(new HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT, new TextComponent[] { new TextComponent(Translate.getTranslation(bp.getLanguage(), "command-tell-hover-another").replace("%player%", t.getName())) }));
 									toPlayer[0] = to;
 									to = null;
 									TextComponent[] toTarget = new TextComponent[args.length + 1];
-									TextComponent from = new TextComponent(
-											Translate.getTranslation(bt.getLanguage(), "command-tell-player-me").replace("%player%", p.getName()));
+									TextComponent from = new TextComponent(Translate.getTranslation(bt.getLanguage(), "command-tell-player-me").replace("%player%", p.getName()));
 									from.setClickEvent(new ClickEvent(Action.SUGGEST_COMMAND, "/r "));
-									from.setHoverEvent(new HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT,
-											new TextComponent[] { new TextComponent(Translate.getTranslation(bt.getLanguage(), "tell-hover-reply")
-													.replace("%player%", p.getName())) }));
+									from.setHoverEvent(new HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT, new TextComponent[] { new TextComponent(Translate.getTranslation(bt.getLanguage(), "command-tell-hover-reply").replace("%player%", p.getName())) }));
 									toTarget[0] = from;
 									from = null;
 									for (int i = 0; i < args.length; i += 1) {
@@ -219,8 +202,7 @@ public class MessengerComand extends CommandClass {
 								Blocked block = new Blocked(id);
 								bp.getBlockedPlayers().put(id, block);
 								PacketSender.sendPacket(new CPacketAddBlockedPlayer(p.getUniqueId(), block));
-								p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-block-blocked").replace("%player%",
-										cmdArgs.getArgs()[0]));
+								p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-block-blocked").replace("%player%", cmdArgs.getArgs()[0]));
 								block = null;
 							} catch (Exception e) {
 								p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "error-try-again-please"));
@@ -229,8 +211,7 @@ public class MessengerComand extends CommandClass {
 							try {
 								bp.getBlockedPlayers().remove(id);
 								PacketSender.sendPacket(new CPacketRemoveBlockedPlayer(p.getUniqueId(), id));
-								p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-block-unblocked").replace("%player%",
-										cmdArgs.getArgs()[0]));
+								p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-block-unblocked").replace("%player%", cmdArgs.getArgs()[0]));
 							} catch (Exception e) {
 								p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "error-try-again-please"));
 							}
