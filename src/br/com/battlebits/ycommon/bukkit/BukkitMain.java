@@ -81,6 +81,8 @@ public class BukkitMain extends JavaPlugin {
 			PacketSender.sendPacketReturn(new CPacketServerNameRequest(getServer().getIp() + ":" + getServer().getPort()), packetHandler);
 		} catch (Exception e) {
 			e.printStackTrace();
+			getServer().shutdown();
+			return;
 		}
 
 		registerCommonManagement();
