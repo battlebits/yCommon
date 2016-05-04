@@ -548,6 +548,56 @@ public class BattleBoard {
 		}
 	}
 
+	public void setScoreOnObjective(Objective objective, String scoreName, int scoreValue) {
+		if (scoreName.length() > 16) {
+			scoreName = scoreName.substring(0, 16);
+		}
+		if (objective != null) {
+			objective.getScore(scoreName).setScore(scoreValue);
+			objective = null;
+		}
+		scoreName = null;
+	}
+
+	public void setScoreOnObjectiveToPlayer(Player player, String objectiveID, String scoreName, int scoreValue) {
+		setScoreOnObjective(getObjectiveFromPlayer(player, objectiveID), scoreName, scoreValue);
+		player = null;
+		objectiveID = null;
+	}
+
+	public void setScoreOnObjectiveToPlayer(Player player, DisplaySlot objectiveSlot, String scoreName, int scoreValue) {
+		setScoreOnObjective(getObjectiveFromPlayer(player, objectiveSlot), scoreName, scoreValue);
+		player = null;
+	}
+
+	public void setScoreOnObjectiveForPlayers(Collection<? extends Player> players, String objectiveID, String scoreName, int scoreValue) {
+		for (Player player : players) {
+			setScoreOnObjective(getObjectiveFromPlayer(player, objectiveID), scoreName, scoreValue);
+		}
+		players = null;
+	}
+
+	public void setScoreOnObjectiveForPlayers(Collection<? extends Player> players, DisplaySlot objectiveSlot, String scoreName, int scoreValue) {
+		for (Player player : players) {
+			setScoreOnObjective(getObjectiveFromPlayer(player, objectiveSlot), scoreName, scoreValue);
+		}
+		players = null;
+	}
+
+	@SuppressWarnings("deprecation")
+	public void setScoreOnObjectiveForOnlinePlayers(String objectiveID, String scoreName, int scoreValue) {
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			setScoreOnObjective(getObjectiveFromPlayer(player, objectiveID), scoreName, scoreValue);
+		}
+	}
+
+	@SuppressWarnings("deprecation")
+	public void setScoreOnObjectiveForOnlinePlayers(DisplaySlot objectiveSlot, String scoreName, int scoreValue) {
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			setScoreOnObjective(getObjectiveFromPlayer(player, objectiveSlot), scoreName, scoreValue);
+		}
+	}
+
 	public void addScoreOnObjectiveToPlayer(Player player, Objective objective, String scoreID, int score, String name, String prefix,
 			String suffix) {
 		if (objective != null) {
@@ -555,9 +605,8 @@ public class BattleBoard {
 			if (team != null) {
 				if (name.length() > 16) {
 					name = name.substring(0, 16);
-					;
 				}
-				objective.getScore(name).setScore(score);
+				setScoreOnObjective(objective, name, score);
 				joinTeam(team, name);
 				team = null;
 				name = null;
