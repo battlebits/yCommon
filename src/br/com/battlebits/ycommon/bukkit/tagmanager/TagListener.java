@@ -36,28 +36,24 @@ public class TagListener implements Listener {
 	}
 
 	@SuppressWarnings("deprecation")
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerJoinListener(PlayerJoinEvent e) {
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				Player p = e.getPlayer();
-				BukkitPlayer player = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(e.getPlayer().getUniqueId());
-				player.setTag(player.getTag());
-				for (Player o : Bukkit.getOnlinePlayers()) {
-					if (o.getUniqueId() != p.getUniqueId()) {
-						BukkitPlayer bp = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(o.getUniqueId());
-						String id = getTeamName(bp.getTag(), bp.getLiga());
-						String tag = bp.getTag().getPrefix(player.getLanguage());
-						manager.getPlugin().getBattleBoard().joinTeam(manager.getPlugin().getBattleBoard().createTeamIfNotExistsToPlayer(p, id, tag + (ChatColor.stripColor(tag).trim().length() > 0 ? " " : ""), " §7(" + bp.getLiga().getSymbol() + "§7)"), o);
-						bp = null;
-					}
-					o = null;
-				}
-				player = null;
-				p = null;
+		Player p = e.getPlayer();
+		BukkitPlayer player = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(e.getPlayer().getUniqueId());
+		player.setTag(player.getTag());
+		for (Player o : Bukkit.getOnlinePlayers()) {
+			if (o.getUniqueId() != p.getUniqueId()) {
+				BukkitPlayer bp = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(o.getUniqueId());
+				String id = getTeamName(bp.getTag(), bp.getLiga());
+				String tag = bp.getTag().getPrefix(player.getLanguage());
+				manager.getPlugin().getBattleBoard().joinTeam(manager.getPlugin().getBattleBoard().createTeamIfNotExistsToPlayer(p, id,
+						tag + (ChatColor.stripColor(tag).trim().length() > 0 ? " " : ""), " §7(" + bp.getLiga().getSymbol() + "§7)"), o);
+				bp = null;
 			}
-		}.runTaskAsynchronously(manager.getPlugin());
+			o = null;
+		}
+		player = null;
+		p = null;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -91,7 +87,8 @@ public class TagListener implements Listener {
 					continue;
 				}
 				String tag = e.getNewTag().getPrefix(bp.getLanguage());
-				manager.getPlugin().getBattleBoard().joinTeam(manager.getPlugin().getBattleBoard().createTeamIfNotExistsToPlayer(o, id, tag + (ChatColor.stripColor(tag).trim().length() > 0 ? " " : ""), " §7(" + player.getLiga().getSymbol() + "§7)"), p);
+				manager.getPlugin().getBattleBoard().joinTeam(manager.getPlugin().getBattleBoard().createTeamIfNotExistsToPlayer(o, id,
+						tag + (ChatColor.stripColor(tag).trim().length() > 0 ? " " : ""), " §7(" + player.getLiga().getSymbol() + "§7)"), p);
 				bp = null;
 			} catch (Exception e2) {
 			}
@@ -100,7 +97,8 @@ public class TagListener implements Listener {
 		player = null;
 	}
 
-	private static char[] chars = new char[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
+	private static char[] chars = new char[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
+			'u', 'v', 'w', 'x', 'y', 'z' };
 
 	public static String getTeamName(Tag tag, Liga liga) {
 		return chars[tag.ordinal()] + "-" + chars[Liga.values().length - liga.ordinal()];

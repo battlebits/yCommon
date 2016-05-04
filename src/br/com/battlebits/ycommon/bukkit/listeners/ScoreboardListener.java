@@ -12,7 +12,7 @@ import org.bukkit.scoreboard.Team;
 
 public class ScoreboardListener implements Listener {
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerQuitListener(PlayerQuitEvent e) {
 		Scoreboard board = e.getPlayer().getScoreboard();
 		if (board != null) {
@@ -29,7 +29,7 @@ public class ScoreboardListener implements Listener {
 		e.getPlayer().setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
 	}
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerJoinListener(PlayerJoinEvent e) {
 		e.getPlayer().setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
 	}

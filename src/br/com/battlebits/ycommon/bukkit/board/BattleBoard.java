@@ -1,6 +1,5 @@
 package br.com.battlebits.ycommon.bukkit.board;
 
-import java.security.SecureRandom;
 import java.util.Collection;
 
 import org.bukkit.Bukkit;
@@ -23,8 +22,6 @@ public class BattleBoard {
 	// - SET - OK
 	// - CUSTOM SCORE - OK
 	// - REMOVE - SOON
-
-	private SecureRandom randomizer = new SecureRandom();
 
 	public Team getTeamFromPlayer(Player player, String teamID) {
 		if (teamID.length() > 16) {
@@ -551,19 +548,19 @@ public class BattleBoard {
 		}
 	}
 
-	public void addScoreOnObjectiveToPlayer(Player player, Objective objective, String scoreID, int score, String prefix, String suffix) {
+	public void addScoreOnObjectiveToPlayer(Player player, Objective objective, String scoreID, int score, String name, String prefix,
+			String suffix) {
 		if (objective != null) {
 			Team team = createTeamIfNotExistsToPlayer(player, objective.getName() + scoreID, prefix, suffix);
 			if (team != null) {
-				int random = randomizer.nextInt(999999);
-				String scoreInternal = "";
-				for (String part : (random + "").split("|")) {
-					scoreInternal += "§" + part;
+				if (name.length() > 16) {
+					name = name.substring(0, 16);
+					;
 				}
-				objective.getScore(scoreInternal).setScore(score);
-				joinTeam(team, scoreInternal);
+				objective.getScore(name).setScore(score);
+				joinTeam(team, name);
 				team = null;
-				scoreInternal = null;
+				name = null;
 			}
 		}
 		scoreID = null;
@@ -572,42 +569,43 @@ public class BattleBoard {
 		player = null;
 	}
 
-	public void addScoreOnObjectiveToPlayer(Player player, String objectiveID, String scoreID, int score, String prefix, String suffix) {
-		addScoreOnObjectiveToPlayer(player, getObjectiveFromPlayer(player, objectiveID), scoreID, score, prefix, suffix);
+	public void addScoreOnObjectiveToPlayer(Player player, String objectiveID, String scoreID, int score, String name, String prefix, String suffix) {
+		addScoreOnObjectiveToPlayer(player, getObjectiveFromPlayer(player, objectiveID), scoreID, score, name, prefix, suffix);
 		objectiveID = null;
 	}
 
-	public void addScoreOnObjectiveToPlayer(Player player, DisplaySlot objectiveSlot, String scoreID, int score, String prefix, String suffix) {
-		addScoreOnObjectiveToPlayer(player, getObjectiveFromPlayer(player, objectiveSlot), scoreID, score, prefix, suffix);
-	}
-
-	public void addScoreOnObjectiveForPlayers(Collection<? extends Player> players, String objectiveID, String scoreID, int score, String prefix,
+	public void addScoreOnObjectiveToPlayer(Player player, DisplaySlot objectiveSlot, String scoreID, int score, String name, String prefix,
 			String suffix) {
-		for (Player player : players) {
-			addScoreOnObjectiveToPlayer(player, objectiveID, scoreID, score, prefix, suffix);
-		}
-		players = null;
+		addScoreOnObjectiveToPlayer(player, getObjectiveFromPlayer(player, objectiveSlot), scoreID, score, name, prefix, suffix);
 	}
 
-	public void addScoreOnObjectiveForPlayers(Collection<? extends Player> players, DisplaySlot objectiveSlot, String scoreID, int score,
+	public void addScoreOnObjectiveForPlayers(Collection<? extends Player> players, String objectiveID, String scoreID, int score, String name,
 			String prefix, String suffix) {
 		for (Player player : players) {
-			addScoreOnObjectiveToPlayer(player, objectiveSlot, scoreID, score, prefix, suffix);
+			addScoreOnObjectiveToPlayer(player, objectiveID, scoreID, score, name, prefix, suffix);
+		}
+		players = null;
+	}
+
+	public void addScoreOnObjectiveForPlayers(Collection<? extends Player> players, DisplaySlot objectiveSlot, String scoreID, int score, String name,
+			String prefix, String suffix) {
+		for (Player player : players) {
+			addScoreOnObjectiveToPlayer(player, objectiveSlot, scoreID, score, name, prefix, suffix);
 		}
 		players = null;
 	}
 
 	@SuppressWarnings("deprecation")
-	public void addScoreOnObjectiveForOnlinePlayers(String objectiveID, String scoreID, int score, String prefix, String suffix) {
+	public void addScoreOnObjectiveForOnlinePlayers(String objectiveID, String scoreID, int score, String name, String prefix, String suffix) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			addScoreOnObjectiveToPlayer(player, getObjectiveFromPlayer(player, objectiveID), scoreID, score, prefix, suffix);
+			addScoreOnObjectiveToPlayer(player, getObjectiveFromPlayer(player, objectiveID), scoreID, score, name, prefix, suffix);
 		}
 	}
 
 	@SuppressWarnings("deprecation")
-	public void addScoreOnObjectiveForOnlinePlayers(DisplaySlot objectiveSlot, String scoreID, int score, String prefix, String suffix) {
+	public void addScoreOnObjectiveForOnlinePlayers(DisplaySlot objectiveSlot, String scoreID, int score, String name, String prefix, String suffix) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			addScoreOnObjectiveToPlayer(player, objectiveSlot, scoreID, score, prefix, suffix);
+			addScoreOnObjectiveToPlayer(player, objectiveSlot, scoreID, score, name, prefix, suffix);
 		}
 	}
 
