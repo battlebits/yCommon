@@ -99,7 +99,7 @@ public class AccountCommand extends CommandClass {
 				Mute mute = player.getBanHistory().getActualMute();
 				if (mute != null) {
 					if (!mute.isPermanent()) {
-						String tempo = DateUtils.getDifferenceFormat(language, ban.getDuration());
+						String tempo = DateUtils.getDifferenceFormat(language, mute.getDuration());
 						sender.sendMessage(TextComponent.fromLegacyText(ChatColor.YELLOW + "Foi mutado por " + mute.getMutedBy() + " e durara " + tempo + ". Motivo: " + mute.getReason()));
 					} else {
 						Date date = new Date(mute.getMuteTime());
