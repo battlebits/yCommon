@@ -54,7 +54,11 @@ public class BungeePacketHandler extends CommonHandler {
 
 	@Override
 	public void handleAccountRequest(CPacketAccountRequest packet) throws Exception {
-		sender.sendPacket(new CPacketAccountLoad(BattlebitsAPI.getAccountCommon().getBattlePlayer(packet.getUuid())));
+		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(packet.getUuid());
+		if (player == null)
+			player = BungeeMain.getPlugin().getAccountManager().loadBattlePlayer(packet.getUuid());
+		sender.sendPacket(new CPacketAccountLoad(player));
+		player = null;
 	}
 
 	@Override

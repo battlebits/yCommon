@@ -1,5 +1,7 @@
 package br.com.battlebits.ycommon.bukkit.listeners;
 
+import java.util.Iterator;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -12,7 +14,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
+import br.com.battlebits.ycommon.bukkit.event.update.UpdateEvent;
+import br.com.battlebits.ycommon.bukkit.event.update.UpdateEvent.UpdateType;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
+import br.com.battlebits.ycommon.common.account.BattlePlayer;
+import net.md_5.bungee.BungeeCord;
 
 public class PlayerListener implements Listener {
 
@@ -65,4 +71,20 @@ public class PlayerListener implements Listener {
 		player = null;
 	}
 
+	@EventHandler
+	public void onUpdate(UpdateEvent event) {
+		if (event.getType() != UpdateType.SECOND)
+			return;
+		Iterator<BattlePlayer> players = BattlebitsAPI.getAccountCommon().getPlayers().iterator();
+		if (players.hasNext()) {
+			BattlePlayer player = players.next();
+			if (BungeeCord.getInstance().getPlayer(player.getUuid()) == null) {
+				if (player.isCacheExpired()) {
+					players.remove();
+					BattlebitsAPI.debug("REMOVENDO BATTLEPLAYER " + player.getUserName() + " DO CACHE");
+				}
+			}
+		}
+	}
+	
 }
