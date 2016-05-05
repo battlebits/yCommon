@@ -18,7 +18,7 @@ public class PlayerListener implements Listener {
 		if (event.getType() != UpdateType.SECOND)
 			return;
 		Iterator<BattlePlayer> players = BattlebitsAPI.getAccountCommon().getPlayers().iterator();
-		if (players.hasNext()) {
+		while (players.hasNext()) {
 			BattlePlayer player = players.next();
 			if (BungeeCord.getInstance().getPlayer(player.getUuid()) == null) {
 				if (player.isCacheExpired()) {
