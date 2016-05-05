@@ -213,10 +213,8 @@ public class BungeePacketHandler extends CommonHandler {
 	@Override
 	public void handleServerRequest(CPacketServerNameRequest packet) throws Exception {
 		String serverHostName = "none";
-		System.out.println(packet.getServerListening());
 		for (ServerInfo info : BungeeMain.getPlugin().getProxy().getServers().values()) {
 			String string = info.getAddress().getHostString() + ":" + info.getAddress().getPort();
-			System.out.println(string);
 			if (string.equals(packet.getServerListening())) {
 				serverHostName = info.getName();
 				break;
