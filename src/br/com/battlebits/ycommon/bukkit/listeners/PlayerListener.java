@@ -18,7 +18,6 @@ import br.com.battlebits.ycommon.bukkit.event.update.UpdateEvent;
 import br.com.battlebits.ycommon.bukkit.event.update.UpdateEvent.UpdateType;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
-import net.md_5.bungee.BungeeCord;
 
 public class PlayerListener implements Listener {
 
@@ -78,7 +77,7 @@ public class PlayerListener implements Listener {
 		Iterator<BattlePlayer> players = BattlebitsAPI.getAccountCommon().getPlayers().iterator();
 		if (players.hasNext()) {
 			BattlePlayer player = players.next();
-			if (BungeeCord.getInstance().getPlayer(player.getUuid()) == null) {
+			if (Bukkit.getPlayer(player.getUuid()) == null) {
 				if (player.isCacheExpired()) {
 					players.remove();
 					BattlebitsAPI.debug("REMOVENDO BATTLEPLAYER " + player.getUserName() + " DO CACHE");
