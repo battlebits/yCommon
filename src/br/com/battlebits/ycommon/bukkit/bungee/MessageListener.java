@@ -89,6 +89,19 @@ public class MessageListener implements PluginMessageListener {
 			bP.loadTags();
 			break;
 		}
+		case "Removevip": {
+			BukkitPlayer bP = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId());
+			RankType rank = RankType.valueOf(in.readUTF());
+			bP.getRanks().remove(rank);
+			String givevip = Translate.getTranslation(bP.getLanguage(), "command-removevip-player-removed");
+			givevip = givevip.replace("%rank%", Tag.valueOf(rank.name()).getPrefix(bP.getLanguage()));
+			player.sendMessage("");
+			player.sendMessage(givevip);
+			player.sendMessage("");
+			bP.setTag(Tag.valueOf(bP.getServerGroup().toString()));
+			bP.loadTags();
+			break;
+		}
 		case "UnmuteConsole": {
 			BattlePlayer bP = BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId());
 			bP.getBanHistory().getActualMute().unmute();

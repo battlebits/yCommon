@@ -212,7 +212,71 @@ public class GroupCommand extends CommandClass {
 		});
 	}
 
-	@Completer(name = "groupset", aliases = { "setargrupo" })
+	@Command(name = "removevip", usage = "/<command> <player> <group>", groupToUse = Group.MANAGER, aliases = { "removervip" }, noPermMessageId = "command-removevip-no-access")
+	public void removevip(CommandArgs cmdArgs) {
+		final CommandSender sender = cmdArgs.getSender();
+		final String[] args = cmdArgs.getArgs();
+		Language lang = BattlebitsAPI.getDefaultLanguage();
+		if (cmdArgs.isPlayer()) {
+			lang = BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getLanguage();
+		}
+		final Language language = lang;
+		final String giveVipPrefix = Translate.getTranslation(lang, "command-removevip-prefix") + " ";
+		if (args.length != 2) {
+			sender.sendMessage(TextComponent.fromLegacyText(giveVipPrefix + Translate.getTranslation(lang, "command-removevip-usage").replace("%command%", cmdArgs.getLabel())));
+			return;
+		}
+		BungeeCord.getInstance().getScheduler().runAsync(BungeeMain.getPlugin(), new Runnable() {
+			public void run() {
+				UUID uuid = BattlebitsAPI.getUUIDOf(args[0]);
+				if (uuid == null) {
+					sender.sendMessage(TextComponent.fromLegacyText(giveVipPrefix + Translate.getTranslation(language, "player-not-exist")));
+					return;
+				}
+				BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(uuid);
+				if (player == null) {
+					try {
+						player = BungeeMain.getPlugin().getAccountManager().loadBattlePlayer(uuid);
+					} catch (Exception e) {
+						e.printStackTrace();
+						sender.sendMessage(TextComponent.fromLegacyText(giveVipPrefix + Translate.getTranslation(language, "cant-request-offline")));
+						return;
+					}
+					if (player == null) {
+						sender.sendMessage(TextComponent.fromLegacyText(giveVipPrefix + Translate.getTranslation(language, "player-never-joined")));
+						return;
+					}
+				}
+
+				RankType rank = null;
+				try {
+					rank = RankType.valueOf(args[1].toUpperCase());
+				} catch (Exception e) {
+					sender.sendMessage(TextComponent.fromLegacyText(giveVipPrefix + Translate.getTranslation(language, "command-removevip-rank-not-exist")));
+					return;
+				}
+				player.getRanks().remove(rank);
+				if (!player.isOnline()) {
+					BattlebitsAPI.getAccountCommon().saveBattlePlayer(player);
+				}
+				ProxiedPlayer pPlayer = BungeeMain.getPlugin().getProxy().getPlayer(player.getUuid());
+				if (pPlayer != null) {
+					ByteArrayDataOutput out = ByteStreams.newDataOutput();
+					out.writeUTF("Removevip");
+					out.writeUTF(rank.name());
+					if (pPlayer.getServer() != null)
+						pPlayer.getServer().sendData(BattlebitsAPI.getBungeeChannel(), out.toByteArray());
+				}
+				String message = giveVipPrefix + Translate.getTranslation(language, "command-removevip-removed");
+				message = message.replace("%player%", player.getUserName() + "(" + player.getUuid().toString().replace("-", "") + ")");
+				message = message.replace("%rank%", rank.name());
+				sender.sendMessage(TextComponent.fromLegacyText(message));
+
+			}
+		});
+	}
+
+	@Completer(name = "groupset", aliases = { "setargrupo", "removevip", "removervip" })
 	public List<String> groupsetCompleter(CommandArgs args) {
 		if (args.isPlayer()) {
 			if (args.getArgs().length == 1) {
