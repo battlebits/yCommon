@@ -37,7 +37,7 @@ public class PlayerListener implements Listener {
 	}
 
 	@SuppressWarnings("deprecation")
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onChat(AsyncPlayerChatEvent event) {
 		event.setCancelled(true);
 		BukkitPlayer player = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(event.getPlayer().getUniqueId());
