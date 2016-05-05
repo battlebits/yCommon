@@ -1,4 +1,4 @@
-package br.com.battlebits.ycommon.bukkit.injector;
+package br.com.battlebits.ycommon.bukkit.injector.injectors;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -11,7 +11,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import br.com.battlebits.ycommon.bukkit.BukkitMain;
+import br.com.battlebits.ycommon.bukkit.injector.PacketListener;
+import br.com.battlebits.ycommon.bukkit.injector.PacketListenerAPI;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
@@ -24,20 +25,20 @@ import net.minecraft.util.com.google.common.cache.Cache;
 import net.minecraft.util.com.google.common.cache.CacheBuilder;
 import net.minecraft.util.com.google.common.cache.CacheLoader;
 
-public class WindowInjector {
+public class MenuTranslationInjector {
 
-	private static Pattern translateFinder = Pattern.compile("%msgId:\\s*([a-zA-Z0-9_-]+)\\s*%");
-	private static Cache<String, Cache<Language, String>> translations = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.DAYS)
+	private Pattern translateFinder = Pattern.compile("%msg:\\s*([a-zA-Z0-9_-]+)\\s*%");
+	private Cache<String, Cache<Language, String>> translations = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.DAYS)
 			.build(new CacheLoader<String, Cache<Language, String>>() {
 				@Override
 				public Cache<Language, String> load(String original) throws Exception {
 					return getLanguageForCache(original);
 				}
 			});
+	private PacketListener injectorListener;
 
-	public static void inject(BukkitMain main) {
-		PacketListenerAPI.addListener(new PacketListener() {
-
+	public MenuTranslationInjector() {
+		injectorListener = new PacketListener() {
 			@Override
 			public void onPacketSend(PacketObject pacote) {
 				Packet packet = pacote.getPacket();
@@ -53,7 +54,7 @@ public class WindowInjector {
 						ItemStack iS = CraftItemStack.copyNMSStack(item, item.count);
 						ItemMeta meta = CraftItemStack.getItemMeta(iS);
 						if (meta != null) {
-							if (meta.hasDisplayName() && meta.getDisplayName().contains("%msgId:")) {
+							if (meta.hasDisplayName() && meta.getDisplayName().contains("%msg:")) {
 								meta.setDisplayName(getTranslation(meta.getDisplayName(), lang));
 							}
 							if (meta.hasLore()) {
@@ -62,7 +63,7 @@ public class WindowInjector {
 									if (!newlore.isEmpty()) {
 										newlore += "\\n";
 									}
-									if (name.contains("%msgId:")) {
+									if (name.contains("%msg:")) {
 										name = getTranslation(name, lang);
 									}
 									newlore += name;
@@ -93,7 +94,7 @@ public class WindowInjector {
 							ItemMeta meta = CraftItemStack.getItemMeta(iS);
 							if (meta != null) {
 								Language lang = BattlebitsAPI.getAccountCommon().getBattlePlayer(pacote.getPlayer().getUniqueId()).getLanguage();
-								if (meta.hasDisplayName() && meta.getDisplayName().contains("%msgId:")) {
+								if (meta.hasDisplayName() && meta.getDisplayName().contains("%msg:")) {
 									meta.setDisplayName(getTranslation(meta.getDisplayName(), lang));
 								}
 								if (meta.hasLore()) {
@@ -102,7 +103,7 @@ public class WindowInjector {
 										if (!newlore.isEmpty()) {
 											newlore += "\\n";
 										}
-										if (name.contains("%msgId:")) {
+										if (name.contains("%msg:")) {
 											name = getTranslation(name, lang);
 										}
 										newlore += name;
@@ -130,7 +131,7 @@ public class WindowInjector {
 						Field c = openWindow.getClass().getDeclaredField("c");
 						c.setAccessible(true);
 						String name = (String) c.get(openWindow);
-						if (name != null && name.contains("%msgId:")) {
+						if (name != null && name.contains("%msg:")) {
 							c.set(openWindow, getTranslation(name,
 									BattlebitsAPI.getAccountCommon().getBattlePlayer(pacote.getPlayer().getUniqueId()).getLanguage()));
 						}
@@ -145,14 +146,21 @@ public class WindowInjector {
 
 			@Override
 			public void onPacketReceive(PacketObject pacote) {
-
 			}
 
-		});
-		BattlebitsAPI.getLogger().info("PacketListener de WindowInjector carregada com sucesso!");
+		};
 	}
 
-	private static ArrayList<String> formatForLore(String string) {
+	public void inject() {
+		PacketListenerAPI.addListener(injectorListener);
+		BattlebitsAPI.getLogger().info("MenuTranslationInjector injetado com sucesso!");
+	}
+
+	public void end() {
+		PacketListenerAPI.removeListener(injectorListener);
+	}
+
+	private ArrayList<String> formatForLore(String string) {
 		String[] split = string.split(" ");
 		string = "";
 		ArrayList<String> newString = new ArrayList<String>();
@@ -179,7 +187,7 @@ public class WindowInjector {
 		return newString;
 	}
 
-	private static String getTranslation(String original, Language lang) {
+	private String getTranslation(String original, Language lang) {
 		try {
 			return translations.get(original, new Callable<Cache<Language, String>>() {
 				@Override
@@ -197,7 +205,7 @@ public class WindowInjector {
 		}
 	}
 
-	private static Cache<Language, String> getLanguageForCache(String original) {
+	private Cache<Language, String> getLanguageForCache(String original) {
 		return CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.DAYS).build(new CacheLoader<Language, String>() {
 			@Override
 			public String load(Language lang) throws Exception {
@@ -206,12 +214,12 @@ public class WindowInjector {
 		});
 	}
 
-	private static String getTranslationForCache(String original, Language lang) {
+	private String getTranslationForCache(String original, Language lang) {
 		try {
 			String message = original;
 			Matcher matcher = translateFinder.matcher(message);
 			while (matcher.find()) {
-				message = message.replace("%msgId:" + matcher.group(1) + "%", Translate.getTranslation(lang, matcher.group(1)));
+				message = message.replace("%msg:" + matcher.group(1) + "%", Translate.getTranslation(lang, matcher.group(1)));
 			}
 			matcher = null;
 			lang = null;

@@ -13,7 +13,7 @@ import br.com.battlebits.ycommon.bukkit.bungee.MessageListener;
 import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandFramework;
 import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandLoader;
 import br.com.battlebits.ycommon.bukkit.injector.Injector;
-import br.com.battlebits.ycommon.bukkit.injector.WindowInjector;
+import br.com.battlebits.ycommon.bukkit.injector.injectors.MenuTranslationInjector;
 import br.com.battlebits.ycommon.bukkit.listeners.ChatListener;
 import br.com.battlebits.ycommon.bukkit.listeners.PlayerListener;
 import br.com.battlebits.ycommon.bukkit.listeners.ScoreboardListener;
@@ -47,6 +47,8 @@ public class BukkitMain extends JavaPlugin {
 	private BukkitCommandFramework bukkitCommandFramework;
 
 	private BattleBoard battleBoard;
+
+	private MenuTranslationInjector menuTranslationInjector;
 
 	private boolean restart;
 
@@ -92,12 +94,14 @@ public class BukkitMain extends JavaPlugin {
 		bukkitCommandFramework = new BukkitCommandFramework(this);
 		bukkitCommandLoader = new BukkitCommandLoader(bukkitCommandFramework);
 		bukkitCommandLoader.loadCommandsFromPackage("br.com.battlebits.ycommon.bukkit.commands.register");
+		menuTranslationInjector = new MenuTranslationInjector();
+		menuTranslationInjector.inject();
 		getServer().getScheduler().runTaskTimer(this, new UpdateScheduler(), 1, 1);
-		WindowInjector.inject(this);
 	}
 
 	@Override
 	public void onDisable() {
+		menuTranslationInjector.end();
 		accountManager.onDisable();
 		permissionManager.onDisable();
 		tagManager.onDisable();

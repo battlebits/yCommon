@@ -1,4 +1,4 @@
-package br.com.battlebits.ycommon.bukkit.menu;
+package br.com.battlebits.ycommon.bukkit.menu.preferences;
 
 import java.util.Arrays;
 
@@ -18,7 +18,7 @@ import br.com.battlebits.ycommon.common.account.BattlePlayer;
 public class PreferencesMenu {
 
 	private ItemStack conversationItem;
-	private MenuItem conversationIcon;
+	private static MenuItem conversationIcon;
 	private ItemStack tellEnabledItem;
 	private ItemStack tellDisabledItem;
 	private MenuItem tellEnabledIcon;
@@ -26,17 +26,17 @@ public class PreferencesMenu {
 
 	public PreferencesMenu() {
 		ItemBuilder builder = new ItemBuilder();
-		conversationItem = builder.amount(1).type(Material.PAPER).name("§6%msgId:item-preferences-conversation-icon-name%")
-				.lore(Arrays.asList("§8%msgId:item-preferences-icon-name%", "§0", "§7%msgId:item-preferences-conversation-icon-lore%", "§0",
-						"§e» %msgId:item-preferences-icon-edit-name%"))
+		conversationItem = builder.amount(1).type(Material.PAPER).name("§6%msg:item-preferences-conversation-icon-name%")
+				.lore(Arrays.asList("§8%msg:item-preferences-icon-name%", "§0", "§7%msg:item-preferences-conversation-icon-lore%", "§0",
+						"§e» %msg:item-preferences-icon-edit-name%"))
 				.build();
-		tellEnabledItem = builder.amount(1).type(Material.BOOK_AND_QUILL).glow().name("§a%msgId:item-preferences-conversation-tell-name%")
-				.lore(Arrays.asList("§8%msgId:item-preferences-icon-name%", "§0", "§7%msgId:item-preferences-conversation-tell-lore%", "§0",
-						"§e» %msgId:item-preferences-icon-edit-disable%"))
+		tellEnabledItem = builder.amount(1).type(Material.BOOK_AND_QUILL).glow().name("§a%msg:item-preferences-conversation-tell-name%")
+				.lore(Arrays.asList("§8%msg:item-preferences-icon-name%", "§0", "§7%msg:item-preferences-conversation-tell-lore%", "§0",
+						"§e» %msg:item-preferences-icon-edit-disable%"))
 				.build();
-		tellDisabledItem = builder.amount(1).type(Material.BOOK_AND_QUILL).name("§a%msgId:item-preferences-conversation-tell-name%")
-				.lore(Arrays.asList("§8%msgId:item-preferences-icon-name%", "§0", "§7%msgId:item-preferences-conversation-tell-lore%", "§0",
-						"§e» %msgId:item-preferences-icon-edit-enable%"))
+		tellDisabledItem = builder.amount(1).type(Material.BOOK_AND_QUILL).name("§a%msg:item-preferences-conversation-tell-name%")
+				.lore(Arrays.asList("§8%msg:item-preferences-icon-name%", "§0", "§7%msg:item-preferences-conversation-tell-lore%", "§0",
+						"§e» %msg:item-preferences-icon-edit-enable%"))
 				.build();
 		conversationIcon = new MenuItem(conversationItem, new MenuClickHandler() {
 
@@ -65,8 +65,8 @@ public class PreferencesMenu {
 		tellClickHandler = null;
 	}
 
-	public void open(Player p) {
-		MenuInventory menu = new MenuInventory("%msgId:menu-preferences-name%", 5, true);
+	public static void openPreferences(Player p) {
+		MenuInventory menu = new MenuInventory("%msg:menu-preferences-name%", 5, true);
 		menu.setItem(conversationIcon, 10);
 		menu.open(p);
 		menu = null;
@@ -74,7 +74,7 @@ public class PreferencesMenu {
 	}
 
 	public void openConversation(Player p) {
-		MenuInventory menu = new MenuInventory("%msgId:menu-p-conversation-name%", 3, true);
+		MenuInventory menu = new MenuInventory("%msg:menu-p-conversation-name%", 3, true);
 		BattlePlayer bp = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
 		if (bp.getConfiguration().isTellEnabled()) {
 			menu.setItem(tellEnabledIcon, 10);
