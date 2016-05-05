@@ -65,7 +65,8 @@ public class BanManager {
 			if (ban.isPermanent()) {
 				ByteArrayDataOutput out = ByteStreams.newDataOutput();
 				out.writeUTF("Ban");
-				pPlayer.getServer().sendData(BattlebitsAPI.getBungeeChannel(), out.toByteArray());
+				if (pPlayer.getServer() != null)
+					pPlayer.getServer().sendData(BattlebitsAPI.getBungeeChannel(), out.toByteArray());
 			}
 			if (player.getIpAddress() != null)
 				banCache.put(player.getIpAddress().getHostString(), new AbstractMap.SimpleEntry<UUID, Ban>(player.getUuid(), ban));
@@ -115,7 +116,8 @@ public class BanManager {
 			ByteArrayDataOutput out = ByteStreams.newDataOutput();
 			out.writeUTF("Mute");
 			out.writeUTF(BattlebitsAPI.getGson().toJson(mute));
-			pPlayer.getServer().sendData(BattlebitsAPI.getBungeeChannel(), out.toByteArray());
+			if (pPlayer.getServer() != null)
+				pPlayer.getServer().sendData(BattlebitsAPI.getBungeeChannel(), out.toByteArray());
 		}
 	}
 
@@ -145,7 +147,8 @@ public class BanManager {
 			} else {
 				out.writeUTF("UnmuteConsole");
 			}
-			pPlayer.getServer().sendData(BattlebitsAPI.getBungeeChannel(), out.toByteArray());
+			if (pPlayer.getServer() != null)
+				pPlayer.getServer().sendData(BattlebitsAPI.getBungeeChannel(), out.toByteArray());
 		}
 	}
 

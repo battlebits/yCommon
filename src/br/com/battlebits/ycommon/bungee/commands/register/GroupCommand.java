@@ -120,7 +120,8 @@ public class GroupCommand extends CommandClass {
 					out.writeUTF("Groupset");
 					out.writeUTF(group.toString());
 					out.writeUTF(serverType.toString());
-					pPlayer.getServer().sendData(BattlebitsAPI.getBungeeChannel(), out.toByteArray());
+					if (pPlayer.getServer() != null)
+						pPlayer.getServer().sendData(BattlebitsAPI.getBungeeChannel(), out.toByteArray());
 				}
 				String message = groupSetPrefix + Translate.getTranslation(language, "command-groupset-change-group");
 				message = message.replace("%player%", player.getUserName() + "(" + player.getUuid().toString().replace("-", "") + ")");
