@@ -198,7 +198,8 @@ public class GroupCommand extends CommandClass {
 					out.writeUTF("Givevip");
 					out.writeUTF(rank.name());
 					out.writeLong(expiresCheck);
-					pPlayer.getServer().sendData(BattlebitsAPI.getBungeeChannel(), out.toByteArray());
+					if (pPlayer.getServer() != null)
+						pPlayer.getServer().sendData(BattlebitsAPI.getBungeeChannel(), out.toByteArray());
 				}
 				String message = giveVipPrefix + Translate.getTranslation(language, "command-givevip-added");
 				message = message.replace("%player%", player.getUserName() + "(" + player.getUuid().toString().replace("-", "") + ")");
