@@ -86,7 +86,7 @@ public class BukkitPlayer extends BattlePlayer {
 	public void setXp(int xp) {
 		super.setXp(xp);
 		sendCPacketChangeAccount();
-		if (getLiga().getMin() < getXp())
+		if (getLiga().getMin() <= getXp())
 			if (Liga.getLiga(xp) != getLiga())
 				setLiga(Liga.getLiga(xp));
 	}
