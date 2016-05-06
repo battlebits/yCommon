@@ -21,6 +21,14 @@ public class CPacketChangeLiga extends CommonPacket {
 		this.liga = liga;
 	}
 
+	public UUID getUuid() {
+		return uuid;
+	}
+
+	public Liga getLiga() {
+		return liga;
+	}
+
 	@Override
 	public void read(DataInputStream in) throws Exception {
 		this.uuid = UUID.fromString(in.readUTF());

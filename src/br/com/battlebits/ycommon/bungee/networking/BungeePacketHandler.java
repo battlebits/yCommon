@@ -184,8 +184,9 @@ public class BungeePacketHandler extends CommonHandler {
 
 	@Override
 	public void handleChangeLiga(CPacketChangeLiga packet) {
-		// TODO Auto-generated method stub
-
+		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(packet.getUuid());
+		player.setLiga(packet.getLiga());
+		player = null;
 	}
 
 	@Override
