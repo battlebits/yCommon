@@ -17,6 +17,7 @@ import br.com.battlebits.ycommon.bukkit.injector.injectors.MenuTranslationInject
 import br.com.battlebits.ycommon.bukkit.listeners.ChatListener;
 import br.com.battlebits.ycommon.bukkit.listeners.PlayerListener;
 import br.com.battlebits.ycommon.bukkit.listeners.ScoreboardListener;
+import br.com.battlebits.ycommon.bukkit.menu.preferences.PreferencesMenu;
 import br.com.battlebits.ycommon.bukkit.networking.BukkitHandler;
 import br.com.battlebits.ycommon.bukkit.networking.PacketSender;
 import br.com.battlebits.ycommon.bukkit.permissions.PermissionManager;
@@ -97,6 +98,7 @@ public class BukkitMain extends JavaPlugin {
 		menuTranslationInjector = new MenuTranslationInjector();
 		menuTranslationInjector.inject();
 		getServer().getScheduler().runTaskTimer(this, new UpdateScheduler(), 1, 1);
+		new PreferencesMenu();
 	}
 
 	@Override

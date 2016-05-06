@@ -80,7 +80,7 @@ public class MenuInventory {
 			p.openInventory(inv);
 		} else {
 			if (p.getOpenInventory() == null || p.getOpenInventory().getTopInventory().getType() != InventoryType.CHEST
-					|| p.getOpenInventory().getTopInventory().getSize() < rows * 9 || p.getOpenInventory().getTopInventory().getHolder() == null
+					|| p.getOpenInventory().getTopInventory().getSize() != rows * 9 || p.getOpenInventory().getTopInventory().getHolder() == null
 					|| !(p.getOpenInventory().getTopInventory().getHolder() instanceof MenuHolder)
 					|| !(((MenuHolder) p.getOpenInventory().getTopInventory().getHolder()).isOnePerPlayer())) {
 				createAndOpenInventory(p);
@@ -93,6 +93,7 @@ public class MenuInventory {
 						p.getOpenInventory().getTopInventory().setItem(i, null);
 					}
 				}
+				p.updateInventory();
 			}
 			((MenuHolder) p.getOpenInventory().getTopInventory().getHolder()).setMenu(this);
 		}
@@ -107,6 +108,12 @@ public class MenuInventory {
 		ep.playerConnection.sendPacket(openWindow);
 		ep.updateInventory(ep.activeContainer);
 		// Garbage Colector
+		int i = 0;
+		for (ItemStack item : p.getInventory().getContents()) {
+			p.getInventory().setItem(i, item);
+			i += 1;
+		}
+		p.updateInventory();
 		openWindow = null;
 		ep = null;
 	}
@@ -118,7 +125,6 @@ public class MenuInventory {
 			playerInventory.setItem(entry.getKey(), entry.getValue().getStack());
 		}
 		p.openInventory(playerInventory);
-		updateTitle(p);
 		// Garbage Colector
 		p = null;
 	}
@@ -136,13 +142,13 @@ public class MenuInventory {
 		}
 	}
 
-	public void destroy() {
-		for (MenuItem item : slotItem.values()) {
-			item.destroy();
-		}
-		this.slotItem.clear();
-		this.slotItem = null;
-	}
+	// public void destroy() {
+	// for (MenuItem item : slotItem.values()) {
+	// item.destroy();
+	// }
+	// this.slotItem.clear();
+	// this.slotItem = null;
+	// }
 
 	public boolean isOnePerPlayer() {
 		return onePerPlayer;
