@@ -26,17 +26,17 @@ public class PreferencesMenu {
 
 	public PreferencesMenu() {
 		ItemBuilder builder = new ItemBuilder();
-		conversationItem = builder.amount(1).type(Material.PAPER).name("§6%msg:item-preferences-conversation-icon-name%")
-				.lore(Arrays.asList("§8%msg:item-preferences-icon-name%", "§0", "§7%msg:item-preferences-conversation-icon-lore%", "§0",
-						"§e» %msg:item-preferences-icon-edit-name%"))
+		conversationItem = builder.amount(1).type(Material.PAPER).name("§6%msg:item-preferences-conversation-name%")
+				.lore(Arrays.asList("§8%msg:item-preferences-icon-name%", "§0", "§7%msg:item-preferences-conversation-lore%", "§0",
+						"§e» %msg:item-preferences-edit-name%"))
 				.build();
 		tellEnabledItem = builder.amount(1).type(Material.BOOK_AND_QUILL).glow().name("§a%msg:item-preferences-conversation-tell-name%")
 				.lore(Arrays.asList("§8%msg:item-preferences-icon-name%", "§0", "§7%msg:item-preferences-conversation-tell-lore%", "§0",
-						"§e» %msg:item-preferences-icon-edit-disable%"))
+						"§e» %msg:item-preferences-edit-disable%"))
 				.build();
 		tellDisabledItem = builder.amount(1).type(Material.BOOK_AND_QUILL).name("§a%msg:item-preferences-conversation-tell-name%")
 				.lore(Arrays.asList("§8%msg:item-preferences-icon-name%", "§0", "§7%msg:item-preferences-conversation-tell-lore%", "§0",
-						"§e» %msg:item-preferences-icon-edit-enable%"))
+						"§e» %msg:item-preferences-edit-enable%"))
 				.build();
 		conversationIcon = new MenuItem(conversationItem, new MenuClickHandler() {
 
@@ -66,7 +66,7 @@ public class PreferencesMenu {
 	}
 
 	public static void openPreferences(Player p) {
-		MenuInventory menu = new MenuInventory("%msg:menu-preferences-name%", 5, true);
+		MenuInventory menu = new MenuInventory("%msg:menu-pref-title%", 3, true);
 		menu.setItem(conversationIcon, 10);
 		menu.open(p);
 		menu = null;
@@ -74,7 +74,7 @@ public class PreferencesMenu {
 	}
 
 	public void openConversation(Player p) {
-		MenuInventory menu = new MenuInventory("%msg:menu-p-conversation-name%", 3, true);
+		MenuInventory menu = new MenuInventory("%msg:menu-pref-conv-title%", 3, true);
 		BattlePlayer bp = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
 		if (bp.getConfiguration().isTellEnabled()) {
 			menu.setItem(tellEnabledIcon, 10);
