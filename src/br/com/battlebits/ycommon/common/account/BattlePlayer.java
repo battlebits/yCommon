@@ -20,6 +20,8 @@ import br.com.battlebits.ycommon.common.party.Party;
 import br.com.battlebits.ycommon.common.payment.enums.RankType;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.tag.Tag;
+import br.com.battlebits.ycommon.common.time.TimeZone;
+import br.com.battlebits.ycommon.common.time.TimeZoneConversor;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
 
 public class BattlePlayer {
@@ -73,6 +75,7 @@ public class BattlePlayer {
 	// PAIS E LINGUA
 	private String countryCode;
 	private Language language;
+	private TimeZone timeZone;
 
 	// STATUS
 	private GameStatus gameStatus;
@@ -89,7 +92,7 @@ public class BattlePlayer {
 
 	}
 
-	public BattlePlayer(String userName, UUID uuid, InetSocketAddress ipAddress, String countryCode) {
+	public BattlePlayer(String userName, UUID uuid, InetSocketAddress ipAddress, String countryCode, String timeZoneCode) {
 		this.userName = userName;
 		this.uuid = uuid;
 		this.fakeName = userName;
@@ -104,8 +107,8 @@ public class BattlePlayer {
 			this.lastIpAddress = ipAddress.getHostString();
 
 		this.onlineTime = 0;
-		this.lastLoggedIn = System.currentTimeMillis();
-		this.firstTimePlaying = System.currentTimeMillis();
+		this.lastLoggedIn = TimeZoneConversor.getCurrentMillsTimeIn(TimeZone.GMT0);
+		this.firstTimePlaying = TimeZoneConversor.getCurrentMillsTimeIn(TimeZone.GMT0);
 
 		this.configuration = new AccountConfiguration();
 
@@ -127,6 +130,7 @@ public class BattlePlayer {
 
 		this.countryCode = countryCode;
 		this.language = BattlebitsAPI.getDefaultLanguage();
+		this.timeZone = TimeZone.fromString(timeZoneCode);
 
 		this.gameStatus = new GameStatus();
 
@@ -171,7 +175,7 @@ public class BattlePlayer {
 	}
 
 	public long getOnlineTime() {
-		return (System.currentTimeMillis() - joinTime) + onlineTime;
+		return (TimeZoneConversor.getCurrentMillsTimeIn(TimeZone.GMT0) - joinTime) + onlineTime;
 	}
 
 	public String getHostname() {
@@ -466,7 +470,7 @@ public class BattlePlayer {
 		checkRanks();
 		this.userName = userName;
 		this.ipAddress = ipAdrress;
-		joinTime = System.currentTimeMillis();
+		joinTime = TimeZoneConversor.getCurrentMillsTimeIn(TimeZone.GMT0);
 		this.countryCode = countryCode;
 		this.online = true;
 		this.serverConnectedType = ServerType.NONE;
@@ -474,7 +478,7 @@ public class BattlePlayer {
 
 	public void setLeaveData() {
 		this.online = false;
-		lastLoggedIn = System.currentTimeMillis();
+		lastLoggedIn = TimeZoneConversor.getCurrentMillsTimeIn(TimeZone.GMT0);
 		onlineTime = getOnlineTime();
 		actualParty = null;
 		if (ipAddress != null)
@@ -496,10 +500,18 @@ public class BattlePlayer {
 			Iterator<Entry<RankType, Long>> it = getRanks().entrySet().iterator();
 			while (it.hasNext()) {
 				Entry<RankType, Long> entry = it.next();
-				if (System.currentTimeMillis() > entry.getValue())
+				if (TimeZoneConversor.getCurrentMillsTimeIn(TimeZone.GMT0) > entry.getValue())
 					it.remove();
 			}
 		}
+	}
+
+	public TimeZone getTimeZone() {
+		return timeZone;
+	}
+
+	public void setTimeZone(TimeZone timeZone) {
+		this.timeZone = timeZone;
 	}
 
 	@Override
@@ -572,6 +584,8 @@ public class BattlePlayer {
 		builder.append("COUNTRY > " + countryCode);
 		builder.append(" | ");
 		builder.append("LANGUAGE > " + language);
+		builder.append(" | ");
+		builder.append("TIMEZONE > " + timeZone);
 		builder.append(" | ");
 
 		builder.append("GAMESTATUS > " + gameStatus);

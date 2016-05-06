@@ -14,6 +14,7 @@ import br.com.battlebits.ycommon.bungee.utils.mojang.BungeeUUIDFetcher;
 import br.com.battlebits.ycommon.common.enums.BattleInstance;
 import br.com.battlebits.ycommon.common.manager.AccountCommon;
 import br.com.battlebits.ycommon.common.manager.ClanCommon;
+import br.com.battlebits.ycommon.common.time.TimeZone;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
 import br.com.battlebits.ycommon.common.utils.gson.GsonInterface;
 import br.com.battlebits.ycommon.common.utils.json.TypeUtils;
@@ -33,6 +34,8 @@ public class BattlebitsAPI {
 	private static Logger logger;
 	private static boolean debugMode = false;
 	private static boolean useRedisBungee = false;
+	private static TimeZone serverTimeZone = TimeZone.GMT03;
+	private static TimeZone defaultTimeZone = TimeZone.GMT03;
 	public final static String FORUM_WEBSITE = "http://forum.battlebits.com.br";
 	public final static String WEBSITE = "http://battlebits.com.br";
 	public final static String STORE = "http://loja.battlebits.com.br";
@@ -116,6 +119,14 @@ public class BattlebitsAPI {
 
 	public static String getBungeeCordChannel() {
 		return ((useRedisBungee) ? "RedisBungee" : "BungeeCord");
+	}
+	
+	public static TimeZone getServerTimeZone() {
+		return serverTimeZone;
+	}
+	
+	public static TimeZone getDefaultTimeZone() {
+		return defaultTimeZone;
 	}
 
 }

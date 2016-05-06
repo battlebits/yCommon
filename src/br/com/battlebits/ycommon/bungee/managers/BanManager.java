@@ -20,6 +20,8 @@ import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.banmanager.constructors.Ban;
 import br.com.battlebits.ycommon.common.banmanager.constructors.Mute;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
+import br.com.battlebits.ycommon.common.time.TimeZone;
+import br.com.battlebits.ycommon.common.time.TimeZoneConversor;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
 import br.com.battlebits.ycommon.common.utils.DateUtils;
@@ -46,9 +48,11 @@ public class BanManager {
 			BattlePlayer pl = BattlebitsAPI.getAccountCommon().getBattlePlayer(proxiedP.getUniqueId());
 			String banSuccess = "";
 			if (ban.isPermanent()) {
-				banSuccess = Translate.getTranslation(pl.getLanguage(), "command-ban-prefix") + " " + Translate.getTranslation(pl.getLanguage(), "command-ban-success");
+				banSuccess = Translate.getTranslation(pl.getLanguage(), "command-ban-prefix") + " "
+						+ Translate.getTranslation(pl.getLanguage(), "command-ban-success");
 			} else {
-				banSuccess = Translate.getTranslation(pl.getLanguage(), "command-tempban-prefix") + " " + Translate.getTranslation(pl.getLanguage(), "command-tempban-success");
+				banSuccess = Translate.getTranslation(pl.getLanguage(), "command-tempban-prefix") + " "
+						+ Translate.getTranslation(pl.getLanguage(), "command-tempban-success");
 			}
 			banSuccess = banSuccess.replace("%player%", player.getUserName() + "(" + player.getUuid().toString().replace("-", "") + ")");
 			banSuccess = banSuccess.replace("%banned-By%", ban.getBannedBy());
@@ -81,7 +85,8 @@ public class BanManager {
 			ban.unban();
 		for (ProxiedPlayer proxiedP : BungeeCord.getInstance().getPlayers()) {
 			BattlePlayer pl = BattlebitsAPI.getAccountCommon().getBattlePlayer(proxiedP.getUniqueId());
-			String unbanSuccess = Translate.getTranslation(pl.getLanguage(), "command-unban-prefix") + " " + Translate.getTranslation(pl.getLanguage(), "command-unban-success");
+			String unbanSuccess = Translate.getTranslation(pl.getLanguage(), "command-unban-prefix") + " "
+					+ Translate.getTranslation(pl.getLanguage(), "command-unban-success");
 			unbanSuccess = unbanSuccess.replace("%player%", player.getUserName() + "(" + player.getUuid().toString().replace("-", "") + ")");
 			unbanSuccess = unbanSuccess.replace("%unbannedBy%", ban.getUnbannedBy());
 			if (pl.hasGroupPermission(Group.TRIAL)) {
@@ -97,9 +102,11 @@ public class BanManager {
 			BattlePlayer pl = BattlebitsAPI.getAccountCommon().getBattlePlayer(proxiedP.getUniqueId());
 			String banSuccess = "";
 			if (mute.isPermanent()) {
-				banSuccess = Translate.getTranslation(pl.getLanguage(), "command-mute-prefix") + " " + Translate.getTranslation(pl.getLanguage(), "command-mute-success");
+				banSuccess = Translate.getTranslation(pl.getLanguage(), "command-mute-prefix") + " "
+						+ Translate.getTranslation(pl.getLanguage(), "command-mute-success");
 			} else {
-				banSuccess = Translate.getTranslation(pl.getLanguage(), "command-tempmute-prefix") + " " + Translate.getTranslation(pl.getLanguage(), "command-tempmute-success");
+				banSuccess = Translate.getTranslation(pl.getLanguage(), "command-tempmute-prefix") + " "
+						+ Translate.getTranslation(pl.getLanguage(), "command-tempmute-success");
 			}
 			banSuccess = banSuccess.replace("%player%", player.getUserName() + "(" + player.getUuid().toString().replace("-", "") + ")");
 			banSuccess = banSuccess.replace("%muted-By%", mute.getMutedBy());
@@ -128,7 +135,8 @@ public class BanManager {
 			mute.unmute();
 		for (ProxiedPlayer proxiedP : BungeeCord.getInstance().getPlayers()) {
 			BattlePlayer pl = BattlebitsAPI.getAccountCommon().getBattlePlayer(proxiedP.getUniqueId());
-			String unbanSuccess = Translate.getTranslation(pl.getLanguage(), "command-unmute-prefix") + " " + Translate.getTranslation(pl.getLanguage(), "command-unmute-success");
+			String unbanSuccess = Translate.getTranslation(pl.getLanguage(), "command-unmute-prefix") + " "
+					+ Translate.getTranslation(pl.getLanguage(), "command-unmute-success");
 			unbanSuccess = unbanSuccess.replace("%player%", player.getUserName() + "(" + player.getUuid().toString().replace("-", "") + ")");
 			unbanSuccess = unbanSuccess.replace("%unmutedBy%", mute.getUnmutedBy());
 			if (pl.hasGroupPermission(Group.TRIAL)) {
@@ -163,12 +171,14 @@ public class BanManager {
 		} else {
 			reason = Translate.getTranslation(lang, "banned-temp");
 		}
-		Date date = new Date(ban.getBanTime());
+		Date date = new Date(TimeZoneConversor.convertTime(TimeZone.GMT0,
+				BattlebitsAPI.getAccountCommon().getBattlePlayer(ban.getBannedByUUID()).getTimeZone(), ban.getBanTime()));
 		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 		reason = reason.replace("%day%", df.format(date));
 		reason = reason.replace("%banned-By%", ban.getBannedBy());
 		reason = reason.replace("%reason%", ban.getReason());
-		reason = reason.replace("%duration%", DateUtils.formatDifference(lang, (ban.getExpire() - System.currentTimeMillis()) / 1000));
+		reason = reason.replace("%duration%",
+				DateUtils.formatDifference(lang, (ban.getExpire() - TimeZoneConversor.getCurrentMillsTimeIn(TimeZone.GMT0)) / 1000));
 		reason = reason.replace("%forum%", BattlebitsAPI.FORUM_WEBSITE);
 		reason = reason.replace("%store%", BattlebitsAPI.STORE);
 		return reason;
@@ -181,7 +191,8 @@ public class BanManager {
 		} else {
 			message = Translate.getTranslation(lang, "command-unmute-prefix") + " " + Translate.getTranslation(lang, "command-tempmute-muted");
 		}
-		message = message.replace("%duration%", DateUtils.formatDifference(lang, (mute.getExpire() - System.currentTimeMillis()) / 1000));
+		message = message.replace("%duration%",
+				DateUtils.formatDifference(lang, (mute.getExpire() - TimeZoneConversor.getCurrentMillsTimeIn(TimeZone.GMT0)) / 1000));
 		message = message.replace("%forum%", BattlebitsAPI.FORUM_WEBSITE);
 		message = message.replace("%store%", BattlebitsAPI.STORE);
 		message = message.replace("%muted-By%", mute.getMutedBy());

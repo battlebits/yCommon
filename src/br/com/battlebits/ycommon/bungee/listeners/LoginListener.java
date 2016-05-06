@@ -35,10 +35,12 @@ public class LoginListener implements Listener {
 			@Override
 			public void run() {
 				String countryCode = "-";
+				String timeZoneCode = "0";
 				try {
 					IpCityResponse responde = GeoIpUtils.getIpStatus(ipAdress.getHostString());
 					if (responde != null)
 						countryCode = responde.getCountryCode();
+						timeZoneCode = responde.getTimeZone();
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -55,7 +57,7 @@ public class LoginListener implements Listener {
 						BattlebitsAPI.getAccountCommon().loadBattlePlayer(uuid, player);
 						BattlebitsAPI.debug("ACCOUNT > LOADED");
 					} else {
-						BattlebitsAPI.getAccountCommon().loadBattlePlayer(uuid, new BattlePlayer(userName, uuid, ipAdress, countryCode));
+						BattlebitsAPI.getAccountCommon().loadBattlePlayer(uuid, new BattlePlayer(userName, uuid, ipAdress, countryCode, timeZoneCode));
 						BattlebitsAPI.debug("ACCOUNT > NEW");
 					}
 					result.close();

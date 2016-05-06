@@ -15,6 +15,8 @@ import br.com.battlebits.ycommon.common.enums.ServerType;
 import br.com.battlebits.ycommon.common.payment.enums.RankType;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.tag.Tag;
+import br.com.battlebits.ycommon.common.time.TimeZone;
+import br.com.battlebits.ycommon.common.time.TimeZoneConversor;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.utils.DateUtils;
 import net.minecraft.util.com.google.common.io.ByteArrayDataInput;
@@ -73,7 +75,7 @@ public class MessageListener implements PluginMessageListener {
 			BukkitPlayer bP = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId());
 			RankType rank = RankType.valueOf(in.readUTF());
 			long expiresCheck = in.readLong();
-			long newAdd = System.currentTimeMillis();
+			long newAdd = TimeZoneConversor.getCurrentMillsTimeIn(TimeZone.GMT0);
 			if (bP.getRanks().containsKey(rank)) {
 				newAdd = bP.getRanks().get(rank);
 			}
