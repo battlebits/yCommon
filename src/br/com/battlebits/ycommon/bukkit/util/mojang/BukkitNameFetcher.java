@@ -11,48 +11,48 @@ import java.util.concurrent.TimeUnit;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import br.com.battlebits.ycommon.common.utils.mojang.UUIDFetcher;
+import br.com.battlebits.ycommon.common.utils.mojang.NameFetcher;
 import net.minecraft.util.com.google.common.cache.Cache;
 import net.minecraft.util.com.google.common.cache.CacheBuilder;
 import net.minecraft.util.com.google.common.cache.CacheLoader;
 import net.minecraft.util.com.google.gson.JsonObject;
 import net.minecraft.util.com.google.gson.JsonParser;
 
-public class BukkitUUIDFetcher extends UUIDFetcher {
+public class BukkitNameFetcher extends NameFetcher {
 
 	private JsonParser parser = new JsonParser();
 
-	private Cache<String, UUID> nameUUID = CacheBuilder.newBuilder().expireAfterWrite(1L, TimeUnit.DAYS).build(new CacheLoader<String, UUID>() {
+	private Cache<UUID, String> uuidName = CacheBuilder.newBuilder().expireAfterWrite(1L, TimeUnit.DAYS).build(new CacheLoader<UUID, String>() {
 		@Override
-		public UUID load(String name) throws Exception {
-			return loadUUID(name);
+		public String load(UUID id) throws Exception {
+			return loadName(id);
 		}
 	});
 
-	private UUID loadUUID(String name) {
-		UUID id = null;
-		Player p = Bukkit.getPlayerExact(name);
+	private String loadName(UUID id) {
+		String name = null;
+		Player p = Bukkit.getPlayer(id);
 		if (p != null) {
-			id = p.getUniqueId();
+			name = p.getName();
 			p = null;
 		} else {
-			id = loadFromServers(name);
+			name = loadFromServers(id);
 		}
-		return id;
+		return name;
 	}
 
 	@Override
-	public UUID load(String name, String server) {
-		UUID id = null;
+	public String load(UUID id, String server) {
+		String name = null;
 		try {
 			String[] infos = server.split("#");
-			String serverUrl = infos[0].replace("%player-name%", name);
+			String serverUrl = infos[0].replace("%player-uuid%", id.toString().replace("-", ""));
 			URL url = new URL(serverUrl);
 			InputStream is = url.openStream();
 			InputStreamReader streamReader = new InputStreamReader(is, Charset.forName("UTF-8"));
 			JsonObject object = parser.parse(streamReader).getAsJsonObject();
-			if (object.get(infos[2]).getAsString().equalsIgnoreCase(name)) {
-				id = (getUUIDFromString(object.get(infos[1]).getAsString()));
+			if (object.has(infos[1]) && object.has(infos[2]) && object.get(infos[2]).getAsString().equalsIgnoreCase(id.toString().replace("-", ""))) {
+				name = object.get(infos[1]).getAsString();
 			}
 			streamReader.close();
 			is.close();
@@ -63,34 +63,25 @@ public class BukkitUUIDFetcher extends UUIDFetcher {
 			serverUrl = null;
 			infos = null;
 			server = null;
+			id = null;
 		} catch (Exception ex) {
 			return null;
 		}
-		return id;
+		return name;
 	}
 
 	@Override
-	public UUID getUUID(String input) {
-		if (input.length() == 32 || input.length() == 36) {
-			try {
-				UUID uuid = getUUIDFromString(input);
-				return uuid;
-			} catch (Exception e) {
-				return null;
-			}
-		} else if (isValidName(input)) {
-			try {
-				return nameUUID.get(input, new Callable<UUID>() {
-					@Override
-					public UUID call() throws Exception {
-						return loadUUID(input);
-					}
-				});
-			} catch (Exception e) {
-				return null;
-			}
-		} else {
+	public String getUsername(UUID id) {
+		try {
+			return uuidName.get(id, new Callable<String>() {
+				@Override
+				public String call() throws Exception {
+					return loadName(id);
+				}
+			});
+		} catch (Exception e) {
 			return null;
 		}
 	}
+
 }

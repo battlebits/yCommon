@@ -5,10 +5,12 @@ import java.util.logging.Logger;
 
 import br.com.battlebits.ycommon.bukkit.util.gson.GsonBukkit;
 import br.com.battlebits.ycommon.bukkit.util.json.TypeBukkitUtils;
+import br.com.battlebits.ycommon.bukkit.util.mojang.BukkitNameFetcher;
 import br.com.battlebits.ycommon.bukkit.util.mojang.BukkitPremiumChecker;
 import br.com.battlebits.ycommon.bukkit.util.mojang.BukkitUUIDFetcher;
 import br.com.battlebits.ycommon.bungee.utils.gson.GsonBungee;
 import br.com.battlebits.ycommon.bungee.utils.json.TypeBungeeUtils;
+import br.com.battlebits.ycommon.bungee.utils.mojang.BungeeNameFetcher;
 import br.com.battlebits.ycommon.bungee.utils.mojang.BungeePremiumChecker;
 import br.com.battlebits.ycommon.bungee.utils.mojang.BungeeUUIDFetcher;
 import br.com.battlebits.ycommon.common.enums.BattleInstance;
@@ -18,6 +20,7 @@ import br.com.battlebits.ycommon.common.time.TimeZone;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
 import br.com.battlebits.ycommon.common.utils.gson.GsonInterface;
 import br.com.battlebits.ycommon.common.utils.json.TypeUtils;
+import br.com.battlebits.ycommon.common.utils.mojang.NameFetcher;
 import br.com.battlebits.ycommon.common.utils.mojang.PremiumChecker;
 import br.com.battlebits.ycommon.common.utils.mojang.UUIDFetcher;
 
@@ -30,6 +33,7 @@ public class BattlebitsAPI {
 	private static BattleInstance battleInstance;
 	private static TypeUtils typeUtils;
 	private static UUIDFetcher uuidFetcher;
+	private static NameFetcher nameFetcher;
 	private static PremiumChecker premiumChecker;
 	private static Logger logger;
 	private static boolean debugMode = false;
@@ -88,6 +92,11 @@ public class BattlebitsAPI {
 		return premiumChecker.isPremium(username.toLowerCase());
 	}
 
+
+	public static String getNammeOf(UUID uuid) {
+		return nameFetcher.getUsername(uuid);
+	}
+	
 	public static void setDefaultLanguange(Language language) {
 		defaultLanguage = language;
 	}
@@ -99,6 +108,7 @@ public class BattlebitsAPI {
 			gson = new GsonBukkit();
 			typeUtils = new TypeBukkitUtils();
 			uuidFetcher = new BukkitUUIDFetcher();
+			nameFetcher = new BukkitNameFetcher();
 			premiumChecker = new BukkitPremiumChecker();
 			logger = org.bukkit.Bukkit.getLogger();
 			break;
@@ -106,6 +116,7 @@ public class BattlebitsAPI {
 			gson = new GsonBungee();
 			typeUtils = new TypeBungeeUtils();
 			uuidFetcher = new BungeeUUIDFetcher();
+			nameFetcher = new BungeeNameFetcher();
 			premiumChecker = new BungeePremiumChecker();
 			logger = net.md_5.bungee.BungeeCord.getInstance().getLogger();
 			break;
@@ -120,11 +131,11 @@ public class BattlebitsAPI {
 	public static String getBungeeCordChannel() {
 		return ((useRedisBungee) ? "RedisBungee" : "BungeeCord");
 	}
-	
+
 	public static TimeZone getServerTimeZone() {
 		return serverTimeZone;
 	}
-	
+
 	public static TimeZone getDefaultTimeZone() {
 		return defaultTimeZone;
 	}

@@ -71,16 +71,9 @@ public class BungeeUUIDFetcher extends UUIDFetcher {
 
 	@Override
 	public UUID getUUID(String input) {
-		if (input.length() == 32) {
+		if (input.length() == 32 || input.length() == 36) {
 			try {
 				UUID uuid = getUUIDFromString(input);
-				return uuid;
-			} catch (Exception e) {
-				return null;
-			}
-		} else if (input.length() == 36) {
-			try {
-				UUID uuid = UUID.fromString(input);
 				return uuid;
 			} catch (Exception e) {
 				return null;
