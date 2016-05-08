@@ -20,7 +20,6 @@ public class CommonConnectionInput extends Thread {
 
 	@Override
 	public void run() {
-		System.out.println("Conectando ao cliente");
 		run = true;
 		while (run) {
 			try {

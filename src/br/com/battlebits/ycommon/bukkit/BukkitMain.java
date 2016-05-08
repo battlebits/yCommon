@@ -76,7 +76,6 @@ public class BukkitMain extends JavaPlugin {
 		battleBoard = new BattleBoard();
 		try {
 			Socket socket = new Socket(CommonServer.ADDRESS, CommonServer.PORT);
-			socket.setSoTimeout(50);
 			socketClient = new BukkitClient(socket);
 		} catch (Exception e1) {
 			e1.printStackTrace();
