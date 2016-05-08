@@ -43,8 +43,7 @@ public class ModeratingCommands extends CommandClass {
 					if (args.length == 1) {
 						if (p.getGameMode() != gm) {
 							p.setGameMode(gm);
-							p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-gamemode-changed-you").replace("%gamemode%",
-									Translate.getTranslation(bp.getLanguage(), "name-gamemode-" + gm.name().toLowerCase())));
+							p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-gamemode-changed-you").replace("%gamemode%", Translate.getTranslation(bp.getLanguage(), "name-gamemode-" + gm.name().toLowerCase())));
 						} else {
 							p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-gamemode-already-you"));
 						}
@@ -53,8 +52,7 @@ public class ModeratingCommands extends CommandClass {
 						if (t != null) {
 							if (t.getGameMode() != gm) {
 								t.setGameMode(gm);
-								p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-gamemode-changed-other").replace(
-										"%gamemode%", Translate.getTranslation(bp.getLanguage(), "name-gamemode-" + gm.name().toLowerCase())));
+								p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-gamemode-changed-other").replace("%gamemode%", Translate.getTranslation(bp.getLanguage(), "name-gamemode-" + gm.name().toLowerCase())));
 							} else {
 								p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-gamemode-already-other"));
 							}
@@ -91,8 +89,7 @@ public class ModeratingCommands extends CommandClass {
 				Player t = Bukkit.getPlayer(args[0]);
 				if (t != null) {
 					p.teleport(t.getLocation());
-					p.sendMessage(prefix
-							+ Translate.getTranslation(bp.getLanguage(), "command-teleport-teleported-to-player").replace("%player%", t.getName()));
+					p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-teleport-teleported-to-player").replace("%player%", t.getName()));
 					t = null;
 				} else {
 					p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "player-not-found"));
@@ -104,8 +101,7 @@ public class ModeratingCommands extends CommandClass {
 						Player target = Bukkit.getPlayer(args[1]);
 						if (target != null) {
 							player.teleport(target);
-							p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-teleport-teleported-other-player")
-									.replace("%player%", player.getName()).replace("%target%", target.getName()));
+							p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-teleport-teleported-other-player").replace("%player%", player.getName()).replace("%target%", target.getName()));
 							target = null;
 						} else {
 							p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "player-not-found"));
@@ -119,9 +115,7 @@ public class ModeratingCommands extends CommandClass {
 						Location loc = getLocationBased(p.getLocation(), args[0], args[1], args[2]);
 						if (loc != null) {
 							p.teleport(loc);
-							p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-teleport-to-location")
-									.replace("%x%", locationFormater.format(loc.getX())).replace("%y%", locationFormater.format(loc.getY()))
-									.replace("%z%", locationFormater.format(loc.getZ())));
+							p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-teleport-to-location").replace("%x%", locationFormater.format(loc.getX())).replace("%y%", locationFormater.format(loc.getY())).replace("%z%", locationFormater.format(loc.getZ())));
 							loc = null;
 						} else {
 							p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-teleport-invalid-location"));
@@ -132,9 +126,7 @@ public class ModeratingCommands extends CommandClass {
 							Location loc = getLocationBased(target.getLocation(), args[1], args[2], args[3]);
 							if (loc != null) {
 								target.teleport(loc);
-								p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-teleport-to-location-other")
-										.replace("%x%", locationFormater.format(loc.getX())).replace("%y%", locationFormater.format(loc.getY()))
-										.replace("%z%", locationFormater.format(loc.getZ())).replace("%target%", target.getName()));
+								p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-teleport-to-location-other").replace("%x%", locationFormater.format(loc.getX())).replace("%y%", locationFormater.format(loc.getY())).replace("%z%", locationFormater.format(loc.getZ())).replace("%target%", target.getName()));
 								loc = null;
 								target = null;
 							} else {
@@ -156,7 +148,6 @@ public class ModeratingCommands extends CommandClass {
 		// TODO: ALERT STAFFS
 	}
 
-	@SuppressWarnings("deprecation")
 	@Command(name = "teleportall", aliases = { "tpall" }, groupToUse = Group.STREAMER, noPermMessageId = "command-teleportall-no-access", runAsync = false)
 	public void tpall(CommandArgs cmdArgs) {
 		if (cmdArgs.isPlayer()) {
@@ -170,8 +161,7 @@ public class ModeratingCommands extends CommandClass {
 					if (on != null && on.isOnline() && on.getUniqueId() != p.getUniqueId()) {
 						on.teleport(p.getLocation());
 						on.setFallDistance(0.0F);
-						on.sendMessage(prefix
-								+ Translate.getTranslation(bp.getLanguage(), "command-teleportall-teleported").replace("%target%", p.getName()));
+						on.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-teleportall-teleported").replace("%target%", p.getName()));
 						i++;
 					}
 					on = null;
@@ -185,14 +175,12 @@ public class ModeratingCommands extends CommandClass {
 						if (on != null && on.isOnline() && on.getUniqueId() != t.getUniqueId() && on.getUniqueId() != p.getUniqueId()) {
 							on.teleport(t.getLocation());
 							on.setFallDistance(0.0F);
-							on.sendMessage(prefix
-									+ Translate.getTranslation(bp.getLanguage(), "command-teleportall-teleported").replace("%target%", t.getName()));
+							on.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-teleportall-teleported").replace("%target%", t.getName()));
 							i++;
 						}
 						on = null;
 					}
-					p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-teleportall-success-other")
-							.replace("%players%", i + "").replace("%target%", t.getName()));
+					p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-teleportall-success-other").replace("%players%", i + "").replace("%target%", t.getName()));
 					t = null;
 				} else {
 					p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "player-not-found"));
@@ -207,9 +195,9 @@ public class ModeratingCommands extends CommandClass {
 		}
 		// TODO: ALERT STAFFS
 	}
-	
-	public void tphere(CommandArgs cmdArgs){
-		
+
+	public void tphere(CommandArgs cmdArgs) {
+
 	}
 
 	private Location getLocationBased(Location loc, String argX, String argY, String argZ) {

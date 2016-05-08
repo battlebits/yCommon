@@ -66,7 +66,6 @@ public class RegexPermissions {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	private void injectAllPermissibles() {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			injectPermissible(player);
@@ -95,7 +94,6 @@ public class RegexPermissions {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	private void uninjectAllPermissibles() {
 		for (Player player : plugin.getServer().getOnlinePlayers()) {
 			uninjectPermissible(player);

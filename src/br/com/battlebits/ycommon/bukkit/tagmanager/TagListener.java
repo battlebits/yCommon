@@ -21,7 +21,6 @@ import br.com.battlebits.ycommon.common.tag.Tag;
 public class TagListener implements Listener {
 	private TagManager manager;
 
-	@SuppressWarnings("deprecation")
 	public TagListener(TagManager manager) {
 		this.manager = manager;
 		for (Player p : manager.getServer().getOnlinePlayers()) {
@@ -35,7 +34,6 @@ public class TagListener implements Listener {
 		manager.removePlayerTag(event.getPlayer());
 	}
 
-	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerJoinListener(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
@@ -56,7 +54,6 @@ public class TagListener implements Listener {
 		p = null;
 	}
 
-	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onPlayerChangeTagListener(PlayerChangeTagEvent e) {
 		final Player p = e.getPlayer();

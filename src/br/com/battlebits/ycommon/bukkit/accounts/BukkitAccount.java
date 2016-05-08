@@ -16,7 +16,6 @@ public class BukkitAccount extends BukkitCommon {
 		super(main);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void onEnable() {
 		for (Player p : Bukkit.getOnlinePlayers()) {

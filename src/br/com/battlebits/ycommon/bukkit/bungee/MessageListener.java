@@ -25,7 +25,6 @@ import br.com.battlebits.ycommon.common.utils.DateUtils;
 
 public class MessageListener implements PluginMessageListener {
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void onPluginMessageReceived(String channel, Player player, byte[] message) {
 		if (!channel.equals(BattlebitsAPI.getBungeeChannel()))
@@ -53,8 +52,7 @@ public class MessageListener implements PluginMessageListener {
 			String userName = in.readUTF();
 			BattlePlayer bP = BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId());
 			bP.getBanHistory().getActualMute().unmute(uuid, userName);
-			String msg = Translate.getTranslation(bP.getLanguage(), "command-unmute-prefix") + " "
-					+ Translate.getTranslation(bP.getLanguage(), "command-unmute-player");
+			String msg = Translate.getTranslation(bP.getLanguage(), "command-unmute-prefix") + " " + Translate.getTranslation(bP.getLanguage(), "command-unmute-player");
 			msg = msg.replace("%unmutedBy%", userName);
 			player.sendMessage(msg);
 			break;
@@ -108,8 +106,7 @@ public class MessageListener implements PluginMessageListener {
 		case "UnmuteConsole": {
 			BattlePlayer bP = BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId());
 			bP.getBanHistory().getActualMute().unmute();
-			String msg = Translate.getTranslation(bP.getLanguage(), "command-unmute-prefix") + " "
-					+ Translate.getTranslation(bP.getLanguage(), "command-unmute-player");
+			String msg = Translate.getTranslation(bP.getLanguage(), "command-unmute-prefix") + " " + Translate.getTranslation(bP.getLanguage(), "command-unmute-player");
 			msg = msg.replace("%unmutedBy%", "CONSOLE");
 			player.sendMessage(msg);
 			break;

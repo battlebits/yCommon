@@ -26,9 +26,9 @@ public class VanishAPI {
 	public void hidePlayerToGroup(Player player, Group group) {
 		for (Player online : Bukkit.getOnlinePlayers()) {
 			BattlePlayer bP = BattlebitsAPI.getAccountCommon().getBattlePlayer(online.getUniqueId());
-			if(bP.hasGroupPermission(group))
-			if (online.canSee(player))
-				continue;
+			if (bP.hasGroupPermission(group))
+				if (online.canSee(player))
+					continue;
 			online.showPlayer(player);
 		}
 	}

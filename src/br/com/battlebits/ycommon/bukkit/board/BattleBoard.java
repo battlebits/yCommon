@@ -72,7 +72,6 @@ public class BattleBoard {
 		players = null;
 	}
 
-	@SuppressWarnings("deprecation")
 	public void createTeamForOnlinePlayers(String teamID, String teamPrefix, String teamSuffix) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			createTeamToPlayer(player, teamID, teamPrefix, teamSuffix);
@@ -98,7 +97,6 @@ public class BattleBoard {
 		players = null;
 	}
 
-	@SuppressWarnings("deprecation")
 	public void createTeamIfNotExistsForOnlinePlayers(String teamID, String teamPrefix, String teamSuffix) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			createTeamIfNotExistsToPlayer(player, teamID, teamPrefix, teamSuffix);
@@ -155,14 +153,12 @@ public class BattleBoard {
 		players = null;
 	}
 
-	@SuppressWarnings("deprecation")
 	public void joinTeamForOnlinePlayers(String join, String teamID) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			joinTeamForPlayer(player, teamID, join);
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	public void joinTeamForOnlinePlayers(Player join, String teamID) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			joinTeamForPlayer(player, teamID, join);
@@ -183,7 +179,6 @@ public class BattleBoard {
 		players = null;
 	}
 
-	@SuppressWarnings("deprecation")
 	public void leaveCurrentTeamForOnlinePlayers(Player leave) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			leaveCurrentTeamForPlayer(player, leave);
@@ -227,7 +222,6 @@ public class BattleBoard {
 		leaveTeamForPlayers(players, teamID, leave.getName());
 	}
 
-	@SuppressWarnings("deprecation")
 	public void leaveTeamForOnlinePlayers(String teamID, String leave) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			leaveTeamToPlayer(player, teamID, leave);
@@ -258,7 +252,6 @@ public class BattleBoard {
 		players = null;
 	}
 
-	@SuppressWarnings("deprecation")
 	public void unregisterTeamForOnlinePlayers(String teamID) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			unregisterTeamToPlayer(player, teamID);
@@ -287,7 +280,6 @@ public class BattleBoard {
 		players = null;
 	}
 
-	@SuppressWarnings("deprecation")
 	public void unregisterTeamIfEmptyForOnlinePlayers(String teamID) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			unregisterTeamIfEmptyToPlayer(player, teamID);
@@ -318,7 +310,6 @@ public class BattleBoard {
 		players = null;
 	}
 
-	@SuppressWarnings("deprecation")
 	public void setTeamPrefixForOnlinePlayers(String teamID, String prefix) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			setTeamPrefixToPlayer(player, teamID, prefix);
@@ -349,7 +340,6 @@ public class BattleBoard {
 		players = null;
 	}
 
-	@SuppressWarnings("deprecation")
 	public void setTeamSuffixForOnlinePlayers(String teamID, String suffix) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			setTeamSuffixToPlayer(player, teamID, suffix);
@@ -385,7 +375,6 @@ public class BattleBoard {
 		players = null;
 	}
 
-	@SuppressWarnings("deprecation")
 	public void setTeamPrefixAndSuffixForOnlinePlayers(String teamID, String prefix, String suffix) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			setTeamPrefixAndSuffixToPlayer(player, teamID, prefix, suffix);
@@ -415,7 +404,6 @@ public class BattleBoard {
 		players = null;
 	}
 
-	@SuppressWarnings("deprecation")
 	public void setTeamDisplayNameForOnlinesPlayers(String teamID, String name) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			setTeamDisplayNameToPlayer(player, teamID, name);
@@ -460,7 +448,6 @@ public class BattleBoard {
 		players = null;
 	}
 
-	@SuppressWarnings("deprecation")
 	public void createObjectiveForOnlinePlayers(String objectiveID, String displayName, DisplaySlot displaySlot) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			createObjectiveToPlayer(player, objectiveID, displayName, displaySlot);
@@ -475,15 +462,13 @@ public class BattleBoard {
 		return objective;
 	}
 
-	public void createObjectiveIfNotExistsToPlayer(Collection<? extends Player> players, String objectiveID, String displayName,
-			DisplaySlot displaySlot) {
+	public void createObjectiveIfNotExistsToPlayer(Collection<? extends Player> players, String objectiveID, String displayName, DisplaySlot displaySlot) {
 		for (Player player : players) {
 			createObjectiveIfNotExistsToPlayer(player, objectiveID, displayName, displaySlot);
 		}
 		players = null;
 	}
 
-	@SuppressWarnings("deprecation")
 	public void createObjectiveIfNotExistsForOnlinePlayers(String objectiveID, String displayName, DisplaySlot displaySlot) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			createObjectiveIfNotExistsToPlayer(player, objectiveID, displayName, displaySlot);
@@ -514,7 +499,6 @@ public class BattleBoard {
 		players = null;
 	}
 
-	@SuppressWarnings("deprecation")
 	public void setObjectiveDisplayNameForOnlinePlayers(String objectiveID, String name) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			setObjectiveDisplayNameToPlayer(player, objectiveID, name);
@@ -541,7 +525,6 @@ public class BattleBoard {
 		players = null;
 	}
 
-	@SuppressWarnings("deprecation")
 	public void setObjectiveDisplaySlotForOnlinePlayers(String objectiveID, DisplaySlot displaySlot) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			setObjectiveDisplaySlotToPlayer(player, objectiveID, displaySlot);
@@ -584,22 +567,19 @@ public class BattleBoard {
 		players = null;
 	}
 
-	@SuppressWarnings("deprecation")
 	public void setScoreOnObjectiveForOnlinePlayers(String objectiveID, String scoreName, int scoreValue) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			setScoreOnObjective(getObjectiveFromPlayer(player, objectiveID), scoreName, scoreValue);
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	public void setScoreOnObjectiveForOnlinePlayers(DisplaySlot objectiveSlot, String scoreName, int scoreValue) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			setScoreOnObjective(getObjectiveFromPlayer(player, objectiveSlot), scoreName, scoreValue);
 		}
 	}
 
-	public void addScoreOnObjectiveToPlayer(Player player, Objective objective, String scoreID, int score, String name, String prefix,
-			String suffix) {
+	public void addScoreOnObjectiveToPlayer(Player player, Objective objective, String scoreID, int score, String name, String prefix, String suffix) {
 		if (objective != null) {
 			Team team = createTeamIfNotExistsToPlayer(player, objective.getName() + scoreID, prefix, suffix);
 			if (team != null) {
@@ -623,35 +603,30 @@ public class BattleBoard {
 		objectiveID = null;
 	}
 
-	public void addScoreOnObjectiveToPlayer(Player player, DisplaySlot objectiveSlot, String scoreID, int score, String name, String prefix,
-			String suffix) {
+	public void addScoreOnObjectiveToPlayer(Player player, DisplaySlot objectiveSlot, String scoreID, int score, String name, String prefix, String suffix) {
 		addScoreOnObjectiveToPlayer(player, getObjectiveFromPlayer(player, objectiveSlot), scoreID, score, name, prefix, suffix);
 	}
 
-	public void addScoreOnObjectiveForPlayers(Collection<? extends Player> players, String objectiveID, String scoreID, int score, String name,
-			String prefix, String suffix) {
+	public void addScoreOnObjectiveForPlayers(Collection<? extends Player> players, String objectiveID, String scoreID, int score, String name, String prefix, String suffix) {
 		for (Player player : players) {
 			addScoreOnObjectiveToPlayer(player, objectiveID, scoreID, score, name, prefix, suffix);
 		}
 		players = null;
 	}
 
-	public void addScoreOnObjectiveForPlayers(Collection<? extends Player> players, DisplaySlot objectiveSlot, String scoreID, int score, String name,
-			String prefix, String suffix) {
+	public void addScoreOnObjectiveForPlayers(Collection<? extends Player> players, DisplaySlot objectiveSlot, String scoreID, int score, String name, String prefix, String suffix) {
 		for (Player player : players) {
 			addScoreOnObjectiveToPlayer(player, objectiveSlot, scoreID, score, name, prefix, suffix);
 		}
 		players = null;
 	}
 
-	@SuppressWarnings("deprecation")
 	public void addScoreOnObjectiveForOnlinePlayers(String objectiveID, String scoreID, int score, String name, String prefix, String suffix) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			addScoreOnObjectiveToPlayer(player, getObjectiveFromPlayer(player, objectiveID), scoreID, score, name, prefix, suffix);
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	public void addScoreOnObjectiveForOnlinePlayers(DisplaySlot objectiveSlot, String scoreID, int score, String name, String prefix, String suffix) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			addScoreOnObjectiveToPlayer(player, objectiveSlot, scoreID, score, name, prefix, suffix);
@@ -694,14 +669,12 @@ public class BattleBoard {
 		players = null;
 	}
 
-	@SuppressWarnings("deprecation")
 	public void updateScoreNameOnObjectiveForOnlinePlayers(String objectiveID, String scoreID, String name) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			updateScoreNameOnObjectiveToPlayer(player, objectiveID, scoreID, name);
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	public void updateScoreNameOnObjectiveForOnlinePlayers(DisplaySlot objectiveSlot, String scoreID, String name) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			updateScoreNameOnObjectiveToPlayer(player, getObjectiveFromPlayer(player, objectiveSlot), scoreID, name);
@@ -744,14 +717,12 @@ public class BattleBoard {
 		players = null;
 	}
 
-	@SuppressWarnings("deprecation")
 	public void updateScoreValueOnObjectiveForOnlinePlayers(String objectiveID, String scoreID, String value) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			updateScoreValueOnObjectiveToPlayer(player, objectiveID, scoreID, value);
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	public void updateScoreValueOnObjectiveForOnlinePlayers(DisplaySlot objectiveSlot, String scoreID, String value) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			updateScoreValueOnObjectiveToPlayer(player, objectiveSlot, scoreID, value);
@@ -781,30 +752,26 @@ public class BattleBoard {
 		updateScoreNameAndValueOnObjectiveToPlayer(player, getObjectiveFromPlayer(player, objectiveSlot), scoreID, name, value);
 	}
 
-	public void updateScoreNameAndValueOnObjectiveForPlayers(Collection<? extends Player> players, String objectiveID, String scoreID, String name,
-			String value) {
+	public void updateScoreNameAndValueOnObjectiveForPlayers(Collection<? extends Player> players, String objectiveID, String scoreID, String name, String value) {
 		for (Player player : players) {
 			updateScoreNameAndValueOnObjectiveToPlayer(player, objectiveID, scoreID, name, value);
 		}
 		players = null;
 	}
 
-	public void updateScoreNameAndValueOnObjectiveForPlayers(Collection<? extends Player> players, DisplaySlot objectiveSlot, String scoreID,
-			String name, String value) {
+	public void updateScoreNameAndValueOnObjectiveForPlayers(Collection<? extends Player> players, DisplaySlot objectiveSlot, String scoreID, String name, String value) {
 		for (Player player : players) {
 			updateScoreNameAndValueOnObjectiveToPlayer(player, objectiveSlot, scoreID, name, value);
 		}
 		players = null;
 	}
 
-	@SuppressWarnings("deprecation")
 	public void updateScoreNameAndValueOnObjectiveForOnlinePlayers(String objectiveID, String scoreID, String name, String value) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			updateScoreNameAndValueOnObjectiveToPlayer(player, objectiveID, scoreID, name, value);
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	public void updateScoreNameAndValueOnObjectiveForOnlinePlayers(DisplaySlot objectiveSlot, String scoreID, String name, String value) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			updateScoreNameAndValueOnObjectiveToPlayer(player, objectiveSlot, scoreID, name, value);
@@ -856,14 +823,12 @@ public class BattleBoard {
 		players = null;
 	}
 
-	@SuppressWarnings("deprecation")
 	public void updateScoreOnObjectiveForOnlinePlayers(String objectiveID, String scoreID, String score) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			updateScoreOnObjectiveToPlayer(player, objectiveID, scoreID, score);
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	public void updateScoreOnObjectiveForOnlinePlayers(DisplaySlot objectiveSlot, String scoreID, String score) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			updateScoreOnObjectiveToPlayer(player, objectiveSlot, scoreID, score);

@@ -19,7 +19,6 @@ public class TagManager extends BukkitCommon {
 		BukkitMain.getPlugin().getBattleBoard().leaveCurrentTeamForOnlinePlayers(p);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void onDisable() {
 		for (Player player : getServer().getOnlinePlayers()) {

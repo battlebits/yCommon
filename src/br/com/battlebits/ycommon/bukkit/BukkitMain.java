@@ -140,7 +140,6 @@ public class BukkitMain extends JavaPlugin {
 		tagManager.onEnable();
 	}
 
-	@SuppressWarnings("deprecation")
 	public void broadcastMessage(String messageId) {
 		BattlePlayer player = null;
 		for (Player p : getServer().getOnlinePlayers()) {

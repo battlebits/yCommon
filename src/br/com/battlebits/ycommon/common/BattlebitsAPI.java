@@ -3,12 +3,12 @@ package br.com.battlebits.ycommon.common;
 import java.util.UUID;
 import java.util.logging.Logger;
 
-import br.com.battlebits.ycommon.bukkit.util.gson.GsonBukkit;
+import com.google.gson.Gson;
+
 import br.com.battlebits.ycommon.bukkit.util.json.TypeBukkitUtils;
 import br.com.battlebits.ycommon.bukkit.util.mojang.BukkitNameFetcher;
 import br.com.battlebits.ycommon.bukkit.util.mojang.BukkitPremiumChecker;
 import br.com.battlebits.ycommon.bukkit.util.mojang.BukkitUUIDFetcher;
-import br.com.battlebits.ycommon.bungee.utils.gson.GsonBungee;
 import br.com.battlebits.ycommon.bungee.utils.json.TypeBungeeUtils;
 import br.com.battlebits.ycommon.bungee.utils.mojang.BungeeNameFetcher;
 import br.com.battlebits.ycommon.bungee.utils.mojang.BungeePremiumChecker;
@@ -18,7 +18,6 @@ import br.com.battlebits.ycommon.common.manager.AccountCommon;
 import br.com.battlebits.ycommon.common.manager.ClanCommon;
 import br.com.battlebits.ycommon.common.time.TimeZone;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
-import br.com.battlebits.ycommon.common.utils.gson.GsonInterface;
 import br.com.battlebits.ycommon.common.utils.json.TypeUtils;
 import br.com.battlebits.ycommon.common.utils.mojang.NameFetcher;
 import br.com.battlebits.ycommon.common.utils.mojang.PremiumChecker;
@@ -29,7 +28,7 @@ public class BattlebitsAPI {
 	private static AccountCommon accountCommon = new AccountCommon();
 	private static ClanCommon clanCommon = new ClanCommon();
 
-	private static GsonInterface gson;
+	private static Gson gson = new Gson();
 	private static BattleInstance battleInstance;
 	private static TypeUtils typeUtils;
 	private static UUIDFetcher uuidFetcher;
@@ -64,7 +63,7 @@ public class BattlebitsAPI {
 		return "yCommon";
 	}
 
-	public static GsonInterface getGson() {
+	public static Gson getGson() {
 		return gson;
 	}
 
@@ -105,7 +104,6 @@ public class BattlebitsAPI {
 		battleInstance = instance;
 		switch (instance) {
 		case BUKKIT:
-			gson = new GsonBukkit();
 			typeUtils = new TypeBukkitUtils();
 			uuidFetcher = new BukkitUUIDFetcher();
 			nameFetcher = new BukkitNameFetcher();
@@ -113,7 +111,6 @@ public class BattlebitsAPI {
 			logger = org.bukkit.Bukkit.getLogger();
 			break;
 		case BUNGEECORD:
-			gson = new GsonBungee();
 			typeUtils = new TypeBungeeUtils();
 			uuidFetcher = new BungeeUUIDFetcher();
 			nameFetcher = new BungeeNameFetcher();
