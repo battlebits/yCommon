@@ -441,8 +441,8 @@ public class BattleBoard {
 			}
 			objective = player.getScoreboard().registerNewObjective(objectiveID, "battleboard");
 		}
-		if (displayName.length() > 16) {
-			displayName = displayName.substring(0, 16);
+		if (displayName.length() > 32) {
+			displayName = displayName.substring(0, 32);
 		}
 		objective.setDisplayName(displayName);
 		objective.setDisplaySlot(displaySlot);
@@ -492,8 +492,8 @@ public class BattleBoard {
 
 	public void setObjectiveDisplayName(Objective objective, String name) {
 		if (objective != null) {
-			if (name.length() > 16) {
-				name = name.substring(0, 16);
+			if (name.length() > 32) {
+				name = name.substring(0, 32);
 			}
 			objective.setDisplayName(name);
 			objective = null;
