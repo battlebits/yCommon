@@ -29,7 +29,6 @@ import net.minecraft.server.v1_7_R4.Packet;
 import net.minecraft.server.v1_7_R4.PacketPlayOutAttachEntity;
 import net.minecraft.server.v1_7_R4.PacketPlayOutEntityMetadata;
 import net.minecraft.server.v1_7_R4.PacketPlayOutEntityTeleport;
-import net.minecraft.server.v1_7_R4.PacketPlayOutPlayerInfo;
 import net.minecraft.server.v1_7_R4.PacketPlayOutSpawnEntity;
 import net.minecraft.server.v1_7_R4.PacketPlayOutSpawnEntityLiving;
 
@@ -72,46 +71,6 @@ public class Injector {
 				return object.getPacket();
 			}
 		};
-		PacketListenerAPI.addListener(new PacketListener() {
-
-			@Override
-			public void onPacketSend(PacketObject object) {
-				Channel channel = object.getChannel();
-				Packet packet = object.getPacket();
-				if (channel.attr(NetworkManager.protocolVersion).get() != 47)
-					return;
-				try {
-					if (packet instanceof PacketPlayOutPlayerInfo) {
-						PacketPlayOutPlayerInfo packetCopy = (PacketPlayOutPlayerInfo) packet;
-						final PacketPlayOutPlayerInfo packetplayoutplayerinfo = new PacketPlayOutPlayerInfo();
-						Field action = packetplayoutplayerinfo.getClass().getDeclaredField("action");
-						action.setAccessible(true);
-						action.set(packetplayoutplayerinfo, getField(packetCopy, "action"));
-						Field player = packetplayoutplayerinfo.getClass().getDeclaredField("player");
-						player.setAccessible(true);
-						player.set(packetplayoutplayerinfo, getField(packetCopy, "player"));
-						Field gamemode = packetplayoutplayerinfo.getClass().getDeclaredField("gamemode");
-						gamemode.setAccessible(true);
-						gamemode.set(packetplayoutplayerinfo, getField(packetCopy, "gamemode"));
-						Field ping = packetplayoutplayerinfo.getClass().getDeclaredField("ping");
-						ping.setAccessible(true);
-						ping.set(packetplayoutplayerinfo, getField(packetCopy, "ping"));
-						Field username = packetCopy.getClass().getDeclaredField("username");
-						username.setAccessible(true);
-						username.set(packetplayoutplayerinfo, null);
-						object.setPacket(packetplayoutplayerinfo);
-						return;
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-
-			@Override
-			public void onPacketReceive(PacketObject object) {
-
-			}
-		});
 
 		PacketListenerAPI.addListener(new PacketListener() {
 

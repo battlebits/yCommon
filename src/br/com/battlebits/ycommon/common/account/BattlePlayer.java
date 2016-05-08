@@ -474,10 +474,11 @@ public class BattlePlayer {
 		this.cacheExpire = System.currentTimeMillis() + (60 * 5 * 1000);
 	}
 
-	public void setJoinData(String userName, InetSocketAddress ipAdrress, String countryCode) {
+	public void setJoinData(String userName, InetSocketAddress ipAdrress, String countryCode, String timeZoneCode) {
 		checkRanks();
 		this.userName = userName;
 		this.ipAddress = ipAdrress;
+		this.timeZone = TimeZone.fromString(timeZoneCode);
 		joinTime = TimeZoneConversor.getCurrentMillsTimeIn(TimeZone.GMT0);
 		this.countryCode = countryCode;
 		this.online = true;
@@ -515,6 +516,8 @@ public class BattlePlayer {
 	}
 
 	public TimeZone getTimeZone() {
+		if(timeZone == null)
+			setTimeZone(TimeZone.GMT0);
 		return timeZone;
 	}
 

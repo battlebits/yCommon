@@ -210,8 +210,6 @@ public class BukkitPlayer extends BattlePlayer {
 	}
 
 	public Player getBukkitPlayer() {
-		if (!isOnline())
-			return null;
 		return Bukkit.getPlayer(getUuid());
 	}
 
