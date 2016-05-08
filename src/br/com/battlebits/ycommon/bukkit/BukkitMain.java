@@ -113,6 +113,7 @@ public class BukkitMain extends JavaPlugin {
 		accountManager = null;
 		permissionManager = null;
 		tagManager = null;
+		socketClient.disconnect();
 	}
 
 	private void registerListeners() {

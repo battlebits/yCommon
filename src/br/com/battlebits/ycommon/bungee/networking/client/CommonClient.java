@@ -27,15 +27,15 @@ public abstract class CommonClient {
 		inputHandler.start();
 		outputHandler.start();
 	}
-	
+
 	protected void setPacketHandler(CommonHandler packetHandler) {
 		this.packetHandler = packetHandler;
 	}
-	
+
 	public void sendPacket(CommonPacket packet) {
 		outputHandler.send(packet);
 	}
-
+	
 	public void disconnect() {
 		if (!socket.isClosed()) {
 			try {
@@ -48,17 +48,18 @@ public abstract class CommonClient {
 		}
 		inputHandler.stopThread();
 		outputHandler.stopThread();
+		CommonServer.disconnectClient(this);
 		System.out.println("Cliente desconectado");
 	}
-	
+
 	public void setServerIp(String serverIp) {
 		this.serverIp = serverIp;
 	}
-	
+
 	public void registerClient() {
 		CommonServer.registerClient(this);
 	}
-	
+
 	public String getServerIp() {
 		return serverIp;
 	}

@@ -37,6 +37,8 @@ import br.com.battlebits.ycommon.common.translate.languages.Language;
 
 public class BukkitHandler extends CommonHandler {
 
+	public static Object LOCK = new Object();
+	
 	@Override
 	public void handleAccountRequest(CPacketAccountRequest packet) {
 		// PROVAVEL QUE NUNCA VAI TER
@@ -53,6 +55,9 @@ public class BukkitHandler extends CommonHandler {
 		BattlebitsAPI.getAccountCommon().loadBattlePlayer(packet.getBattlePlayer().getUuid(), battlePlayer);
 		BattlebitsAPI.debug("NEW BATTLEPLAYER>" + battlePlayer.getUserName() + "(" + battlePlayer.getUuid() + ")");
 		battlePlayer = null;
+		synchronized (LOCK) {
+			LOCK.notifyAll();
+		}
 	}
 
 	@Override

@@ -13,7 +13,7 @@ public class CommonServer implements Runnable {
 
 	private ServerSocket server;
 	private Socket client;
-	public static final int PORT = 57967;
+	public static final int PORT = 57966;
 	public static final String ADDRESS = "localhost";
 	private static HashMap<String, CommonClient> serverClients = new HashMap<>();
 
@@ -56,11 +56,18 @@ public class CommonServer implements Runnable {
 	}
 
 	public static void registerClient(CommonClient client) {
-		if(serverClients.containsKey(client.getServerIp()))
-			return;
+		if (serverClients.containsKey(client.getServerIp())) {
+			serverClients.get(client.getServerIp()).disconnect();
+		}
 		serverClients.put(client.getServerIp(), client);
 	}
-	
+
+	public static void disconnectClient(CommonClient client) {
+		if (!serverClients.containsKey(client.getServerIp()))
+			return;
+		serverClients.remove(client.getServerIp());
+	}
+
 	public CommonClient getClient(String serverIp) {
 		return serverClients.get(serverIp);
 	}
