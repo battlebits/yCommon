@@ -2,9 +2,11 @@ package br.com.battlebits.ycommon.bukkit.accounts;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bukkit.event.account.update.PlayerChangeLeagueEvent;
@@ -45,7 +47,7 @@ public class BukkitPlayer extends BattlePlayer {
 		if (!tags.contains(tag) && !forcetag) {
 			tag = getDefaultTag();
 		}
-		PlayerChangeTagEvent event = new PlayerChangeTagEvent(Bukkit.getPlayer(getUuid()), getTag(), tag, forcetag);
+		PlayerChangeTagEvent event = new PlayerChangeTagEvent(getBukkitPlayer(), getTag(), tag, forcetag);
 		BukkitMain.getPlugin().getServer().getPluginManager().callEvent(event);
 		if (!event.isCancelled()) {
 			if (!forcetag)
@@ -53,7 +55,7 @@ public class BukkitPlayer extends BattlePlayer {
 					try {
 						PacketSender.sendPacket(new CPacketChangeTag(getUuid(), tag));
 					} catch (Exception e) {
-						Bukkit.getPlayer(getUuid()).sendMessage(Translate.getTranslation(getLanguage(), "command-tag-prefix") + " " + Translate.getTranslation(getLanguage(), "error-try-again-please"));
+						getBukkitPlayer().sendMessage(Translate.getTranslation(getLanguage(), "command-tag-prefix") + " " + Translate.getTranslation(getLanguage(), "error-try-again-please"));
 						return false;
 					}
 			super.setTag(tag);
@@ -93,14 +95,14 @@ public class BukkitPlayer extends BattlePlayer {
 
 	@Override
 	public void setLiga(Liga liga) {
-		PlayerChangeLeagueEvent event = new PlayerChangeLeagueEvent(Bukkit.getPlayer(getUuid()), getLiga(), liga);
+		PlayerChangeLeagueEvent event = new PlayerChangeLeagueEvent(getBukkitPlayer(), getLiga(), liga);
 		BukkitMain.getPlugin().getServer().getPluginManager().callEvent(event);
 		if (!event.isCancelled()) {
 			super.setLiga(liga);
 			try {
 				PacketSender.sendPacket(new CPacketChangeLiga(getUuid(), getLiga()));
 			} catch (Exception ex) {
-				Bukkit.getPlayer(getUuid()).sendMessage(Translate.getTranslation(getLanguage(), "liga-fail-save"));
+				getBukkitPlayer().sendMessage(Translate.getTranslation(getLanguage(), "liga-fail-save"));
 			}
 		}
 	}
@@ -170,6 +172,15 @@ public class BukkitPlayer extends BattlePlayer {
 		super.updateBanHistory(banHistory);
 	}
 
+	@Override
+	public void sendMessage(String translateId, Map<String, String> replaces) {
+		String message = Translate.getTranslation(getLanguage(), translateId);
+		for(Entry<String, String> entry : replaces.entrySet()) {
+			message = message.replace(entry.getKey(), entry.getValue());
+		}
+		getBukkitPlayer().sendMessage(message);
+	}
+
 	public void injectBukkitClass() {
 		super.setConfiguration(new BukkitConfiguration(this));
 		super.setGameStatus(new BukkitGameStatus(this));
@@ -188,7 +199,7 @@ public class BukkitPlayer extends BattlePlayer {
 		try {
 			PacketSender.sendPacket(new CPacketAccountConfiguration(getUuid(), getConfiguration()));
 		} catch (Exception ex) {
-			Bukkit.getPlayer(getUuid()).sendMessage(Translate.getTranslation(getLanguage(), "configuration-fail-save"));
+			getBukkitPlayer().sendMessage(Translate.getTranslation(getLanguage(), "configuration-fail-save"));
 		}
 	}
 
@@ -196,7 +207,7 @@ public class BukkitPlayer extends BattlePlayer {
 		try {
 			PacketSender.sendPacket(new CPacketChangeAccount(this));
 		} catch (Exception ex) {
-			Bukkit.getPlayer(getUuid()).sendMessage(Translate.getTranslation(getLanguage(), "profile-fail-save"));
+			getBukkitPlayer().sendMessage(Translate.getTranslation(getLanguage(), "profile-fail-save"));
 		}
 	}
 
@@ -214,6 +225,12 @@ public class BukkitPlayer extends BattlePlayer {
 
 	public ArrayList<Tag> getTags() {
 		return tags;
+	}
+
+	public Player getBukkitPlayer() {
+		if (!isOnline())
+			return null;
+		return Bukkit.getPlayer(getUuid());
 	}
 
 }

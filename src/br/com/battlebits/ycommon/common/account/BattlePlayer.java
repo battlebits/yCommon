@@ -455,6 +455,14 @@ public class BattlePlayer {
 	public void updateBanHistory(BanHistory banHistory) {
 		this.banHistory = banHistory;
 	}
+	
+	public void sendMessage(String translateId) {
+		this.sendMessage(translateId, null);
+	}
+	
+	public void sendMessage(String translateId, Map<String, String> replaces) {
+		
+	}
 
 	public void connect(String serverIp) {
 		checkRanks();
