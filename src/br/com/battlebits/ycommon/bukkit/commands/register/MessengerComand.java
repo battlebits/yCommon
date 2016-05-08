@@ -6,10 +6,10 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
 import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandFramework.Command;
 import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandFramework.CommandArgs;
-import br.com.battlebits.ycommon.bukkit.networking.PacketSender;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.commands.CommandClass;
 import br.com.battlebits.ycommon.common.friends.block.Blocked;
@@ -201,7 +201,7 @@ public class MessengerComand extends CommandClass {
 							try {
 								Blocked block = new Blocked(id);
 								bp.getBlockedPlayers().put(id, block);
-								PacketSender.sendPacket(new CPacketAddBlockedPlayer(p.getUniqueId(), block));
+								BukkitMain.getPlugin().getClient().sendPacket(new CPacketAddBlockedPlayer(p.getUniqueId(), block));
 								p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-block-blocked").replace("%player%", cmdArgs.getArgs()[0]));
 								block = null;
 							} catch (Exception e) {
@@ -210,7 +210,7 @@ public class MessengerComand extends CommandClass {
 						} else {
 							try {
 								bp.getBlockedPlayers().remove(id);
-								PacketSender.sendPacket(new CPacketRemoveBlockedPlayer(p.getUniqueId(), id));
+								BukkitMain.getPlugin().getClient().sendPacket(new CPacketRemoveBlockedPlayer(p.getUniqueId(), id));
 								p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-block-unblocked").replace("%player%", cmdArgs.getArgs()[0]));
 							} catch (Exception e) {
 								p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "error-try-again-please"));

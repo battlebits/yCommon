@@ -20,6 +20,7 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketCommandRun;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketCreateParty;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketDisbandParty;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketJoinParty;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketKeepAlive;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveBlockedPlayer;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveFriend;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveFriendRequest;
@@ -40,13 +41,14 @@ public abstract class CommonPacket {
 	private static final Map<Byte, Boolean> MAP_VALID = new HashMap<Byte, Boolean>();
 
 	static {
+		register((byte) 0x00, CPacketKeepAlive.class);
 		/** 0x0X: Account **/
-		register((byte) 0x00, CPacketAccountRequest.class);
-		register((byte) 0x01, CPacketAccountLoad.class);
-		register((byte) 0x02, CPacketAccountConfiguration.class);
-		register((byte) 0x03, CPacketServerNameRequest.class);
-		register((byte) 0x04, CPacketServerNameLoad.class);
-		register((byte) 0x05, CPacketCommandRun.class);
+		register((byte) 0x01, CPacketAccountRequest.class);
+		register((byte) 0x02, CPacketAccountLoad.class);
+		register((byte) 0x03, CPacketAccountConfiguration.class);
+		register((byte) 0x04, CPacketServerNameRequest.class);
+		register((byte) 0x05, CPacketServerNameLoad.class);
+		register((byte) 0x06, CPacketCommandRun.class);
 		/** 0x1X: Translations **/
 		register((byte) 0x10, CPacketTranslationsRequest.class);
 		register((byte) 0x11, CPacketTranslationsLoad.class);

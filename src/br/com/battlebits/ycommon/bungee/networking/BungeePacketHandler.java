@@ -1,6 +1,7 @@
 package br.com.battlebits.ycommon.bungee.networking;
 
 import br.com.battlebits.ycommon.bungee.BungeeMain;
+import br.com.battlebits.ycommon.bungee.networking.client.CommonClient;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.networking.CommonHandler;
@@ -37,9 +38,9 @@ import net.md_5.bungee.api.config.ServerInfo;
 
 public class BungeePacketHandler extends CommonHandler {
 
-	private PacketSender sender;
+	private CommonClient sender;
 
-	public BungeePacketHandler(PacketSender sender) {
+	public BungeePacketHandler(CommonClient sender) {
 		this.sender = sender;
 	}
 

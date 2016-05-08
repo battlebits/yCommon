@@ -1,6 +1,7 @@
 package br.com.battlebits.ycommon.bukkit;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.net.UnknownHostException;
 
 import org.bukkit.entity.Player;
@@ -18,17 +19,16 @@ import br.com.battlebits.ycommon.bukkit.listeners.ChatListener;
 import br.com.battlebits.ycommon.bukkit.listeners.PlayerListener;
 import br.com.battlebits.ycommon.bukkit.listeners.ScoreboardListener;
 import br.com.battlebits.ycommon.bukkit.menu.preferences.PreferencesMenu;
-import br.com.battlebits.ycommon.bukkit.networking.BukkitHandler;
-import br.com.battlebits.ycommon.bukkit.networking.PacketSender;
+import br.com.battlebits.ycommon.bukkit.networking.BukkitClient;
 import br.com.battlebits.ycommon.bukkit.permissions.PermissionManager;
 import br.com.battlebits.ycommon.bukkit.run.UpdateScheduler;
 import br.com.battlebits.ycommon.bukkit.tagmanager.TagManager;
 import br.com.battlebits.ycommon.bukkit.util.PluginUpdater;
+import br.com.battlebits.ycommon.bungee.networking.CommonServer;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.enums.BattleInstance;
 import br.com.battlebits.ycommon.common.enums.ServerType;
-import br.com.battlebits.ycommon.common.networking.CommonHandler;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketServerNameRequest;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketTranslationsRequest;
 import br.com.battlebits.ycommon.common.translate.Translate;
@@ -41,7 +41,6 @@ public class BukkitMain extends JavaPlugin {
 
 	private BukkitAccount accountManager;
 	private PermissionManager permissionManager;
-	private CommonHandler packetHandler;
 	private TagManager tagManager;
 
 	private BukkitCommandLoader bukkitCommandLoader;
@@ -51,6 +50,8 @@ public class BukkitMain extends JavaPlugin {
 
 	private MenuTranslationInjector menuTranslationInjector;
 
+	private BukkitClient socketClient;
+	
 	private boolean restart;
 
 	{
@@ -68,26 +69,29 @@ public class BukkitMain extends JavaPlugin {
 		if (restart)
 			return;
 		Injector.createTinyProtocol(this);
-		packetHandler = new BukkitHandler();
 		this.getServer().getMessenger().registerOutgoingPluginChannel(this, BattlebitsAPI.getBungeeChannel());
 		this.getServer().getMessenger().registerIncomingPluginChannel(this, BattlebitsAPI.getBungeeChannel(), new MessageListener());
 		this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 		this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new MessageListener());
 		battleBoard = new BattleBoard();
 		try {
+			Socket socket = new Socket(CommonServer.ADDRESS, CommonServer.PORT);
+			socket.setSoTimeout(50);
+			socketClient = new BukkitClient(socket);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			getServer().shutdown();
+			restart = true;
+			return;
+		}
+		try {
 			loadTranslations();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		try {
-			PacketSender.sendPacketReturn(new CPacketServerNameRequest(getServer().getIp() + ":" + getServer().getPort()), packetHandler);
-		} catch (Exception e) {
-			e.printStackTrace();
-			getServer().shutdown();
-			return;
-		}
-
+		socketClient.sendPacket(new CPacketServerNameRequest(getServer().getIp() + ":" + getServer().getPort()));
+		
 		registerCommonManagement();
 		enableCommonManagement();
 		registerListeners();
@@ -126,11 +130,7 @@ public class BukkitMain extends JavaPlugin {
 
 	public void loadTranslations() throws UnknownHostException, IOException {
 		for (Language lang : Language.values()) {
-			try {
-				PacketSender.sendPacketReturn(new CPacketTranslationsRequest(lang), packetHandler);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			socketClient.sendPacket(new CPacketTranslationsRequest(lang));
 		}
 	}
 
@@ -149,8 +149,8 @@ public class BukkitMain extends JavaPlugin {
 		player = null;
 	}
 
-	public CommonHandler getPacketHandler() {
-		return packetHandler;
+	public BukkitClient getClient() {
+		return socketClient;
 	}
 
 	public BukkitAccount getAccountManager() {

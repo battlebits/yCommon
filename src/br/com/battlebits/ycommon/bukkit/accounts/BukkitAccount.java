@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 
 import br.com.battlebits.ycommon.bukkit.BukkitCommon;
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
-import br.com.battlebits.ycommon.bukkit.networking.PacketSender;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAccountRequest;
 
 public class BukkitAccount extends BukkitCommon {
@@ -33,11 +32,7 @@ public class BukkitAccount extends BukkitCommon {
 	}
 
 	public void loadPlayer(UUID uuid) throws Exception {
-		PacketSender.sendPacketReturn(new CPacketAccountRequest(uuid), BukkitMain.getPlugin().getPacketHandler());
-	}
-
-	public BukkitPlayer getOfflinePlayer(UUID uuid) throws Exception {
-		return PacketSender.getOfflinePlayer(uuid);
+		BukkitMain.getPlugin().getClient().sendPacket(new CPacketAccountRequest(uuid));
 	}
 
 }

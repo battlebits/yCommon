@@ -1,8 +1,8 @@
 package br.com.battlebits.ycommon.bukkit.commands.register;
 
+import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandFramework.Command;
 import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandFramework.CommandArgs;
-import br.com.battlebits.ycommon.bukkit.networking.PacketSender;
 import br.com.battlebits.ycommon.common.commands.CommandClass;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketCommandRun;
 
@@ -16,10 +16,6 @@ public class IW4Command extends CommandClass {
 		for (String arg : args.getArgs()) {
 			command = command + " " + arg;
 		}
-		try {
-			PacketSender.sendPacket(new CPacketCommandRun(command));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		BukkitMain.getPlugin().getClient().sendPacket(new CPacketCommandRun(command));
 	}
 }

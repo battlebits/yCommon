@@ -1,14 +1,13 @@
 package br.com.battlebits.ycommon.bungee.networking;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 
+import br.com.battlebits.ycommon.bungee.networking.client.CommonClient;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
-import br.com.battlebits.ycommon.common.networking.CommonPacket;
 
 public class CommonServer implements Runnable {
 
@@ -16,6 +15,7 @@ public class CommonServer implements Runnable {
 	private Socket client;
 	public static final int PORT = 57966;
 	public static final String ADDRESS = "localhost";
+	private static HashMap<String, CommonClient> serverClients = new HashMap<>();
 
 	private static boolean RUNNING = false;
 
@@ -31,25 +31,7 @@ public class CommonServer implements Runnable {
 		while (RUNNING) {
 			try {
 				client = server.accept();
-
-				DataInputStream inputStream = new DataInputStream(client.getInputStream());
-				DataOutputStream outputStream = new DataOutputStream(client.getOutputStream());
-
-				byte ID = inputStream.readByte();
-				CommonPacket PACKET = CommonPacket.get(ID);
-				if (PACKET != null) {
-					BattlebitsAPI.debug("SOCKET>INP>" + PACKET.getClass().getSimpleName());
-					PACKET.read(inputStream);
-					PACKET.handle(new BungeePacketHandler(new PacketSender(outputStream)));
-				}
-				BattlebitsAPI.debug("SOCKET > CLOSE");
-				outputStream.close();
-				inputStream.close();
-				client.close();
-
-				outputStream = null;
-				inputStream = null;
-				client = null;
+				new BungeeClient(client);
 			} catch (IOException e) {
 				BattlebitsAPI.debug("SOCKET FOI FECHADO");
 			} catch (Exception e) {
@@ -71,6 +53,12 @@ public class CommonServer implements Runnable {
 		if (server != null)
 			server.close();
 		server = null;
+	}
+
+	public static void registerClient(CommonClient client) {
+		if(serverClients.containsKey(client.getServerIp()))
+			return;
+		serverClients.put(client.getServerIp(), client);
 	}
 
 }

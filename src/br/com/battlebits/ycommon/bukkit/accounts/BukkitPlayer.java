@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bukkit.event.account.update.PlayerChangeLeagueEvent;
 import br.com.battlebits.ycommon.bukkit.event.account.update.PlayerChangeTagEvent;
-import br.com.battlebits.ycommon.bukkit.networking.PacketSender;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.account.game.GameStatus;
 import br.com.battlebits.ycommon.common.banmanager.history.BanHistory;
@@ -52,12 +51,7 @@ public class BukkitPlayer extends BattlePlayer {
 		if (!event.isCancelled()) {
 			if (!forcetag)
 				if (tag != getTag())
-					try {
-						PacketSender.sendPacket(new CPacketChangeTag(getUuid(), tag));
-					} catch (Exception e) {
-						getBukkitPlayer().sendMessage(Translate.getTranslation(getLanguage(), "command-tag-prefix") + " " + Translate.getTranslation(getLanguage(), "error-try-again-please"));
-						return false;
-					}
+					BukkitMain.getPlugin().getClient().sendPacket(new CPacketChangeTag(getUuid(), tag));
 			super.setTag(tag);
 		}
 		return !event.isCancelled();
@@ -99,11 +93,7 @@ public class BukkitPlayer extends BattlePlayer {
 		BukkitMain.getPlugin().getServer().getPluginManager().callEvent(event);
 		if (!event.isCancelled()) {
 			super.setLiga(liga);
-			try {
-				PacketSender.sendPacket(new CPacketChangeLiga(getUuid(), getLiga()));
-			} catch (Exception ex) {
-				getBukkitPlayer().sendMessage(Translate.getTranslation(getLanguage(), "liga-fail-save"));
-			}
+			BukkitMain.getPlugin().getClient().sendPacket(new CPacketChangeLiga(getUuid(), getLiga()));
 		}
 	}
 
@@ -175,7 +165,7 @@ public class BukkitPlayer extends BattlePlayer {
 	@Override
 	public void sendMessage(String translateId, Map<String, String> replaces) {
 		String message = Translate.getTranslation(getLanguage(), translateId);
-		for(Entry<String, String> entry : replaces.entrySet()) {
+		for (Entry<String, String> entry : replaces.entrySet()) {
 			message = message.replace(entry.getKey(), entry.getValue());
 		}
 		getBukkitPlayer().sendMessage(message);
@@ -196,19 +186,11 @@ public class BukkitPlayer extends BattlePlayer {
 	}
 
 	public void updateConfiguration() {
-		try {
-			PacketSender.sendPacket(new CPacketAccountConfiguration(getUuid(), getConfiguration()));
-		} catch (Exception ex) {
-			getBukkitPlayer().sendMessage(Translate.getTranslation(getLanguage(), "configuration-fail-save"));
-		}
+		BukkitMain.getPlugin().getClient().sendPacket(new CPacketAccountConfiguration(getUuid(), getConfiguration()));
 	}
 
 	public void sendCPacketChangeAccount() {
-		try {
-			PacketSender.sendPacket(new CPacketChangeAccount(this));
-		} catch (Exception ex) {
-			getBukkitPlayer().sendMessage(Translate.getTranslation(getLanguage(), "profile-fail-save"));
-		}
+		BukkitMain.getPlugin().getClient().sendPacket(new CPacketChangeAccount(this));
 	}
 
 	public UUID getLastTellUUID() {
