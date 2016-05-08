@@ -73,6 +73,7 @@ public class BungeeMain extends Plugin {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
+		loadConfiguration();
 		mysql = new MySQLBackend(hostname, port, database, username, password);
 		try {
 			mysql.startConnection();
@@ -125,7 +126,6 @@ public class BungeeMain extends Plugin {
 		getProxy().getPluginManager().registerListener(this, new QuitListener());
 	}
 
-	@SuppressWarnings("unused")
 	private void loadConfiguration() {
 		hostname = config.getString("database.hostname");
 		port = config.getInt("database.port");
