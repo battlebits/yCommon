@@ -22,6 +22,7 @@ import de.inventivegames.holograms.HologramOffsets;
 import de.inventivegames.holograms.reflection.AccessUtil;
 import de.inventivegames.holograms.reflection.NMSClass;
 import de.inventivegames.holograms.reflection.NMUClass;
+import io.netty.channel.Channel;
 import net.minecraft.server.v1_7_R4.DataWatcher;
 import net.minecraft.server.v1_7_R4.NetworkManager;
 import net.minecraft.server.v1_7_R4.Packet;
@@ -31,7 +32,6 @@ import net.minecraft.server.v1_7_R4.PacketPlayOutEntityTeleport;
 import net.minecraft.server.v1_7_R4.PacketPlayOutPlayerInfo;
 import net.minecraft.server.v1_7_R4.PacketPlayOutSpawnEntity;
 import net.minecraft.server.v1_7_R4.PacketPlayOutSpawnEntityLiving;
-import net.minecraft.util.io.netty.channel.Channel;
 
 public class Injector {
 	public static void createTinyProtocol(final Plugin plugin) {

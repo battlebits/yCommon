@@ -6,6 +6,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteStreams;
+
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
 import br.com.battlebits.ycommon.bungee.managers.BanManager;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
@@ -19,8 +22,6 @@ import br.com.battlebits.ycommon.common.time.TimeZone;
 import br.com.battlebits.ycommon.common.time.TimeZoneConversor;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.utils.DateUtils;
-import net.minecraft.util.com.google.common.io.ByteArrayDataInput;
-import net.minecraft.util.com.google.common.io.ByteStreams;
 
 public class MessageListener implements PluginMessageListener {
 

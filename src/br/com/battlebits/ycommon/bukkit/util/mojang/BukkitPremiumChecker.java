@@ -3,10 +3,11 @@ package br.com.battlebits.ycommon.bukkit.util.mojang;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+
 import br.com.battlebits.ycommon.common.utils.mojang.PremiumChecker;
-import net.minecraft.util.com.google.common.cache.Cache;
-import net.minecraft.util.com.google.common.cache.CacheBuilder;
-import net.minecraft.util.com.google.common.cache.CacheLoader;
 
 public class BukkitPremiumChecker extends PremiumChecker {
 

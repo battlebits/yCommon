@@ -29,11 +29,10 @@ public class LoginListener implements Listener {
 		attachments = new HashMap<>();
 		this.manager = manager;
 		new BukkitRunnable() {
-			@SuppressWarnings("deprecation")
 			@Override
 			public void run() {
 				for (Player player : manager.getServer().getOnlinePlayers()) {
-					updateAttachment(player, getServerGroup(player) );
+					updateAttachment(player, getServerGroup(player));
 				}
 			}
 		}.runTaskLater(manager.getPlugin(), 10);
@@ -44,7 +43,7 @@ public class LoginListener implements Listener {
 		final Player player = event.getPlayer();
 		updateAttachment(player, getServerGroup(player));
 	}
-	
+
 	private Group getServerGroup(Player player) {
 		return BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId()).getServerGroup();
 	}

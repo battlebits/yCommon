@@ -20,20 +20,21 @@ import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.MapMaker;
+import com.mojang.authlib.GameProfile;
+
 import br.com.battlebits.ycommon.common.utils.reflection.Reflection;
 import br.com.battlebits.ycommon.common.utils.reflection.Reflection.FieldAccessor;
 import br.com.battlebits.ycommon.common.utils.reflection.Reflection.MethodInvoker;
-import net.minecraft.util.com.google.common.collect.Lists;
-import net.minecraft.util.com.google.common.collect.MapMaker;
-import net.minecraft.util.com.mojang.authlib.GameProfile;
-import net.minecraft.util.io.netty.channel.Channel;
-import net.minecraft.util.io.netty.channel.ChannelDuplexHandler;
-import net.minecraft.util.io.netty.channel.ChannelFuture;
-import net.minecraft.util.io.netty.channel.ChannelHandlerContext;
-import net.minecraft.util.io.netty.channel.ChannelInboundHandlerAdapter;
-import net.minecraft.util.io.netty.channel.ChannelInitializer;
-import net.minecraft.util.io.netty.channel.ChannelPipeline;
-import net.minecraft.util.io.netty.channel.ChannelPromise;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelDuplexHandler;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelPipeline;
+import io.netty.channel.ChannelPromise;
 
 public abstract class TinyProtocol {
 	private static final AtomicInteger ID = new AtomicInteger(0);
@@ -245,7 +246,6 @@ public abstract class TinyProtocol {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	private void registerPlayers(Plugin plugin) {
 		for (Player player : plugin.getServer().getOnlinePlayers()) {
 			injectPlayer(player);
@@ -495,7 +495,6 @@ public abstract class TinyProtocol {
 	 * Cease listening for packets. This is called automatically when your
 	 * plugin is disabled.
 	 */
-	@SuppressWarnings("deprecation")
 	public final void close() {
 		if (!closed) {
 			closed = true;

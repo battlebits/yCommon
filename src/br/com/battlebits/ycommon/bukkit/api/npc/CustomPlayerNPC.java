@@ -15,22 +15,24 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
 
+import com.mojang.authlib.GameProfile;
+
 import de.inventivegames.holograms.Hologram;
 import de.inventivegames.holograms.HologramAPI;
+import io.netty.channel.AbstractChannel;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelConfig;
+import io.netty.channel.ChannelMetadata;
+import io.netty.channel.ChannelOutboundBuffer;
+import io.netty.channel.DefaultChannelConfig;
+import io.netty.channel.EventLoop;
+import io.netty.util.AttributeKey;
 import net.minecraft.server.v1_7_R4.EntityPlayer;
 import net.minecraft.server.v1_7_R4.NetworkManager;
 import net.minecraft.server.v1_7_R4.PacketPlayOutPlayerInfo;
 import net.minecraft.server.v1_7_R4.PlayerConnection;
 import net.minecraft.server.v1_7_R4.PlayerInteractManager;
 import net.minecraft.server.v1_7_R4.WorldServer;
-import net.minecraft.util.com.mojang.authlib.GameProfile;
-import net.minecraft.util.io.netty.channel.AbstractChannel;
-import net.minecraft.util.io.netty.channel.ChannelConfig;
-import net.minecraft.util.io.netty.channel.ChannelMetadata;
-import net.minecraft.util.io.netty.channel.ChannelOutboundBuffer;
-import net.minecraft.util.io.netty.channel.DefaultChannelConfig;
-import net.minecraft.util.io.netty.channel.EventLoop;
-import net.minecraft.util.io.netty.util.AttributeKey;
 
 public class CustomPlayerNPC {
 
@@ -159,7 +161,7 @@ public class CustomPlayerNPC {
 	class NPCChannel extends AbstractChannel {
 		private final ChannelConfig config = new DefaultChannelConfig(this);
 
-		protected NPCChannel(net.minecraft.util.io.netty.channel.Channel parent) {
+		protected NPCChannel(Channel parent) {
 			super(parent);
 		}
 

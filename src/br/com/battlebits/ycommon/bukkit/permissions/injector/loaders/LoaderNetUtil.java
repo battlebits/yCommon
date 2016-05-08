@@ -3,7 +3,7 @@ package br.com.battlebits.ycommon.bukkit.permissions.injector.loaders;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import net.minecraft.util.com.google.common.cache.CacheLoader;
+import com.google.common.cache.CacheLoader;
 
 public class LoaderNetUtil extends CacheLoader<String, Pattern> {
 	public static final String RAW_REGEX_CHAR = "$";

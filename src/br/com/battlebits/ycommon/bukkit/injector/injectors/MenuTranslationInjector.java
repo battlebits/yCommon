@@ -11,6 +11,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+
 import br.com.battlebits.ycommon.bukkit.injector.PacketListener;
 import br.com.battlebits.ycommon.bukkit.injector.PacketListenerAPI;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
@@ -21,9 +25,6 @@ import net.minecraft.server.v1_7_R4.Packet;
 import net.minecraft.server.v1_7_R4.PacketPlayOutOpenWindow;
 import net.minecraft.server.v1_7_R4.PacketPlayOutSetSlot;
 import net.minecraft.server.v1_7_R4.PacketPlayOutWindowItems;
-import net.minecraft.util.com.google.common.cache.Cache;
-import net.minecraft.util.com.google.common.cache.CacheBuilder;
-import net.minecraft.util.com.google.common.cache.CacheLoader;
 
 public class MenuTranslationInjector {
 

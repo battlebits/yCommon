@@ -2,7 +2,7 @@ package br.com.battlebits.ycommon.bukkit.util.gson;
 
 import java.lang.reflect.Type;
 
-import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
+import com.google.gson.Gson;
 
 import br.com.battlebits.ycommon.common.utils.gson.GsonInterface;
 

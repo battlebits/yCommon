@@ -161,22 +161,9 @@ public class PEXPermissionSubscriptionMap extends HashMap<String, Map<Permissibl
 			return backing.get(key);
 		}
 
-		@SuppressWarnings({ "rawtypes", "deprecation" })
 		@Override
 		public Set<Permissible> keySet() {
-			Object players = plugin.getServer().getOnlinePlayers();
-			int size = 0;
-			try {
-				if (players.getClass().isAssignableFrom(Collection.class)) {
-					size = (int) ((Collection) players).size();
-				} else {
-					size = (int) ((Player[]) players).length;
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-			Set<Permissible> pexMatches = new HashSet<Permissible>(size);
+			Set<Permissible> pexMatches = new HashSet<Permissible>(plugin.getServer().getOnlinePlayers().size());
 			for (Player player : Bukkit.getOnlinePlayers()) {
 				if (player.hasPermission(permission)) {
 					pexMatches.add(player);

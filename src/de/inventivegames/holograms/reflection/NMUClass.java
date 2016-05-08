@@ -45,11 +45,7 @@ public abstract class NMUClass {
 				if (f.getType().equals(Class.class)) {
 					try {
 						String name = f.getName().replace("_", ".");
-						if (Reflection.getVersion().contains("1_8")) {
-							f.set(null, Class.forName(name));
-						} else {
-							f.set(null, Class.forName("net.minecraft.util." + name));
-						}
+						f.set(null, Class.forName(name));
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

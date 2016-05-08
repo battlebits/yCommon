@@ -2,8 +2,8 @@ package br.com.battlebits.ycommon.bukkit.injector;
 
 import org.bukkit.entity.Player;
 
+import io.netty.channel.Channel;
 import net.minecraft.server.v1_7_R4.Packet;
-import net.minecraft.util.io.netty.channel.Channel;
 
 public interface PacketListener {
 
