@@ -143,7 +143,11 @@ public class Injector {
 							DataWatcher watcher = (DataWatcher) ReflectionUtils.getPrivateFieldObject(living, "l");
 
 							if (watcher != null) {
-								fixIndexes(watcher);
+								DataWatcher newWatcher = new DataWatcher(e);
+								fixIndexesAndCopy(watcher, newWatcher);
+								// cloneWatcher(watcher, newWatcher);
+								// fixIndexes(newWatcher);
+								AccessUtil.setAccessible(PacketPlayOutSpawnEntityLiving.class.getDeclaredField("l")).set(living, newWatcher);
 							}
 
 							return;
@@ -164,12 +168,7 @@ public class Injector {
 						Entity entity = e.getBukkitEntity();
 
 						if (entity.getType() == EntityType.WITHER_SKULL) {
-							ReflectionUtils.setPrivateFieldObject(spawn, "j", 78); // The
-																					// object
-																					// ID
-																					// for
-																					// armor
-																					// stands
+							ReflectionUtils.setPrivateFieldObject(spawn, "j", 78);
 
 							final DataWatcher watcher = new DataWatcher(((CraftWorld) reciever.getWorld()).getHandle().getEntity(id));
 							Object map_1_8 = AccessUtil.setAccessible(NMSClass.DataWatcher.getDeclaredField("dataValues")).get(watcher);
@@ -213,8 +212,11 @@ public class Injector {
 						DataWatcher watcher = e.getHandle().getDataWatcher();
 
 						if (watcher != null) {
-							fixIndexes(watcher);
-							ReflectionUtils.setPrivateFieldObject(metadata, "b", watcher.c());
+							DataWatcher newWatcher = new DataWatcher(e.getHandle());
+							fixIndexesAndCopy(watcher, newWatcher);
+							// cloneWatcher(watcher, newWatcher);
+							// fixIndexes(newWatcher);
+							ReflectionUtils.setPrivateFieldObject(metadata, "b", newWatcher.c());
 
 							return;
 						}
@@ -302,9 +304,10 @@ public class Injector {
 	}
 
 	@SuppressWarnings({ "boxing" })
-	private static void fixIndexes(DataWatcher watcher) throws Exception {
+	private static void fixIndexesAndCopy(DataWatcher watcher, DataWatcher newDataWatcher) throws Exception {
 		Object map_1_8 = AccessUtil.setAccessible(NMSClass.DataWatcher.getDeclaredField("dataValues")).get(watcher);
-		NMUClass.gnu_trove_map_hash_TIntObjectHashMap.getDeclaredMethod("put", int.class, Object.class).invoke(map_1_8, 10, NMSClass.WatchableObject.getConstructor(int.class, int.class, Object.class).newInstance(0, 10, (byte) 1));
+		Object newMap = AccessUtil.setAccessible(NMSClass.DataWatcher.getDeclaredField("dataValues")).get(newDataWatcher);
+		NMUClass.gnu_trove_map_hash_TIntObjectHashMap.getDeclaredMethod("put", int.class, Object.class).invoke(newMap, 10, NMSClass.WatchableObject.getConstructor(int.class, int.class, Object.class).newInstance(0, 10, (byte) 1));
 		List<Integer> toRemove = new ArrayList<>();
 		for (int i = 0; i < 100; i++) {
 			Object current = NMUClass.gnu_trove_map_hash_TIntObjectHashMap.getDeclaredMethod("get", int.class).invoke(map_1_8, i);
@@ -312,6 +315,7 @@ public class Injector {
 				continue;
 			}
 			int index = AccessUtil.setAccessible(NMSClass.WatchableObject.getDeclaredField("b")).getInt(current);
+			NMUClass.gnu_trove_map_hash_TIntObjectHashMap.getDeclaredMethod("put", int.class, Object.class).invoke(newMap, index, current);
 			if (index == 2) {
 
 			} else if (index != 3) {
@@ -319,9 +323,9 @@ public class Injector {
 			}
 		}
 		for (Integer i : toRemove) {
-			NMUClass.gnu_trove_map_hash_TIntObjectHashMap.getDeclaredMethod("remove", int.class).invoke(map_1_8, i);
+			NMUClass.gnu_trove_map_hash_TIntObjectHashMap.getDeclaredMethod("remove", int.class).invoke(newMap, i);
 		}
-		NMUClass.gnu_trove_map_hash_TIntObjectHashMap.getDeclaredMethod("put", int.class, Object.class).invoke(map_1_8, 0, NMSClass.WatchableObject.getConstructor(int.class, int.class, Object.class).newInstance(0, 0, (byte) 32));
+		NMUClass.gnu_trove_map_hash_TIntObjectHashMap.getDeclaredMethod("put", int.class, Object.class).invoke(newMap, 0, NMSClass.WatchableObject.getConstructor(int.class, int.class, Object.class).newInstance(0, 0, (byte) 32));
 	}
 
 	private static Object getField(Object packet, String fieldName) {
