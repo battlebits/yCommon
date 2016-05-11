@@ -23,25 +23,57 @@ public class VanishAPI {
 		vanishedToGroup = new HashMap<>();
 	}
 
-	public void hidePlayerToGroup(Player player, Group group) {
-		for (Player online : Bukkit.getOnlinePlayers()) {
-			BattlePlayer bP = BattlebitsAPI.getAccountCommon().getBattlePlayer(online.getUniqueId());
-			if (bP.hasGroupPermission(group))
-				if (online.canSee(player))
-					continue;
-			online.showPlayer(player);
+	public void setPlayerVanishToGroup(Player player, Group group) {
+		switch (group) {
+		case NORMAL:
+			if (vanishedToGroup.containsKey(player.getUniqueId()))
+				vanishedToGroup.remove(player.getUniqueId());
+			break;
+		default:
+			vanishedToGroup.put(player.getUniqueId(), group);
+			break;
 		}
-	}
-
-	public void showPlayerToGroup(Player player, Group group) {
-
-	}
-
-	public void showPlayerToAll(Player player) {
 		for (Player online : Bukkit.getOnlinePlayers()) {
+			BattlePlayer onlineP = BattlebitsAPI.getAccountCommon().getBattlePlayer(online.getUniqueId());
+			if (!onlineP.hasGroupPermission(group)) {
+				if (!online.canSee(player))
+					continue;
+				online.hidePlayer(player);
+				continue;
+			}
 			if (online.canSee(player))
 				continue;
 			online.showPlayer(player);
 		}
+	}
+
+	public void updateVanishToPlayer(Player player) {
+		BattlePlayer bP = BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId());
+		for (Player online : Bukkit.getOnlinePlayers()) {
+			Group group = vanishedToGroup.get(online);
+			if (group != null) {
+				if (!bP.hasGroupPermission(group)) {
+					if (player.canSee(online)) {
+						player.hidePlayer(online);
+					}
+				}
+			}
+			if (player.canSee(online))
+				continue;
+			player.showPlayer(online);
+		}
+	}
+
+	public void hidePlayer(Player player) {
+		BattlePlayer bP = BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId());
+		setPlayerVanishToGroup(player, bP.getServerGroup());
+	}
+
+	public void showPlayer(Player player) {
+		setPlayerVanishToGroup(player, Group.NORMAL);
+	}
+
+	public static VanishAPI getInstance() {
+		return instance;
 	}
 }

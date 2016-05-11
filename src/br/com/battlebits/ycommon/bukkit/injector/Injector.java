@@ -1,6 +1,5 @@
 package br.com.battlebits.ycommon.bukkit.injector;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -287,14 +286,4 @@ public class Injector {
 		NMUClass.gnu_trove_map_hash_TIntObjectHashMap.getDeclaredMethod("put", int.class, Object.class).invoke(newMap, 0, NMSClass.WatchableObject.getConstructor(int.class, int.class, Object.class).newInstance(0, 0, (byte) 32));
 	}
 
-	private static Object getField(Object packet, String fieldName) {
-		try {
-			Field field = packet.getClass().getDeclaredField(fieldName);
-			field.setAccessible(true);
-			return field.get(packet);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
 }
