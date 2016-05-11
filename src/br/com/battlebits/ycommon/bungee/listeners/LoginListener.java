@@ -40,7 +40,7 @@ public class LoginListener implements Listener {
 					IpCityResponse responde = GeoIpUtils.getIpStatus(ipAdress.getHostString());
 					if (responde != null)
 						countryCode = responde.getCountryCode();
-						timeZoneCode = responde.getTimeZone();
+					timeZoneCode = responde.getTimeZone();
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -85,7 +85,7 @@ public class LoginListener implements Listener {
 				Ban ban = player.getBanHistory().getActualBan();
 				if (ban != null) {
 					event.setCancelled(true);
-					event.setCancelReason(BanManager.getBanKickMessage(ban, player.getLanguage()));
+					event.setCancelReason(BanManager.getBanKickMessage(ban, player.getLanguage(), player.getTimeZone()));
 				}
 				BattlebitsAPI.debug("BANNING > FINISHED");
 				event.completeIntent(BungeeMain.getPlugin());
