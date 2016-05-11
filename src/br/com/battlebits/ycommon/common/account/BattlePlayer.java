@@ -175,7 +175,7 @@ public class BattlePlayer {
 	}
 
 	public long getOnlineTime() {
-		return (TimeZoneConversor.getCurrentMillsTimeIn(TimeZone.GMT0) - joinTime) + onlineTime;
+		return (System.currentTimeMillis() - joinTime) + onlineTime;
 	}
 
 	public String getHostname() {
@@ -455,13 +455,13 @@ public class BattlePlayer {
 	public void updateBanHistory(BanHistory banHistory) {
 		this.banHistory = banHistory;
 	}
-	
+
 	public void sendMessage(String translateId) {
 		this.sendMessage(translateId, null);
 	}
-	
+
 	public void sendMessage(String translateId, Map<String, String> replaces) {
-		
+
 	}
 
 	public void connect(String serverIp) {
@@ -479,7 +479,7 @@ public class BattlePlayer {
 		this.userName = userName;
 		this.ipAddress = ipAdrress;
 		this.timeZone = TimeZone.fromString(timeZoneCode);
-		joinTime = TimeZoneConversor.getCurrentMillsTimeIn(TimeZone.GMT0);
+		joinTime = System.currentTimeMillis();
 		this.countryCode = countryCode;
 		this.online = true;
 		this.serverConnectedType = ServerType.NONE;
@@ -487,7 +487,7 @@ public class BattlePlayer {
 
 	public void setLeaveData() {
 		this.online = false;
-		lastLoggedIn = TimeZoneConversor.getCurrentMillsTimeIn(TimeZone.GMT0);
+		lastLoggedIn = System.currentTimeMillis();
 		onlineTime = getOnlineTime();
 		actualParty = null;
 		if (ipAddress != null)
@@ -516,8 +516,8 @@ public class BattlePlayer {
 	}
 
 	public TimeZone getTimeZone() {
-		if(timeZone == null)
-			setTimeZone(TimeZone.GMT0);
+		if (timeZone == null)
+			setTimeZone(BattlebitsAPI.getDefaultTimeZone());
 		return timeZone;
 	}
 

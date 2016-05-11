@@ -165,12 +165,12 @@ public class BanManager {
 		} else {
 			reason = Translate.getTranslation(lang, "banned-temp");
 		}
-		Date date = new Date(TimeZoneConversor.convertTime(TimeZone.GMT0, zone, ban.getBanTime()));
+		Date date = new Date(ban.getBanTime());
 		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 		reason = reason.replace("%day%", df.format(date));
 		reason = reason.replace("%banned-By%", ban.getBannedBy());
 		reason = reason.replace("%reason%", ban.getReason());
-		reason = reason.replace("%duration%", DateUtils.formatDifference(lang, (ban.getExpire() - TimeZoneConversor.getCurrentMillsTimeIn(TimeZone.GMT0)) / 1000));
+		reason = reason.replace("%duration%", DateUtils.formatDifference(lang, (ban.getExpire() - System.currentTimeMillis()) / 1000));
 		reason = reason.replace("%forum%", BattlebitsAPI.FORUM_WEBSITE);
 		reason = reason.replace("%store%", BattlebitsAPI.STORE);
 		return reason;
@@ -183,7 +183,7 @@ public class BanManager {
 		} else {
 			message = Translate.getTranslation(lang, "command-unmute-prefix") + " " + Translate.getTranslation(lang, "command-tempmute-muted");
 		}
-		message = message.replace("%duration%", DateUtils.formatDifference(lang, (mute.getExpire() - TimeZoneConversor.getCurrentMillsTimeIn(TimeZone.GMT0)) / 1000));
+		message = message.replace("%duration%", DateUtils.formatDifference(lang, (mute.getExpire() - System.currentTimeMillis()) / 1000));
 		message = message.replace("%forum%", BattlebitsAPI.FORUM_WEBSITE);
 		message = message.replace("%store%", BattlebitsAPI.STORE);
 		message = message.replace("%muted-By%", mute.getMutedBy());

@@ -3,8 +3,6 @@ package br.com.battlebits.ycommon.common.banmanager.constructors;
 import java.util.UUID;
 
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
-import br.com.battlebits.ycommon.common.time.TimeZone;
-import br.com.battlebits.ycommon.common.time.TimeZoneConversor;
 
 public class Ban {
 
@@ -30,8 +28,8 @@ public class Ban {
 	}
 
 	public Ban(String bannedBy, UUID bannedByUuid, String bannedIp, String server, String reason, long expire) {
-		this(bannedBy, bannedIp, server, bannedByUuid, TimeZoneConversor.getCurrentMillsTimeIn(TimeZone.GMT0), reason, false, null, null, -1, expire,
-				expire - TimeZoneConversor.getCurrentMillsTimeIn(TimeZone.GMT0));
+		this(bannedBy, bannedIp, server, bannedByUuid, System.currentTimeMillis(), reason, false, null, null, -1, expire,
+				expire - System.currentTimeMillis());
 	}
 
 	public Ban(String bannedBy, String bannedIp, String server, String reason) {
@@ -39,7 +37,7 @@ public class Ban {
 	}
 
 	public Ban(String bannedBy, UUID bannedByUuid, String bannedIp, String server, String reason) {
-		this(bannedBy, bannedIp, server, bannedByUuid, TimeZoneConversor.getCurrentMillsTimeIn(TimeZone.GMT0), reason, false, null, null, -1, -1, -1);
+		this(bannedBy, bannedIp, server, bannedByUuid, System.currentTimeMillis(), reason, false, null, null, -1, -1, -1);
 	}
 
 	public Ban(String bannedBy, String bannedIp, String server, UUID bannedByUUID, long banTime, String reason, boolean unbanned, String unbannedBy,
@@ -107,7 +105,7 @@ public class Ban {
 	}
 
 	public boolean hasExpired() {
-		return expire != -1 && expire < TimeZoneConversor.getCurrentMillsTimeIn(TimeZone.GMT0);
+		return expire != -1 && expire < System.currentTimeMillis();
 	}
 
 	public boolean isPermanent() {
@@ -117,14 +115,14 @@ public class Ban {
 	public void unban() {
 		this.unbanned = true;
 		this.unbannedBy = "CONSOLE";
-		this.unbanTime = TimeZoneConversor.getCurrentMillsTimeIn(TimeZone.GMT0);
+		this.unbanTime = System.currentTimeMillis();
 	}
 
 	public void unban(BattlePlayer unbanPlayer) {
 		this.unbanned = true;
 		this.unbannedBy = unbanPlayer.getUserName();
 		this.unbannedByUUID = unbanPlayer.getUuid();
-		this.unbanTime = TimeZoneConversor.getCurrentMillsTimeIn(TimeZone.GMT0);
+		this.unbanTime = System.currentTimeMillis();
 	}
 
 }

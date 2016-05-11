@@ -3,8 +3,6 @@ package br.com.battlebits.ycommon.common.banmanager.constructors;
 import java.util.UUID;
 
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
-import br.com.battlebits.ycommon.common.time.TimeZone;
-import br.com.battlebits.ycommon.common.time.TimeZoneConversor;
 
 public class Mute {
 
@@ -30,8 +28,7 @@ public class Mute {
 	}
 
 	public Mute(String mutedBy, UUID mutedByUuid, String mutedIp, String server, String reason, long expire) {
-		this(mutedBy, mutedIp, server, mutedByUuid, TimeZoneConversor.getCurrentMillsTimeIn(TimeZone.GMT0), reason, false, null, null, -1, expire,
-				expire - TimeZoneConversor.getCurrentMillsTimeIn(TimeZone.GMT0));
+		this(mutedBy, mutedIp, server, mutedByUuid, System.currentTimeMillis(), reason, false, null, null, -1, expire, expire - System.currentTimeMillis());
 	}
 
 	public Mute(String mutedBy, String mutedIp, String server, String reason) {
@@ -39,11 +36,10 @@ public class Mute {
 	}
 
 	public Mute(String mutedBy, UUID mutedByUuid, String mutedIp, String server, String reason) {
-		this(mutedBy, mutedIp, server, mutedByUuid, TimeZoneConversor.getCurrentMillsTimeIn(TimeZone.GMT0), reason, false, null, null, -1, -1, -1);
+		this(mutedBy, mutedIp, server, mutedByUuid, System.currentTimeMillis(), reason, false, null, null, -1, -1, -1);
 	}
 
-	public Mute(String mutedBy, String mutedIp, String server, UUID mutedByUUID, long muteTime, String reason, boolean unmuted, String unmutedBy,
-			UUID unmutedByUUID, long unmuteTime, long expire, long duration) {
+	public Mute(String mutedBy, String mutedIp, String server, UUID mutedByUUID, long muteTime, String reason, boolean unmuted, String unmutedBy, UUID unmutedByUUID, long unmuteTime, long expire, long duration) {
 		this.mutedBy = mutedBy;
 		this.mutedIp = mutedIp;
 		this.mutedByUUID = mutedByUUID;
@@ -107,7 +103,7 @@ public class Mute {
 	}
 
 	public boolean hasExpired() {
-		return expire != -1 && expire < TimeZoneConversor.getCurrentMillsTimeIn(TimeZone.GMT0);
+		return expire != -1 && expire < System.currentTimeMillis();
 	}
 
 	public boolean isPermanent() {
@@ -117,7 +113,7 @@ public class Mute {
 	public void unmute() {
 		this.unmuted = true;
 		this.unmutedBy = "CONSOLE";
-		this.unmuteTime = TimeZoneConversor.getCurrentMillsTimeIn(TimeZone.GMT0);
+		this.unmuteTime = System.currentTimeMillis();
 	}
 
 	public void unmute(BattlePlayer unmutePlayer) {
@@ -128,7 +124,7 @@ public class Mute {
 		this.unmuted = true;
 		this.unmutedBy = unmuteName;
 		this.unmutedByUUID = unmuteUuid;
-		this.unmuteTime = TimeZoneConversor.getCurrentMillsTimeIn(TimeZone.GMT0);
+		this.unmuteTime = System.currentTimeMillis();
 	}
 
 }

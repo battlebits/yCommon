@@ -17,8 +17,6 @@ import br.com.battlebits.ycommon.common.commands.CommandClass;
 import br.com.battlebits.ycommon.common.enums.ServerType;
 import br.com.battlebits.ycommon.common.payment.enums.RankType;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
-import br.com.battlebits.ycommon.common.time.TimeZone;
-import br.com.battlebits.ycommon.common.time.TimeZoneConversor;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
 import br.com.battlebits.ycommon.common.utils.DateUtils;
@@ -178,7 +176,7 @@ public class GroupCommand extends CommandClass {
 					sender.sendMessage(TextComponent.fromLegacyText(giveVipPrefix + Translate.getTranslation(language, "invalid-format")));
 					return;
 				}
-				expiresCheck = expiresCheck - TimeZoneConversor.getCurrentMillsTimeIn(TimeZone.GMT0);
+				expiresCheck = expiresCheck - System.currentTimeMillis();
 				RankType rank = null;
 				try {
 					rank = RankType.valueOf(args[2].toUpperCase());
@@ -186,7 +184,7 @@ public class GroupCommand extends CommandClass {
 					sender.sendMessage(TextComponent.fromLegacyText(giveVipPrefix + Translate.getTranslation(language, "command-givevip-rank-not-exist")));
 					return;
 				}
-				long newAdd = TimeZoneConversor.getCurrentMillsTimeIn(TimeZone.GMT0);
+				long newAdd = System.currentTimeMillis();
 				if (player.getRanks().containsKey(rank)) {
 					newAdd = player.getRanks().get(rank);
 				}
