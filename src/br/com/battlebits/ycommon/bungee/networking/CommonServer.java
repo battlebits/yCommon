@@ -29,6 +29,13 @@ public class CommonServer implements Runnable {
 	@Override
 	public void run() {
 		while (RUNNING) {
+			if(server.isClosed())
+				try {
+					server.bind(new InetSocketAddress(ADDRESS, PORT));
+				} catch (IOException e1) {
+					e1.printStackTrace();
+					break;
+				}
 			try {
 				client = server.accept();
 				new BungeeClient(client);

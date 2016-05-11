@@ -15,6 +15,7 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeTag;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketCommandRun;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketCreateParty;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketDisbandParty;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketKeepAlive;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveBlockedPlayer;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveFriend;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveFriendRequest;
@@ -83,5 +84,7 @@ public abstract class CommonHandler {
 	public abstract void handleServerLoad(CPacketServerNameLoad packet) throws Exception;
 	
 	public abstract void handleCommandRun(CPacketCommandRun packet) throws Exception;
+	
+	public abstract void handlerKeepAlive(CPacketKeepAlive packet) throws Exception;
 
 }

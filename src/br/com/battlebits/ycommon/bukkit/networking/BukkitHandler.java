@@ -19,6 +19,7 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeTag;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketCommandRun;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketCreateParty;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketDisbandParty;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketKeepAlive;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveBlockedPlayer;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveFriend;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveFriendRequest;
@@ -38,7 +39,7 @@ import br.com.battlebits.ycommon.common.translate.languages.Language;
 public class BukkitHandler extends CommonHandler {
 
 	public static Object LOCK = new Object();
-	
+
 	@Override
 	public void handleAccountRequest(CPacketAccountRequest packet) {
 		// PROVAVEL QUE NUNCA VAI TER
@@ -209,6 +210,12 @@ public class BukkitHandler extends CommonHandler {
 	@Override
 	public void handleCommandRun(CPacketCommandRun packet) throws Exception {
 		// PROVAVEL QUE NUNCA VAI TER
+	}
+
+	@Override
+	public void handlerKeepAlive(CPacketKeepAlive packet) throws Exception {
+		// TODO Auto-generated method stub
+
 	}
 
 }

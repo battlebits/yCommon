@@ -22,6 +22,7 @@ public class CPacketKeepAlive extends CommonPacket {
 
 	@Override
 	public void handle(CommonHandler handler) throws Exception {
+		handler.handlerKeepAlive(this);
 	}
 
 }

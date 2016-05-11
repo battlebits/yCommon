@@ -18,6 +18,7 @@ import br.com.battlebits.ycommon.bukkit.event.update.UpdateEvent;
 import br.com.battlebits.ycommon.bukkit.event.update.UpdateEvent.UpdateType;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketKeepAlive;
 
 public class PlayerListener implements Listener {
 
@@ -83,6 +84,16 @@ public class PlayerListener implements Listener {
 				}
 			}
 		}
+	}
+	
+	@EventHandler
+	public void onKeepAlive(UpdateEvent event) {
+		if (event.getType() != UpdateType.SECOND)
+			return;
+		if(BukkitMain.getPlugin().getClient().keepAlive >= 30) {
+			BukkitMain.getPlugin().getClient().sendPacket(new CPacketKeepAlive());
+		}
+		--BukkitMain.getPlugin().getClient().keepAlive;
 	}
 
 }

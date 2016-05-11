@@ -20,6 +20,7 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeTag;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketCommandRun;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketCreateParty;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketDisbandParty;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketKeepAlive;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveBlockedPlayer;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveFriend;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveFriendRequest;
@@ -233,6 +234,11 @@ public class BungeePacketHandler extends CommonHandler {
 	@Override
 	public void handleCommandRun(CPacketCommandRun packet) throws Exception {
 		BungeeMain.getPlugin().getProxy().getPluginManager().dispatchCommand(BungeeMain.getPlugin().getProxy().getConsole(), packet.getCommand());
+	}
+	
+	@Override
+	public void handlerKeepAlive(CPacketKeepAlive packet) throws Exception {
+		sender.sendPacket(new CPacketKeepAlive());
 	}
 
 }

@@ -150,6 +150,15 @@ public class BukkitMain extends JavaPlugin {
 	}
 
 	public BukkitClient getClient() {
+		if(socketClient.socket.isClosed())
+			try {
+				Socket socket = new Socket(CommonServer.ADDRESS, CommonServer.PORT);
+				socketClient = new BukkitClient(socket);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+				getServer().shutdown();
+				restart = true;
+			}
 		return socketClient;
 	}
 
