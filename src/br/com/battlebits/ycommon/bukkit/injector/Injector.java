@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import br.com.battlebits.ycommon.bukkit.api.npc.CustomPlayerNPC;
 import br.com.battlebits.ycommon.bukkit.injector.PacketListener.PacketObject;
 import br.com.battlebits.ycommon.common.utils.reflection.ReflectionUtils;
 import de.inventivegames.holograms.HologramAPI;
@@ -28,6 +29,7 @@ import net.minecraft.server.v1_7_R4.Packet;
 import net.minecraft.server.v1_7_R4.PacketPlayOutAttachEntity;
 import net.minecraft.server.v1_7_R4.PacketPlayOutEntityMetadata;
 import net.minecraft.server.v1_7_R4.PacketPlayOutEntityTeleport;
+import net.minecraft.server.v1_7_R4.PacketPlayOutNamedEntitySpawn;
 import net.minecraft.server.v1_7_R4.PacketPlayOutSpawnEntity;
 import net.minecraft.server.v1_7_R4.PacketPlayOutSpawnEntityLiving;
 
@@ -70,6 +72,36 @@ public class Injector {
 				return object.getPacket();
 			}
 		};
+
+		PacketListenerAPI.addListener(new PacketListener() {
+
+			@Override
+			public void onPacketSend(PacketObject pacote) {
+				final Player reciever = pacote.getPlayer();
+				Packet packet = pacote.getPacket();
+				if (packet instanceof PacketPlayOutNamedEntitySpawn) {
+					PacketPlayOutNamedEntitySpawn namedEntity = (PacketPlayOutNamedEntitySpawn) packet;
+					int entityId = (int) ReflectionUtils.getPrivateFieldObject(namedEntity, "a");
+					final CustomPlayerNPC npc = CustomPlayerNPC.isPlayerNPC(entityId);
+					if (npc == null) {
+						return;
+					}
+					new BukkitRunnable() {
+						@Override
+						public void run() {
+							((CraftPlayer) reciever).getHandle().playerConnection.sendPacket(npc.removePlayer);
+						}
+					}.runTaskLater(plugin, 1);
+					return;
+				}
+			}
+
+			@Override
+			public void onPacketReceive(PacketObject pacote) {
+				// TODO Auto-generated method stub
+
+			}
+		});
 
 		PacketListenerAPI.addListener(new PacketListener() {
 

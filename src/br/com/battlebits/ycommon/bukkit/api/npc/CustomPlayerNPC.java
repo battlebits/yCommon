@@ -54,7 +54,7 @@ public class CustomPlayerNPC {
 
 				profile = new GameProfile(uuid, name);
 				try {
-					profile.getProperties().put("textures", CustomPlayerAPI.Textures.get(profile, null));
+					profile.getProperties().put("textures", CustomPlayerAPI.Textures.get(profile));
 				} catch (ExecutionException e) {
 					e.printStackTrace();
 				}

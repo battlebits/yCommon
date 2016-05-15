@@ -7,9 +7,9 @@ import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_7_R4.CraftServer;
 import org.bukkit.craftbukkit.v1_7_R4.CraftWorld;
 
-import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Iterables;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
@@ -22,29 +22,28 @@ import net.minecraft.server.v1_7_R4.WorldServer;
 
 public class CustomPlayerAPI {
 
-	public static final Cache<GameProfile, Property> Textures = CacheBuilder.newBuilder()
-			.expireAfterWrite(30L, TimeUnit.MINUTES).build(new CacheLoader<GameProfile, Property>() {
-				@Override
-				public Property load(GameProfile key) throws Exception {
-					return loadTextures(key);
-				}
-			});
+	public static final LoadingCache<GameProfile, Property> Textures = CacheBuilder.newBuilder().expireAfterWrite(30L, TimeUnit.MINUTES).build(new CacheLoader<GameProfile, Property>() {
+		@Override
+		public Property load(GameProfile key) throws Exception {
+			return loadTextures(key);
+		}
+	});
 
 	private static final Property loadTextures(GameProfile profile) {
 		MinecraftServer.getServer().av().fillProfileProperties(profile, true);
 		return Iterables.getFirst(profile.getProperties().get("textures"), null);
 	}
-	
+
 	private static MinecraftServer nmsServer = ((CraftServer) Bukkit.getServer()).getServer();
-	
+
 	public static MinecraftServer getNmsServer() {
 		return nmsServer;
 	}
-	
-	public static WorldServer getNmsWorld(World world){
+
+	public static WorldServer getNmsWorld(World world) {
 		return ((CraftWorld) world).getHandle();
 	}
-	
+
 	public static void setHeadYaw(Entity en, float yaw) {
 		if (!(en instanceof EntityLiving))
 			return;
