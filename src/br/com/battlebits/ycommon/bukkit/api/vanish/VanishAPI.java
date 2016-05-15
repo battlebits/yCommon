@@ -6,6 +6,8 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import br.com.battlebits.ycommon.bukkit.event.vanish.PlayerInvisibleToPlayerEvent;
+import br.com.battlebits.ycommon.bukkit.event.vanish.PlayerVisibleToPlayerEvent;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
@@ -36,12 +38,18 @@ public class VanishAPI {
 			if (!onlineP.hasGroupPermission(group)) {
 				if (!online.canSee(player))
 					continue;
-				online.hidePlayer(player);
+				PlayerInvisibleToPlayerEvent event = new PlayerInvisibleToPlayerEvent(player, online);
+				Bukkit.getPluginManager().callEvent(event);
+				if (!event.isCancelled())
+					online.hidePlayer(player);
 				continue;
 			}
 			if (online.canSee(player))
 				continue;
-			online.showPlayer(player);
+			PlayerVisibleToPlayerEvent event = new PlayerVisibleToPlayerEvent(player, online);
+			Bukkit.getPluginManager().callEvent(event);
+			if (!event.isCancelled())
+				online.showPlayer(player);
 		}
 	}
 
@@ -55,13 +63,19 @@ public class VanishAPI {
 				if (!bP.hasGroupPermission(group)) {
 					if (!player.canSee(online))
 						continue;
-					player.hidePlayer(online);
+					PlayerInvisibleToPlayerEvent event = new PlayerInvisibleToPlayerEvent(player, online);
+					Bukkit.getPluginManager().callEvent(event);
+					if (!event.isCancelled())
+						player.hidePlayer(online);
 					continue;
 				}
 			}
 			if (player.canSee(online))
 				continue;
-			player.showPlayer(online);
+			PlayerVisibleToPlayerEvent event = new PlayerVisibleToPlayerEvent(player, online);
+			Bukkit.getPluginManager().callEvent(event);
+			if (!event.isCancelled())
+				player.showPlayer(online);
 		}
 	}
 

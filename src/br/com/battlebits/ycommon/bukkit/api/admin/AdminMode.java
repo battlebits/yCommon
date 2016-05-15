@@ -3,6 +3,7 @@ package br.com.battlebits.ycommon.bukkit.api.admin;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -13,11 +14,11 @@ import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 
 public class AdminMode {
-	private ArrayList<Player> admin;
+	private ArrayList<UUID> admin;
 	private static final AdminMode instance = new AdminMode();
 
 	public AdminMode() {
-		admin = new ArrayList<Player>();
+		admin = new ArrayList<UUID>();
 	}
 
 	public static AdminMode getInstance() {
@@ -25,8 +26,8 @@ public class AdminMode {
 	}
 
 	public void setAdmin(Player p) {
-		if (!admin.contains(p))
-			admin.add(p);
+		if (!admin.contains(p.getUniqueId()))
+			admin.add(p.getUniqueId());
 		p.setGameMode(GameMode.CREATIVE);
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
 		Group group = VanishAPI.getInstance().hidePlayer(p);
@@ -38,17 +39,17 @@ public class AdminMode {
 
 	public void setPlayer(Player p) {
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
-		if (admin.contains(p)) {
+		if (admin.contains(p.getUniqueId())) {
 			player.sendMessage("command-admin-prefix", "command-admin-disabled");
+			admin.remove(p.getUniqueId());
 		}
 		player.sendMessage("command-vanish-prefix", "command-vanish-visible-all");
-		admin.remove(p);
 		p.setGameMode(GameMode.SURVIVAL);
 		VanishAPI.getInstance().showPlayer(p);
 	}
 
 	public boolean isAdmin(Player p) {
-		return admin.contains(p);
+		return admin.contains(p.getUniqueId());
 	}
 
 	public int playersInAdmin() {
@@ -56,6 +57,6 @@ public class AdminMode {
 	}
 
 	public void removeAdmin(Player p) {
-		admin.remove(p);
+		admin.remove(p.getUniqueId());
 	}
 }
