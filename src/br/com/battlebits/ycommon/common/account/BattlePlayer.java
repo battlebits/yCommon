@@ -457,10 +457,18 @@ public class BattlePlayer {
 	}
 
 	public void sendMessage(String translateId) {
-		this.sendMessage(translateId, null);
+		this.sendMessage(null, translateId);
+	}
+
+	public void sendMessage(String tagId, String translateId) {
+		this.sendMessage(tagId, translateId, null);
 	}
 
 	public void sendMessage(String translateId, Map<String, String> replaces) {
+		this.sendMessage(null, translateId, null);
+	}
+
+	public void sendMessage(String tagId, String translateId, Map<String, String> replaces) {
 
 	}
 

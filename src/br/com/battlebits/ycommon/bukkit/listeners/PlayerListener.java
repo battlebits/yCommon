@@ -4,16 +4,14 @@ import java.util.Iterator;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
-import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
+import br.com.battlebits.ycommon.bukkit.api.vanish.VanishAPI;
 import br.com.battlebits.ycommon.bukkit.event.update.UpdateEvent;
 import br.com.battlebits.ycommon.bukkit.event.update.UpdateEvent.UpdateType;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
@@ -37,37 +35,9 @@ public class PlayerListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onChat(AsyncPlayerChatEvent event) {
-		event.setCancelled(true);
-		BukkitPlayer player = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(event.getPlayer().getUniqueId());
-		for (Player r : event.getRecipients()) {
-			try {
-				BukkitPlayer receiver = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(r.getUniqueId());
-				if (receiver == null) {
-					new BukkitRunnable() {
-						@Override
-						public void run() {
-							r.kickPlayer("BUG");
-						}
-					}.runTask(BukkitMain.getPlugin());
-					continue;
-				}
-				if ((!receiver.getConfiguration().isIgnoreAll()) && (!receiver.getBlockedPlayers().containsKey(player.getUuid()) && (!player.getBlockedPlayers().containsKey(receiver.getUuid())))) {
-					String tag = player.getTag().getPrefix(receiver.getLanguage());
-					String format = tag + (ChatColor.stripColor(tag).trim().length() > 0 ? " " : "") + event.getPlayer().getName() + ChatColor.GRAY + " (" + player.getLiga().getSymbol() + ChatColor.GRAY + ") " + ChatColor.WHITE + ": ";
-					if (player.getActualClan() != null) {
-						format = "[" + player.getActualClan().getAbbreviation() + "] " + format;
-					}
-					r.sendMessage(format + event.getMessage());
-					format = null;
-				}
-				receiver = null;
-			} catch (Exception e) {
-			}
-		}
-		BukkitMain.getPlugin().getLogger().info("<" + player.getUserName() + "> " + event.getMessage());
-		player = null;
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onJoin(PlayerJoinEvent event) {
+		VanishAPI.getInstance().updateVanishToPlayer(event.getPlayer());
 	}
 
 	@EventHandler
@@ -85,12 +55,12 @@ public class PlayerListener implements Listener {
 			}
 		}
 	}
-	
+
 	@EventHandler
 	public void onKeepAlive(UpdateEvent event) {
 		if (event.getType() != UpdateType.SECOND)
 			return;
-		if(BukkitMain.getPlugin().getClient().keepAlive >= 30) {
+		if (BukkitMain.getPlugin().getClient().keepAlive >= 30) {
 			BukkitMain.getPlugin().getClient().sendPacket(new CPacketKeepAlive());
 		}
 		--BukkitMain.getPlugin().getClient().keepAlive;

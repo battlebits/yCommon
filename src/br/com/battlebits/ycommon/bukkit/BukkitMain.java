@@ -31,7 +31,6 @@ import br.com.battlebits.ycommon.common.enums.BattleInstance;
 import br.com.battlebits.ycommon.common.enums.ServerType;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketServerNameRequest;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketTranslationsRequest;
-import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
 
 public class BukkitMain extends JavaPlugin {
@@ -51,7 +50,7 @@ public class BukkitMain extends JavaPlugin {
 	private MenuTranslationInjector menuTranslationInjector;
 
 	private BukkitClient socketClient;
-	
+
 	private boolean restart;
 
 	{
@@ -90,7 +89,7 @@ public class BukkitMain extends JavaPlugin {
 		}
 
 		socketClient.sendPacket(new CPacketServerNameRequest(getServer().getIp() + ":" + getServer().getPort()));
-		
+
 		registerCommonManagement();
 		enableCommonManagement();
 		registerListeners();
@@ -141,16 +140,20 @@ public class BukkitMain extends JavaPlugin {
 	}
 
 	public void broadcastMessage(String messageId) {
+		broadcastMessage(null, messageId);
+	}
+
+	public void broadcastMessage(String tagPrefix, String messageId) {
 		BattlePlayer player = null;
 		for (Player p : getServer().getOnlinePlayers()) {
 			player = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
-			Translate.getTranslation(player.getLanguage(), messageId);
+			player.sendMessage(tagPrefix, messageId);
 		}
 		player = null;
 	}
 
 	public BukkitClient getClient() {
-		if(socketClient.socket.isClosed())
+		if (socketClient.socket.isClosed())
 			try {
 				Socket socket = new Socket(CommonServer.ADDRESS, CommonServer.PORT);
 				socketClient = new BukkitClient(socket);
