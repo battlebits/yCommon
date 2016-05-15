@@ -174,7 +174,7 @@ public class BungeePacketHandler extends CommonHandler {
 	@Override
 	public void handleUpdateGameStatus(CPacketUpdateGameStatus packet) {
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(packet.getUuid());
-		player.getGameStatus().getMinigameStatus().put(packet.getGameType(), packet.getJson());
+		player.getGameStatus().updateMinigame(packet.getGameType(), packet.getJson());
 		player = null;
 	}
 
@@ -235,7 +235,7 @@ public class BungeePacketHandler extends CommonHandler {
 	public void handleCommandRun(CPacketCommandRun packet) throws Exception {
 		BungeeMain.getPlugin().getProxy().getPluginManager().dispatchCommand(BungeeMain.getPlugin().getProxy().getConsole(), packet.getCommand());
 	}
-	
+
 	@Override
 	public void handlerKeepAlive(CPacketKeepAlive packet) throws Exception {
 		sender.sendPacket(new CPacketKeepAlive());
