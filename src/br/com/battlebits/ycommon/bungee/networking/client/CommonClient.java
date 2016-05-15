@@ -49,7 +49,7 @@ public abstract class CommonClient {
 		inputHandler.stopThread();
 		outputHandler.stopThread();
 		CommonServer.disconnectClient(this);
-		System.out.println("Cliente desconectado");
+		System.out.println("Cliente desconectado: " + serverIp);
 	}
 
 	public void setServerIp(String serverIp) {

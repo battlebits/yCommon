@@ -157,6 +157,7 @@ public class BukkitMain extends JavaPlugin {
 			try {
 				Socket socket = new Socket(CommonServer.ADDRESS, CommonServer.PORT);
 				socketClient = new BukkitClient(socket);
+				socketClient.sendPacket(new CPacketServerNameRequest(getServer().getIp() + ":" + getServer().getPort()));
 			} catch (Exception e1) {
 				e1.printStackTrace();
 				getServer().shutdown();
