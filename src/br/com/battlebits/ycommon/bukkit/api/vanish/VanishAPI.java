@@ -13,11 +13,7 @@ import br.com.battlebits.ycommon.common.permissions.enums.Group;
 public class VanishAPI {
 	private HashMap<UUID, Group> vanishedToGroup;
 
-	private static VanishAPI instance;
-
-	{
-		instance = new VanishAPI();
-	}
+	private final static VanishAPI instance = new VanishAPI();
 
 	public VanishAPI() {
 		vanishedToGroup = new HashMap<>();
@@ -73,6 +69,10 @@ public class VanishAPI {
 
 	public void showPlayer(Player player) {
 		setPlayerVanishToGroup(player, Group.NORMAL);
+	}
+
+	public void removeVanish(Player p) {
+		vanishedToGroup.remove(p.getUniqueId());
 	}
 
 	public static VanishAPI getInstance() {

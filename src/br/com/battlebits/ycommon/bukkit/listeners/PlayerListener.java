@@ -9,8 +9,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
+import br.com.battlebits.ycommon.bukkit.api.admin.AdminMode;
 import br.com.battlebits.ycommon.bukkit.api.vanish.VanishAPI;
 import br.com.battlebits.ycommon.bukkit.event.update.UpdateEvent;
 import br.com.battlebits.ycommon.bukkit.event.update.UpdateEvent.UpdateType;
@@ -38,6 +40,12 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onJoin(PlayerJoinEvent event) {
 		VanishAPI.getInstance().updateVanishToPlayer(event.getPlayer());
+	}
+
+	@EventHandler
+	public void onQuit(PlayerQuitEvent event) {
+		AdminMode.getInstance().removeAdmin(event.getPlayer());
+		VanishAPI.getInstance().removeVanish(event.getPlayer());
 	}
 
 	@EventHandler

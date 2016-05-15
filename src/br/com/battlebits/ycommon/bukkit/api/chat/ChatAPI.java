@@ -3,11 +3,7 @@ package br.com.battlebits.ycommon.bukkit.api.chat;
 public class ChatAPI {
 
 	private ChatState chatState = ChatState.ENABLED;
-	private static ChatAPI instance;
-
-	{
-		instance = new ChatAPI();
-	}
+	private static final ChatAPI instance = new ChatAPI();
 
 	public static ChatAPI getInstance() {
 		return instance;

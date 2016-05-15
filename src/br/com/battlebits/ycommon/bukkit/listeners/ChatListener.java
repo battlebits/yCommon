@@ -43,7 +43,7 @@ public class ChatListener implements Listener {
 			break;
 		}
 		if (event.isCancelled()) {
-			player.sendMessage("command-chat-prefix", "command-chat-can-talk");
+			player.sendMessage("command-chat-prefix", "command-chat-cant-talk");
 		}
 		p = null;
 		player = null;

@@ -36,6 +36,7 @@ public class AdminCommand extends CommandClass {
 		if (args.isPlayer()) {
 			Player p = args.getPlayer();
 			VanishAPI.getInstance().showPlayer(p);
+			BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId()).sendMessage("command-vanish-prefix", "command-vanish-visible-all");
 		}
 	}
 
@@ -47,7 +48,7 @@ public class AdminCommand extends CommandClass {
 			Group group = Group.NORMAL;
 			if (args.getArgs().length > 0) {
 				try {
-					group = Group.valueOf(args.getArgs()[0]);
+					group = Group.valueOf(args.getArgs()[0].toUpperCase());
 				} catch (Exception e) {
 					bP.sendMessage("command-vanish-prefix", "command-vanish-rank-not-exist");
 					return;
@@ -65,7 +66,7 @@ public class AdminCommand extends CommandClass {
 			VanishAPI.getInstance().setPlayerVanishToGroup(p, group);
 			HashMap<String, String> map = new HashMap<>();
 			map.put("%invisible%", group.name());
-			bP.sendMessage("command-vanish-prefix", "command-vanish-success", map);
+			bP.sendMessage("command-vanish-prefix", "command-vanish-invisible", map);
 		}
 	}
 
@@ -76,7 +77,7 @@ public class AdminCommand extends CommandClass {
 			BattlePlayer bP = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
 			if (args.getArgs().length == 0) {
 				HashMap<String, String> map = new HashMap<>();
-				map.put("%label%", args.getLabel());
+				map.put("%command%", args.getLabel());
 				bP.sendMessage("command-inventorysee-prefix", "command-inventorysee-usage", map);
 			} else {
 				Player t = Bukkit.getPlayer(args.getArgs()[0]);
@@ -99,14 +100,14 @@ public class AdminCommand extends CommandClass {
 			if (args.getArgs().length == 1) {
 				if (args.getArgs()[0].equalsIgnoreCase("on")) {
 					if (ChatAPI.getInstance().getChatState() == ChatState.ENABLED) {
-						bP.sendMessage("command-chat-prefix", "command-chat-alread-enabled");
+						bP.sendMessage("command-chat-prefix", "command-chat-already-enabled");
 						return;
 					}
 					ChatAPI.getInstance().setChatState(ChatState.ENABLED);
 					BukkitMain.getPlugin().broadcastMessage("command-chat-prefix", "command-chat-enabled");
 				} else if (args.getArgs()[0].equalsIgnoreCase("off")) {
 					if (ChatAPI.getInstance().getChatState() == ChatState.YOUTUBER) {
-						bP.sendMessage("command-chat-prefix", "command-chat-disabled");
+						bP.sendMessage("command-chat-prefix", "command-chat-already-disabled");
 						return;
 					}
 					ChatAPI.getInstance().setChatState(ChatState.YOUTUBER);
@@ -120,7 +121,7 @@ public class AdminCommand extends CommandClass {
 		}
 	}
 
-	@Command(name = "clearchat", aliases = { "limparchat" }, groupToUse = Group.TRIAL, noPermMessageId = "command-clearchat-no-access")
+	@Command(name = "clearchat", aliases = { "limparchat" }, groupToUse = Group.TRIAL, noPermMessageId = "command-chat-no-access")
 	public void clearchat(CommandArgs args) {
 		if (args.isPlayer()) {
 			HashMap<String, String> map = new HashMap<>();
@@ -128,7 +129,7 @@ public class AdminCommand extends CommandClass {
 			for (Player p : Bukkit.getOnlinePlayers()) {
 				for (int i = 0; i < 100; i++)
 					p.sendMessage("");
-				BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId()).sendMessage("command-clearchat-prefix", "command-clearchat-success", map);
+				BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId()).sendMessage("command-chat-prefix", "command-chat-success", map);
 			}
 		}
 	}

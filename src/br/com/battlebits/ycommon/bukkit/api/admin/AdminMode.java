@@ -14,11 +14,7 @@ import br.com.battlebits.ycommon.common.permissions.enums.Group;
 
 public class AdminMode {
 	private ArrayList<Player> admin;
-	private static AdminMode instance;
-
-	{
-		instance = new AdminMode();
-	}
+	private static final AdminMode instance = new AdminMode();
 
 	public AdminMode() {
 		admin = new ArrayList<Player>();
@@ -36,14 +32,14 @@ public class AdminMode {
 		Group group = VanishAPI.getInstance().hidePlayer(p);
 		Map<String, String> map = new HashMap<>();
 		map.put("%invisible%", group.toString());
-		player.sendMessage("command-admin-prefix", "command-admin-enable");
+		player.sendMessage("command-admin-prefix", "command-admin-enabled");
 		player.sendMessage("command-vanish-prefix", "command-vanish-invisible", map);
 	}
 
 	public void setPlayer(Player p) {
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
 		if (admin.contains(p)) {
-			player.sendMessage("command-admin-disabled");
+			player.sendMessage("command-admin-prefix", "command-admin-disabled");
 		}
 		player.sendMessage("command-vanish-prefix", "command-vanish-visible-all");
 		admin.remove(p);
@@ -53,6 +49,10 @@ public class AdminMode {
 
 	public boolean isAdmin(Player p) {
 		return admin.contains(p);
+	}
+
+	public int playersInAdmin() {
+		return admin.size();
 	}
 
 	public void removeAdmin(Player p) {

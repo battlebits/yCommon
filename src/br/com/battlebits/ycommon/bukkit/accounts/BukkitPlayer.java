@@ -166,9 +166,10 @@ public class BukkitPlayer extends BattlePlayer {
 	public void sendMessage(String tagId, String translateId, Map<String, String> replaces) {
 		String tag = tagId != null ? Translate.getTranslation(getLanguage(), tagId) + " " : "";
 		String message = Translate.getTranslation(getLanguage(), translateId);
-		for (Entry<String, String> entry : replaces.entrySet()) {
-			message = message.replace(entry.getKey(), entry.getValue());
-		}
+		if (replaces != null)
+			for (Entry<String, String> entry : replaces.entrySet()) {
+				message = message.replace(entry.getKey(), entry.getValue());
+			}
 		getBukkitPlayer().sendMessage(tag + message);
 	}
 
