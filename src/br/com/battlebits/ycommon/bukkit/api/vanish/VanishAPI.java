@@ -30,6 +30,8 @@ public class VanishAPI {
 			break;
 		}
 		for (Player online : Bukkit.getOnlinePlayers()) {
+			if (online.getUniqueId().equals(player.getUniqueId()))
+				continue;
 			BattlePlayer onlineP = BattlebitsAPI.getAccountCommon().getBattlePlayer(online.getUniqueId());
 			if (!onlineP.hasGroupPermission(group)) {
 				if (!online.canSee(player))
@@ -46,12 +48,15 @@ public class VanishAPI {
 	public void updateVanishToPlayer(Player player) {
 		BattlePlayer bP = BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId());
 		for (Player online : Bukkit.getOnlinePlayers()) {
-			Group group = vanishedToGroup.get(online);
+			if (online.getUniqueId().equals(player.getUniqueId()))
+				continue;
+			Group group = vanishedToGroup.get(online.getUniqueId());
 			if (group != null) {
 				if (!bP.hasGroupPermission(group)) {
-					if (player.canSee(online)) {
-						player.hidePlayer(online);
-					}
+					if (!player.canSee(online))
+						continue;
+					player.hidePlayer(online);
+					continue;
 				}
 			}
 			if (player.canSee(online))
@@ -62,9 +67,8 @@ public class VanishAPI {
 
 	public Group hidePlayer(Player player) {
 		BattlePlayer bP = BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId());
-		Group group = Group.values()[bP.getServerGroup().ordinal() - 1];
-		setPlayerVanishToGroup(player, group);
-		return group;
+		setPlayerVanishToGroup(player, bP.getServerGroup());
+		return Group.values()[bP.getServerGroup().ordinal() - 1];
 	}
 
 	public void showPlayer(Player player) {

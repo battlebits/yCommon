@@ -31,6 +31,14 @@ public class AdminCommand extends CommandClass {
 		}
 	}
 
+	@Command(name = "updatevanish", groupToUse = Group.TRIAL, noPermMessageId = "command-admin-no-access")
+	public void updatevanish(CommandArgs args) {
+		if (args.isPlayer()) {
+			Player p = args.getPlayer();
+			VanishAPI.getInstance().updateVanishToPlayer(p);
+		}
+	}
+
 	@Command(name = "visible", aliases = { "vis", "visivel" }, groupToUse = Group.TRIAL, noPermMessageId = "command-vanish-no-access")
 	public void visible(CommandArgs args) {
 		if (args.isPlayer()) {
@@ -65,7 +73,7 @@ public class AdminCommand extends CommandClass {
 			}
 			VanishAPI.getInstance().setPlayerVanishToGroup(p, group);
 			HashMap<String, String> map = new HashMap<>();
-			map.put("%invisible%", group.name());
+			map.put("%invisible%", group.toString());
 			bP.sendMessage("command-vanish-prefix", "command-vanish-invisible", map);
 		}
 	}
