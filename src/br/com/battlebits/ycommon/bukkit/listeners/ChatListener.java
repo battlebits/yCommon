@@ -19,6 +19,8 @@ import br.com.battlebits.ycommon.common.permissions.enums.Group;
 
 public class ChatListener implements Listener {
 
+	//REGEX: #\w\w+
+	
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onChatEnabled(AsyncPlayerChatEvent event) {
 		Player p = event.getPlayer();

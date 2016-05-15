@@ -1,5 +1,6 @@
 package br.com.battlebits.ycommon.common.manager;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashMap;
@@ -59,7 +60,11 @@ public class AccountCommon {
 			return;
 		String json = BattlebitsAPI.getGson().toJson(player);
 		try {
-			BungeeMain.getPlugin().getConnection().update("INSERT INTO `account`(`uuid`, `json`) VALUES ('" + player.getUuid().toString().replace("-", "") + "','" + json + "') ON DUPLICATE KEY UPDATE `json` ='" + json + "';");
+			PreparedStatement stmt = BungeeMain.getPlugin().getConnection().prepareStatment("INSERT INTO `account`(`uuid`, `json`) VALUES (?, ?) ON DUPLICATE KEY UPDATE `json` = ?;");
+			stmt.setString(1, player.getUuid().toString().replace("-", ""));
+			stmt.setString(2, json);
+			stmt.setString(3, json);
+			stmt.executeUpdate();
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}

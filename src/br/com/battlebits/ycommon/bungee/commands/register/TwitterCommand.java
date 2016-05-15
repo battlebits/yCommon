@@ -24,6 +24,10 @@ public class TwitterCommand extends CommandClass {
 			language = BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getLanguage();
 		}
 		String[] args = cmdArgs.getArgs();
+		if(args.length <= 0) {
+			cmdArgs.getSender().sendMessage(TextComponent.fromLegacyText(Translate.getTranslation(language, "command-broadcast-usage").replace("%command%", cmdArgs.getLabel())));
+			return;
+		}
 		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < args.length; i++) {
 			String espaco = " ";

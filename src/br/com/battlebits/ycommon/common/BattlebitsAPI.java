@@ -91,11 +91,10 @@ public class BattlebitsAPI {
 		return premiumChecker.isPremium(username.toLowerCase());
 	}
 
-
 	public static String getNammeOf(UUID uuid) {
 		return nameFetcher.getUsername(uuid);
 	}
-	
+
 	public static void setDefaultLanguange(Language language) {
 		defaultLanguage = language;
 	}
