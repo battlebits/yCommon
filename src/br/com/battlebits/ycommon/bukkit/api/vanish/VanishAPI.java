@@ -64,9 +64,11 @@ public class VanishAPI {
 		}
 	}
 
-	public void hidePlayer(Player player) {
+	public Group hidePlayer(Player player) {
 		BattlePlayer bP = BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId());
-		setPlayerVanishToGroup(player, bP.getServerGroup());
+		Group group = Group.values()[bP.getServerGroup().ordinal() - 1];
+		setPlayerVanishToGroup(player, group);
+		return group;
 	}
 
 	public void showPlayer(Player player) {
