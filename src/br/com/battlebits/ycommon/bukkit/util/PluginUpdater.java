@@ -37,6 +37,7 @@ public class PluginUpdater {
 		try {
 			URL url = new URL(downloadURL + pluginName + "/version.txt");
 			URLConnection conn = url.openConnection();
+			conn.setConnectTimeout(100);
 			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 			String inputLine;
 			while ((inputLine = br.readLine()) != null) {
