@@ -29,7 +29,8 @@ import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.enums.BattleInstance;
 import br.com.battlebits.ycommon.common.enums.ServerType;
-import br.com.battlebits.ycommon.common.networking.packets.CPacketServerNameRequest;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketServerRecall;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketServerStart;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketTranslationsRequest;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
 
@@ -88,7 +89,7 @@ public class BukkitMain extends JavaPlugin {
 			e.printStackTrace();
 		}
 
-		socketClient.sendPacket(new CPacketServerNameRequest(getServer().getIp() + ":" + getServer().getPort()));
+		socketClient.sendPacket(new CPacketServerStart(getServer().getIp() + ":" + getServer().getPort(), getServer().getMaxPlayers()));
 
 		registerCommonManagement();
 		enableCommonManagement();
@@ -112,7 +113,7 @@ public class BukkitMain extends JavaPlugin {
 		accountManager = null;
 		permissionManager = null;
 		tagManager = null;
-		socketClient.disconnect();
+		socketClient.disconnect(true);
 	}
 
 	private void registerListeners() {
@@ -157,7 +158,7 @@ public class BukkitMain extends JavaPlugin {
 			try {
 				Socket socket = new Socket(CommonServer.ADDRESS, CommonServer.PORT);
 				socketClient = new BukkitClient(socket);
-				socketClient.sendPacket(new CPacketServerNameRequest(getServer().getIp() + ":" + getServer().getPort()));
+				socketClient.sendPacket(new CPacketServerRecall(getServer().getIp() + ":" + getServer().getPort(), getServer().getOnlinePlayers().size(), getServer().getMaxPlayers()));
 			} catch (Exception e1) {
 				e1.printStackTrace();
 				getServer().shutdown();

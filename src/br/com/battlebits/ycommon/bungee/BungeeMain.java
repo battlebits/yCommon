@@ -16,6 +16,7 @@ import br.com.battlebits.ycommon.bungee.listeners.PlayerListener;
 import br.com.battlebits.ycommon.bungee.listeners.QuitListener;
 import br.com.battlebits.ycommon.bungee.managers.AccountManager;
 import br.com.battlebits.ycommon.bungee.managers.BanManager;
+import br.com.battlebits.ycommon.bungee.managers.ServerManager;
 import br.com.battlebits.ycommon.bungee.networking.CommonServer;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.connection.backend.MySQLBackend;
@@ -46,9 +47,10 @@ public class BungeeMain extends Plugin {
 	private CommonServer commonServer;
 	private AccountManager accountManager;
 	private BanManager banManager;
+	private ServerManager serverManager;
 	private BungeeCommandFramework commandFramework;
 	private BungeeCommandLoader commandLoader;
-
+	
 	{
 		plugin = this;
 	}
@@ -63,6 +65,7 @@ public class BungeeMain extends Plugin {
 		// loadConfiguration();
 		banManager = new BanManager();
 		accountManager = new AccountManager();
+		serverManager = new ServerManager(this);
 		try {
 			getProxy().getScheduler().runAsync(this, commonServer = new CommonServer());
 		} catch (Exception e) {
@@ -175,6 +178,10 @@ public class BungeeMain extends Plugin {
 	public BanManager getBanManager() {
 		return banManager;
 	}
+	
+	public ServerManager getServerManager() {
+		return serverManager;
+	}
 
 	public BungeeCommandLoader getCommandLoader() {
 		return commandLoader;
@@ -192,8 +199,8 @@ public class BungeeMain extends Plugin {
 		return ProxyServer.getInstance().getServers().containsKey(paramString);
 	}
 
-	public void addBungee(final String serverHostName, String ipAddress, int port, String motd) {
-		final ServerInfo localServerInfo = proxy.constructServerInfo(serverHostName, new InetSocketAddress(ipAddress, port), motd, false);
+	public void addBungee(final String serverHostName, String ipAddress, int port) {
+		final ServerInfo localServerInfo = proxy.constructServerInfo(serverHostName, new InetSocketAddress(ipAddress, port), "Restarting", false);
 		if (!serverExists(serverHostName)) {
 			BattlebitsAPI.getLogger().info("Server " + serverHostName + " adicionado ao Bungee.");
 			proxy.getServers().put(serverHostName, localServerInfo);
@@ -208,7 +215,7 @@ public class BungeeMain extends Plugin {
 			this.proxy.getServers().remove(paramString);
 			return true;
 		}
-		BattlebitsAPI.getLogger().log(Level.WARNING, "&cTendtado remover servidor \"" + paramString + "\" mas ele nao existe!");
+		BattlebitsAPI.getLogger().log(Level.WARNING, "&cTentado remover servidor \"" + paramString + "\" mas ele nao existe!");
 		return false;
 	}
 
