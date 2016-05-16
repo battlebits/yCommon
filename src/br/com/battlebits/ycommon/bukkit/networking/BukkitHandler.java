@@ -25,6 +25,7 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveFriend;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveFriendRequest;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveGroup;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveRank;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketServerInfo;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketServerNameLoad;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketServerRecall;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketServerStart;
@@ -217,6 +218,11 @@ public class BukkitHandler extends CommonHandler {
 		BukkitMain.setServerName(packet.getServerHostName());
 		BattlebitsAPI.getLogger().info("SERVER HOST NAME > " + packet.getServerHostName());
 		BattlebitsAPI.getLogger().info("SERVER TYPE > " + BukkitMain.getServerType());
+	}
+
+	@Override
+	public void handleServerInfo(CPacketServerInfo packet) throws Exception {
+		// PROVAVEL QUE NUNCA VAI TER
 	}
 
 	@Override
