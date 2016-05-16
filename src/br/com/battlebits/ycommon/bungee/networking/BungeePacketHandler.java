@@ -25,6 +25,7 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveFriend;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveFriendRequest;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveGroup;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveRank;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketServerInfo;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketServerNameLoad;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketServerRecall;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketServerStart;
@@ -222,7 +223,7 @@ public class BungeePacketHandler extends CommonHandler {
 		sender.registerClient();
 		sender.sendPacket(new CPacketServerNameLoad(serverId));
 
-		BungeeMain.getPlugin().getServerManager().addActiveServer(packet.getServerAddress(), sender, packet.getMaxPlayers());
+		BungeeMain.getPlugin().getServerManager().addActiveServer(packet.getServerAddress(), serverId, packet.getMaxPlayers());
 
 	}
 
@@ -233,7 +234,12 @@ public class BungeePacketHandler extends CommonHandler {
 		sender.setServerIp(serverId);
 		sender.registerClient();
 
-		BungeeMain.getPlugin().getServerManager().updateActiveServer(packet.getServerAddress(), sender, packet.getOnlinePlayers(), packet.getMaxPlayers());
+		BungeeMain.getPlugin().getServerManager().updateActiveServer(serverId, packet.getOnlinePlayers(), packet.getMaxPlayers(), true);
+	}
+
+	@Override
+	public void handleServerInfo(CPacketServerInfo packet) throws Exception {
+		BungeeMain.getPlugin().getServerManager().updateActiveServer(sender.getServerIp(), packet.getOnlinePlayers(), packet.getMaxPlayers(), packet.canJoin());
 	}
 
 	@Override

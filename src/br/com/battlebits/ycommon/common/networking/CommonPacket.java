@@ -26,6 +26,7 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveFriend;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveFriendRequest;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveGroup;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveRank;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketServerInfo;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketServerNameLoad;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketServerRecall;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketServerStart;
@@ -49,17 +50,15 @@ public abstract class CommonPacket {
 		register((byte) 0x02, CPacketServerStop.class);
 		register((byte) 0x03, CPacketServerRecall.class);
 		register((byte) 0x04, CPacketServerNameLoad.class);
-		register((byte) 0x05, CPacketCommandRun.class);
+		register((byte) 0x05, CPacketServerInfo.class);
+		register((byte) 0x06, CPacketCommandRun.class);
+		register((byte) 0x07, CPacketTranslationsRequest.class);
+		register((byte) 0x08, CPacketTranslationsLoad.class);
 		
-		/** 0x0X: Account **/
-		register((byte) 0x06, CPacketAccountRequest.class);
-		register((byte) 0x07, CPacketAccountLoad.class);
-		register((byte) 0x08, CPacketAccountConfiguration.class);
-	
-		
-		/** 0x1X: Translations **/
-		register((byte) 0x10, CPacketTranslationsRequest.class);
-		register((byte) 0x11, CPacketTranslationsLoad.class);
+		/** 0x1X: Account **/
+		register((byte) 0x10, CPacketAccountRequest.class);
+		register((byte) 0x11, CPacketAccountLoad.class);
+		register((byte) 0x12, CPacketAccountConfiguration.class);
 
 		/** 0x2X: Change Profile **/
 		register((byte) 0x20, CPacketChangeLanguage.class);

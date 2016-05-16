@@ -21,6 +21,7 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveFriend;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveFriendRequest;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveGroup;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveRank;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketServerInfo;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketServerNameLoad;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketServerRecall;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketServerStart;
@@ -82,12 +83,14 @@ public abstract class CommonHandler {
 	public abstract void handleChangeTag(CPacketChangeTag packet) throws Exception;
 
 	public abstract void handleServerStart(CPacketServerStart packet) throws Exception;
-	
+
 	public abstract void handleServerRecall(CPacketServerRecall packet) throws Exception;
-	
+
 	public abstract void handleServerStop(CPacketServerStop packet) throws Exception;
 
 	public abstract void handleServerLoad(CPacketServerNameLoad packet) throws Exception;
+
+	public abstract void handleServerInfo(CPacketServerInfo packet) throws Exception;
 
 	public abstract void handleCommandRun(CPacketCommandRun packet) throws Exception;
 

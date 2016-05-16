@@ -8,7 +8,7 @@ import java.util.Map;
 import br.com.battlebits.ycommon.bungee.BungeeMain;
 import br.com.battlebits.ycommon.bungee.loadbalancer.BaseBalancer;
 import br.com.battlebits.ycommon.bungee.loadbalancer.LeastConnection;
-import br.com.battlebits.ycommon.bungee.networking.BungeeClient;
+import br.com.battlebits.ycommon.bungee.loadbalancer.MostConnection;
 import br.com.battlebits.ycommon.bungee.servers.BattleServer;
 import br.com.battlebits.ycommon.bungee.servers.HungerGamesServer;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
@@ -20,16 +20,19 @@ public class ServerManager {
 
 	private Map<String, BattleServer> activeServers;
 
+	private BaseBalancer<BattleServer> lobbyBalancer;
+
 	private BaseBalancer<BattleServer> fullIronBalancer;
-	
+
 	private BaseBalancer<BattleServer> peladoBalancer;
-	
+
 	private BaseBalancer<BattleServer> hgBalancer;
-	
+
 	public ServerManager(BungeeMain main) {
+		lobbyBalancer = new LeastConnection<>();
 		fullIronBalancer = new LeastConnection<>();
 		peladoBalancer = new LeastConnection<>();
-		hgBalancer = new LeastConnection<>();
+		hgBalancer = new MostConnection<>();
 		battlebitsServers = new HashMap<>();
 		activeServers = new HashMap<>();
 		loadServers(main.getConnection());
@@ -62,20 +65,23 @@ public class ServerManager {
 		return battlebitsServers.containsKey(serverAddress) ? battlebitsServers.get(serverAddress) : serverAddress;
 	}
 
-	public void addActiveServer(String str, BungeeClient client, int maxPlayers) {
-		BungeeMain.getPlugin().addBungee(client.getServerIp(), str.split(":")[0], Integer.valueOf(str.split(":")[1]));
-		updateActiveServer(client.getServerIp(), client, 0, maxPlayers);
+	public void addActiveServer(String serverAddress, String serverIp, int maxPlayers) {
+		BungeeMain.getPlugin().addBungee(serverIp, serverAddress.split(":")[0], Integer.valueOf(serverAddress.split(":")[1]));
+		updateActiveServer(serverIp, 0, maxPlayers, true);
 	}
 
-	public void updateActiveServer(String str, BungeeClient client, int onlinePlayers, int maxPlayers) {
-		BattleServer server = null;
-		if(str.endsWith("battle-hg.com")) {
-			server = new HungerGamesServer(client, BungeeMain.getPlugin().getProxy().getServerInfo(str), onlinePlayers, true);
-		} else {
-			server = new BattleServer(client, BungeeMain.getPlugin().getProxy().getServerInfo(str), onlinePlayers, maxPlayers, true);
+	public void updateActiveServer(String serverId, int onlinePlayers, int maxPlayers, boolean canJoin) {
+		BattleServer server = activeServers.get(serverId);
+		if (server == null) {
+			if (serverId.endsWith("battle-hg.com")) {
+				server = new HungerGamesServer(onlinePlayers, true);
+			} else {
+				server = new BattleServer(onlinePlayers, maxPlayers, true);
+			}
+			activeServers.put(serverId, server);
 		}
-		updateActiveServer(str, server);
-		activeServers.put(str, server);
+		server.setOnlinePlayers(onlinePlayers);
+		server.setJoinEnabled(canJoin);
 	}
 
 	public BattleServer getServer(String str) {
@@ -85,15 +91,15 @@ public class ServerManager {
 	public void removeActiveServer(String str) {
 		activeServers.remove(str);
 	}
-	
-	
-	
-	public void updateActiveServer(String serverId, BattleServer server) {
-		if(serverId.endsWith("fulliron.battlecraft.com.br")) {
+
+	public void updateBalancers(String serverId, BattleServer server) {
+		if (serverId.endsWith("lobby.battlebits.com.br")) {
+			lobbyBalancer.add(serverId, server);
+		} else if (serverId.endsWith("fulliron.battlecraft.com.br")) {
 			fullIronBalancer.add(serverId, server);
-		} else if(serverId.endsWith("simulator.battlecraft.com.br")) {
+		} else if (serverId.endsWith("simulator.battlecraft.com.br")) {
 			peladoBalancer.add(serverId, server);
-		} else if(serverId.endsWith("battle-hg.com")) {
+		} else if (serverId.endsWith("battle-hg.com")) {
 			hgBalancer.add(serverId, server);
 		}
 	}
