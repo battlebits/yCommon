@@ -32,6 +32,7 @@ import br.com.battlebits.ycommon.common.enums.ServerType;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketServerInfo;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketServerRecall;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketServerStart;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketServerStop;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketTranslationsRequest;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
 
@@ -55,7 +56,7 @@ public class BukkitMain extends JavaPlugin {
 
 	private boolean restart;
 
-	private boolean canJoin;
+	private boolean canJoin = true;
 
 	{
 		plugin = this;
@@ -116,6 +117,7 @@ public class BukkitMain extends JavaPlugin {
 		accountManager = null;
 		permissionManager = null;
 		tagManager = null;
+		getClient().sendPacket(new CPacketServerStop());
 		socketClient.disconnect(true);
 	}
 

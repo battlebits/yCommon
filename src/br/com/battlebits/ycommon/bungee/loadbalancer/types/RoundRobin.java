@@ -1,4 +1,7 @@
-package br.com.battlebits.ycommon.bungee.loadbalancer;
+package br.com.battlebits.ycommon.bungee.loadbalancer.types;
+
+import br.com.battlebits.ycommon.bungee.loadbalancer.BaseBalancer;
+import br.com.battlebits.ycommon.bungee.loadbalancer.elements.LoadBalancerObject;
 
 public class RoundRobin<T extends LoadBalancerObject> extends BaseBalancer<T> {
 

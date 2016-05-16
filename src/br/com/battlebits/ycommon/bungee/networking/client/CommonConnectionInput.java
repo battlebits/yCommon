@@ -33,7 +33,9 @@ public class CommonConnectionInput extends Thread {
 				}
 
 			} catch (Exception e) {
-				e.printStackTrace();
+				if (BattlebitsAPI.debugModeEnabled()) {
+					e.printStackTrace();
+				}
 				CLIENT.disconnect(true);
 			}
 		}

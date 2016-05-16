@@ -1,4 +1,4 @@
-package br.com.battlebits.ycommon.bungee.loadbalancer;
+package br.com.battlebits.ycommon.bungee.loadbalancer.elements;
 
 public interface NumberConnection {
 

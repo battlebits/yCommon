@@ -7,8 +7,8 @@ import java.util.Map;
 
 import br.com.battlebits.ycommon.bungee.BungeeMain;
 import br.com.battlebits.ycommon.bungee.loadbalancer.BaseBalancer;
-import br.com.battlebits.ycommon.bungee.loadbalancer.LeastConnection;
-import br.com.battlebits.ycommon.bungee.loadbalancer.MostConnection;
+import br.com.battlebits.ycommon.bungee.loadbalancer.types.LeastConnection;
+import br.com.battlebits.ycommon.bungee.loadbalancer.types.MostConnection;
 import br.com.battlebits.ycommon.bungee.servers.BattleServer;
 import br.com.battlebits.ycommon.bungee.servers.HungerGamesServer;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
@@ -21,7 +21,7 @@ public class ServerManager {
 	private BaseBalancer<BattleServer> lobbyBalancer;
 	private BaseBalancer<BattleServer> fullIronBalancer;
 	private BaseBalancer<BattleServer> peladoBalancer;
-	private BaseBalancer<BattleServer> hgBalancer;
+	private BaseBalancer<HungerGamesServer> hgBalancer;
 
 	private BungeeMain main;
 
@@ -81,7 +81,7 @@ public class ServerManager {
 		}
 		server.setOnlinePlayers(onlinePlayers);
 		server.setJoinEnabled(canJoin);
-		updateBalancers(serverId, server);
+		addToBalancers(serverId, server);
 	}
 
 	public BattleServer getServer(String str) {
@@ -89,10 +89,11 @@ public class ServerManager {
 	}
 
 	public void removeActiveServer(String str) {
+		removeFromBalancers(str);
 		activeServers.remove(str);
 	}
 
-	public void updateBalancers(String serverId, BattleServer server) {
+	public void addToBalancers(String serverId, BattleServer server) {
 		if (serverId.endsWith("lobby.battlebits.com.br")) {
 			lobbyBalancer.add(serverId, server);
 		} else if (serverId.endsWith("fulliron.battlecraft.com.br")) {
@@ -100,7 +101,19 @@ public class ServerManager {
 		} else if (serverId.endsWith("simulator.battlecraft.com.br")) {
 			peladoBalancer.add(serverId, server);
 		} else if (serverId.endsWith("battle-hg.com")) {
-			hgBalancer.add(serverId, server);
+			hgBalancer.add(serverId, (HungerGamesServer) server);
+		}
+	}
+
+	public void removeFromBalancers(String serverId) {
+		if (serverId.endsWith("lobby.battlebits.com.br")) {
+			lobbyBalancer.remove(serverId);
+		} else if (serverId.endsWith("fulliron.battlecraft.com.br")) {
+			fullIronBalancer.remove(serverId);
+		} else if (serverId.endsWith("simulator.battlecraft.com.br")) {
+			peladoBalancer.remove(serverId);
+		} else if (serverId.endsWith("battle-hg.com")) {
+			hgBalancer.remove(serverId);
 		}
 	}
 
@@ -108,7 +121,7 @@ public class ServerManager {
 		return fullIronBalancer;
 	}
 
-	public BaseBalancer<BattleServer> getHgBalancer() {
+	public BaseBalancer<HungerGamesServer> getHgBalancer() {
 		return hgBalancer;
 	}
 

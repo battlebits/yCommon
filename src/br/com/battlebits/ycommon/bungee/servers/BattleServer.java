@@ -1,8 +1,8 @@
 package br.com.battlebits.ycommon.bungee.servers;
 
 import br.com.battlebits.ycommon.bungee.BungeeMain;
-import br.com.battlebits.ycommon.bungee.loadbalancer.LoadBalancerObject;
-import br.com.battlebits.ycommon.bungee.loadbalancer.NumberConnection;
+import br.com.battlebits.ycommon.bungee.loadbalancer.elements.LoadBalancerObject;
+import br.com.battlebits.ycommon.bungee.loadbalancer.elements.NumberConnection;
 import br.com.battlebits.ycommon.common.enums.ServerType;
 import net.md_5.bungee.api.config.ServerInfo;
 

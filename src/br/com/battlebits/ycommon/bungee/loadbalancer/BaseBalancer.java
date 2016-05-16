@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import br.com.battlebits.ycommon.bungee.loadbalancer.elements.LoadBalancerObject;
+
 public abstract class BaseBalancer<T extends LoadBalancerObject> implements LoadBalancer<T> {
 
 	private Map<String, T> objects;
@@ -39,10 +41,15 @@ public abstract class BaseBalancer<T extends LoadBalancerObject> implements Load
 		update();
 	}
 
+	public List<T> getList() {
+		return nextObj;
+	}
+
 	public void update() {
 		if (nextObj != null)
 			nextObj.clear();
 		nextObj = new ArrayList<>();
 		nextObj.addAll(objects.values());
 	}
+
 }

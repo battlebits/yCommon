@@ -1,4 +1,8 @@
-package br.com.battlebits.ycommon.bungee.loadbalancer;
+package br.com.battlebits.ycommon.bungee.loadbalancer.types;
+
+import br.com.battlebits.ycommon.bungee.loadbalancer.BaseBalancer;
+import br.com.battlebits.ycommon.bungee.loadbalancer.elements.LoadBalancerObject;
+import br.com.battlebits.ycommon.bungee.loadbalancer.elements.NumberConnection;
 
 public class LeastConnection<T extends LoadBalancerObject & NumberConnection> extends BaseBalancer<T> {
 
@@ -14,7 +18,7 @@ public class LeastConnection<T extends LoadBalancerObject & NumberConnection> ex
 						obj = item;
 						continue;
 					}
-					if (obj.getActualNumber() > item.getActualNumber())
+					if (obj.getActualNumber() >= item.getActualNumber())
 						obj = item;
 				}
 		return obj;
