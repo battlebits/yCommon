@@ -73,14 +73,15 @@ public class ServerManager {
 		BattleServer server = activeServers.get(serverId);
 		if (server == null) {
 			if (serverId.endsWith("battle-hg.com")) {
-				server = new HungerGamesServer(onlinePlayers, true);
+				server = new HungerGamesServer(serverId, onlinePlayers, true);
 			} else {
-				server = new BattleServer(onlinePlayers, maxPlayers, true);
+				server = new BattleServer(serverId, onlinePlayers, maxPlayers, true);
 			}
 			activeServers.put(serverId, server);
 		}
 		server.setOnlinePlayers(onlinePlayers);
 		server.setJoinEnabled(canJoin);
+		updateBalancers(serverId, server);
 	}
 
 	public BattleServer getServer(String str) {
@@ -101,6 +102,22 @@ public class ServerManager {
 		} else if (serverId.endsWith("battle-hg.com")) {
 			hgBalancer.add(serverId, server);
 		}
+	}
+
+	public BaseBalancer<BattleServer> getFullIronBalancer() {
+		return fullIronBalancer;
+	}
+
+	public BaseBalancer<BattleServer> getHgBalancer() {
+		return hgBalancer;
+	}
+
+	public BaseBalancer<BattleServer> getLobbyBalancer() {
+		return lobbyBalancer;
+	}
+
+	public BaseBalancer<BattleServer> getPeladoBalancer() {
+		return peladoBalancer;
 	}
 
 }

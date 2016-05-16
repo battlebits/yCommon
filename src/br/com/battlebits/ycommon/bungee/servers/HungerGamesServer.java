@@ -5,8 +5,8 @@ public class HungerGamesServer extends BattleServer {
 	private int tempo;
 	private HungerGamesState state;
 
-	public HungerGamesServer(int onlinePlayers, boolean joinEnabled) {
-		super(onlinePlayers, 100, joinEnabled);
+	public HungerGamesServer(String serverId, int onlinePlayers, boolean joinEnabled) {
+		super(serverId, onlinePlayers, 100, joinEnabled);
 		this.state = HungerGamesState.WAITING;
 	}
 

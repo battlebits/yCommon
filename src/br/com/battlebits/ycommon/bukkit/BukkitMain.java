@@ -29,6 +29,7 @@ import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.enums.BattleInstance;
 import br.com.battlebits.ycommon.common.enums.ServerType;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketServerInfo;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketServerRecall;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketServerStart;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketTranslationsRequest;
@@ -53,6 +54,8 @@ public class BukkitMain extends JavaPlugin {
 	private BukkitClient socketClient;
 
 	private boolean restart;
+
+	private boolean canJoin;
 
 	{
 		plugin = this;
@@ -153,6 +156,10 @@ public class BukkitMain extends JavaPlugin {
 		player = null;
 	}
 
+	public void sendUpdate() {
+		getClient().sendPacket(new CPacketServerInfo(getServer().getOnlinePlayers().size(), getServer().getMaxPlayers(), canJoin));
+	}
+
 	public BukkitClient getClient() {
 		if (socketClient.socket.isClosed())
 			try {
@@ -193,6 +200,10 @@ public class BukkitMain extends JavaPlugin {
 
 	public static void setServerName(String serverName) {
 		SERVERNAME = serverName;
+	}
+
+	public void setCanJoin(boolean canJoin) {
+		this.canJoin = canJoin;
 	}
 
 	public static String getServerHostName() {

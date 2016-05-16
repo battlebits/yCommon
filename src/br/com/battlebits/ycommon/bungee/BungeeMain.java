@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import br.com.battlebits.ycommon.bungee.commands.BungeeCommandFramework;
 import br.com.battlebits.ycommon.bungee.commands.BungeeCommandLoader;
 import br.com.battlebits.ycommon.bungee.event.UpdateScheduler;
+import br.com.battlebits.ycommon.bungee.listeners.LoadBalancerListener;
 import br.com.battlebits.ycommon.bungee.listeners.LoginListener;
 import br.com.battlebits.ycommon.bungee.listeners.PlayerListener;
 import br.com.battlebits.ycommon.bungee.listeners.QuitListener;
@@ -50,7 +51,7 @@ public class BungeeMain extends Plugin {
 	private ServerManager serverManager;
 	private BungeeCommandFramework commandFramework;
 	private BungeeCommandLoader commandLoader;
-	
+
 	{
 		plugin = this;
 	}
@@ -65,7 +66,6 @@ public class BungeeMain extends Plugin {
 		// loadConfiguration();
 		banManager = new BanManager();
 		accountManager = new AccountManager();
-		serverManager = new ServerManager(this);
 		try {
 			getProxy().getScheduler().runAsync(this, commonServer = new CommonServer());
 		} catch (Exception e) {
@@ -84,6 +84,7 @@ public class BungeeMain extends Plugin {
 			e1.printStackTrace();
 		}
 		loadTranslations();
+		serverManager = new ServerManager(this);
 		getProxy().getScheduler().schedule(this, new UpdateScheduler(), 0, 50, TimeUnit.MILLISECONDS);
 		getProxy().registerChannel(BattlebitsAPI.getBungeeChannel());
 		loadListeners();
@@ -124,6 +125,7 @@ public class BungeeMain extends Plugin {
 	}
 
 	private void loadListeners() {
+		getProxy().getPluginManager().registerListener(this, new LoadBalancerListener(serverManager));
 		getProxy().getPluginManager().registerListener(this, new PlayerListener());
 		getProxy().getPluginManager().registerListener(this, new LoginListener());
 		getProxy().getPluginManager().registerListener(this, new QuitListener());
@@ -178,7 +180,7 @@ public class BungeeMain extends Plugin {
 	public BanManager getBanManager() {
 		return banManager;
 	}
-	
+
 	public ServerManager getServerManager() {
 		return serverManager;
 	}

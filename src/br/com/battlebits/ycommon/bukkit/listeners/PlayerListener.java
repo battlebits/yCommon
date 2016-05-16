@@ -42,6 +42,16 @@ public class PlayerListener implements Listener {
 		VanishAPI.getInstance().updateVanishToPlayer(event.getPlayer());
 	}
 
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onJoinUpdate(PlayerJoinEvent event) {
+		BukkitMain.getPlugin().sendUpdate();
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onQuitUpdate(PlayerQuitEvent event) {
+		BukkitMain.getPlugin().sendUpdate();
+	}
+
 	@EventHandler
 	public void onQuit(PlayerQuitEvent event) {
 		AdminMode.getInstance().removeAdmin(event.getPlayer());

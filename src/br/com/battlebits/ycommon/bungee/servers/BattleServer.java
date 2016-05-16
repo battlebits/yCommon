@@ -1,20 +1,22 @@
 package br.com.battlebits.ycommon.bungee.servers;
 
+import br.com.battlebits.ycommon.bungee.BungeeMain;
 import br.com.battlebits.ycommon.bungee.loadbalancer.LoadBalancerObject;
 import br.com.battlebits.ycommon.bungee.loadbalancer.NumberConnection;
 import br.com.battlebits.ycommon.common.enums.ServerType;
+import net.md_5.bungee.api.config.ServerInfo;
 
 public class BattleServer implements LoadBalancerObject, NumberConnection {
 
 	private String serverId;
-	
+
 	private int onlinePlayers;
 	private int maxPlayers;
 
 	private boolean joinEnabled;
 
-
-	public BattleServer(int onlinePlayers, int maxPlayers, boolean joinEnabled) {
+	public BattleServer(String serverId, int onlinePlayers, int maxPlayers, boolean joinEnabled) {
+		this.serverId = serverId;
 		this.onlinePlayers = onlinePlayers;
 		this.maxPlayers = maxPlayers;
 		this.joinEnabled = joinEnabled;
@@ -22,6 +24,10 @@ public class BattleServer implements LoadBalancerObject, NumberConnection {
 
 	public void setOnlinePlayers(int onlinePlayers) {
 		this.onlinePlayers = onlinePlayers;
+	}
+	
+	public String getServerId() {
+		return serverId;
 	}
 
 	public int getOnlinePlayers() {
@@ -35,13 +41,17 @@ public class BattleServer implements LoadBalancerObject, NumberConnection {
 	public boolean isFull() {
 		return onlinePlayers >= maxPlayers;
 	}
-	
+
 	public void setJoinEnabled(boolean joinEnabled) {
 		this.joinEnabled = joinEnabled;
 	}
 
 	public boolean isJoinEnabled() {
 		return joinEnabled;
+	}
+
+	public ServerInfo getServerInfo() {
+		return BungeeMain.getPlugin().getProxy().getServerInfo(serverId);
 	}
 
 	public ServerType getServerType() {
