@@ -64,7 +64,7 @@ public class CommonServer implements Runnable {
 
 	public static void registerClient(CommonClient client) {
 		if (serverClients.containsKey(client.getServerIp())) {
-			serverClients.get(client.getServerIp()).disconnect();
+			serverClients.get(client.getServerIp()).disconnect(false);
 		}
 		serverClients.put(client.getServerIp(), client);
 	}

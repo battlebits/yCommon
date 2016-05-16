@@ -47,7 +47,7 @@ public class CommonConnectionOutput extends Thread {
 				if (BattlebitsAPI.debugModeEnabled()) {
 					e.printStackTrace();
 				}
-				CLIENT.disconnect();
+				CLIENT.disconnect(true);
 			}
 		}
 	}

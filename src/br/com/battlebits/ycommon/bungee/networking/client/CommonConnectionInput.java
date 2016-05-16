@@ -34,7 +34,7 @@ public class CommonConnectionInput extends Thread {
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				CLIENT.disconnect();
+				CLIENT.disconnect(true);
 			}
 		}
 	}

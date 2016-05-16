@@ -22,7 +22,9 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveFriendRe
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveGroup;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveRank;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketServerNameLoad;
-import br.com.battlebits.ycommon.common.networking.packets.CPacketServerNameRequest;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketServerRecall;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketServerStart;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketServerStop;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketTranslationsLoad;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketTranslationsRequest;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketUpdateClan;
@@ -78,13 +80,17 @@ public abstract class CommonHandler {
 	public abstract void handleChangeLanguage(CPacketChangeLanguage packet) throws Exception;
 
 	public abstract void handleChangeTag(CPacketChangeTag packet) throws Exception;
+
+	public abstract void handleServerStart(CPacketServerStart packet) throws Exception;
 	
-	public abstract void handleServerRequest(CPacketServerNameRequest packet) throws Exception;
+	public abstract void handleServerRecall(CPacketServerRecall packet) throws Exception;
+	
+	public abstract void handleServerStop(CPacketServerStop packet) throws Exception;
 
 	public abstract void handleServerLoad(CPacketServerNameLoad packet) throws Exception;
-	
+
 	public abstract void handleCommandRun(CPacketCommandRun packet) throws Exception;
-	
+
 	public abstract void handlerKeepAlive(CPacketKeepAlive packet) throws Exception;
 
 }

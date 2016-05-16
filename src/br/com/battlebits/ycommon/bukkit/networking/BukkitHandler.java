@@ -26,7 +26,9 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveFriendRe
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveGroup;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveRank;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketServerNameLoad;
-import br.com.battlebits.ycommon.common.networking.packets.CPacketServerNameRequest;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketServerRecall;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketServerStart;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketServerStop;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketTranslationsLoad;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketTranslationsRequest;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketUpdateClan;
@@ -196,7 +198,17 @@ public class BukkitHandler extends CommonHandler {
 	}
 
 	@Override
-	public void handleServerRequest(CPacketServerNameRequest packet) throws Exception {
+	public void handleServerStart(CPacketServerStart packet) throws Exception {
+		// PROVAVEL QUE NUNCA VAI TER
+	}
+
+	@Override
+	public void handleServerRecall(CPacketServerRecall packet) throws Exception {
+		// PROVAVEL QUE NUNCA VAI TER
+	}
+
+	@Override
+	public void handleServerStop(CPacketServerStop packet) throws Exception {
 		// PROVAVEL QUE NUNCA VAI TER
 	}
 
@@ -214,8 +226,7 @@ public class BukkitHandler extends CommonHandler {
 
 	@Override
 	public void handlerKeepAlive(CPacketKeepAlive packet) throws Exception {
-		// TODO Auto-generated method stub
-
+		// NAO PRECISA
 	}
 
 }

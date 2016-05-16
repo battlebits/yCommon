@@ -27,7 +27,9 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveFriendRe
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveGroup;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveRank;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketServerNameLoad;
-import br.com.battlebits.ycommon.common.networking.packets.CPacketServerNameRequest;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketServerRecall;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketServerStart;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketServerStop;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketTranslationsLoad;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketTranslationsRequest;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketUpdateClan;
@@ -41,14 +43,20 @@ public abstract class CommonPacket {
 	private static final Map<Byte, Boolean> MAP_VALID = new HashMap<Byte, Boolean>();
 
 	static {
+		/** 0x0X Server **/
 		register((byte) 0x00, CPacketKeepAlive.class);
+		register((byte) 0x01, CPacketServerStart.class);
+		register((byte) 0x02, CPacketServerStop.class);
+		register((byte) 0x03, CPacketServerRecall.class);
+		register((byte) 0x04, CPacketServerNameLoad.class);
+		register((byte) 0x05, CPacketCommandRun.class);
+		
 		/** 0x0X: Account **/
-		register((byte) 0x01, CPacketAccountRequest.class);
-		register((byte) 0x02, CPacketAccountLoad.class);
-		register((byte) 0x03, CPacketAccountConfiguration.class);
-		register((byte) 0x04, CPacketServerNameRequest.class);
-		register((byte) 0x05, CPacketServerNameLoad.class);
-		register((byte) 0x06, CPacketCommandRun.class);
+		register((byte) 0x06, CPacketAccountRequest.class);
+		register((byte) 0x07, CPacketAccountLoad.class);
+		register((byte) 0x08, CPacketAccountConfiguration.class);
+	
+		
 		/** 0x1X: Translations **/
 		register((byte) 0x10, CPacketTranslationsRequest.class);
 		register((byte) 0x11, CPacketTranslationsLoad.class);

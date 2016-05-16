@@ -35,8 +35,8 @@ public abstract class CommonClient {
 	public void sendPacket(CommonPacket packet) {
 		outputHandler.send(packet);
 	}
-	
-	public void disconnect() {
+
+	public void disconnect(boolean removeServer) {
 		if (!socket.isClosed()) {
 			try {
 				inputHandler.close();
@@ -48,7 +48,6 @@ public abstract class CommonClient {
 		}
 		inputHandler.stopThread();
 		outputHandler.stopThread();
-		CommonServer.disconnectClient(this);
 		System.out.println("Cliente desconectado: " + serverIp);
 	}
 

@@ -1,7 +1,6 @@
 package br.com.battlebits.ycommon.bungee.networking;
 
 import br.com.battlebits.ycommon.bungee.BungeeMain;
-import br.com.battlebits.ycommon.bungee.networking.client.CommonClient;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.networking.CommonHandler;
@@ -27,7 +26,9 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveFriendRe
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveGroup;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveRank;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketServerNameLoad;
-import br.com.battlebits.ycommon.common.networking.packets.CPacketServerNameRequest;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketServerRecall;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketServerStart;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketServerStop;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketTranslationsLoad;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketTranslationsRequest;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketUpdateClan;
@@ -35,13 +36,12 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketUpdateGameStat
 import br.com.battlebits.ycommon.common.networking.packets.CPacketUpdateProfile;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
-import net.md_5.bungee.api.config.ServerInfo;
 
 public class BungeePacketHandler extends CommonHandler {
 
-	private CommonClient sender;
+	private BungeeClient sender;
 
-	public BungeePacketHandler(CommonClient sender) {
+	public BungeePacketHandler(BungeeClient sender) {
 		this.sender = sender;
 	}
 
@@ -214,16 +214,26 @@ public class BungeePacketHandler extends CommonHandler {
 	}
 
 	@Override
-	public void handleServerRequest(CPacketServerNameRequest packet) throws Exception {
-		for (ServerInfo info : BungeeMain.getPlugin().getProxy().getServers().values()) {
-			String string = info.getAddress().getHostString() + ":" + info.getAddress().getPort();
-			if (string.equals(packet.getServerListening())) {
-				sender.setServerIp(info.getName());
-				sender.registerClient();
-				sender.sendPacket(new CPacketServerNameLoad(info.getName()));
-				break;
-			}
-		}
+	public void handleServerStart(CPacketServerStart packet) throws Exception {
+
+		String serverId = BungeeMain.getPlugin().getServerManager().getServerId(packet.getServerAddress());
+
+		sender.setServerIp(serverId);
+		sender.registerClient();
+		sender.sendPacket(new CPacketServerNameLoad(serverId));
+
+		BungeeMain.getPlugin().getServerManager().addActiveServer(packet.getServerAddress(), sender, packet.getMaxPlayers());
+
+	}
+
+	@Override
+	public void handleServerRecall(CPacketServerRecall packet) throws Exception {
+		String serverId = BungeeMain.getPlugin().getServerManager().getServerId(packet.getServerAddress());
+
+		sender.setServerIp(serverId);
+		sender.registerClient();
+
+		BungeeMain.getPlugin().getServerManager().updateActiveServer(packet.getServerAddress(), sender, packet.getOnlinePlayers(), packet.getMaxPlayers());
 	}
 
 	@Override
@@ -239,6 +249,11 @@ public class BungeePacketHandler extends CommonHandler {
 	@Override
 	public void handlerKeepAlive(CPacketKeepAlive packet) throws Exception {
 		sender.sendPacket(new CPacketKeepAlive());
+	}
+
+	@Override
+	public void handleServerStop(CPacketServerStop packet) throws Exception {
+		sender.disconnect(true);
 	}
 
 }
