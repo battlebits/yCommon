@@ -23,6 +23,8 @@ import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.time.TimeZone;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
+import br.com.battlebits.ycommon.common.twitter.TweetUtils;
+import br.com.battlebits.ycommon.common.twitter.TwitterAccount;
 import br.com.battlebits.ycommon.common.utils.DateUtils;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -61,6 +63,9 @@ public class BanManager {
 		}
 		if (!player.isOnline())
 			BattlebitsAPI.getAccountCommon().saveBattlePlayer(player);
+		if (ban.isPermanent()) {
+			TweetUtils.tweet(TwitterAccount.BATTLEBANS, "Jogador banido: " + player.getUserName() + "\nBanido por: " + ban.getBannedBy() + "\nMotivo: " + ban.getReason() + "\n\nServidor: " + player.getServerConnected());
+		}
 		ProxiedPlayer pPlayer = BungeeMain.getPlugin().getProxy().getPlayer(player.getUuid());
 		if (pPlayer != null) {
 			if (ban.isPermanent()) {
