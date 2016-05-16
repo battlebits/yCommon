@@ -12,36 +12,34 @@ import br.com.battlebits.ycommon.bungee.loadbalancer.MostConnection;
 import br.com.battlebits.ycommon.bungee.servers.BattleServer;
 import br.com.battlebits.ycommon.bungee.servers.HungerGamesServer;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
-import br.com.battlebits.ycommon.common.connection.backend.MySQLBackend;
 
 public class ServerManager {
 
 	private Map<String, String> battlebitsServers;
-
 	private Map<String, BattleServer> activeServers;
 
 	private BaseBalancer<BattleServer> lobbyBalancer;
-
 	private BaseBalancer<BattleServer> fullIronBalancer;
-
 	private BaseBalancer<BattleServer> peladoBalancer;
-
 	private BaseBalancer<BattleServer> hgBalancer;
 
+	private BungeeMain main;
+
 	public ServerManager(BungeeMain main) {
+		this.main = main;
 		lobbyBalancer = new LeastConnection<>();
 		fullIronBalancer = new LeastConnection<>();
 		peladoBalancer = new LeastConnection<>();
 		hgBalancer = new MostConnection<>();
 		battlebitsServers = new HashMap<>();
 		activeServers = new HashMap<>();
-		loadServers(main.getConnection());
+		loadServers();
 	}
 
-	private void loadServers(MySQLBackend backend) {
+	public void loadServers() {
 		try {
 			BattlebitsAPI.debug("SERVERS > LOADING");
-			PreparedStatement stmt = backend.getConnection().prepareStatement("SELECT * FROM `servers`;");
+			PreparedStatement stmt = main.getConnection().getConnection().prepareStatement("SELECT * FROM `servers`;");
 			ResultSet result = stmt.executeQuery();
 			while (result.next()) {
 				try {

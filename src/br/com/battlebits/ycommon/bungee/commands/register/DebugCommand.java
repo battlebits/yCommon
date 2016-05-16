@@ -38,4 +38,10 @@ public class DebugCommand extends CommandClass {
 		BungeeMain.getPlugin().loadTranslations();
 		cmdArgs.getSender().sendMessage(TextComponent.fromLegacyText("Traducoes recarregadas!"));
 	}
+
+	@Command(name = "reloadservers", usage = "/<command>", aliases = { "rlservers", "reloadserver", "rlserver" }, groupToUse = Group.DONO, noPermMessageId = "command-no-access")
+	public void reloadServers(CommandArgs cmdArgs) {
+		BungeeMain.getPlugin().getServerManager().loadServers();
+		cmdArgs.getSender().sendMessage(TextComponent.fromLegacyText("Servidores recarregados!"));
+	}
 }
