@@ -37,6 +37,7 @@ public class ServerManager {
 	}
 
 	public void loadServers() {
+		battlebitsServers.clear();
 		try {
 			BattlebitsAPI.debug("SERVERS > LOADING");
 			PreparedStatement stmt = main.getConnection().getConnection().prepareStatement("SELECT * FROM `servers`;");
