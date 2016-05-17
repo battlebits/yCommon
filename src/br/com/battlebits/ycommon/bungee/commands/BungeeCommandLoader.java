@@ -2,7 +2,7 @@ package br.com.battlebits.ycommon.bungee.commands;
 
 import br.com.battlebits.ycommon.bungee.BungeeMain;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
-import br.com.battlebits.ycommon.common.commands.CommandClass;
+import br.com.battlebits.ycommon.common.commandmanager.CommandClass;
 import br.com.battlebits.ycommon.common.utils.ClassGetter;
 
 public class BungeeCommandLoader {

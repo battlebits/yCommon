@@ -1,4 +1,4 @@
-package br.com.battlebits.ycommon.bukkit.util;
+package br.com.battlebits.ycommon.bukkit.utils;
 
 import java.io.BufferedReader;
 import java.io.File;

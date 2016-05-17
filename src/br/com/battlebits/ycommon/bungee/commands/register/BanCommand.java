@@ -9,7 +9,7 @@ import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.banmanager.constructors.Ban;
 import br.com.battlebits.ycommon.common.banmanager.constructors.Mute;
-import br.com.battlebits.ycommon.common.commands.CommandClass;
+import br.com.battlebits.ycommon.common.commandmanager.CommandClass;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.translate.languages.Language;

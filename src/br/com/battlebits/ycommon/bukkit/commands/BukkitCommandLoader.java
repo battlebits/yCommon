@@ -2,7 +2,7 @@ package br.com.battlebits.ycommon.bukkit.commands;
 
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
-import br.com.battlebits.ycommon.common.commands.CommandClass;
+import br.com.battlebits.ycommon.common.commandmanager.CommandClass;
 import br.com.battlebits.ycommon.common.utils.ClassGetter;
 
 public class BukkitCommandLoader {

@@ -13,7 +13,7 @@ import br.com.battlebits.ycommon.bungee.commands.BungeeCommandFramework.CommandA
 import br.com.battlebits.ycommon.bungee.commands.BungeeCommandFramework.Completer;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
-import br.com.battlebits.ycommon.common.commands.CommandClass;
+import br.com.battlebits.ycommon.common.commandmanager.CommandClass;
 import br.com.battlebits.ycommon.common.enums.ServerType;
 import br.com.battlebits.ycommon.common.payment.enums.RankType;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;

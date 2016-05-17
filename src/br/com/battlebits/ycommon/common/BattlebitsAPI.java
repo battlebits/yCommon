@@ -5,20 +5,15 @@ import java.util.logging.Logger;
 
 import com.google.gson.Gson;
 
-import br.com.battlebits.ycommon.bukkit.util.json.TypeBukkitUtils;
-import br.com.battlebits.ycommon.bukkit.util.mojang.BukkitNameFetcher;
-import br.com.battlebits.ycommon.bukkit.util.mojang.BukkitPremiumChecker;
-import br.com.battlebits.ycommon.bukkit.util.mojang.BukkitUUIDFetcher;
-import br.com.battlebits.ycommon.bungee.utils.json.TypeBungeeUtils;
+import br.com.battlebits.ycommon.bukkit.utils.mojang.BukkitNameFetcher;
+import br.com.battlebits.ycommon.bukkit.utils.mojang.BukkitUUIDFetcher;
 import br.com.battlebits.ycommon.bungee.utils.mojang.BungeeNameFetcher;
-import br.com.battlebits.ycommon.bungee.utils.mojang.BungeePremiumChecker;
 import br.com.battlebits.ycommon.bungee.utils.mojang.BungeeUUIDFetcher;
 import br.com.battlebits.ycommon.common.enums.BattleInstance;
 import br.com.battlebits.ycommon.common.manager.AccountCommon;
 import br.com.battlebits.ycommon.common.manager.ClanCommon;
 import br.com.battlebits.ycommon.common.time.TimeZone;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
-import br.com.battlebits.ycommon.common.utils.json.TypeUtils;
 import br.com.battlebits.ycommon.common.utils.mojang.NameFetcher;
 import br.com.battlebits.ycommon.common.utils.mojang.PremiumChecker;
 import br.com.battlebits.ycommon.common.utils.mojang.UUIDFetcher;
@@ -30,10 +25,9 @@ public class BattlebitsAPI {
 
 	private static Gson gson = new Gson();
 	private static BattleInstance battleInstance;
-	private static TypeUtils typeUtils;
 	private static UUIDFetcher uuidFetcher;
 	private static NameFetcher nameFetcher;
-	private static PremiumChecker premiumChecker;
+	private static PremiumChecker premiumChecker = new PremiumChecker();
 	private static Logger logger;
 	private static boolean debugMode = false;
 	private static boolean useRedisBungee = false;
@@ -65,10 +59,6 @@ public class BattlebitsAPI {
 
 	public static Gson getGson() {
 		return gson;
-	}
-
-	public static TypeUtils getTypeUtils() {
-		return typeUtils;
 	}
 
 	public static boolean debugModeEnabled() {
@@ -103,17 +93,13 @@ public class BattlebitsAPI {
 		battleInstance = instance;
 		switch (instance) {
 		case BUKKIT:
-			typeUtils = new TypeBukkitUtils();
 			uuidFetcher = new BukkitUUIDFetcher();
 			nameFetcher = new BukkitNameFetcher();
-			premiumChecker = new BukkitPremiumChecker();
 			logger = org.bukkit.Bukkit.getLogger();
 			break;
 		case BUNGEECORD:
-			typeUtils = new TypeBungeeUtils();
 			uuidFetcher = new BungeeUUIDFetcher();
 			nameFetcher = new BungeeNameFetcher();
-			premiumChecker = new BungeePremiumChecker();
 			logger = net.md_5.bungee.BungeeCord.getInstance().getLogger();
 			break;
 		}

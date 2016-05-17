@@ -7,7 +7,7 @@ import br.com.battlebits.ycommon.bungee.commands.BungeeCommandFramework.Command;
 import br.com.battlebits.ycommon.bungee.commands.BungeeCommandFramework.CommandArgs;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
-import br.com.battlebits.ycommon.common.commands.CommandClass;
+import br.com.battlebits.ycommon.common.commandmanager.CommandClass;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.chat.TextComponent;

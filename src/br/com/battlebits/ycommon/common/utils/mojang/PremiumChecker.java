@@ -5,10 +5,23 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
+
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
 
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 
-public abstract class PremiumChecker {
+public class PremiumChecker {
+
+	private Cache<String, Boolean> isPremium = CacheBuilder.newBuilder().expireAfterWrite(1L, TimeUnit.DAYS).build(new CacheLoader<String, Boolean>() {
+		@Override
+		public Boolean load(String name) throws Exception {
+			return checkInMojang(name);
+		}
+	});
 
 	public boolean checkInMojang(String username) {
 		boolean isPremium = false;
@@ -33,5 +46,17 @@ public abstract class PremiumChecker {
 		return isPremium;
 	}
 
-	public abstract boolean isPremium(String username);
+	public boolean isPremium(String nickname) {
+		try {
+			return isPremium.get(nickname, new Callable<Boolean>() {
+
+				@Override
+				public Boolean call() throws Exception {
+					return checkInMojang(nickname);
+				}
+			});
+		} catch (Exception e) {
+			return true;
+		}
+	}
 }

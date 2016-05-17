@@ -23,7 +23,7 @@ import br.com.battlebits.ycommon.bukkit.networking.BukkitClient;
 import br.com.battlebits.ycommon.bukkit.permissions.PermissionManager;
 import br.com.battlebits.ycommon.bukkit.run.UpdateScheduler;
 import br.com.battlebits.ycommon.bukkit.tagmanager.TagManager;
-import br.com.battlebits.ycommon.bukkit.util.PluginUpdater;
+import br.com.battlebits.ycommon.bukkit.utils.PluginUpdater;
 import br.com.battlebits.ycommon.bungee.networking.CommonServer;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;

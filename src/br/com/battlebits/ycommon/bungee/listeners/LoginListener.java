@@ -11,12 +11,12 @@ import java.util.UUID;
 
 import br.com.battlebits.ycommon.bungee.BungeeMain;
 import br.com.battlebits.ycommon.bungee.managers.BanManager;
-import br.com.battlebits.ycommon.bungee.utils.GeoIpUtils;
-import br.com.battlebits.ycommon.bungee.utils.GeoIpUtils.IpCityResponse;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.banmanager.constructors.Ban;
 import br.com.battlebits.ycommon.common.translate.Translate;
+import br.com.battlebits.ycommon.common.utils.GeoIpUtils;
+import br.com.battlebits.ycommon.common.utils.GeoIpUtils.IpCityResponse;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.event.LoginEvent;
 import net.md_5.bungee.api.plugin.Listener;

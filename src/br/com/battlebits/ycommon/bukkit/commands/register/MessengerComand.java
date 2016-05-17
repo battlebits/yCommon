@@ -11,7 +11,7 @@ import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
 import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandFramework.Command;
 import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandFramework.CommandArgs;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
-import br.com.battlebits.ycommon.common.commands.CommandClass;
+import br.com.battlebits.ycommon.common.commandmanager.CommandClass;
 import br.com.battlebits.ycommon.common.friends.block.Blocked;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAddBlockedPlayer;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveBlockedPlayer;

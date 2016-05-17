@@ -1,4 +1,4 @@
-package br.com.battlebits.ycommon.bukkit.util.mojang;
+package br.com.battlebits.ycommon.bukkit.utils.mojang;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;

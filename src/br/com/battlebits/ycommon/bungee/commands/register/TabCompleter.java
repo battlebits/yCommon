@@ -6,7 +6,7 @@ import java.util.List;
 import br.com.battlebits.ycommon.bungee.BungeeMain;
 import br.com.battlebits.ycommon.bungee.commands.BungeeCommandFramework.CommandArgs;
 import br.com.battlebits.ycommon.bungee.commands.BungeeCommandFramework.Completer;
-import br.com.battlebits.ycommon.common.commands.CommandClass;
+import br.com.battlebits.ycommon.common.commandmanager.CommandClass;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class TabCompleter extends CommandClass {

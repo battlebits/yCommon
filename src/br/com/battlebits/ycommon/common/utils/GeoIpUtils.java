@@ -1,4 +1,4 @@
-package br.com.battlebits.ycommon.bungee.utils;
+package br.com.battlebits.ycommon.common.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;

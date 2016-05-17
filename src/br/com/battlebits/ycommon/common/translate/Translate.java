@@ -3,6 +3,8 @@ package br.com.battlebits.ycommon.common.translate;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gson.reflect.TypeToken;
+
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
 
@@ -59,13 +61,8 @@ public class Translate {
 	}
 
 	public static void loadTranslations(Language lang, String json) {
-		languageTranslations.put(lang, 
-				BattlebitsAPI
-				.getGson().
-				fromJson(json, 
-						BattlebitsAPI
-						.getTypeUtils()
-						.getTranslateMap()));
+		languageTranslations.put(lang, BattlebitsAPI.getGson().fromJson(json, new TypeToken<HashMap<String, String>>() {
+		}.getType()));
 	}
 
 	/*
