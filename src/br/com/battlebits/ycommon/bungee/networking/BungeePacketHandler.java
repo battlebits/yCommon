@@ -239,7 +239,7 @@ public class BungeePacketHandler extends CommonHandler {
 
 	@Override
 	public void handleServerInfo(CPacketServerInfo packet) throws Exception {
-		BungeeMain.getPlugin().getServerManager().updateActiveServer(sender.getServerIp(), packet.getOnlinePlayers(), packet.getMaxPlayers(), packet.canJoin());
+		BungeeMain.getPlugin().getServerManager().updateActiveServer(sender.getServerIp(), packet.getOnlinePlayers(), packet.getMaxPlayers(), packet.canJoin(), packet.getTempo(), packet.getHungerGamesStatus());
 	}
 
 	@Override

@@ -171,14 +171,17 @@ public class BukkitMain extends JavaPlugin {
 
 	public void setCanJoin(boolean canJoin) {
 		this.canJoin = canJoin;
+		sendUpdate();
 	}
 
 	public void setState(HungerGamesState state) {
 		this.state = state;
+		sendUpdate();
 	}
 
 	public void setTempo(int tempo) {
 		this.tempo = tempo;
+		sendUpdate();
 	}
 
 	public BukkitClient getClient() {

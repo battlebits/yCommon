@@ -14,6 +14,7 @@ import br.com.battlebits.ycommon.bungee.loadbalancer.types.LeastConnection;
 import br.com.battlebits.ycommon.bungee.loadbalancer.types.MostConnection;
 import br.com.battlebits.ycommon.bungee.servers.BattleServer;
 import br.com.battlebits.ycommon.bungee.servers.HungerGamesServer;
+import br.com.battlebits.ycommon.bungee.servers.HungerGamesServer.HungerGamesState;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import net.md_5.bungee.api.config.ServerInfo;
 
@@ -48,7 +49,7 @@ public class ServerManager {
 			ResultSet result = stmt.executeQuery();
 			while (result.next()) {
 				try {
-					battlebitsServers.put(result.getString("serverAddress"), result.getString("serverId"));
+					battlebitsServers.put(result.getString("serverAddress").toLowerCase(), result.getString("serverId").toLowerCase());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -65,7 +66,7 @@ public class ServerManager {
 	}
 
 	public String getServerId(String serverAddress) {
-		return battlebitsServers.containsKey(serverAddress) ? battlebitsServers.get(serverAddress) : serverAddress;
+		return battlebitsServers.containsKey(serverAddress.toLowerCase()) ? battlebitsServers.get(serverAddress.toLowerCase()) : serverAddress.toLowerCase();
 	}
 
 	public void addActiveServer(String serverAddress, String serverIp, int maxPlayers) {
@@ -75,13 +76,13 @@ public class ServerManager {
 
 	public void sendAddToLobbies(String serverIp) {
 		for (BattleServer server : lobbyBalancer.getList()) {
-			sendDataToServer(server.getServerInfo(), "AddServer", serverIp);
+			sendDataToServer(server.getServerInfo(), "AddServer", serverIp.toLowerCase());
 		}
 	}
 
 	public void sendRemoveToLobbies(String serverIp) {
 		for (BattleServer server : lobbyBalancer.getList()) {
-			sendDataToServer(server.getServerInfo(), "RemoveServer", serverIp);
+			sendDataToServer(server.getServerInfo(), "RemoveServer", serverIp.toLowerCase());
 		}
 	}
 
@@ -94,10 +95,19 @@ public class ServerManager {
 	}
 
 	public void updateActiveServer(String serverId, int onlinePlayers, int maxPlayers, boolean canJoin) {
+		updateActiveServer(serverId, onlinePlayers, maxPlayers, canJoin, 0, null);
+	}
+
+	public void updateActiveServer(String serverId, int onlinePlayers, int maxPlayers, boolean canJoin, int tempo, HungerGamesState state) {
+		serverId = serverId.toLowerCase();
 		BattleServer server = activeServers.get(serverId);
 		if (server == null) {
 			if (serverId.endsWith("battle-hg.com")) {
 				server = new HungerGamesServer(serverId, onlinePlayers, true);
+				if (state != null) {
+					((HungerGamesServer) server).setState(state);
+					((HungerGamesServer) server).setTempo(tempo);
+				}
 			} else {
 				server = new BattleServer(serverId, onlinePlayers, maxPlayers, true);
 			}
@@ -109,15 +119,16 @@ public class ServerManager {
 	}
 
 	public BattleServer getServer(String str) {
-		return activeServers.get(str);
+		return activeServers.get(str.toLowerCase());
 	}
 
 	public void removeActiveServer(String str) {
 		removeFromBalancers(str);
-		activeServers.remove(str);
+		activeServers.remove(str.toLowerCase());
 	}
 
 	public void addToBalancers(String serverId, BattleServer server) {
+		serverId = serverId.toLowerCase();
 		if (serverId.endsWith("lobby.battlebits.com.br")) {
 			lobbyBalancer.add(serverId, server);
 		} else if (serverId.endsWith("fulliron.pvp.battlebits.com.br")) {
@@ -130,6 +141,7 @@ public class ServerManager {
 	}
 
 	public void removeFromBalancers(String serverId) {
+		serverId = serverId.toLowerCase();
 		if (serverId.endsWith("lobby.battlebits.com.br")) {
 			lobbyBalancer.remove(serverId);
 		} else if (serverId.endsWith("fulliron.battlecraft.com.br")) {

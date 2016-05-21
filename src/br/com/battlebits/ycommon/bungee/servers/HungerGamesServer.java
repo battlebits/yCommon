@@ -7,7 +7,7 @@ public class HungerGamesServer extends BattleServer {
 
 	public HungerGamesServer(String serverId, int onlinePlayers, boolean joinEnabled) {
 		super(serverId, onlinePlayers, 100, joinEnabled);
-		this.state = HungerGamesState.PREGAME;
+		this.state = HungerGamesState.WAITING;
 	}
 
 	public void setTempo(int tempo) {
@@ -37,7 +37,7 @@ public class HungerGamesServer extends BattleServer {
 	}
 
 	public static enum HungerGamesState {
-		PREGAME, INVENCIBILITY, GAMETIME, NONE;
+		WAITING, PREGAME, INVENCIBILITY, GAMETIME, NONE;
 	}
 
 }
