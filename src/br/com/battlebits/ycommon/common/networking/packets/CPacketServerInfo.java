@@ -21,10 +21,6 @@ public class CPacketServerInfo extends CommonPacket {
 	public CPacketServerInfo() {
 	}
 
-	public CPacketServerInfo(int onlinePlayers, int maxPlayers, boolean canJoin) {
-		this(onlinePlayers, maxPlayers, canJoin, -1, HungerGamesState.NONE);
-	}
-
 	public CPacketServerInfo(int onlinePlayers, int maxPlayers, boolean canJoin, int tempo, HungerGamesState hungerGamesStatus) {
 		this.onlinePlayers = onlinePlayers;
 		this.maxPlayers = maxPlayers;

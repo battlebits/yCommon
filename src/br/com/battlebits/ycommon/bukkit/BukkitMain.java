@@ -25,6 +25,7 @@ import br.com.battlebits.ycommon.bukkit.run.UpdateScheduler;
 import br.com.battlebits.ycommon.bukkit.tagmanager.TagManager;
 import br.com.battlebits.ycommon.bukkit.utils.PluginUpdater;
 import br.com.battlebits.ycommon.bungee.networking.CommonServer;
+import br.com.battlebits.ycommon.bungee.servers.HungerGamesServer.HungerGamesState;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.enums.BattleInstance;
@@ -57,6 +58,8 @@ public class BukkitMain extends JavaPlugin {
 	private boolean restart;
 
 	private boolean canJoin = true;
+	private HungerGamesState state = HungerGamesState.NONE;
+	private int tempo = 0;
 
 	{
 		plugin = this;
@@ -158,8 +161,24 @@ public class BukkitMain extends JavaPlugin {
 		player = null;
 	}
 
+	public void sendUpdate() {
+		sendUpdate(getServer().getOnlinePlayers().size());
+	}
+
 	public void sendUpdate(int online) {
-		getClient().sendPacket(new CPacketServerInfo(online, getServer().getMaxPlayers(), canJoin));
+		getClient().sendPacket(new CPacketServerInfo(online, getServer().getMaxPlayers(), canJoin, tempo, state));
+	}
+
+	public void setCanJoin(boolean canJoin) {
+		this.canJoin = canJoin;
+	}
+
+	public void setState(HungerGamesState state) {
+		this.state = state;
+	}
+
+	public void setTempo(int tempo) {
+		this.tempo = tempo;
 	}
 
 	public BukkitClient getClient() {
@@ -202,10 +221,6 @@ public class BukkitMain extends JavaPlugin {
 
 	public static void setServerName(String serverName) {
 		SERVERNAME = serverName;
-	}
-
-	public void setCanJoin(boolean canJoin) {
-		this.canJoin = canJoin;
 	}
 
 	public static String getServerHostName() {
