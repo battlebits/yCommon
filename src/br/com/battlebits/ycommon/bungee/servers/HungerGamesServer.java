@@ -33,7 +33,7 @@ public class HungerGamesServer extends BattleServer {
 
 	@Override
 	public boolean canBeSelected() {
-		return super.canBeSelected() && !(getState() == HungerGamesState.PREGAME && tempo >= 15);
+		return super.canBeSelected() && state != HungerGamesState.INVENCIBILITY && state != HungerGamesState.GAMETIME && ((state == HungerGamesState.PREGAME && tempo >= 15) || state == HungerGamesState.WAITING);
 	}
 
 	public static enum HungerGamesState {

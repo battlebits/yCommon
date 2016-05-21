@@ -92,7 +92,7 @@ public class LoadBalancerListener implements Listener {
 			server.getServerInfo().ping(new Callback<ServerPing>() {
 				@Override
 				public void done(ServerPing realPing, Throwable throwable) {
-					if (throwable != null) {
+					if (throwable == null) {
 						ping.getPlayers().setMax(realPing.getPlayers().getMax());
 						ping.getPlayers().setOnline(realPing.getPlayers().getOnline());
 						ping.setDescription(realPing.getDescription());
