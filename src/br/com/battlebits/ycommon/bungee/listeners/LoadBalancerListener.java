@@ -102,6 +102,10 @@ public class LoadBalancerListener implements Listener {
 	}
 
 	private String getServerIp(PendingConnection con) {
+		if (con == null)
+			return "";
+		if (con.getVirtualHost() == null)
+			return "";
 		String s = con.getVirtualHost().getHostName().toLowerCase();
 		if (s.isEmpty())
 			return "";
