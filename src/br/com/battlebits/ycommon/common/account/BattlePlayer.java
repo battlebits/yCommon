@@ -12,6 +12,7 @@ import br.com.battlebits.ycommon.common.account.game.GameStatus;
 import br.com.battlebits.ycommon.common.banmanager.history.BanHistory;
 import br.com.battlebits.ycommon.common.clans.Clan;
 import br.com.battlebits.ycommon.common.enums.Liga;
+import br.com.battlebits.ycommon.common.enums.ServerStaff;
 import br.com.battlebits.ycommon.common.enums.ServerType;
 import br.com.battlebits.ycommon.common.friends.Friend;
 import br.com.battlebits.ycommon.common.friends.block.Blocked;
@@ -50,7 +51,7 @@ public class BattlePlayer {
 	private long cacheExpire;
 
 	// GRUPOS
-	private Map<ServerType, Group> groups;
+	private Map<ServerStaff, Group> groups;
 	private Map<RankType, Long> ranks;
 
 	// AMIGOS
@@ -198,17 +199,17 @@ public class BattlePlayer {
 		return configuration;
 	}
 
-	public Map<ServerType, Group> getGroups() {
+	public Map<ServerStaff, Group> getGroups() {
 		return groups;
 	}
 
 	public Group getServerGroup() {
 		Group group = Group.NORMAL;
 		if (!getGroups().isEmpty()) {
-			if (getGroups().containsKey(ServerType.NETWORK)) {
-				group = getGroups().get(ServerType.NETWORK);
-			} else if (getGroups().containsKey(serverConnectedType)) {
-				group = getGroups().get(serverConnectedType);
+			if (getGroups().containsKey(ServerType.NETWORK.getStaffType())) {
+				group = getGroups().get(ServerType.NETWORK.getStaffType());
+			} else if (getGroups().containsKey(serverConnectedType.getStaffType())) {
+				group = getGroups().get(serverConnectedType.getStaffType());
 			}
 		}
 		if (group == Group.NORMAL)
@@ -384,7 +385,7 @@ public class BattlePlayer {
 		return this.xp;
 	}
 
-	public void updateGroup(Map<ServerType, Group> groups) {
+	public void updateGroup(Map<ServerStaff, Group> groups) {
 		this.groups = groups;
 	}
 

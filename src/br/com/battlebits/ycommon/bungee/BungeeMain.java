@@ -13,6 +13,7 @@ import br.com.battlebits.ycommon.bungee.commands.BungeeCommandLoader;
 import br.com.battlebits.ycommon.bungee.event.UpdateScheduler;
 import br.com.battlebits.ycommon.bungee.listeners.LoadBalancerListener;
 import br.com.battlebits.ycommon.bungee.listeners.LoginListener;
+import br.com.battlebits.ycommon.bungee.listeners.MessageListener;
 import br.com.battlebits.ycommon.bungee.listeners.PlayerListener;
 import br.com.battlebits.ycommon.bungee.listeners.QuitListener;
 import br.com.battlebits.ycommon.bungee.managers.AccountManager;
@@ -126,6 +127,7 @@ public class BungeeMain extends Plugin {
 
 	private void loadListeners() {
 		getProxy().getPluginManager().registerListener(this, new LoadBalancerListener(serverManager));
+		getProxy().getPluginManager().registerListener(this, new MessageListener(serverManager));
 		getProxy().getPluginManager().registerListener(this, new PlayerListener());
 		getProxy().getPluginManager().registerListener(this, new LoginListener());
 		getProxy().getPluginManager().registerListener(this, new QuitListener());
@@ -206,6 +208,7 @@ public class BungeeMain extends Plugin {
 		if (!serverExists(serverHostName)) {
 			BattlebitsAPI.getLogger().info("Server " + serverHostName + " adicionado ao Bungee.");
 			proxy.getServers().put(serverHostName, localServerInfo);
+			serverManager.sendAddToLobbies(serverHostName);
 		} else {
 			BattlebitsAPI.getLogger().log(Level.WARNING, "Servidor \"" + serverHostName + "\" já existe!");
 		}
@@ -215,6 +218,8 @@ public class BungeeMain extends Plugin {
 		if (serverExists(paramString)) {
 			BattlebitsAPI.getLogger().info("Removido server " + paramString + " do Bungee.");
 			this.proxy.getServers().remove(paramString);
+			serverManager.removeActiveServer(paramString);
+			serverManager.sendRemoveToLobbies(paramString);
 			return true;
 		}
 		BattlebitsAPI.getLogger().log(Level.WARNING, "&cTentado remover servidor \"" + paramString + "\" mas ele nao existe!");

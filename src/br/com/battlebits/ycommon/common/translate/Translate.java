@@ -38,6 +38,9 @@ public class Translate {
 	// youtuber
 	// tournament
 	// winner
+
+	// server-not-available
+
 	private static Map<Language, Map<String, String>> languageTranslations = new HashMap<>();
 
 	public static String getTranslation(Language language, String messageId) {

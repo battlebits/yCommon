@@ -14,6 +14,7 @@ public abstract class BaseBalancer<T extends LoadBalancerObject> implements Load
 
 	public BaseBalancer() {
 		objects = new HashMap<>();
+		nextObj = new ArrayList<>();
 	}
 
 	public BaseBalancer(Map<String, T> map) {
@@ -52,4 +53,5 @@ public abstract class BaseBalancer<T extends LoadBalancerObject> implements Load
 		nextObj.addAll(objects.values());
 	}
 
+	public abstract int getTotalNumber();
 }

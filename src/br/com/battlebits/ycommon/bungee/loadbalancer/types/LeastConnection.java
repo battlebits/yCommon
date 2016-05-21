@@ -24,4 +24,13 @@ public class LeastConnection<T extends LoadBalancerObject & NumberConnection> ex
 		return obj;
 	}
 
+	@Override
+	public int getTotalNumber() {
+		int number = 0;
+		for (T item : nextObj) {
+			number += item.getActualNumber();
+		}
+		return number;
+	}
+
 }

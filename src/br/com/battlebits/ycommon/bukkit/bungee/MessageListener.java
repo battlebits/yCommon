@@ -60,9 +60,9 @@ public class MessageListener implements PluginMessageListener {
 			ServerType serverType = ServerType.valueOf(in.readUTF());
 			BukkitPlayer bP = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId());
 			if (group == Group.NORMAL) {
-				bP.getGroups().remove(serverType);
+				bP.getGroups().remove(serverType.getStaffType());
 			} else {
-				bP.getGroups().put(serverType, group);
+				bP.getGroups().put(serverType.getStaffType(), group);
 			}
 			bP.setTag(Tag.valueOf(group.toString()));
 			bP.loadTags();

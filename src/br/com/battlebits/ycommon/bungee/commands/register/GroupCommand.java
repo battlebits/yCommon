@@ -97,7 +97,7 @@ public class GroupCommand extends CommandClass {
 					serverType = ServerType.NETWORK;
 				if (group == Group.NORMAL && player.getServerGroup().ordinal() > Group.STREAMER.ordinal())
 					serverType = ServerType.NETWORK;
-				Group actualGroup = player.getGroups().containsKey(serverType) ? player.getGroups().get(serverType) : Group.NORMAL;
+				Group actualGroup = player.getGroups().containsKey(serverType.getStaffType()) ? player.getGroups().get(serverType.getStaffType()) : Group.NORMAL;
 				if (actualGroup == group) {
 					sender.sendMessage(TextComponent.fromLegacyText(groupSetPrefix + Translate.getTranslation(language, "command-groupset-player-already-group")));
 					return;
@@ -105,11 +105,11 @@ public class GroupCommand extends CommandClass {
 
 				if (group == Group.NORMAL) {
 					if (serverType != ServerType.NETWORK)
-						if (player.getGroups().containsKey(ServerType.NETWORK) && cmdArgs.isPlayer() && BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).isOnline())
+						if (player.getGroups().containsKey(ServerType.NETWORK.getStaffType()) && cmdArgs.isPlayer() && BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).isOnline())
 							serverType = ServerType.NETWORK;
-					player.getGroups().remove(serverType);
+					player.getGroups().remove(serverType.getStaffType());
 				} else {
-					player.getGroups().put(serverType, group);
+					player.getGroups().put(serverType.getStaffType(), group);
 				}
 				if (!player.isOnline()) {
 					BattlebitsAPI.getAccountCommon().saveBattlePlayer(player);

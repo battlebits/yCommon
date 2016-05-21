@@ -158,8 +158,8 @@ public class BukkitMain extends JavaPlugin {
 		player = null;
 	}
 
-	public void sendUpdate() {
-		getClient().sendPacket(new CPacketServerInfo(getServer().getOnlinePlayers().size(), getServer().getMaxPlayers(), canJoin));
+	public void sendUpdate(int online) {
+		getClient().sendPacket(new CPacketServerInfo(online, getServer().getMaxPlayers(), canJoin));
 	}
 
 	public BukkitClient getClient() {

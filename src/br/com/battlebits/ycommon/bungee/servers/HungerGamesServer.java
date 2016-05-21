@@ -7,7 +7,7 @@ public class HungerGamesServer extends BattleServer {
 
 	public HungerGamesServer(String serverId, int onlinePlayers, boolean joinEnabled) {
 		super(serverId, onlinePlayers, 100, joinEnabled);
-		this.state = HungerGamesState.WAITING;
+		this.state = HungerGamesState.PREGAME;
 	}
 
 	public void setTempo(int tempo) {
@@ -33,11 +33,11 @@ public class HungerGamesServer extends BattleServer {
 
 	@Override
 	public boolean canBeSelected() {
-		return super.canBeSelected() && (getState() != HungerGamesState.PREGAME || getState() != HungerGamesState.WAITING) && tempo >= 15;
+		return super.canBeSelected() && !(getState() == HungerGamesState.PREGAME && tempo >= 15);
 	}
 
 	public static enum HungerGamesState {
-		WAITING, PREGAME, INVENCIBILITY, GAMETIME, FINAL, WINNER, NONE;
+		PREGAME, INVENCIBILITY, GAMETIME, NONE;
 	}
 
 }

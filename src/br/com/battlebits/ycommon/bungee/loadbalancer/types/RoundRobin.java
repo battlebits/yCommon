@@ -29,4 +29,9 @@ public class RoundRobin<T extends LoadBalancerObject> extends BaseBalancer<T> {
 		return obj;
 	}
 
+	@Override
+	public int getTotalNumber() {
+		return 0;
+	}
+
 }

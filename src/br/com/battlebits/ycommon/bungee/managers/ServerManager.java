@@ -5,6 +5,9 @@ import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
+
 import br.com.battlebits.ycommon.bungee.BungeeMain;
 import br.com.battlebits.ycommon.bungee.loadbalancer.BaseBalancer;
 import br.com.battlebits.ycommon.bungee.loadbalancer.types.LeastConnection;
@@ -12,6 +15,7 @@ import br.com.battlebits.ycommon.bungee.loadbalancer.types.MostConnection;
 import br.com.battlebits.ycommon.bungee.servers.BattleServer;
 import br.com.battlebits.ycommon.bungee.servers.HungerGamesServer;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
+import net.md_5.bungee.api.config.ServerInfo;
 
 public class ServerManager {
 
@@ -53,7 +57,7 @@ public class ServerManager {
 			stmt.close();
 			result = null;
 			stmt = null;
-			BattlebitsAPI.debug("TRANSLATIONS > CLOSE");
+			BattlebitsAPI.debug("SERVERS > CLOSE");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -67,6 +71,26 @@ public class ServerManager {
 	public void addActiveServer(String serverAddress, String serverIp, int maxPlayers) {
 		BungeeMain.getPlugin().addBungee(serverIp, serverAddress.split(":")[0], Integer.valueOf(serverAddress.split(":")[1]));
 		updateActiveServer(serverIp, 0, maxPlayers, true);
+	}
+
+	public void sendAddToLobbies(String serverIp) {
+		for (BattleServer server : lobbyBalancer.getList()) {
+			sendDataToServer(server.getServerInfo(), "AddServer", serverIp);
+		}
+	}
+
+	public void sendRemoveToLobbies(String serverIp) {
+		for (BattleServer server : lobbyBalancer.getList()) {
+			sendDataToServer(server.getServerInfo(), "RemoveServer", serverIp);
+		}
+	}
+
+	public void sendDataToServer(ServerInfo info, String... data) {
+		ByteArrayDataOutput out = ByteStreams.newDataOutput();
+		for (String str : data) {
+			out.writeUTF(str);
+		}
+		info.sendData("BungeeCord", out.toByteArray());
 	}
 
 	public void updateActiveServer(String serverId, int onlinePlayers, int maxPlayers, boolean canJoin) {
@@ -96,9 +120,9 @@ public class ServerManager {
 	public void addToBalancers(String serverId, BattleServer server) {
 		if (serverId.endsWith("lobby.battlebits.com.br")) {
 			lobbyBalancer.add(serverId, server);
-		} else if (serverId.endsWith("fulliron.battlecraft.com.br")) {
+		} else if (serverId.endsWith("fulliron.pvp.battlebits.com.br")) {
 			fullIronBalancer.add(serverId, server);
-		} else if (serverId.endsWith("simulator.battlecraft.com.br")) {
+		} else if (serverId.endsWith("simulator.pvp.battlebits.com.br")) {
 			peladoBalancer.add(serverId, server);
 		} else if (serverId.endsWith("battle-hg.com")) {
 			hgBalancer.add(serverId, (HungerGamesServer) server);

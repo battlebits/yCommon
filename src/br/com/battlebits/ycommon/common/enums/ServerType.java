@@ -1,16 +1,32 @@
 package br.com.battlebits.ycommon.common.enums;
 
 public enum ServerType {
-	NETWORK("bbits.com.br"), HUNGERGAMES("battle-hg.com"), BATTLECRAFT("battlecraft.com.br"), SKYWARS("sw.battlebits.com.br"), LOBBY("lobby.battlebits.com.br"), RAID("raid.battlebits.com.br"), GARTICCRAFT("gc.battlebits.com.br"), TESTSERVER("teste.battlebits.com.br"), NONE("none");
+	NETWORK("bbits.com.br", ServerStaff.NETWORK), //
+	HUNGERGAMES("battle-hg.com", ServerStaff.HUNGERGAMES), //
+	FAIRPLAY("fp.battle-hg.com", ServerStaff.HUNGERGAMES), //
+	PVP_FULLIRON("fulliron.pvp.battlebits.com.br", ServerStaff.BATTLECRAFT), //
+	PVP_SIMULATOR("simulator.pvp.battlebits.com.br", ServerStaff.BATTLECRAFT), //
+	SKYWARS("sw.battlebits.com.br", ServerStaff.SKYWARS), //
+	LOBBY("lobby.battlebits.com.br", ServerStaff.LOBBY), //
+	RAID("raid.battlebits.com.br", ServerStaff.RAID), //
+	GARTICCRAFT("gc.battlebits.com.br", ServerStaff.GARTICCRAFT), //
+	TESTSERVER("teste.battlebits.com.br", ServerStaff.TESTSERVER), //
+	NONE("none", ServerStaff.NONE);
 
 	private String suffix;
+	private ServerStaff staffType;
 
-	private ServerType(String ends) {
+	private ServerType(String ends, ServerStaff staffType) {
 		this.suffix = ends;
+		this.staffType = staffType;
 	}
 
 	public String getSuffix() {
 		return suffix;
+	}
+
+	public ServerStaff getStaffType() {
+		return staffType;
 	}
 
 	public static ServerType getServerType(String serverHostname) {

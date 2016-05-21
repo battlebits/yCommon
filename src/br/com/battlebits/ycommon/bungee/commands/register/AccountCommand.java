@@ -14,7 +14,7 @@ import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.banmanager.constructors.Ban;
 import br.com.battlebits.ycommon.common.banmanager.constructors.Mute;
 import br.com.battlebits.ycommon.common.commandmanager.CommandClass;
-import br.com.battlebits.ycommon.common.enums.ServerType;
+import br.com.battlebits.ycommon.common.enums.ServerStaff;
 import br.com.battlebits.ycommon.common.payment.enums.RankType;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.tag.Tag;
@@ -84,7 +84,7 @@ public class AccountCommand extends CommandClass {
 				for (Entry<RankType, Long> entry : player.getRanks().entrySet()) {
 					sender.sendMessage(TextComponent.fromLegacyText(Tag.valueOf(entry.getKey().toString()).getPrefix(language) + ChatColor.YELLOW + " expira em " + DateUtils.formatDifference(language, (entry.getValue() - TimeZoneConversor.getCurrentMillsTimeIn(TimeZone.GMT0)) / 1000)));
 				}
-				for (Entry<ServerType, Group> staff : player.getGroups().entrySet()) {
+				for (Entry<ServerStaff, Group> staff : player.getGroups().entrySet()) {
 					sender.sendMessage(TextComponent.fromLegacyText(Tag.valueOf(staff.getValue().toString()).getPrefix(language) + ChatColor.YELLOW + " do server " + staff.getKey().toString()));
 				}
 				Ban ban = player.getBanHistory().getActualBan();

@@ -44,12 +44,12 @@ public class PlayerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onJoinUpdate(PlayerJoinEvent event) {
-		BukkitMain.getPlugin().sendUpdate();
+		BukkitMain.getPlugin().sendUpdate(Bukkit.getOnlinePlayers().size());
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onQuitUpdate(PlayerQuitEvent event) {
-		BukkitMain.getPlugin().sendUpdate();
+		BukkitMain.getPlugin().sendUpdate(Bukkit.getOnlinePlayers().size() - 1);
 	}
 
 	@EventHandler

@@ -23,4 +23,13 @@ public class MostConnection<T extends LoadBalancerObject & NumberConnection> ext
 				}
 		return obj;
 	}
+	
+	@Override
+	public int getTotalNumber() {
+		int number = 0;
+		for (T item : nextObj) {
+			number += item.getActualNumber();
+		}
+		return number;
+	}
 }
