@@ -77,10 +77,16 @@ public class LoadBalancerListener implements Listener {
 
 	@EventHandler(priority = -128)
 	public void onProxyPing(ProxyPingEvent event) {
+		ServerPing ping = event.getResponse();
+		ping.getVersion().setName("Join with 1.7 or 1.8");
+		event.setResponse(ping);
+	}
+
+	@EventHandler(priority = 127)
+	public void onPing(ProxyPingEvent event) {
 		String serverIp = getServerIp(event.getConnection());
 		BattleServer server = manager.getServer(serverIp);
 		ServerPing ping = event.getResponse();
-		ping.getVersion().setName("Join with 1.7 or 1.8");
 		if (server != null) {
 			event.registerIntent(BungeeMain.getPlugin());
 			server.getServerInfo().ping(new Callback<ServerPing>() {
@@ -95,6 +101,7 @@ public class LoadBalancerListener implements Listener {
 						ping.setVersion(new Protocol("Server not found", 0));
 						ping.setDescription(ChatColor.RED + "Error :(");
 					}
+					event.setResponse(ping);
 					event.completeIntent(BungeeMain.getPlugin());
 				}
 			});

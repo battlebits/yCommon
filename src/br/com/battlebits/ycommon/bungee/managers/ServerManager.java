@@ -104,10 +104,6 @@ public class ServerManager {
 		if (server == null) {
 			if (serverId.endsWith("battle-hg.com")) {
 				server = new HungerGamesServer(serverId, onlinePlayers, true);
-				if (state != null) {
-					((HungerGamesServer) server).setState(state);
-					((HungerGamesServer) server).setTempo(tempo);
-				}
 			} else {
 				server = new BattleServer(serverId, onlinePlayers, maxPlayers, true);
 			}
@@ -115,6 +111,10 @@ public class ServerManager {
 		}
 		server.setOnlinePlayers(onlinePlayers);
 		server.setJoinEnabled(canJoin);
+		if (state != null && server instanceof HungerGamesServer) {
+			((HungerGamesServer) server).setState(state);
+			((HungerGamesServer) server).setTempo(tempo);
+		}
 		addToBalancers(serverId, server);
 	}
 
