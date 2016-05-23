@@ -9,17 +9,17 @@ import br.com.battlebits.ycommon.common.networking.CommonPacket;
 public class CPacketJoinParty extends CommonPacket {
 
 	@Override
-	public void read(DataInputStream in) throws Exception {
+	public void read(DataInputStream in) {
 
 	}
 
 	@Override
-	public void write(DataOutputStream out) throws Exception {
+	public void write(DataOutputStream out)  {
 
 	}
 
 	@Override
-	public void handle(CommonHandler handler) throws Exception {
+	public void handle(CommonHandler handler) {
 
 	}
 

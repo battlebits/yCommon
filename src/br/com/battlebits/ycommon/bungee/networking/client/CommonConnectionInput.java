@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
+import br.com.battlebits.ycommon.common.exception.HandlePacketException;
 import br.com.battlebits.ycommon.common.networking.CommonPacket;
 
 public class CommonConnectionInput extends Thread {
@@ -22,8 +23,10 @@ public class CommonConnectionInput extends Thread {
 	public void run() {
 		run = true;
 		while (run) {
+			byte ID;
 			try {
-				final byte ID = STREAM.readByte();
+				ID = STREAM.readByte();
+
 				final CommonPacket PACKET = CommonPacket.get(ID);
 				if (PACKET != null) {
 					PACKET.read(STREAM);
@@ -31,12 +34,12 @@ public class CommonConnectionInput extends Thread {
 					PACKET.handle(CLIENT.getPacketHandler());
 					BattlebitsAPI.debug("MCC>INP>" + PACKET.getClass().getName());
 				}
-
-			} catch (Exception e) {
-				if (BattlebitsAPI.debugModeEnabled()) {
+			} catch (IOException e) {
+				if (BattlebitsAPI.debugModeEnabled())
 					e.printStackTrace();
-				}
 				CLIENT.disconnect(true);
+			} catch (HandlePacketException e) {
+				e.printStackTrace();
 			}
 		}
 	}

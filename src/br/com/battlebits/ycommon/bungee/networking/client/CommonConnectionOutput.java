@@ -32,7 +32,18 @@ public class CommonConnectionOutput extends Thread {
 				synchronized (QUEUE) {
 					while (QUEUE.size() > 0) {
 						final CommonPacket PACKET = QUEUE.get(0);
+
+						if (PACKET == null) {
+							continue;
+						}
+
+						if (PACKET.id() == null) {
+							BattlebitsAPI.getLogger().info(PACKET.getClass() + " possui o id() null");
+							continue;
+						}
+
 						STREAM.writeByte(PACKET.id());
+
 						PACKET.write(STREAM);
 						CLIENT.written++;
 						QUEUE.remove(0);
@@ -43,11 +54,12 @@ public class CommonConnectionOutput extends Thread {
 				synchronized (LOCK) {
 					LOCK.wait(3250);
 				}
-			} catch (Exception e) {
-				if (BattlebitsAPI.debugModeEnabled()) {
+			} catch (IOException e) {
+				if (BattlebitsAPI.debugModeEnabled())
 					e.printStackTrace();
-				}
 				CLIENT.disconnect(true);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 		}
 	}

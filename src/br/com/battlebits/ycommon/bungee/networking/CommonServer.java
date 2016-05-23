@@ -29,7 +29,7 @@ public class CommonServer implements Runnable {
 	@Override
 	public void run() {
 		while (RUNNING) {
-			if(server.isClosed())
+			if (server.isClosed())
 				try {
 					server.bind(new InetSocketAddress(ADDRESS, PORT));
 				} catch (IOException e1) {
@@ -64,7 +64,8 @@ public class CommonServer implements Runnable {
 
 	public static void registerClient(CommonClient client) {
 		if (serverClients.containsKey(client.getServerIp())) {
-			serverClients.get(client.getServerIp()).disconnect(false);
+			client.disconnect(false);
+			return;
 		}
 		serverClients.put(client.getServerIp(), client);
 	}

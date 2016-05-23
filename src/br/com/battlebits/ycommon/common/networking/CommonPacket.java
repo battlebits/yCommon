@@ -2,9 +2,11 @@ package br.com.battlebits.ycommon.common.networking;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import br.com.battlebits.ycommon.common.exception.HandlePacketException;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAccountConfiguration;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAccountLoad;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAccountRequest;
@@ -15,6 +17,7 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketAddGroup;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAddRank;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeAccount;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLanguage;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLiga;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeTag;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketCommandRun;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketCreateParty;
@@ -54,7 +57,7 @@ public abstract class CommonPacket {
 		register((byte) 0x06, CPacketCommandRun.class);
 		register((byte) 0x07, CPacketTranslationsRequest.class);
 		register((byte) 0x08, CPacketTranslationsLoad.class);
-		
+
 		/** 0x1X: Account **/
 		register((byte) 0x10, CPacketAccountRequest.class);
 		register((byte) 0x11, CPacketAccountLoad.class);
@@ -64,9 +67,10 @@ public abstract class CommonPacket {
 		register((byte) 0x20, CPacketChangeLanguage.class);
 		register((byte) 0x21, CPacketChangeAccount.class);
 		register((byte) 0x22, CPacketChangeTag.class);
-		register((byte) 0x23, CPacketUpdateGameStatus.class);
-		register((byte) 0x24, CPacketUpdateProfile.class);
-		register((byte) 0x25, CPacketUpdateClan.class);
+		register((byte) 0x23, CPacketChangeLiga.class);
+		register((byte) 0x24, CPacketUpdateGameStatus.class);
+		register((byte) 0x25, CPacketUpdateProfile.class);
+		register((byte) 0x26, CPacketUpdateClan.class);
 
 		/** 0x4X: Friends **/
 		register((byte) 0x40, CPacketAddFriend.class);
@@ -124,13 +128,13 @@ public abstract class CommonPacket {
 		MAP_VALID.put(i, v);
 	}
 
-	public final byte id() {
+	public final Byte id() {
 		return MAP_ID.get(getClass());
 	}
 
-	public abstract void read(DataInputStream in) throws Exception;
+	public abstract void read(DataInputStream in) throws IOException;
 
-	public abstract void write(DataOutputStream out) throws Exception;
+	public abstract void write(DataOutputStream out) throws IOException;
 
-	public abstract void handle(CommonHandler handler) throws Exception;
+	public abstract void handle(CommonHandler handler) throws HandlePacketException;
 }

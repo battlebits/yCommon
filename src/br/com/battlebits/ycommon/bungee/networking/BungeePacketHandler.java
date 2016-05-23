@@ -47,7 +47,7 @@ public class BungeePacketHandler extends CommonHandler {
 	}
 
 	@Override
-	public void handleAccountConfiguration(CPacketAccountConfiguration packet) throws Exception {
+	public void handleAccountConfiguration(CPacketAccountConfiguration packet) {
 		BattlebitsAPI.getLogger().warning("Recebendo AccountConfiguration!");
 		BattlebitsAPI.getLogger().info(packet.getConfiguration().toString());
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(packet.getUuid());
@@ -56,7 +56,7 @@ public class BungeePacketHandler extends CommonHandler {
 	}
 
 	@Override
-	public void handleAccountRequest(CPacketAccountRequest packet) throws Exception {
+	public void handleAccountRequest(CPacketAccountRequest packet) {
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(packet.getUuid());
 		if (player == null)
 			player = BungeeMain.getPlugin().getAccountManager().loadBattlePlayer(packet.getUuid());
@@ -70,7 +70,7 @@ public class BungeePacketHandler extends CommonHandler {
 	}
 
 	@Override
-	public void handleTranslationsRequest(CPacketTranslationsRequest packet) throws Exception {
+	public void handleTranslationsRequest(CPacketTranslationsRequest packet) {
 		Language lang = packet.getLanguage();
 		String json = Translate.getMapTranslation(lang);
 		sender.sendPacket(new CPacketTranslationsLoad(lang, json));
@@ -193,7 +193,7 @@ public class BungeePacketHandler extends CommonHandler {
 	}
 
 	@Override
-	public void handleChangeAccount(CPacketChangeAccount packet) throws Exception {
+	public void handleChangeAccount(CPacketChangeAccount packet) {
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(packet.getUuid());
 		player.setXp(packet.getXp());
 		player.setFichas(packet.getFichas());
@@ -208,14 +208,14 @@ public class BungeePacketHandler extends CommonHandler {
 	}
 
 	@Override
-	public void handleChangeTag(CPacketChangeTag packet) throws Exception {
+	public void handleChangeTag(CPacketChangeTag packet) {
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(packet.getUniqueId());
 		player.setTag(packet.getTag());
 		player = null;
 	}
 
 	@Override
-	public void handleServerStart(CPacketServerStart packet) throws Exception {
+	public void handleServerStart(CPacketServerStart packet) {
 
 		String serverId = BungeeMain.getPlugin().getServerManager().getServerId(packet.getServerAddress());
 
@@ -228,7 +228,7 @@ public class BungeePacketHandler extends CommonHandler {
 	}
 
 	@Override
-	public void handleServerRecall(CPacketServerRecall packet) throws Exception {
+	public void handleServerRecall(CPacketServerRecall packet) {
 		String serverId = BungeeMain.getPlugin().getServerManager().getServerId(packet.getServerAddress());
 
 		sender.setServerIp(serverId);
@@ -238,27 +238,27 @@ public class BungeePacketHandler extends CommonHandler {
 	}
 
 	@Override
-	public void handleServerInfo(CPacketServerInfo packet) throws Exception {
+	public void handleServerInfo(CPacketServerInfo packet) {
 		BungeeMain.getPlugin().getServerManager().updateActiveServer(sender.getServerIp(), packet.getOnlinePlayers(), packet.getMaxPlayers(), packet.canJoin(), packet.getTempo(), packet.getHungerGamesStatus());
 	}
 
 	@Override
-	public void handleServerLoad(CPacketServerNameLoad packet) throws Exception {
+	public void handleServerLoad(CPacketServerNameLoad packet) {
 		// PROVAVEL QUE NUNCA VAI ACONTECER
 	}
 
 	@Override
-	public void handleCommandRun(CPacketCommandRun packet) throws Exception {
+	public void handleCommandRun(CPacketCommandRun packet) {
 		BungeeMain.getPlugin().getProxy().getPluginManager().dispatchCommand(BungeeMain.getPlugin().getProxy().getConsole(), packet.getCommand());
 	}
 
 	@Override
-	public void handlerKeepAlive(CPacketKeepAlive packet) throws Exception {
+	public void handlerKeepAlive(CPacketKeepAlive packet) {
 		sender.sendPacket(new CPacketKeepAlive());
 	}
 
 	@Override
-	public void handleServerStop(CPacketServerStop packet) throws Exception {
+	public void handleServerStop(CPacketServerStop packet) {
 		sender.disconnect(true);
 	}
 

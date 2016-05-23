@@ -90,13 +90,13 @@ public class BukkitMain extends JavaPlugin {
 			restart = true;
 			return;
 		}
+		socketClient.sendPacket(new CPacketServerStart(getServer().getIp() + ":" + getServer().getPort(), getServer().getMaxPlayers()));
+
 		try {
 			loadTranslations();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		socketClient.sendPacket(new CPacketServerStart(getServer().getIp() + ":" + getServer().getPort(), getServer().getMaxPlayers()));
 
 		registerCommonManagement();
 		enableCommonManagement();
@@ -175,6 +175,8 @@ public class BukkitMain extends JavaPlugin {
 	}
 
 	public void setState(HungerGamesState state) {
+		if (state == null)
+			return;
 		this.state = state;
 		sendUpdate();
 	}
@@ -184,17 +186,20 @@ public class BukkitMain extends JavaPlugin {
 		sendUpdate();
 	}
 
+	public void reconnect() {
+		try {
+			Socket socket = new Socket(CommonServer.ADDRESS, CommonServer.PORT);
+			socketClient = new BukkitClient(socket);
+			socketClient.sendPacket(new CPacketServerRecall(getServer().getIp() + ":" + getServer().getPort(), getServer().getOnlinePlayers().size(), getServer().getMaxPlayers()));
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			getServer().shutdown();
+		}
+	}
+
 	public BukkitClient getClient() {
 		if (socketClient.socket.isClosed())
-			try {
-				Socket socket = new Socket(CommonServer.ADDRESS, CommonServer.PORT);
-				socketClient = new BukkitClient(socket);
-				socketClient.sendPacket(new CPacketServerRecall(getServer().getIp() + ":" + getServer().getPort(), getServer().getOnlinePlayers().size(), getServer().getMaxPlayers()));
-			} catch (Exception e1) {
-				e1.printStackTrace();
-				getServer().shutdown();
-				restart = true;
-			}
+			reconnect();
 		return socketClient;
 	}
 

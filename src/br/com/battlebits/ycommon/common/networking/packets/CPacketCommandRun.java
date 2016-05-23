@@ -2,7 +2,9 @@ package br.com.battlebits.ycommon.common.networking.packets;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 
+import br.com.battlebits.ycommon.common.exception.HandlePacketException;
 import br.com.battlebits.ycommon.common.networking.CommonHandler;
 import br.com.battlebits.ycommon.common.networking.CommonPacket;
 
@@ -21,19 +23,19 @@ public class CPacketCommandRun extends CommonPacket {
 	public String getCommand() {
 		return command;
 	}
-	
+
 	@Override
-	public void read(DataInputStream in) throws Exception {
+	public void read(DataInputStream in) throws IOException {
 		command = in.readUTF();
 	}
 
 	@Override
-	public void write(DataOutputStream out) throws Exception {
+	public void write(DataOutputStream out) throws IOException {
 		out.writeUTF(command);
 	}
 
 	@Override
-	public void handle(CommonHandler handler) throws Exception {
+	public void handle(CommonHandler handler) throws HandlePacketException {
 		handler.handleCommandRun(this);
 	}
 

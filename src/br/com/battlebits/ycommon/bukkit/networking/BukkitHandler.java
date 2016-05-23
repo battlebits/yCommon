@@ -182,56 +182,56 @@ public class BukkitHandler extends CommonHandler {
 	}
 
 	@Override
-	public void handleAccountConfiguration(CPacketAccountConfiguration packet) throws Exception {
+	public void handleAccountConfiguration(CPacketAccountConfiguration packet) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void handleChangeTag(CPacketChangeTag packet) throws Exception {
+	public void handleChangeTag(CPacketChangeTag packet) {
 		// PROVAVEL QUE NUNCA VAI TER
 
 	}
 
 	@Override
-	public void handleChangeAccount(CPacketChangeAccount packet) throws Exception {
+	public void handleChangeAccount(CPacketChangeAccount packet) {
 
 	}
 
 	@Override
-	public void handleServerStart(CPacketServerStart packet) throws Exception {
+	public void handleServerStart(CPacketServerStart packet) {
 		// PROVAVEL QUE NUNCA VAI TER
 	}
 
 	@Override
-	public void handleServerRecall(CPacketServerRecall packet) throws Exception {
+	public void handleServerRecall(CPacketServerRecall packet) {
 		// PROVAVEL QUE NUNCA VAI TER
 	}
 
 	@Override
-	public void handleServerStop(CPacketServerStop packet) throws Exception {
+	public void handleServerStop(CPacketServerStop packet) {
 		// PROVAVEL QUE NUNCA VAI TER
 	}
 
 	@Override
-	public void handleServerLoad(CPacketServerNameLoad packet) throws Exception {
+	public void handleServerLoad(CPacketServerNameLoad packet) {
 		BukkitMain.setServerName(packet.getServerHostName());
 		BattlebitsAPI.getLogger().info("SERVER HOST NAME > " + packet.getServerHostName());
 		BattlebitsAPI.getLogger().info("SERVER TYPE > " + BukkitMain.getServerType());
 	}
 
 	@Override
-	public void handleServerInfo(CPacketServerInfo packet) throws Exception {
+	public void handleServerInfo(CPacketServerInfo packet) {
 		// PROVAVEL QUE NUNCA VAI TER
 	}
 
 	@Override
-	public void handleCommandRun(CPacketCommandRun packet) throws Exception {
+	public void handleCommandRun(CPacketCommandRun packet) {
 		// PROVAVEL QUE NUNCA VAI TER
 	}
 
 	@Override
-	public void handlerKeepAlive(CPacketKeepAlive packet) throws Exception {
+	public void handlerKeepAlive(CPacketKeepAlive packet) {
 		// NAO PRECISA
 	}
 

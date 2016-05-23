@@ -24,8 +24,8 @@ public abstract class CommonClient {
 		keepAlive = 0;
 		outputHandler = new CommonConnectionOutput(this, new DataOutputStream(socket.getOutputStream()));
 		inputHandler = new CommonConnectionInput(this, new DataInputStream(socket.getInputStream()));
-		inputHandler.start();
 		outputHandler.start();
+		inputHandler.start();
 	}
 
 	protected void setPacketHandler(CommonHandler packetHandler) {
