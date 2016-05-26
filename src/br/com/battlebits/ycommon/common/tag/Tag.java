@@ -1,5 +1,7 @@
 package br.com.battlebits.ycommon.common.tag;
 
+import org.bukkit.ChatColor;
+
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
@@ -17,6 +19,7 @@ public enum Tag {
 	STAFF("§e§l%staff%§e", Group.STAFF, false), //
 	BUILDER("§e§l%builder%§e", Group.BUILDER, true), //
 	DEV("§3§l%developer%§3", Group.DEV, true), //
+	YOUTUBERPLUS("§3§l%youtuberplus%§3", Group.YOUTUBERPLUS, true), //
 	YOUTUBER("§b§l%youtuber%§b", Group.YOUTUBER, true), //
 	ULTIMATE("§d§lULTIMATE§d", Group.ULTIMATE, false), //
 	PREMIUM("§6§lPREMIUM§6", Group.PREMIUM, false), //
@@ -45,9 +48,20 @@ public enum Tag {
 
 	public String getPrefix(Language language) {
 		String tag = prefix;
-		for (String strTag : new String[] { "owner", "star", "admin", "manager", "streamer", "mod", "trial", "helper", "staff", "builder",
-				"developer", "youtuber", "tournament", "winner" })
+		for (String strTag : new String[] { "owner", "star", "admin", "manager", "streamer", "mod", "trial", "helper", "staff", "builder", "developer", "youtuber", "tournament", "winner" })
 			tag = tag.replace("%" + strTag + "%", Translate.getTranslation(language, strTag).toUpperCase());
 		return tag;
+	}
+
+	public static Tag getTag(String match, Language language) throws Exception {
+		try {
+			return Tag.valueOf(match.toUpperCase());
+		} catch (Exception e) {
+		}
+		for (Tag tagPrefix : values()) {
+			if (ChatColor.stripColor(tagPrefix.getPrefix(language)).equalsIgnoreCase(match))
+				return tagPrefix;
+		}
+		throw new Exception();
 	}
 }

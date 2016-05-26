@@ -181,7 +181,7 @@ public class BukkitPlayer extends BattlePlayer {
 	public void loadTags() {
 		tags = new ArrayList<>();
 		for (Tag t : Tag.values()) {
-			if (((t.isExclusive() && ((t.getGroupToUse() == getServerGroup()) || (getServerGroup().ordinal() >= Group.ADMIN.ordinal()))) || (!t.isExclusive() && getServerGroup().ordinal() >= t.getGroupToUse().ordinal()))) {
+			if ((t.isExclusive() && (t.getGroupToUse() == getServerGroup() || getServerGroup().ordinal() >= Group.ADMIN.ordinal())) || (!t.isExclusive() && getServerGroup().ordinal() >= t.getGroupToUse().ordinal())) {
 				tags.add(t);
 			}
 		}

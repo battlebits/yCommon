@@ -26,18 +26,9 @@ public class PreferencesMenu {
 
 	public PreferencesMenu() {
 		ItemBuilder builder = new ItemBuilder();
-		conversationItem = builder.amount(1).type(Material.PAPER).name("§6%msg:item-preferences-conversation-name%")
-				.lore(Arrays.asList("§8%msg:item-preferences-icon-name%", "§0", "§7%msg:item-preferences-conversation-lore%", "§0",
-						"§e» %msg:item-preferences-edit-name%"))
-				.build();
-		tellEnabledItem = builder.amount(1).type(Material.BOOK_AND_QUILL).glow().name("§a%msg:item-preferences-conversation-tell-name%")
-				.lore(Arrays.asList("§8%msg:item-preferences-icon-name%", "§0", "§7%msg:item-preferences-conversation-tell-lore%", "§0",
-						"§e» %msg:item-preferences-edit-disable%"))
-				.build();
-		tellDisabledItem = builder.amount(1).type(Material.BOOK_AND_QUILL).name("§a%msg:item-preferences-conversation-tell-name%")
-				.lore(Arrays.asList("§8%msg:item-preferences-icon-name%", "§0", "§7%msg:item-preferences-conversation-tell-lore%", "§0",
-						"§e» %msg:item-preferences-edit-enable%"))
-				.build();
+		conversationItem = builder.amount(1).type(Material.PAPER).name("§6%msg:item-preferences-conversation-name%").lore(Arrays.asList("§8%msg:item-preferences-icon-name%", "§0", "§7%msg:item-preferences-conversation-lore%", "§0", "§e» %msg:item-preferences-edit-name%")).build();
+		tellEnabledItem = builder.amount(1).type(Material.BOOK_AND_QUILL).glow().name("§a%msg:item-preferences-conversation-tell-name%").lore(Arrays.asList("§8%msg:item-preferences-icon-name%", "§0", "§7%msg:item-preferences-conversation-tell-lore%", "§0", "§e» %msg:item-preferences-edit-disable%")).build();
+		tellDisabledItem = builder.amount(1).type(Material.BOOK_AND_QUILL).name("§a%msg:item-preferences-conversation-tell-name%").lore(Arrays.asList("§8%msg:item-preferences-icon-name%", "§0", "§7%msg:item-preferences-conversation-tell-lore%", "§0", "§e» %msg:item-preferences-edit-enable%")).build();
 		conversationIcon = new MenuItem(conversationItem, new MenuClickHandler() {
 
 			@Override

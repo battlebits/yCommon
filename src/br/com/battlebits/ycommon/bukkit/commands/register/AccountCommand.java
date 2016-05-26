@@ -3,6 +3,7 @@ package br.com.battlebits.ycommon.bukkit.commands.register;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
@@ -53,8 +54,7 @@ public class AccountCommand extends CommandClass {
 						i -= 1;
 					}
 					TextComponent component = new TextComponent((t == Tag.NORMAL) ? "§7§lNORMAL" : t.getPrefix(player.getLanguage()));
-					component.setHoverEvent(new HoverEvent(Action.SHOW_TEXT,
-							new TextComponent[] { new TextComponent(Translate.getTranslation(player.getLanguage(), "command-tag-click-select")) }));
+					component.setHoverEvent(new HoverEvent(Action.SHOW_TEXT, new TextComponent[] { new TextComponent(Translate.getTranslation(player.getLanguage(), "command-tag-click-select")) }));
 					component.setClickEvent(new ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.RUN_COMMAND, "/tag " + t.name()));
 					message[i] = component;
 					i -= 1;
@@ -65,7 +65,7 @@ public class AccountCommand extends CommandClass {
 			} else {
 				Tag tag = null;
 				try {
-					tag = Tag.valueOf(args[0].toUpperCase());
+					tag = Tag.getTag(args[0].toUpperCase(), player.getLanguage());
 				} catch (Exception ex) {
 					p.sendMessage(prefix + Translate.getTranslation(player.getLanguage(), "command-tag-not-found"));
 					return;
@@ -74,8 +74,7 @@ public class AccountCommand extends CommandClass {
 					if (player.getTags().contains(tag)) {
 						if (player.getTag() != tag) {
 							if (player.setTag(tag)) {
-								p.sendMessage(prefix + Translate.getTranslation(player.getLanguage(), "command-tag-selected").replace("%tag%",
-										((tag == Tag.NORMAL) ? "§7§lNORMAL" : tag.getPrefix(player.getLanguage()))));
+								p.sendMessage(prefix + Translate.getTranslation(player.getLanguage(), "command-tag-selected").replace("%tag%", ((tag == Tag.NORMAL) ? "§7§lNORMAL" : tag.getPrefix(player.getLanguage()))));
 							}
 						} else {
 							p.sendMessage(prefix + Translate.getTranslation(player.getLanguage(), "command-tag-current"));
@@ -108,6 +107,8 @@ public class AccountCommand extends CommandClass {
 				String s = args[0].toUpperCase();
 				for (Tag t : player.getTags()) {
 					if (t.name().startsWith(s)) {
+						tags.add(t.name());
+					} else if (ChatColor.stripColor(t.getPrefix(player.getLanguage())).startsWith(s)) {
 						tags.add(t.name());
 					}
 				}
