@@ -33,8 +33,8 @@ public class ServerManager {
 	public ServerManager(BungeeMain main) {
 		this.main = main;
 		lobbyBalancer = new LeastConnection<>();
-		fullIronBalancer = new LeastConnection<>();
-		peladoBalancer = new LeastConnection<>();
+		fullIronBalancer = new MostConnection<>();
+		peladoBalancer = new MostConnection<>();
 		hgBalancer = new MostConnection<>();
 		battlebitsServers = new HashMap<>();
 		activeServers = new HashMap<>();
