@@ -176,6 +176,8 @@ public class BungeePacketHandler extends CommonHandler {
 	@Override
 	public void handleUpdateGameStatus(CPacketUpdateGameStatus packet) {
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(packet.getUuid());
+		if(player == null)
+			player = BungeeMain.getPlugin().getAccountManager().loadBattlePlayer(packet.getUuid());
 		player.getGameStatus().updateMinigame(packet.getGameType(), packet.getJson());
 		if (BungeeCord.getInstance().getPlayer(player.getUuid()) == null)
 			BattlebitsAPI.getAccountCommon().saveBattlePlayer(player);
@@ -191,6 +193,8 @@ public class BungeePacketHandler extends CommonHandler {
 	@Override
 	public void handleChangeLiga(CPacketChangeLiga packet) {
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(packet.getUuid());
+		if(player == null)
+			player = BungeeMain.getPlugin().getAccountManager().loadBattlePlayer(packet.getUuid());
 		player.setLiga(packet.getLiga());
 		if (BungeeCord.getInstance().getPlayer(player.getUuid()) == null)
 			BattlebitsAPI.getAccountCommon().saveBattlePlayer(player);
@@ -200,6 +204,8 @@ public class BungeePacketHandler extends CommonHandler {
 	@Override
 	public void handleChangeAccount(CPacketChangeAccount packet) {
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(packet.getUuid());
+		if(player == null)
+			player = BungeeMain.getPlugin().getAccountManager().loadBattlePlayer(packet.getUuid());
 		player.setXp(packet.getXp());
 		player.setFichas(packet.getFichas());
 		player.setMoney(packet.getMoney());
@@ -217,6 +223,8 @@ public class BungeePacketHandler extends CommonHandler {
 	@Override
 	public void handleChangeTag(CPacketChangeTag packet) {
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(packet.getUniqueId());
+		if(player == null)
+			player = BungeeMain.getPlugin().getAccountManager().loadBattlePlayer(packet.getUniqueId());
 		player.setTag(packet.getTag());
 		if (BungeeCord.getInstance().getPlayer(player.getUuid()) == null)
 			BattlebitsAPI.getAccountCommon().saveBattlePlayer(player);
