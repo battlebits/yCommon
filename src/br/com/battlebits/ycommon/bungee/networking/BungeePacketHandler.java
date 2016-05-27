@@ -37,6 +37,7 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketUpdateGameStat
 import br.com.battlebits.ycommon.common.networking.packets.CPacketUpdateProfile;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
+import net.md_5.bungee.BungeeCord;
 
 public class BungeePacketHandler extends CommonHandler {
 
@@ -176,6 +177,8 @@ public class BungeePacketHandler extends CommonHandler {
 	public void handleUpdateGameStatus(CPacketUpdateGameStatus packet) {
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(packet.getUuid());
 		player.getGameStatus().updateMinigame(packet.getGameType(), packet.getJson());
+		if (BungeeCord.getInstance().getPlayer(player.getUuid()) == null)
+			BattlebitsAPI.getAccountCommon().saveBattlePlayer(player);
 		player = null;
 	}
 
@@ -189,6 +192,8 @@ public class BungeePacketHandler extends CommonHandler {
 	public void handleChangeLiga(CPacketChangeLiga packet) {
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(packet.getUuid());
 		player.setLiga(packet.getLiga());
+		if (BungeeCord.getInstance().getPlayer(player.getUuid()) == null)
+			BattlebitsAPI.getAccountCommon().saveBattlePlayer(player);
 		player = null;
 	}
 
@@ -198,6 +203,8 @@ public class BungeePacketHandler extends CommonHandler {
 		player.setXp(packet.getXp());
 		player.setFichas(packet.getFichas());
 		player.setMoney(packet.getMoney());
+		if (BungeeCord.getInstance().getPlayer(player.getUuid()) == null)
+			BattlebitsAPI.getAccountCommon().saveBattlePlayer(player);
 		player = null;
 	}
 
@@ -211,8 +218,12 @@ public class BungeePacketHandler extends CommonHandler {
 	public void handleChangeTag(CPacketChangeTag packet) {
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(packet.getUniqueId());
 		player.setTag(packet.getTag());
+		if (BungeeCord.getInstance().getPlayer(player.getUuid()) == null)
+			BattlebitsAPI.getAccountCommon().saveBattlePlayer(player);
 		player = null;
 	}
+
+	// SERVER HANDLER
 
 	@Override
 	public void handleServerStart(CPacketServerStart packet) {
