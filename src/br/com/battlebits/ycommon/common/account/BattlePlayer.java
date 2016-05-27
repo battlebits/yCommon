@@ -234,7 +234,7 @@ public class BattlePlayer {
 
 	public boolean hasGroupPermission(Group group) {
 		if (getServerGroup() == Group.YOUTUBERPLUS) {
-			return Group.TRIAL.ordinal() >= group.ordinal();
+			return Group.MOD.ordinal() >= group.ordinal();
 		}
 		return getServerGroup().ordinal() >= group.ordinal();
 	}
