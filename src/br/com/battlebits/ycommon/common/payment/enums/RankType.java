@@ -4,5 +4,6 @@ public enum RankType {
 	LIGHT, //
 	PREMIUM, //
 	ULTIMATE, //
-	YOUTUBER;
+	YOUTUBER, //
+	YOUTUBERPLUS;
 }
