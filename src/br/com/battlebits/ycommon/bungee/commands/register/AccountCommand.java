@@ -18,8 +18,6 @@ import br.com.battlebits.ycommon.common.enums.ServerStaff;
 import br.com.battlebits.ycommon.common.payment.enums.RankType;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.tag.Tag;
-import br.com.battlebits.ycommon.common.time.TimeZone;
-import br.com.battlebits.ycommon.common.time.TimeZoneConversor;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
 import br.com.battlebits.ycommon.common.utils.DateUtils;
@@ -82,7 +80,7 @@ public class AccountCommand extends CommandClass {
 					sender.sendMessage(TextComponent.fromLegacyText(ChatColor.YELLOW + "Fichas: " + player.getFichas()));
 				}
 				for (Entry<RankType, Long> entry : player.getRanks().entrySet()) {
-					sender.sendMessage(TextComponent.fromLegacyText(Tag.valueOf(entry.getKey().toString()).getPrefix(language) + ChatColor.YELLOW + " expira em " + DateUtils.formatDifference(language, (entry.getValue() - TimeZoneConversor.getCurrentMillsTimeIn(TimeZone.GMT0)) / 1000)));
+					sender.sendMessage(TextComponent.fromLegacyText(Tag.valueOf(entry.getKey().toString()).getPrefix(language) + ChatColor.YELLOW + " expira em " + DateUtils.formatDifference(language, (entry.getValue() - System.currentTimeMillis()) / 1000)));
 				}
 				for (Entry<ServerStaff, Group> staff : player.getGroups().entrySet()) {
 					sender.sendMessage(TextComponent.fromLegacyText(Tag.valueOf(staff.getValue().toString()).getPrefix(language) + ChatColor.YELLOW + " do server " + staff.getKey().toString()));
