@@ -41,30 +41,44 @@ public class Translate {
 
 	// server-not-available
 
-	private static Map<Language, Map<String, String>> languageTranslations = new HashMap<>();
+	private static Map<String, Map<Language, Map<String, String>>> languageTranslations = new HashMap<>();
 
 	public static String getTranslation(Language language, String messageId) {
-		if (!languageTranslations.containsKey(language)) {
-			BattlebitsAPI.debug(language.toString() + " > NAO ENCONTRADA");
-			return null;
+		String message = null;
+
+		for (Map<Language, Map<String, String>> translations : languageTranslations.values()) {
+			if (!translations.containsKey(language)) {
+				BattlebitsAPI.debug(language.toString() + " > NAO ENCONTRADA");
+				continue;
+			}
+			if (!translations.get(language).containsKey(messageId)) {
+				continue;
+			}
+			message = translations.get(language).get(messageId);
 		}
-		if (!languageTranslations.get(language).containsKey(messageId)) {
+
+		if (message == null) {
 			BattlebitsAPI.debug(language.toString() + " > " + messageId + " > NAO ENCONTRADA");
-			return null;
 		}
-		return languageTranslations.get(language).get(messageId);
+
+		return message;
 	}
 
-	public static String getMapTranslation(Language language) {
-		if (!languageTranslations.containsKey(language)) {
+	public static String getyCommonMapTranslation(Language language) {
+		if (!languageTranslations.get(BattlebitsAPI.TRANSLATION_ID).containsKey(language)) {
 			BattlebitsAPI.debug(language.toString() + " > NAO ENCONTRADA");
 			return null;
 		}
-		return BattlebitsAPI.getGson().toJson(languageTranslations.get(language));
+		return BattlebitsAPI.getGson().toJson(languageTranslations.get(BattlebitsAPI.TRANSLATION_ID).get(language));
 	}
 
-	public static void loadTranslations(Language lang, String json) {
-		languageTranslations.put(lang, BattlebitsAPI.getGson().fromJson(json, new TypeToken<HashMap<String, String>>() {
+	public static void loadTranslations(String translationType, Language lang, String json) {
+		Map<Language, Map<String, String>> map = languageTranslations.get(translationType);
+		if (map == null) {
+			map = new HashMap<>();
+			languageTranslations.put(translationType, map);
+		}
+		map.put(lang, BattlebitsAPI.getGson().fromJson(json, new TypeToken<HashMap<String, String>>() {
 		}.getType()));
 	}
 

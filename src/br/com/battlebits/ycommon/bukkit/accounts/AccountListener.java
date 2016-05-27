@@ -9,34 +9,29 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
-import br.com.battlebits.ycommon.bukkit.networking.BukkitHandler;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.translate.Translate;
 
 public class AccountListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	public synchronized void onAsync(AsyncPlayerPreLoginEvent event) throws Exception {
-		if(Bukkit.getPlayer(event.getUniqueId()) != null) {
+	public synchronized void onAsync(AsyncPlayerPreLoginEvent event) throws InterruptedException {
+		if (Bukkit.getPlayer(event.getUniqueId()) != null) {
 			event.setLoginResult(Result.KICK_OTHER);
 			event.setKickMessage("Already online");
 			return;
 		}
 		BukkitMain.getPlugin().getAccountManager().loadPlayer(event.getUniqueId());
-		synchronized (BukkitHandler.LOCK) {
-			BukkitHandler.LOCK.wait(3250);
-		}
-		
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onRemoveAccount(AsyncPlayerPreLoginEvent event) {
-		if(BattlebitsAPI.getAccountCommon().getBattlePlayer(event.getUniqueId()) == null){
+		if (BattlebitsAPI.getAccountCommon().getBattlePlayer(event.getUniqueId()) == null) {
 			event.setLoginResult(Result.KICK_OTHER);
 			event.setKickMessage(Translate.getTranslation(BattlebitsAPI.getDefaultLanguage(), "account-not-load"));
 		}
-		
-		if (event.getLoginResult() != Result.ALLOWED){
+
+		if (event.getLoginResult() != Result.ALLOWED) {
 			BattlebitsAPI.getAccountCommon().unloadBattlePlayer(event.getUniqueId());
 		}
 	}

@@ -123,8 +123,8 @@ public class ServerManager {
 	}
 
 	public void removeActiveServer(String str) {
-		removeFromBalancers(str);
 		activeServers.remove(str.toLowerCase());
+		removeFromBalancers(str);
 	}
 
 	public void addToBalancers(String serverId, BattleServer server) {

@@ -39,6 +39,7 @@ public class BattlebitsAPI {
 	public final static String ADMIN_EMAIL = "admin@battlebits.com.br";
 	public final static String TWITTER = "@BattlebitsMC";
 	public final static String HUNGERGAMES_ADDRESS = "battle-hg.com";
+	public final static String TRANSLATION_ID = "ycommon";
 	public static Language defaultLanguage = Language.PORTUGUES;
 
 	public static AccountCommon getAccountCommon() {

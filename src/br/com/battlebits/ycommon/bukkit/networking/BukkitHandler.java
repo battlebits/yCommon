@@ -73,7 +73,7 @@ public class BukkitHandler extends CommonHandler {
 	public void handleTranslationsLoad(CPacketTranslationsLoad packet) {
 		Language lang = packet.getLanguage();
 		String json = packet.getJson();
-		Translate.loadTranslations(lang, json);
+		Translate.loadTranslations(BattlebitsAPI.TRANSLATION_ID, lang, json);
 		BattlebitsAPI.debug("NEW TRANSLATION>" + lang);
 		lang = null;
 		json = null;

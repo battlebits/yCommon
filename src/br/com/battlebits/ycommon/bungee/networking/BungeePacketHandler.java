@@ -72,7 +72,7 @@ public class BungeePacketHandler extends CommonHandler {
 	@Override
 	public void handleTranslationsRequest(CPacketTranslationsRequest packet) {
 		Language lang = packet.getLanguage();
-		String json = Translate.getMapTranslation(lang);
+		String json = Translate.getyCommonMapTranslation(lang);
 		sender.sendPacket(new CPacketTranslationsLoad(lang, json));
 		lang = null;
 		json = null;

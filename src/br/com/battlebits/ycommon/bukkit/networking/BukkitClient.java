@@ -15,7 +15,8 @@ public class BukkitClient extends CommonClient {
 	@Override
 	public void disconnect(boolean removeServer) {
 		super.disconnect(removeServer);
-		BukkitMain.getPlugin().reconnect();
+		if (!removeServer)
+			BukkitMain.getPlugin().reconnect();
 	}
 
 }

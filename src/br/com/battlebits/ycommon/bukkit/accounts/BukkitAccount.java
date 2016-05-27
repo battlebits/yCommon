@@ -7,6 +7,9 @@ import org.bukkit.entity.Player;
 
 import br.com.battlebits.ycommon.bukkit.BukkitCommon;
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
+import br.com.battlebits.ycommon.bukkit.networking.BukkitHandler;
+import br.com.battlebits.ycommon.common.BattlebitsAPI;
+import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAccountRequest;
 
 public class BukkitAccount extends BukkitCommon {
@@ -31,8 +34,12 @@ public class BukkitAccount extends BukkitCommon {
 	public void onDisable() {
 	}
 
-	public void loadPlayer(UUID uuid) throws Exception {
+	public BattlePlayer loadPlayer(UUID uuid) throws InterruptedException {
 		BukkitMain.getPlugin().getClient().sendPacket(new CPacketAccountRequest(uuid));
+		synchronized (BukkitHandler.LOCK) {
+			BukkitHandler.LOCK.wait(3250);
+		}
+		return BattlebitsAPI.getAccountCommon().getBattlePlayer(uuid);
 	}
 
 }

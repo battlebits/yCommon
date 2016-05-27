@@ -1,6 +1,5 @@
 package br.com.battlebits.ycommon.bukkit.commands;
 
-import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.commandmanager.CommandClass;
 import br.com.battlebits.ycommon.common.utils.ClassGetter;
@@ -15,7 +14,7 @@ public class BukkitCommandLoader {
 
 	public int loadCommandsFromPackage(String packageName) {
 		int i = 0;
-		for (Class<?> commandClass : ClassGetter.getClassesForPackage(BukkitMain.getPlugin().getClass(), packageName)) {
+		for (Class<?> commandClass : ClassGetter.getClassesForPackage(framework.getPlugin().getClass(), packageName)) {
 			if (CommandClass.class.isAssignableFrom(commandClass)) {
 				try {
 					CommandClass commands = (CommandClass) commandClass.newInstance();

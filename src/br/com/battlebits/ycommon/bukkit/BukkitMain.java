@@ -46,9 +46,6 @@ public class BukkitMain extends JavaPlugin {
 	private PermissionManager permissionManager;
 	private TagManager tagManager;
 
-	private BukkitCommandLoader bukkitCommandLoader;
-	private BukkitCommandFramework bukkitCommandFramework;
-
 	private BattleBoard battleBoard;
 
 	private MenuTranslationInjector menuTranslationInjector;
@@ -102,9 +99,7 @@ public class BukkitMain extends JavaPlugin {
 		enableCommonManagement();
 		registerListeners();
 		getServer().getPluginManager().registerEvents(new MenuListener(), this);
-		bukkitCommandFramework = new BukkitCommandFramework(this);
-		bukkitCommandLoader = new BukkitCommandLoader(bukkitCommandFramework);
-		bukkitCommandLoader.loadCommandsFromPackage("br.com.battlebits.ycommon.bukkit.commands.register");
+		new BukkitCommandLoader(new BukkitCommandFramework(this)).loadCommandsFromPackage("br.com.battlebits.ycommon.bukkit.commands.register");
 		menuTranslationInjector = new MenuTranslationInjector();
 		menuTranslationInjector.inject();
 		getServer().getScheduler().runTaskTimer(this, new UpdateScheduler(), 1, 1);
@@ -209,10 +204,6 @@ public class BukkitMain extends JavaPlugin {
 
 	public BattleBoard getBattleBoard() {
 		return battleBoard;
-	}
-
-	public BukkitCommandLoader getBukkitCommandLoader() {
-		return bukkitCommandLoader;
 	}
 
 	public static BukkitMain getPlugin() {

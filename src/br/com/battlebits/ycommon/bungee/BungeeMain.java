@@ -151,7 +151,7 @@ public class BungeeMain extends Plugin {
 					stmt = getConnection().getConnection().prepareStatement("SELECT * FROM `translations` WHERE `language`='" + lang + "';");
 					result = stmt.executeQuery();
 					if (result.next()) {
-						Translate.loadTranslations(lang, result.getString("json"));
+						Translate.loadTranslations(BattlebitsAPI.TRANSLATION_ID, lang, result.getString("json"));
 						BattlebitsAPI.debug(lang.toString() + " > LOADED");
 
 					}

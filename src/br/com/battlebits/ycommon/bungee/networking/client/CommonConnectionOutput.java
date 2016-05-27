@@ -34,10 +34,12 @@ public class CommonConnectionOutput extends Thread {
 						final CommonPacket PACKET = QUEUE.get(0);
 
 						if (PACKET == null) {
+							QUEUE.remove(0);
 							continue;
 						}
 
 						if (PACKET.id() == null) {
+							QUEUE.remove(0);
 							BattlebitsAPI.getLogger().info(PACKET.getClass() + " possui o id() null");
 							continue;
 						}
@@ -57,8 +59,12 @@ public class CommonConnectionOutput extends Thread {
 			} catch (IOException e) {
 				if (BattlebitsAPI.debugModeEnabled())
 					e.printStackTrace();
+				QUEUE.remove(0);
 				CLIENT.disconnect(true);
 			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				QUEUE.remove(0);
 				e.printStackTrace();
 			}
 		}

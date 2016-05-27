@@ -68,6 +68,10 @@ public class BukkitCommandFramework {
 			}
 		}
 	}
+	
+	public JavaPlugin getPlugin() {
+		return plugin;
+	}
 
 	/**
 	 * Handles commands. Used in the onCommand method in your JavaPlugin class
