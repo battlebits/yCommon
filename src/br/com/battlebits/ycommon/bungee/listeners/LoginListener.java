@@ -51,12 +51,19 @@ public class LoginListener implements Listener {
 					PreparedStatement stmt = connection.prepareStatement("SELECT * FROM `account` WHERE `uuid`='" + uuid.toString().replace("-", "") + "';");
 					ResultSet result = stmt.executeQuery();
 					BattlebitsAPI.debug("ACCOUNT > EXCUTED");
+					boolean success = true;
 					if (result.next()) {
-						BattlePlayer player = BattlebitsAPI.getGson().fromJson(result.getString("json"), BattlePlayer.class);
-						player.setJoinData(userName, ipAdress, countryCode, timeZoneCode);
-						BattlebitsAPI.getAccountCommon().loadBattlePlayer(uuid, player);
-						BattlebitsAPI.debug("ACCOUNT > LOADED");
-					} else {
+						try {
+							BattlePlayer player = BattlebitsAPI.getGson().fromJson(result.getString("json"), BattlePlayer.class);
+							player.setJoinData(userName, ipAdress, countryCode, timeZoneCode);
+							BattlebitsAPI.getAccountCommon().loadBattlePlayer(uuid, player);
+							BattlebitsAPI.debug("ACCOUNT > LOADED");
+						} catch (Exception e) {
+							success = false;
+							e.printStackTrace();
+						}
+					}
+					if (!success) {
 						BattlebitsAPI.getAccountCommon().loadBattlePlayer(uuid, new BattlePlayer(userName, uuid, ipAdress, countryCode, timeZoneCode));
 						BattlebitsAPI.debug("ACCOUNT > NEW");
 					}
