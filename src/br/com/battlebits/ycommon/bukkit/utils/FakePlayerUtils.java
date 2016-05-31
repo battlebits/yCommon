@@ -25,10 +25,15 @@ import net.minecraft.server.v1_7_R4.PacketPlayOutPlayerInfo;
 public class FakePlayerUtils {
 
 	public static void changePlayerName(Player player, String name) {
+		changePlayerName(player, name, true);
+	}
+
+	public static void changePlayerName(Player player, String name, boolean respawn) {
 		Collection<? extends Player> players = BukkitMain.getPlugin().getServer().getOnlinePlayers();
 		EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
 		GameProfile playerProfile = entityPlayer.getProfile();
-		removeFromTab(player, players);
+		if (respawn)
+			removeFromTab(player, players);
 		try {
 			Field field = playerProfile.getClass().getDeclaredField("name");
 			field.setAccessible(true);
@@ -39,15 +44,28 @@ public class FakePlayerUtils {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		respawnPlayer(player, players);
+		if (respawn)
+			respawnPlayer(player, players);
 	}
 
 	public static void removePlayerSkin(Player player) {
+		removePlayerSkin(player, true);
+	}
 
+	public static void removePlayerSkin(Player player, boolean respawn) {
+		EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
+		GameProfile playerProfile = entityPlayer.getProfile();
+		playerProfile.getProperties().clear();
+		if (respawn) {
+			respawnPlayer(player, BukkitMain.getPlugin().getServer().getOnlinePlayers());
+		}
 	}
 
 	public static void changePlayerSkin(Player player, String name, UUID uuid) {
-		Collection<? extends Player> players = BukkitMain.getPlugin().getServer().getOnlinePlayers();
+		changePlayerSkin(player, name, uuid, true);
+	}
+
+	public static void changePlayerSkin(Player player, String name, UUID uuid, boolean respawn) {
 		EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
 		GameProfile playerProfile = entityPlayer.getProfile();
 		playerProfile.getProperties().clear();
@@ -56,7 +74,8 @@ public class FakePlayerUtils {
 		} catch (ExecutionException e) {
 			e.printStackTrace();
 		}
-		respawnPlayer(player, players);
+		if (respawn)
+			respawnPlayer(player, BukkitMain.getPlugin().getServer().getOnlinePlayers());
 	}
 
 	public void addToTab(Player player, Collection<? extends Player> players) {

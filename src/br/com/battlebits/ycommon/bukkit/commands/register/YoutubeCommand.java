@@ -35,11 +35,16 @@ public class YoutubeCommand extends CommandClass {
 			return;
 		}
 		String playerName = args.getArgs()[0];
+
+		if (playerName.equalsIgnoreCase(bP.getUserName())) {
+			fakeremove(args);
+			return;
+		}
+
 		if (!FakePlayerUtils.validateName(playerName)) {
 			p.sendMessage(fakePrefix + Translate.getTranslation(bP.getLanguage(), "command-fake-invalid"));
 			return;
 		}
-
 		if (BattlebitsAPI.getUUIDOf(playerName) != null) {
 			p.sendMessage(fakePrefix + Translate.getTranslation(bP.getLanguage(), "command-fake-player-exists"));
 			return;
@@ -49,11 +54,34 @@ public class YoutubeCommand extends CommandClass {
 			@Override
 			public void run() {
 				BukkitMain.getPlugin().getTagManager().removePlayerTag(p);
-				FakePlayerUtils.changePlayerName(p, playerName);
+				FakePlayerUtils.removePlayerSkin(p, false);
+				FakePlayerUtils.changePlayerName(p, playerName, true);
 				bP.setTag(bP.getTag());
+				bP.setFakeName(playerName);
 				p.sendMessage(fakePrefix + Translate.getTranslation(bP.getLanguage(), "command-fake-changed-success"));
 			}
 		}.runTask(BukkitMain.getPlugin());
+	}
+
+	@Command(name = "fakeremove", aliases = { "removefake", "removerfake" }, groupToUse = Group.YOUTUBER, noPermMessageId = "command-fakeremove-no-access")
+	public void fakeremove(CommandArgs args) {
+		if (!args.isPlayer()) {
+			args.getSender().sendMessage("COMANDO PARA PLAYERS");
+			return;
+		}
+		Player p = args.getPlayer();
+		BattlePlayer bP = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
+		if (!bP.getServerGroup().toString().contains("YOUTUBER") && !bP.hasGroupPermission(Group.STREAMER)) {
+			p.sendMessage(Translate.getTranslation(bP.getLanguage(), "command-fakeremove-no-access").replace("%command%", args.getLabel()));
+			return;
+		}
+		bP.setFakeName("");
+
+		BukkitMain.getPlugin().getTagManager().removePlayerTag(p);
+		FakePlayerUtils.changePlayerSkin(p, bP.getUserName(), bP.getUuid(), false);
+		FakePlayerUtils.changePlayerName(p, bP.getUserName(), true);
+		bP.setTag(bP.getTag());
+		p.sendMessage(Translate.getTranslation(bP.getLanguage(), "command-fakeremove-prefix") + " " + Translate.getTranslation(bP.getLanguage(), "command-fakeremove-changed-success"));
 	}
 
 	@Command(name = "changeskin", groupToUse = Group.ULTIMATE, noPermMessageId = "command-changeskin-no-access", runAsync = true)
