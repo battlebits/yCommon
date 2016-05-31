@@ -56,6 +56,9 @@ public class PlayerListener implements Listener {
 	public void onQuit(PlayerQuitEvent event) {
 		AdminMode.getInstance().removeAdmin(event.getPlayer());
 		VanishAPI.getInstance().removeVanish(event.getPlayer());
+		if (BukkitMain.isMemoryRamRestart())
+			if (Bukkit.getOnlinePlayers().size() - 1 <= 0)
+				Bukkit.shutdown();
 	}
 
 	@EventHandler
@@ -72,6 +75,13 @@ public class PlayerListener implements Listener {
 				}
 			}
 		}
+	}
+
+	@EventHandler
+	public void onRamRestart(UpdateEvent event) {
+		if (event.getType() != UpdateType.MINUTE)
+			return;
+		BukkitMain.isMemoryRamOnLimit();
 	}
 
 	@EventHandler

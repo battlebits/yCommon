@@ -54,6 +54,8 @@ public class BukkitMain extends JavaPlugin {
 
 	private boolean restart;
 
+	private static boolean memoryRamRestart = false;
+
 	private boolean canJoin = true;
 	private HungerGamesState state = HungerGamesState.NONE;
 	private int tempo = 0;
@@ -228,6 +230,21 @@ public class BukkitMain extends JavaPlugin {
 
 	public static String getServerHostName() {
 		return SERVERNAME;
+	}
+
+	public static void isMemoryRamOnLimit() {
+		if (memoryRamRestart)
+			return;
+		long maxMemory = Runtime.getRuntime().maxMemory();
+		long usedMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+		if (usedMemory > maxMemory) {
+			memoryRamRestart = true;
+			BukkitMain.getPlugin().setCanJoin(false);
+		}
+	}
+
+	public static boolean isMemoryRamRestart() {
+		return memoryRamRestart;
 	}
 
 }
