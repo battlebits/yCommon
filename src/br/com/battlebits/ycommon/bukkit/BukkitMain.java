@@ -206,6 +206,10 @@ public class BukkitMain extends JavaPlugin {
 		return battleBoard;
 	}
 
+	public TagManager getTagManager() {
+		return tagManager;
+	}
+
 	public static BukkitMain getPlugin() {
 		return plugin;
 	}

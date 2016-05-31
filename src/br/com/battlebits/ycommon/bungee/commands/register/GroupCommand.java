@@ -17,6 +17,7 @@ import br.com.battlebits.ycommon.common.commandmanager.CommandClass;
 import br.com.battlebits.ycommon.common.enums.ServerType;
 import br.com.battlebits.ycommon.common.payment.enums.RankType;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
+import br.com.battlebits.ycommon.common.tag.Tag;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
 import br.com.battlebits.ycommon.common.utils.DateUtils;
@@ -190,6 +191,7 @@ public class GroupCommand extends CommandClass {
 				}
 				newAdd = newAdd + expiresCheck;
 				player.getRanks().put(rank, newAdd);
+				player.setTag(Tag.valueOf(rank.toString()));
 				if (!player.isOnline()) {
 					BattlebitsAPI.getAccountCommon().saveBattlePlayer(player);
 				}

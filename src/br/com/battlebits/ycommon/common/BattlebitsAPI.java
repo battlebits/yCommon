@@ -15,7 +15,6 @@ import br.com.battlebits.ycommon.common.manager.ClanCommon;
 import br.com.battlebits.ycommon.common.time.TimeZone;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
 import br.com.battlebits.ycommon.common.utils.mojang.NameFetcher;
-import br.com.battlebits.ycommon.common.utils.mojang.PremiumChecker;
 import br.com.battlebits.ycommon.common.utils.mojang.UUIDFetcher;
 
 public class BattlebitsAPI {
@@ -27,7 +26,6 @@ public class BattlebitsAPI {
 	private static BattleInstance battleInstance;
 	private static UUIDFetcher uuidFetcher;
 	private static NameFetcher nameFetcher;
-	private static PremiumChecker premiumChecker = new PremiumChecker();
 	private static Logger logger;
 	private static boolean debugMode = false;
 	private static boolean useRedisBungee = false;
@@ -76,10 +74,6 @@ public class BattlebitsAPI {
 
 	public static UUID getUUIDOf(String name) {
 		return uuidFetcher.getUUID(name);
-	}
-
-	public static boolean isPremium(String username) {
-		return premiumChecker.isPremium(username.toLowerCase());
 	}
 
 	public static String getNammeOf(UUID uuid) {

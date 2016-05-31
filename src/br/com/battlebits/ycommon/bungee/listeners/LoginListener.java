@@ -51,15 +51,15 @@ public class LoginListener implements Listener {
 					PreparedStatement stmt = connection.prepareStatement("SELECT * FROM `account` WHERE `uuid`='" + uuid.toString().replace("-", "") + "';");
 					ResultSet result = stmt.executeQuery();
 					BattlebitsAPI.debug("ACCOUNT > EXCUTED");
-					boolean success = true;
+					boolean success = false;
 					if (result.next()) {
 						try {
 							BattlePlayer player = BattlebitsAPI.getGson().fromJson(result.getString("json"), BattlePlayer.class);
 							player.setJoinData(userName, ipAdress, countryCode, timeZoneCode);
 							BattlebitsAPI.getAccountCommon().loadBattlePlayer(uuid, player);
 							BattlebitsAPI.debug("ACCOUNT > LOADED");
+							success = true;
 						} catch (Exception e) {
-							success = false;
 							e.printStackTrace();
 						}
 					}
@@ -82,14 +82,17 @@ public class LoginListener implements Listener {
 				BattlebitsAPI.debug("BANNING > STARTING");
 				BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(event.getConnection().getUniqueId());
 
-				if (player.getBanHistory().getActualBan() == null) {
-					Entry<UUID, Ban> ipBan = BungeeMain.getPlugin().getBanManager().getIpBan(ipAdress.getHostString());
-					if (ipBan != null) {
-						if (!ipBan.getKey().equals(player.getUuid()))
-							BungeeMain.getPlugin().getBanManager().ban(player, new Ban("CONSOLE", ipAdress.getHostString(), "proxy", Translate.getTranslation(player.getLanguage(), "alt-account")));
+				if (player.getBanHistory() != null)
+					if (player.getBanHistory().getActualBan() == null) {
+						Entry<UUID, Ban> ipBan = BungeeMain.getPlugin().getBanManager().getIpBan(ipAdress.getHostString());
+						if (ipBan != null) {
+							if (!ipBan.getKey().equals(player.getUuid()))
+								BungeeMain.getPlugin().getBanManager().ban(player, new Ban("CONSOLE", ipAdress.getHostString(), "proxy", Translate.getTranslation(player.getLanguage(), "alt-account")));
+						}
 					}
-				}
-				Ban ban = player.getBanHistory().getActualBan();
+				Ban ban = null;
+				if (player.getBanHistory() != null)
+					ban = player.getBanHistory().getActualBan();
 				if (ban != null) {
 					event.setCancelled(true);
 					event.setCancelReason(BanManager.getBanKickMessage(ban, player.getLanguage(), player.getTimeZone()));

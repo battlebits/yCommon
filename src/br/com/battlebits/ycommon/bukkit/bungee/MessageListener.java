@@ -45,16 +45,6 @@ public class MessageListener implements PluginMessageListener {
 			player.sendMessage(BanManager.getMuteMessage(mute, bP.getLanguage()));
 			break;
 		}
-		case "Unmute": {
-			UUID uuid = UUID.fromString(in.readUTF());
-			String userName = in.readUTF();
-			BattlePlayer bP = BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId());
-			bP.getBanHistory().getActualMute().unmute(uuid, userName);
-			String msg = Translate.getTranslation(bP.getLanguage(), "command-unmute-prefix") + " " + Translate.getTranslation(bP.getLanguage(), "command-unmute-player");
-			msg = msg.replace("%unmutedBy%", userName);
-			player.sendMessage(msg);
-			break;
-		}
 		case "Groupset": {
 			Group group = Group.valueOf(in.readUTF());
 			ServerType serverType = ServerType.valueOf(in.readUTF());
@@ -99,6 +89,16 @@ public class MessageListener implements PluginMessageListener {
 			player.sendMessage("");
 			bP.setTag(Tag.valueOf(bP.getServerGroup().toString()));
 			bP.loadTags();
+			break;
+		}
+		case "Unmute": {
+			UUID uuid = UUID.fromString(in.readUTF());
+			String userName = in.readUTF();
+			BattlePlayer bP = BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId());
+			bP.getBanHistory().getActualMute().unmute(uuid, userName);
+			String msg = Translate.getTranslation(bP.getLanguage(), "command-unmute-prefix") + " " + Translate.getTranslation(bP.getLanguage(), "command-unmute-player");
+			msg = msg.replace("%unmutedBy%", userName);
+			player.sendMessage(msg);
 			break;
 		}
 		case "UnmuteConsole": {
