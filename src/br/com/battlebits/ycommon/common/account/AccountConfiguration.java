@@ -5,6 +5,7 @@ public class AccountConfiguration {
 	private boolean ignoreAll;
 	private boolean tellEnabled;
 	private boolean canPlaySound;
+	private transient boolean staffChatEnabled = false;
 
 	public AccountConfiguration() {
 		ignoreAll = false;
@@ -32,12 +33,20 @@ public class AccountConfiguration {
 	public void setTellEnabled(boolean tellEnabled) {
 		this.tellEnabled = tellEnabled;
 	}
-	
+
 	public boolean canPlaySound() {
 		return canPlaySound;
 	}
-	
+
 	public void setCanPlaySound(boolean canPlaySound) {
 		this.canPlaySound = canPlaySound;
+	}
+
+	public boolean isStaffChatEnabled() {
+		return staffChatEnabled;
+	}
+
+	public void setStaffChatEnabled(boolean staffChatEnabled) {
+		this.staffChatEnabled = staffChatEnabled;
 	}
 }

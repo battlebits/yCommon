@@ -250,5 +250,9 @@ public class ModeratingCommands extends CommandClass {
 		loc = null;
 		return l;
 	}
+	
+	//whitelist
+	
+	//kick
 
 }
