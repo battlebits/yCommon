@@ -35,7 +35,7 @@ public class VanishAPI {
 			if (online.getUniqueId().equals(player.getUniqueId()))
 				continue;
 			BattlePlayer onlineP = BattlebitsAPI.getAccountCommon().getBattlePlayer(online.getUniqueId());
-			if (!onlineP.hasGroupPermission(group)) {
+			if (onlineP.getServerGroup().ordinal() < group.ordinal()) {
 				if (!online.canSee(player))
 					continue;
 				PlayerInvisibleToPlayerEvent event = new PlayerInvisibleToPlayerEvent(player, online);
@@ -60,7 +60,7 @@ public class VanishAPI {
 				continue;
 			Group group = vanishedToGroup.get(online.getUniqueId());
 			if (group != null) {
-				if (!bP.hasGroupPermission(group)) {
+				if (bP.getServerGroup().ordinal() < group.ordinal()) {
 					if (!player.canSee(online))
 						continue;
 					PlayerInvisibleToPlayerEvent event = new PlayerInvisibleToPlayerEvent(player, online);
