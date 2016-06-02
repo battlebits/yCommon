@@ -10,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bukkit.api.admin.AdminMode;
@@ -34,6 +35,19 @@ public class PlayerListener implements Listener {
 		if (event.getMessage().split(" ")[0].contains(":")) {
 			event.getPlayer().sendMessage(ChatColor.RED + "Voce nao pode enviar comando que possuem ':' (dois pontos)");
 			event.setCancelled(true);
+		}
+	}
+
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+	public void onWhitelist(PlayerCommandPreprocessEvent event) {
+		if (event.getMessage().toLowerCase().startsWith("/whitelist ")) {
+			if (event.getPlayer().hasPermission("minecraft.command.whitelist") || event.getPlayer().hasPermission("bukkit.command.whitelist"))
+				new BukkitRunnable() {
+					@Override
+					public void run() {
+						BukkitMain.getPlugin().setCanJoin(!Bukkit.hasWhitelist());
+					}
+				}.runTaskLater(BukkitMain.getPlugin(), 1);
 		}
 	}
 

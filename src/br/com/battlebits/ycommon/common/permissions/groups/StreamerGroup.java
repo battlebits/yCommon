@@ -8,7 +8,7 @@ public class StreamerGroup extends GroupInterface {
 	@Override
 	public List<String> getPermissions() {
 		List<String> permissions = new ArrayList<>();
-		for (String str : new String[] { "stop", "effect", "kick", "enchant", "give", "gamemode", "toggledownfall", "tp", "clear" }) {
+		for (String str : new String[] { "stop", "effect", "kick", "enchant", "give", "gamemode", "toggledownfall", "tp", "clear", "whitelist" }) {
 			permissions.add("minecraft.command." + str);
 			permissions.add("bukkit.command." + str);
 		}

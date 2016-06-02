@@ -5,8 +5,10 @@ import java.text.DecimalFormat;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandFramework.Command;
 import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandFramework.CommandArgs;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
@@ -14,6 +16,7 @@ import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.commandmanager.CommandClass;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.translate.Translate;
+import br.com.battlebits.ycommon.common.translate.languages.Language;
 
 public class ModeratingCommands extends CommandClass {
 
@@ -250,9 +253,53 @@ public class ModeratingCommands extends CommandClass {
 		loc = null;
 		return l;
 	}
-	
-	//whitelist
-	
-	//kick
+
+	@Command(name = "kick", aliases = { "kickar" }, groupToUse = Group.TRIAL, noPermMessageId = "command-kick-no-access", runAsync = false)
+	public void kick(CommandArgs cmdArgs) {
+		CommandSender sender = cmdArgs.getSender();
+		String[] args = cmdArgs.getArgs();
+		Language language = BattlebitsAPI.getDefaultLanguage();
+		if (cmdArgs.isPlayer())
+			language = BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getLanguage();
+		String prefix = Translate.getTranslation(language, "command-kick-prefix") + " ";
+
+		if (args.length < 1) {
+			sender.sendMessage(prefix + Translate.getTranslation(language, "command-kick-usage").replace("%command%", cmdArgs.getLabel()));
+			return;
+		}
+
+		Player target = BukkitMain.getPlugin().getServer().getPlayer(args[0]);
+		if (target == null) {
+			sender.sendMessage(prefix + Translate.getTranslation(language, "player-not-found"));
+			return;
+		}
+
+		boolean hasReason = false;
+		StringBuilder builder = new StringBuilder();
+		if (args.length > 1) {
+			hasReason = true;
+			for (int i = 1; i < args.length; i++) {
+				String espaco = " ";
+				if (i >= args.length - 1)
+					espaco = "";
+				builder.append(args[i] + espaco);
+			}
+		}
+
+		for (Player p : Bukkit.getOnlinePlayers()) {
+			BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
+			if (!player.isStaff())
+				continue;
+			String staffMessage = prefix + Translate.getTranslation(player.getLanguage(), "command-kick-message-" + (hasReason ? "reason" : "no-reason"));
+
+			staffMessage = staffMessage.replace("%player%", target.getName());
+			staffMessage = staffMessage.replace("%kickedBy%", sender.getName());
+			staffMessage = staffMessage.replace("%reason%", builder.toString());
+			p.sendMessage(staffMessage);
+		}
+		target.kickPlayer(Translate.getTranslation(BattlebitsAPI.getAccountCommon().getBattlePlayer(target.getUniqueId()).getLanguage(), "command-kick-message-target-" + (hasReason ? "reason" : "no-reason")));
+	}
+
+	// whitelist
 
 }
