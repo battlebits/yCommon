@@ -44,8 +44,10 @@ public class PlayerListener implements Listener {
 		if (!(event.getSender() instanceof ProxiedPlayer))
 			return;
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(((ProxiedPlayer) event.getSender()).getUniqueId());
-		if (player.getConfiguration().isStaffChatEnabled())
+		if (player.getConfiguration().isStaffChatEnabled()) {
 			sendMessage(player, event.getMessage());
+			event.setCancelled(true);
+		}
 	}
 
 	@EventHandler(priority = (byte) -128)
