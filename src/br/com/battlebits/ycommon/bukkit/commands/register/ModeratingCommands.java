@@ -297,7 +297,10 @@ public class ModeratingCommands extends CommandClass {
 			staffMessage = staffMessage.replace("%reason%", builder.toString());
 			p.sendMessage(staffMessage);
 		}
-		target.kickPlayer(Translate.getTranslation(BattlebitsAPI.getAccountCommon().getBattlePlayer(target.getUniqueId()).getLanguage(), "command-kick-message-target-" + (hasReason ? "reason" : "no-reason")));
+		String kickMessage = Translate.getTranslation(BattlebitsAPI.getAccountCommon().getBattlePlayer(target.getUniqueId()).getLanguage(), "command-kick-message-target-" + (hasReason ? "reason" : "no-reason"));
+		kickMessage = kickMessage.replace("%kickedBy%", sender.getName());
+		kickMessage = kickMessage.replace("%reason%", builder.toString());
+		target.kickPlayer(kickMessage);
 	}
 
 	// whitelist
