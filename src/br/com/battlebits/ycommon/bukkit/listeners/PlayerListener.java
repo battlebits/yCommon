@@ -9,6 +9,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -20,6 +22,7 @@ import br.com.battlebits.ycommon.bukkit.event.update.UpdateEvent.UpdateType;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketKeepAlive;
+import br.com.battlebits.ycommon.common.permissions.enums.Group;
 
 public class PlayerListener implements Listener {
 
@@ -54,6 +57,15 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onJoin(PlayerJoinEvent event) {
 		VanishAPI.getInstance().updateVanishToPlayer(event.getPlayer());
+	}
+
+	@EventHandler
+	public void onLogin(PlayerLoginEvent event) {
+		if (event.getResult() == Result.KICK_WHITELIST) {
+			if (BattlebitsAPI.getAccountCommon().getBattlePlayer(event.getPlayer().getUniqueId()).hasGroupPermission(Group.STREAMER)) {
+				event.allow();
+			}
+		}
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
