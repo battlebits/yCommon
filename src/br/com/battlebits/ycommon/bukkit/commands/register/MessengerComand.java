@@ -37,7 +37,7 @@ public class MessengerComand extends CommandClass {
 			} else {
 				if (bp.getConfiguration().isTellEnabled()) {
 					Player t = Bukkit.getPlayer(args[0]);
-					if (t != null) {
+					if (t != null && p.canSee(t)) {
 						if (t.getUniqueId() != p.getUniqueId()) {
 							BukkitPlayer bt = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(t.getUniqueId());
 							if (!bt.getConfiguration().isIgnoreAll()) {
@@ -119,7 +119,7 @@ public class MessengerComand extends CommandClass {
 			} else {
 				if (bp.hasLastTell()) {
 					Player t = Bukkit.getPlayer(bp.getLastTellUUID());
-					if (t != null) {
+					if (t != null && p.canSee(t)) {
 						BukkitPlayer bt = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(t.getUniqueId());
 						if (!bt.getConfiguration().isIgnoreAll()) {
 							if (!bt.getBlockedPlayers().containsKey(p.getUniqueId())) {

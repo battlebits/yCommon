@@ -110,15 +110,21 @@ public class BukkitMain extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		menuTranslationInjector.end();
-		accountManager.onDisable();
-		permissionManager.onDisable();
-		tagManager.onDisable();
+		if (menuTranslationInjector != null)
+			menuTranslationInjector.end();
+		if (accountManager != null)
+			accountManager.onDisable();
+		if (permissionManager != null)
+			permissionManager.onDisable();
+		if (tagManager != null)
+			tagManager.onDisable();
 		accountManager = null;
 		permissionManager = null;
 		tagManager = null;
-		getClient().sendPacket(new CPacketServerStop());
-		socketClient.disconnect(true);
+		if (socketClient != null) {
+			getClient().sendPacket(new CPacketServerStop());
+			socketClient.disconnect(true);
+		}
 	}
 
 	private void registerListeners() {
