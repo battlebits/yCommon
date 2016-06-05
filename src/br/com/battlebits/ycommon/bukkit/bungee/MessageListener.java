@@ -54,8 +54,8 @@ public class MessageListener implements PluginMessageListener {
 			} else {
 				bP.getGroups().put(serverType.getStaffType(), group);
 			}
-			bP.setTag(Tag.valueOf(group.toString()));
 			bP.loadTags();
+			bP.setTag(Tag.valueOf(group.toString()));
 			break;
 		}
 		case "Givevip": {
@@ -74,8 +74,8 @@ public class MessageListener implements PluginMessageListener {
 			player.sendMessage("");
 			player.sendMessage(givevip);
 			player.sendMessage("");
-			bP.setTag(Tag.valueOf(bP.getServerGroup().toString()));
 			bP.loadTags();
+			bP.setTag(Tag.valueOf(bP.getServerGroup().toString()));
 			break;
 		}
 		case "Removevip": {
@@ -87,8 +87,8 @@ public class MessageListener implements PluginMessageListener {
 			player.sendMessage("");
 			player.sendMessage(givevip);
 			player.sendMessage("");
-			bP.setTag(Tag.valueOf(bP.getServerGroup().toString()));
 			bP.loadTags();
+			bP.setTag(Tag.valueOf(bP.getServerGroup().toString()));
 			break;
 		}
 		case "Unmute": {

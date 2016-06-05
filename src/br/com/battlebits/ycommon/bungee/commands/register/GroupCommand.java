@@ -134,7 +134,7 @@ public class GroupCommand extends CommandClass {
 		});
 	}
 
-	@Command(name = "givevip", usage = "/<command> <player> <tempo> <group>", groupToUse = Group.MANAGER, aliases = { "darvip" }, noPermMessageId = "command-givevip-no-access")
+	@Command(name = "givevip", usage = "/<command> <player> <tempo> <group>", groupToUse = Group.STREAMER, aliases = { "darvip" }, noPermMessageId = "command-givevip-no-access")
 	public void givevip(CommandArgs cmdArgs) {
 		final CommandSender sender = cmdArgs.getSender();
 		final String[] args = cmdArgs.getArgs();
