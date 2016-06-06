@@ -254,38 +254,6 @@ public class BukkitMain extends JavaPlugin {
 		}
 	}
 
-	/*
-	 * 
-	 * [22:55:27] [Client thread/INFO]: [CHAT] Memoria Livre (bytes): 618970096
-	 * [22:55:27] [Client thread/INFO]: [CHAT] Memoria minima (bytes):
-	 * 3817865216 [22:55:27] [Client thread/INFO]: [CHAT] Memoria Total (bytes):
-	 * 3443523584
-	 * 
-	 * 
-	 * [23:08:36] [Client thread/INFO]: [CHAT] Memoria Livre (bytes): 897144864
-	 * [23:08:36] [Client thread/INFO]: [CHAT] Memoria minima (bytes):
-	 * 4151836672 [23:08:36] [Client thread/INFO]: [CHAT] Memoria Total (bytes):
-	 * 1037959168
-	 * 
-	 * 
-	 * [23:14:03] [Client thread/INFO]: [CHAT] Memoria Livre (bytes): 3686642376
-	 * [23:14:03] [Client thread/INFO]: [CHAT] Memoria minima (bytes):
-	 * 4116185088 [23:14:03] [Client thread/INFO]: [CHAT] Memoria Total (bytes):
-	 * 4116185088
-	 * 
-	 * 
-	 * [23:17:48] [Client thread/INFO]: [CHAT] Memoria Livre (bytes): 2175234592
-	 * [23:17:48] [Client thread/INFO]: [CHAT] Memoria minima (bytes):
-	 * 3817865216 [23:17:48] [Client thread/INFO]: [CHAT] Memoria Total (bytes):
-	 * 3645374464
-	 * 
-	 * 
-	 * [15:28:06 INFO]: Memoria Livre (bytes): 2043842024 [15:28:06 INFO]:
-	 * Memoria minima (bytes): 4191158272 [15:28:06 INFO]: Memoria Total
-	 * (bytes): 4191158272
-	 * 
-	 */
-
 	public static boolean isMemoryRamRestart() {
 		return memoryRamRestart;
 	}
