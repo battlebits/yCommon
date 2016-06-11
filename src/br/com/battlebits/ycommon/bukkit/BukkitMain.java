@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitAccount;
+import br.com.battlebits.ycommon.bukkit.api.bossbar.BarAPI;
 import br.com.battlebits.ycommon.bukkit.api.inventory.menu.MenuListener;
 import br.com.battlebits.ycommon.bukkit.board.BattleBoard;
 import br.com.battlebits.ycommon.bukkit.bungee.MessageListener;
@@ -131,6 +132,9 @@ public class BukkitMain extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new ChatListener(), this);
 		getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 		getServer().getPluginManager().registerEvents(new ScoreboardListener(), this);
+
+		// API
+		getServer().getPluginManager().registerEvents(new BarAPI(), this);
 	}
 
 	private void registerCommonManagement() {
