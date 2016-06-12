@@ -1,5 +1,6 @@
 package br.com.battlebits.ycommon.bukkit.listeners;
 
+import java.util.HashMap;
 import java.util.Iterator;
 
 import org.bukkit.Bukkit;
@@ -17,6 +18,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bukkit.api.admin.AdminMode;
 import br.com.battlebits.ycommon.bukkit.api.vanish.VanishAPI;
+import br.com.battlebits.ycommon.bukkit.event.account.update.PlayerChangeLeagueEvent;
 import br.com.battlebits.ycommon.bukkit.event.update.UpdateEvent;
 import br.com.battlebits.ycommon.bukkit.event.update.UpdateEvent.UpdateType;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
@@ -108,6 +110,14 @@ public class PlayerListener implements Listener {
 		if (event.getType() != UpdateType.MINUTE)
 			return;
 		BukkitMain.isMemoryRamOnLimit();
+	}
+
+	@EventHandler
+	public void onChangeLiga(PlayerChangeLeagueEvent event) {
+		HashMap<String, String> replaces = new HashMap<>();
+		replaces.put("%league%", event.getNewLeague().toString());
+		replaces.put("%symbol%", event.getNewLeague().getSymbol());
+		event.getBukkitPlayer().sendMessage("league-prefix", "league-rank-level-up", replaces);
 	}
 
 	@EventHandler

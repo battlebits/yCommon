@@ -82,14 +82,20 @@ public class BukkitPlayer extends BattlePlayer {
 	public void setXp(int xp) {
 		super.setXp(xp);
 		sendCPacketChangeAccount();
-		if (getLiga().getMin() <= getXp())
-			if (Liga.getLiga(xp) != getLiga())
-				setLiga(Liga.getLiga(xp));
+		boolean upLiga = false;
+		if (getXp() >= getLiga().getMaxXp()) {
+			upLiga = true;
+			xp = getXp() - getLiga().getMaxXp();
+		}
+		if (upLiga) {
+			setLiga(getLiga().getNextLiga());
+			setXp(xp);
+		}
 	}
 
 	@Override
 	public void setLiga(Liga liga) {
-		PlayerChangeLeagueEvent event = new PlayerChangeLeagueEvent(getBukkitPlayer(), getLiga(), liga);
+		PlayerChangeLeagueEvent event = new PlayerChangeLeagueEvent(getBukkitPlayer(), this, getLiga(), liga);
 		BukkitMain.getPlugin().getServer().getPluginManager().callEvent(event);
 		if (!event.isCancelled()) {
 			super.setLiga(liga);

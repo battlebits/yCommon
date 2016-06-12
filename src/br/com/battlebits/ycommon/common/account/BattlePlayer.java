@@ -101,7 +101,7 @@ public class BattlePlayer {
 		this.fichas = 0;
 		this.money = 0;
 		this.xp = 0;
-		this.liga = Liga.FIRST;
+		this.liga = Liga.UNRANKED;
 
 		this.ipAddress = ipAddress;
 		if (ipAddress != null)
@@ -373,19 +373,11 @@ public class BattlePlayer {
 	}
 
 	public int addXp(int xp) {
-		int multiplier = 1 + (hasGroupPermission(Group.ULTIMATE) ? 1 : 0);
-		int plus = xp * multiplier;
-		this.xp += plus;
+		if(xp < 0)
+			xp = 0;
+		this.xp += xp;
 		setXp(this.xp);
-		return plus;
-	}
-
-	public int removeXp(int xp) {
-		this.xp -= xp;
-		if (this.xp < 0)
-			this.xp = 0;
-		setXp(this.xp);
-		return this.xp;
+		return xp;
 	}
 
 	public void updateGroup(Map<ServerStaff, Group> groups) {

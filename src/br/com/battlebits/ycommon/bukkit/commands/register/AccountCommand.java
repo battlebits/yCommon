@@ -26,16 +26,6 @@ public class AccountCommand extends CommandClass {
 
 	}
 
-	@Command(name = "league")
-	public void league(CommandArgs args) {
-
-	}
-
-	@Command(name = "ranking")
-	public void ranking(CommandArgs args) {
-
-	}
-
 	@Command(name = "tag", runAsync = true)
 	public void tag(CommandArgs cmdArgs) {
 		if (cmdArgs.isPlayer()) {

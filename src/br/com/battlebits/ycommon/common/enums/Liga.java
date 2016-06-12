@@ -3,48 +3,34 @@ package br.com.battlebits.ycommon.common.enums;
 import net.md_5.bungee.api.ChatColor;
 
 public enum Liga {
-	FIRST(ChatColor.WHITE + "-", 200), //
-	NOOB(ChatColor.WHITE + "=", 600), //
-	PRIMARY(ChatColor.WHITE + "☰", 1400), //
-	INTERMEDIARY(ChatColor.YELLOW + "☱", 2400), //
-	ADVANCE(ChatColor.YELLOW + "☳", 3600), //
-	EXPERT(ChatColor.YELLOW + "☷", 5000), //
-	BRONZE(ChatColor.GOLD + "✶", 6400), //
-	SILVER(ChatColor.GOLD + "✷", 8000), //
-	GOLD(ChatColor.GOLD + "✸", 9800), //
-	DIAMOND(ChatColor.RED + "✹", 11800), //
-	KING(ChatColor.RED + "✫", 15000), //
+	UNRANKED(ChatColor.WHITE + "-", 1000), //
+	PRIMARY(ChatColor.YELLOW + "=", 2000), //
+	ADVANCED(ChatColor.YELLOW + "☰", 2000), //
+	EXPERT(ChatColor.YELLOW + "☷", 3000), //
+	SILVER(ChatColor.GRAY + "✶", 3000), //
+	GOLD(ChatColor.GOLD + "✷", 4000), //
+	DIAMOND(ChatColor.AQUA + "✸", 4000), //
+	ELITE(ChatColor.RED + "✹", 5000), //
+	MASTER(ChatColor.RED + "✫", 5000), //
 	LEGENDARY(ChatColor.DARK_RED + "✪", Integer.MAX_VALUE);
 
 	private String symbol;
-	private int max;
+	private int maxXp;
 
-	private Liga(String symbol, int max) {
+	private Liga(String symbol, int xp) {
 		this.symbol = symbol;
-		this.max = max;
+		this.maxXp = xp;
 	}
 
-	public int getMax() {
-		return max;
-	}
-
-	public int getMin() {
-		int min = 0;
-		if (this.ordinal() > 0)
-			min = Liga.values()[this.ordinal() - 1].getMax();
-		return min;
+	public int getMaxXp() {
+		return maxXp;
 	}
 
 	public String getSymbol() {
 		return symbol;
 	}
 
-	public static Liga getLiga(int xp) {
-		Liga liga = FIRST;
-		for (Liga rank : values()) {
-			if (xp <= rank.max && xp > rank.getMin())
-				liga = rank;
-		}
-		return liga;
+	public Liga getNextLiga() {
+		return Liga.values()[ordinal() + 1];
 	}
 }
