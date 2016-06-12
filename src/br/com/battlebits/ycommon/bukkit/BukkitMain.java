@@ -242,20 +242,19 @@ public class BukkitMain extends JavaPlugin {
 		return SERVERNAME;
 	}
 
-	public static void isMemoryRamOnLimit() {
-		if (memoryRamRestart)
-			return;
+	public static long isMemoryRamOnLimit() {
 		Runtime.getRuntime().gc();
 		long total = Runtime.getRuntime().maxMemory();
 		long free = Runtime.getRuntime().freeMemory();
 		long used = total - free;
 
 		long usedPercentage = (used / total) * 100;
-
-		if (usedPercentage > 90) {
-			memoryRamRestart = true;
-			BukkitMain.getPlugin().setCanJoin(false);
-		}
+		if (!memoryRamRestart)
+			if (usedPercentage > 90) {
+				memoryRamRestart = true;
+				BukkitMain.getPlugin().setCanJoin(false);
+			}
+		return usedPercentage;
 	}
 
 	public static boolean isMemoryRamRestart() {

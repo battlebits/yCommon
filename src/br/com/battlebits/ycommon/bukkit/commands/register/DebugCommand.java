@@ -27,5 +27,10 @@ public class DebugCommand extends CommandClass {
 			}
 		}.runTaskAsynchronously(BukkitMain.getPlugin());
 	}
+	
+	@Command(name = "raminfo", usage = "/<command>", groupToUse = Group.DONO, noPermMessageId = "command-no-access")
+	public void raminfo(CommandArgs cmdArgs) {
+		cmdArgs.getSender().sendMessage(BukkitMain.isMemoryRamOnLimit() + "% da memoria RAM");
+	}
 
 }
