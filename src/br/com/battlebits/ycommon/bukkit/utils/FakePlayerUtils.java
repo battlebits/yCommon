@@ -130,7 +130,7 @@ public class FakePlayerUtils {
 	@SuppressWarnings("deprecation")
 	public static void respawnSelf(Player player) {
 		PacketPlayOutRespawn respawn = new PacketPlayOutRespawn(player.getWorld().getEnvironment().getId(), EnumDifficulty.valueOf(player.getWorld().getDifficulty().toString()), WorldType.getType(player.getWorld().getWorldType().toString()), EnumGamemode.valueOf(player.getGameMode().toString()));
-		PacketPlayOutPosition position = new PacketPlayOutPosition(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ(), player.getLocation().getYaw(), player.getLocation().getPitch(), false);
+		PacketPlayOutPosition position = new PacketPlayOutPosition(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ(), player.getLocation().getYaw(), player.getLocation().getPitch(), true);
 
 		((CraftPlayer) player).getHandle().playerConnection.sendPacket(respawn);
 		((CraftPlayer) player).getHandle().playerConnection.sendPacket(position);
