@@ -11,6 +11,7 @@ import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.game.GameStatus;
 import br.com.battlebits.ycommon.common.banmanager.history.BanHistory;
 import br.com.battlebits.ycommon.common.clans.Clan;
+import br.com.battlebits.ycommon.common.enums.AccountUpdateVersion;
 import br.com.battlebits.ycommon.common.enums.Liga;
 import br.com.battlebits.ycommon.common.enums.ServerStaff;
 import br.com.battlebits.ycommon.common.enums.ServerType;
@@ -33,11 +34,12 @@ public class BattlePlayer {
 	private String fakeName;
 
 	// DADOS DA CONTA
-	private int fichas;
-	private int money;
-	private int xp;
-	private Liga liga;
+	private int fichas = 0;
+	private int money = 0;
+	private int xp = 0;
+	private Liga liga = Liga.UNRANKED;
 	private Tag tag;
+	private AccountUpdateVersion accountVersion = AccountUpdateVersion.NONE;
 
 	// ENDEREÇOS E NETWORKING
 	private InetSocketAddress ipAddress;
@@ -373,11 +375,19 @@ public class BattlePlayer {
 	}
 
 	public int addXp(int xp) {
-		if(xp < 0)
+		if (xp < 0)
 			xp = 0;
 		this.xp += xp;
 		setXp(this.xp);
 		return xp;
+	}
+	
+	public AccountUpdateVersion getAccountVersion() {
+		return accountVersion;
+	}
+	
+	public void setAccountVersion(AccountUpdateVersion accountVersion) {
+		this.accountVersion = accountVersion;
 	}
 
 	public void updateGroup(Map<ServerStaff, Group> groups) {
@@ -461,7 +471,7 @@ public class BattlePlayer {
 	}
 
 	public void sendMessage(String translateId, Map<String, String> replaces) {
-		this.sendMessage(null, translateId, null);
+		this.sendMessage(null, translateId, replaces);
 	}
 
 	public void sendMessage(String tagId, String translateId, Map<String, String> replaces) {

@@ -10,7 +10,9 @@ import java.util.logging.Level;
 import br.com.battlebits.ycommon.bungee.BungeeMain;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
+import br.com.battlebits.ycommon.common.enums.AccountUpdateVersion;
 import br.com.battlebits.ycommon.common.enums.BattleInstance;
+import br.com.battlebits.ycommon.common.enums.Liga;
 
 public class AccountCommon {
 
@@ -38,6 +40,11 @@ public class AccountCommon {
 	public void loadBattlePlayer(UUID uuid, BattlePlayer player) {
 		if (players.containsKey(uuid))
 			return;
+		if (player.getAccountVersion().ordinal() < AccountUpdateVersion.LIGA_UPDATE.ordinal()) {
+			player.setXp(0);
+			player.setLiga(Liga.UNRANKED);
+		}
+		player.setAccountVersion(BattlebitsAPI.getDefaultAccountVersion());
 		players.put(uuid, player);
 	}
 

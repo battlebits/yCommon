@@ -9,6 +9,7 @@ import br.com.battlebits.ycommon.bukkit.utils.mojang.BukkitNameFetcher;
 import br.com.battlebits.ycommon.bukkit.utils.mojang.BukkitUUIDFetcher;
 import br.com.battlebits.ycommon.bungee.utils.mojang.BungeeNameFetcher;
 import br.com.battlebits.ycommon.bungee.utils.mojang.BungeeUUIDFetcher;
+import br.com.battlebits.ycommon.common.enums.AccountUpdateVersion;
 import br.com.battlebits.ycommon.common.enums.BattleInstance;
 import br.com.battlebits.ycommon.common.manager.AccountCommon;
 import br.com.battlebits.ycommon.common.manager.ClanCommon;
@@ -31,6 +32,7 @@ public class BattlebitsAPI {
 	private static boolean useRedisBungee = false;
 	private static TimeZone serverTimeZone = TimeZone.GMT03;
 	private static TimeZone defaultTimeZone = TimeZone.GMT03;
+	private static AccountUpdateVersion defaultAccountVersion = AccountUpdateVersion.LIGA_UPDATE;
 	public final static String FORUM_WEBSITE = "http://forum.battlebits.com.br";
 	public final static String WEBSITE = "http://battlebits.com.br";
 	public final static String STORE = "http://loja.battlebits.com.br";
@@ -115,6 +117,10 @@ public class BattlebitsAPI {
 
 	public static TimeZone getDefaultTimeZone() {
 		return defaultTimeZone;
+	}
+
+	public static AccountUpdateVersion getDefaultAccountVersion() {
+		return defaultAccountVersion;
 	}
 
 }

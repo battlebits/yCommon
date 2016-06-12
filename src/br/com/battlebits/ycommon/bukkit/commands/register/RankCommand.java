@@ -37,7 +37,7 @@ public class RankCommand extends CommandClass {
 				Liga rank = Liga.values()[player.getLiga().ordinal() + 1];
 				replaces.put("%nextLeague%", rank.toString());
 				replaces.put("%nextSymbol%", rank.getSymbol());
-				replaces.put("%missingXp%", (player.getLiga().getMaxXp() - player.getXp() + 1) + "");
+				replaces.put("%missingXp%", player.getLiga().getMaxXp() - player.getXp() + "");
 
 				player.sendMessage("league-next-league", replaces);
 				player.sendMessage("league-next-xp-league", replaces);
