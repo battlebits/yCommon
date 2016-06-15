@@ -245,7 +245,6 @@ public class BukkitMain extends JavaPlugin {
 	public static void isMemoryRamOnLimit() {
 		if (memoryRamRestart)
 			return;
-		Runtime.getRuntime().gc();
 		double total = Runtime.getRuntime().maxMemory();
 		double free = Runtime.getRuntime().freeMemory();
 		double used = total - free;
