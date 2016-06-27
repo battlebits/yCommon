@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bungee.BungeeMain;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
@@ -49,8 +50,12 @@ public class AccountCommon {
 	}
 
 	public BattlePlayer getBattlePlayer(UUID uuid) {
-		if (!players.containsKey(uuid))
+		if (!players.containsKey(uuid)) {
+			if (BattlebitsAPI.getBattleInstance() == BattleInstance.BUKKIT) {
+				BukkitMain.kickPlayer(uuid);
+			}
 			return null;
+		}
 		players.get(uuid).updateCache();
 		return players.get(uuid);
 	}

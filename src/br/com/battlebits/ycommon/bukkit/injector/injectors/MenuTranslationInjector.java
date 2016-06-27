@@ -42,6 +42,12 @@ public class MenuTranslationInjector {
 		injectorListener = new PacketListener() {
 			@Override
 			public void onPacketSend(PacketObject pacote) {
+				if(pacote.getPlayer() == null)
+					return;
+				if(pacote.getPlayer().getUniqueId() == null)
+					return;
+				if(BattlebitsAPI.getAccountCommon().getBattlePlayer(pacote.getPlayer().getUniqueId()) == null)
+					return;
 				Packet packet = pacote.getPacket();
 				if (packet instanceof PacketPlayOutWindowItems) {
 					PacketPlayOutWindowItems items = (PacketPlayOutWindowItems) packet;

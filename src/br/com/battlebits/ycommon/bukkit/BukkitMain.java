@@ -3,7 +3,9 @@ package br.com.battlebits.ycommon.bukkit;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -260,6 +262,10 @@ public class BukkitMain extends JavaPlugin {
 
 	public static boolean isMemoryRamRestart() {
 		return memoryRamRestart;
+	}
+
+	public static void kickPlayer(UUID uuid) {
+		Bukkit.getPlayer(uuid).kickPlayer("ERROR");
 	}
 
 }
