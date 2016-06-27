@@ -33,7 +33,7 @@ public class TorneioCommand extends CommandClass {
 		final Language language = lang;
 		final String groupSetPrefix = Translate.getTranslation(lang, "command-torneio-prefix") + " ";
 		if (args.length != 1) {
-			sender.sendMessage(TextComponent.fromLegacyText(groupSetPrefix + Translate.getTranslation(lang, "command-torneio-remove-usage")));
+			sender.sendMessage(TextComponent.fromLegacyText(groupSetPrefix + Translate.getTranslation(lang, "command-torneio-usage").replace("%command%", cmdArgs.getLabel())));
 			return;
 		}
 		BungeeCord.getInstance().getScheduler().runAsync(BungeeMain.getPlugin(), new Runnable() {
@@ -87,7 +87,7 @@ public class TorneioCommand extends CommandClass {
 		final Language language = lang;
 		final String groupSetPrefix = Translate.getTranslation(lang, "command-torneio-prefix") + " ";
 		if (args.length != 1) {
-			sender.sendMessage(TextComponent.fromLegacyText(groupSetPrefix + Translate.getTranslation(lang, "command-torneio-remove-usage")));
+			sender.sendMessage(TextComponent.fromLegacyText(groupSetPrefix + Translate.getTranslation(lang, "command-torneio-usage").replace("%command%", cmdArgs.getLabel())));
 			return;
 		}
 		BungeeCord.getInstance().getScheduler().runAsync(BungeeMain.getPlugin(), new Runnable() {
