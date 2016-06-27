@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bukkit.event.account.update.PlayerChangeLeagueEvent;
 import br.com.battlebits.ycommon.bukkit.event.account.update.PlayerChangeTagEvent;
+import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.account.game.GameStatus;
 import br.com.battlebits.ycommon.common.banmanager.history.BanHistory;
@@ -187,6 +188,11 @@ public class BukkitPlayer extends BattlePlayer {
 	public void loadTags() {
 		tags = new ArrayList<>();
 		for (Tag t : Tag.values()) {
+			if (t == Tag.TORNEIO)
+				if (getTorneio() != null && getTorneio() == BattlebitsAPI.getDefaultTorneio()) {
+					tags.add(t);
+					continue;
+				}
 			if ((t.isExclusive() && (t.getGroupToUse() == getServerGroup() || getServerGroup().ordinal() >= Group.ADMIN.ordinal())) || (!t.isExclusive() && getServerGroup().ordinal() >= t.getGroupToUse().ordinal())) {
 				tags.add(t);
 			}

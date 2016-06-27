@@ -14,6 +14,7 @@ import br.com.battlebits.ycommon.bukkit.board.BattleBoard;
 import br.com.battlebits.ycommon.bukkit.bungee.MessageListener;
 import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandFramework;
 import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandLoader;
+import br.com.battlebits.ycommon.bukkit.event.ram.RamOutOfLimitEvent;
 import br.com.battlebits.ycommon.bukkit.injector.Injector;
 import br.com.battlebits.ycommon.bukkit.injector.injectors.MenuTranslationInjector;
 import br.com.battlebits.ycommon.bukkit.listeners.ChatListener;
@@ -252,6 +253,7 @@ public class BukkitMain extends JavaPlugin {
 		double usedPercentage = (used / total) * 100;
 		if (usedPercentage > 90) {
 			memoryRamRestart = true;
+			BukkitMain.getPlugin().getServer().getPluginManager().callEvent(new RamOutOfLimitEvent());
 			BukkitMain.getPlugin().setCanJoin(false);
 		}
 	}

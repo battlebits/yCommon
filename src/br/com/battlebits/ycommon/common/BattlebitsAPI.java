@@ -11,6 +11,7 @@ import br.com.battlebits.ycommon.bungee.utils.mojang.BungeeNameFetcher;
 import br.com.battlebits.ycommon.bungee.utils.mojang.BungeeUUIDFetcher;
 import br.com.battlebits.ycommon.common.enums.AccountUpdateVersion;
 import br.com.battlebits.ycommon.common.enums.BattleInstance;
+import br.com.battlebits.ycommon.common.enums.Torneio;
 import br.com.battlebits.ycommon.common.manager.AccountCommon;
 import br.com.battlebits.ycommon.common.manager.ClanCommon;
 import br.com.battlebits.ycommon.common.time.TimeZone;
@@ -23,6 +24,7 @@ public class BattlebitsAPI {
 	private static AccountCommon accountCommon = new AccountCommon();
 	private static ClanCommon clanCommon = new ClanCommon();
 
+	private static Torneio torneio = Torneio.BATTLEBITS_PVP_1;
 	private static Gson gson = new Gson();
 	private static BattleInstance battleInstance;
 	private static UUIDFetcher uuidFetcher;
@@ -41,6 +43,10 @@ public class BattlebitsAPI {
 	public final static String HUNGERGAMES_ADDRESS = "battle-hg.com";
 	public final static String TRANSLATION_ID = "ycommon";
 	public static Language defaultLanguage = Language.PORTUGUES;
+
+	public static Torneio getDefaultTorneio() {
+		return torneio;
+	}
 
 	public static AccountCommon getAccountCommon() {
 		return accountCommon;

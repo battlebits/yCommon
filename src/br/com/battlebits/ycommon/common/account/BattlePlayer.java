@@ -15,6 +15,7 @@ import br.com.battlebits.ycommon.common.enums.AccountUpdateVersion;
 import br.com.battlebits.ycommon.common.enums.Liga;
 import br.com.battlebits.ycommon.common.enums.ServerStaff;
 import br.com.battlebits.ycommon.common.enums.ServerType;
+import br.com.battlebits.ycommon.common.enums.Torneio;
 import br.com.battlebits.ycommon.common.friends.Friend;
 import br.com.battlebits.ycommon.common.friends.block.Blocked;
 import br.com.battlebits.ycommon.common.friends.request.Request;
@@ -39,6 +40,7 @@ public class BattlePlayer {
 	private int xp = 0;
 	private Liga liga = Liga.UNRANKED;
 	private Tag tag;
+	private Torneio torneio = null;
 	private AccountUpdateVersion accountVersion = AccountUpdateVersion.NONE;
 
 	// ENDEREÇOS E NETWORKING
@@ -171,6 +173,10 @@ public class BattlePlayer {
 
 	public Liga getLiga() {
 		return liga;
+	}
+
+	public Torneio getTorneio() {
+		return torneio;
 	}
 
 	public InetSocketAddress getIpAddress() {
@@ -381,11 +387,11 @@ public class BattlePlayer {
 		setXp(this.xp);
 		return xp;
 	}
-	
+
 	public AccountUpdateVersion getAccountVersion() {
 		return accountVersion;
 	}
-	
+
 	public void setAccountVersion(AccountUpdateVersion accountVersion) {
 		this.accountVersion = accountVersion;
 	}
@@ -440,6 +446,10 @@ public class BattlePlayer {
 
 	public void setLiga(Liga liga) {
 		this.liga = liga;
+	}
+
+	public void setTorneio(Torneio torneio) {
+		this.torneio = torneio;
 	}
 
 	public void setConfiguration(AccountConfiguration config) {

@@ -30,5 +30,11 @@ public class BukkitConfiguration extends AccountConfiguration {
 		super.setCanPlaySound(canPlaySound);
 		player.updateConfiguration();
 	}
+	
+	@Override
+	public void setShowAlerts(boolean showAlerts) {
+		super.setShowAlerts(showAlerts);
+		player.updateConfiguration();
+	}
 
 }

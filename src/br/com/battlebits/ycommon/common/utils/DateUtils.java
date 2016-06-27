@@ -52,7 +52,7 @@ public class DateUtils {
 
 		String diff = sb.toString();
 
-		return diff.isEmpty() ? "0 " + Translate.getTranslation(lang, "second") + "s" : diff;
+		return diff.isEmpty() ? "1 " + Translate.getTranslation(lang, "second") + "s" : diff;
 	}
 
 	public static String getDifferenceFormat(Language lang, long timestamp) {

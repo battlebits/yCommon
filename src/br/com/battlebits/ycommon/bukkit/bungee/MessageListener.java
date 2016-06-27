@@ -109,6 +109,20 @@ public class MessageListener implements PluginMessageListener {
 			player.sendMessage(msg);
 			break;
 		}
+		case "TorneioAdd": {
+			BukkitPlayer bP = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId());
+			bP.setTorneio(BattlebitsAPI.getDefaultTorneio());
+			bP.loadTags();
+			bP.setTag(Tag.TORNEIO);
+			break;
+		}
+		case "TorneioRemove": {
+			BukkitPlayer bP = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId());
+			bP.setTorneio(null);
+			bP.loadTags();
+			bP.setTag(bP.getDefaultTag());
+			break;
+		}
 		default:
 			break;
 		}
