@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitAccount;
 import br.com.battlebits.ycommon.bukkit.api.bossbar.BarAPI;
@@ -265,7 +266,12 @@ public class BukkitMain extends JavaPlugin {
 	}
 
 	public static void kickPlayer(UUID uuid) {
-		Bukkit.getPlayer(uuid).kickPlayer("ERROR");
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				Bukkit.getPlayer(uuid).kickPlayer("ERROR");
+			}
+		}.runTask(getPlugin());
 	}
 
 }
