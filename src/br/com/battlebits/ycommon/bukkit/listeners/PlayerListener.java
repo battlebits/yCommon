@@ -85,7 +85,7 @@ public class PlayerListener implements Listener {
 		AdminMode.getInstance().removeAdmin(event.getPlayer());
 		VanishAPI.getInstance().removeVanish(event.getPlayer());
 		if (BukkitMain.isMemoryRamRestart())
-			if (Bukkit.getOnlinePlayers().size() - 1 <= 0)
+			if (Bukkit.getOnlinePlayers().size() - 1 <= 10)
 				Bukkit.shutdown();
 	}
 
