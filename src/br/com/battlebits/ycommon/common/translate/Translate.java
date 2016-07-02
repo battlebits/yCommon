@@ -58,6 +58,7 @@ public class Translate {
 		}
 
 		if (message == null) {
+			message = "[NOT FOUND: '" + messageId + "']";
 			BattlebitsAPI.debug(language.toString() + " > " + messageId + " > NAO ENCONTRADA");
 		}
 

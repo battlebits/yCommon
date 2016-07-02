@@ -45,6 +45,8 @@ public class LoginListener implements Listener {
 	}
 
 	private Group getServerGroup(Player player) {
+		if(BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId()) == null)
+			return Group.NORMAL;
 		return BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId()).getServerGroup();
 	}
 

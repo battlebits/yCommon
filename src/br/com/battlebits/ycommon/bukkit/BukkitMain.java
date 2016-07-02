@@ -266,9 +266,14 @@ public class BukkitMain extends JavaPlugin {
 	}
 
 	public static void kickPlayer(UUID uuid) {
+		final Player p = Bukkit.getPlayer(uuid);
+		if (p == null)
+			return;
 		new BukkitRunnable() {
 			@Override
 			public void run() {
+				if (!p.isOnline())
+					return;
 				Bukkit.getPlayer(uuid).kickPlayer("ERROR");
 			}
 		}.runTask(getPlugin());

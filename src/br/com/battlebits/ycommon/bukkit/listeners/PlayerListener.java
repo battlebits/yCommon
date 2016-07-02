@@ -64,6 +64,8 @@ public class PlayerListener implements Listener {
 	@EventHandler
 	public void onLogin(PlayerLoginEvent event) {
 		if (event.getResult() == Result.KICK_WHITELIST) {
+			if(BattlebitsAPI.getAccountCommon().getBattlePlayer(event.getPlayer().getUniqueId()) == null)
+				event.disallow(Result.KICK_OTHER, ChatColor.RED + "ERROR");
 			if (BattlebitsAPI.getAccountCommon().getBattlePlayer(event.getPlayer().getUniqueId()).hasGroupPermission(Group.STREAMER)) {
 				event.allow();
 			}

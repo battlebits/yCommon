@@ -23,6 +23,8 @@ public class TagListener implements Listener {
 		this.manager = manager;
 		for (Player p : manager.getServer().getOnlinePlayers()) {
 			BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
+			if(player == null)
+				continue;
 			player.setTag(player.getTag());
 		}
 	}
@@ -36,10 +38,14 @@ public class TagListener implements Listener {
 	public void onPlayerJoinListener(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
 		BukkitPlayer player = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(e.getPlayer().getUniqueId());
+		if(player == null)
+			return;
 		player.setTag(player.getTag());
 		for (Player o : Bukkit.getOnlinePlayers()) {
 			if (o.getUniqueId() != p.getUniqueId()) {
 				BukkitPlayer bp = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(o.getUniqueId());
+				if(bp == null)
+					continue;
 				String id = getTeamName(bp.getTag(), bp.getLiga());
 				String tag = bp.getTag().getPrefix(player.getLanguage());
 				manager.getPlugin().getBattleBoard().joinTeam(manager.getPlugin().getBattleBoard().createTeamIfNotExistsToPlayer(p, id, tag + (ChatColor.stripColor(tag).trim().length() > 0 ? " " : ""), " §7(" + bp.getLiga().getSymbol() + "§7)"), o);
@@ -59,10 +65,14 @@ public class TagListener implements Listener {
 			return;
 		}
 		BukkitPlayer player = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
+		if(player == null)
+			return;
 		String id = getTeamName(e.getNewTag(), player.getLiga());
 		for (final Player o : Bukkit.getOnlinePlayers()) {
 			try {
 				BukkitPlayer bp = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(o.getUniqueId());
+				if(bp == null)
+					continue;
 				String tag = e.getNewTag().getPrefix(bp.getLanguage());
 				manager.getPlugin().getBattleBoard().joinTeam(manager.getPlugin().getBattleBoard().createTeamIfNotExistsToPlayer(o, id, tag + (ChatColor.stripColor(tag).trim().length() > 0 ? " " : ""), " §7(" + player.getLiga().getSymbol() + "§7)"), p);
 				bp = null;

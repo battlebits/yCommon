@@ -41,6 +41,9 @@ public class PreferencesMenu {
 			@Override
 			public void onClick(Player p, Inventory inv, ClickType type, ItemStack stack, int slot) {
 				BattlePlayer bp = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
+				if(bp == null) {
+					return;
+				}
 				if (bp.getConfiguration().isTellEnabled()) {
 					bp.getConfiguration().setTellEnabled(false);
 					inv.setItem(slot, tellDisabledItem);
@@ -67,6 +70,8 @@ public class PreferencesMenu {
 	public void openConversation(Player p) {
 		MenuInventory menu = new MenuInventory("%msg:menu-pref-conv-title%", 3, true);
 		BattlePlayer bp = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
+		if(bp == null)
+			return;
 		if (bp.getConfiguration().isTellEnabled()) {
 			menu.setItem(tellEnabledIcon, 10);
 		} else {

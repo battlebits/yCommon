@@ -25,6 +25,10 @@ public class ChatListener implements Listener {
 	public void onChatEnabled(AsyncPlayerChatEvent event) {
 		Player p = event.getPlayer();
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
+		if(player == null) {
+			event.setCancelled(true);
+			return;
+		}
 		switch (ChatAPI.getInstance().getChatState()) {
 		case DISABLED:
 			event.setCancelled(true);
@@ -55,6 +59,10 @@ public class ChatListener implements Listener {
 	public void onMute(AsyncPlayerChatEvent event) {
 		Player p = event.getPlayer();
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
+		if(player == null) {
+			event.setCancelled(true);
+			return;
+		}
 		Mute mute = player.getBanHistory().getActualMute();
 		if (mute == null)
 			return;
@@ -69,6 +77,10 @@ public class ChatListener implements Listener {
 	public void onChat(AsyncPlayerChatEvent event) {
 		event.setCancelled(true);
 		BukkitPlayer player = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(event.getPlayer().getUniqueId());
+		if(player == null) {
+			event.setCancelled(true);
+			return;
+		}
 		for (Player r : event.getRecipients()) {
 			try {
 				BukkitPlayer receiver = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(r.getUniqueId());
