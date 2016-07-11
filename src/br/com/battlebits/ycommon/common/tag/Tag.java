@@ -12,7 +12,7 @@ public enum Tag {
 	ESTRELA("§1§l%star%§1", Group.DONO, false), //
 	ADMIN("§c§l%admin%§c", Group.ADMIN, false), //
 	MANAGER("§c§l%manager%§c", Group.MANAGER, false), //
-	STREAMER("§5§l%streamer%§5", Group.STREAMER, false), //
+	MODPLUS("§5§l%modplus%§5", Group.MODPLUS, false), //
 	MOD("§5§l%mod%§5", Group.MOD, false), //
 	TRIAL("§5§l%trial%§5", Group.TRIAL, false), //
 	HELPER("§9§l%helper%§9", Group.HELPER, false), //

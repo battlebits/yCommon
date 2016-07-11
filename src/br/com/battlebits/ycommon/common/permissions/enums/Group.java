@@ -20,7 +20,7 @@ public enum Group {
 	DEV, //
 	TRIAL(new ModeratorGroup()), //
 	MOD(new ModeratorGroup()), //
-	STREAMER(new StreamerGroup()), //
+	MODPLUS(new StreamerGroup()), //
 	MANAGER(new StreamerGroup()), //
 	ADMIN(new StreamerGroup()), //
 	DONO(new OwnerGroup());

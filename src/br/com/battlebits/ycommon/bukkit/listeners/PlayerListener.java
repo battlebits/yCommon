@@ -66,7 +66,7 @@ public class PlayerListener implements Listener {
 		if (event.getResult() == Result.KICK_WHITELIST) {
 			if(BattlebitsAPI.getAccountCommon().getBattlePlayer(event.getPlayer().getUniqueId()) == null)
 				event.disallow(Result.KICK_OTHER, ChatColor.RED + "ERROR");
-			if (BattlebitsAPI.getAccountCommon().getBattlePlayer(event.getPlayer().getUniqueId()).hasGroupPermission(Group.STREAMER)) {
+			if (BattlebitsAPI.getAccountCommon().getBattlePlayer(event.getPlayer().getUniqueId()).hasGroupPermission(Group.MODPLUS)) {
 				event.allow();
 			}
 		}

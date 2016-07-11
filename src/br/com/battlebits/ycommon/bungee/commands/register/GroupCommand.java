@@ -67,7 +67,7 @@ public class GroupCommand extends CommandClass {
 		}
 
 		if (!owner)
-			if (group.ordinal() > Group.STREAMER.ordinal()) {
+			if (group.ordinal() > Group.MODPLUS.ordinal()) {
 				sender.sendMessage(TextComponent.fromLegacyText(groupSetPrefix + Translate.getTranslation(lang, "command-groupset-group-not-owner")));
 				return;
 			}
@@ -94,9 +94,9 @@ public class GroupCommand extends CommandClass {
 					}
 				}
 				ServerType serverType = typep;
-				if (group.ordinal() > Group.STREAMER.ordinal())
+				if (group.ordinal() >= Group.MODPLUS.ordinal())
 					serverType = ServerType.NETWORK;
-				if (group == Group.NORMAL && player.getServerGroup().ordinal() > Group.STREAMER.ordinal())
+				if (group == Group.NORMAL && player.getServerGroup().ordinal() >= Group.MODPLUS.ordinal())
 					serverType = ServerType.NETWORK;
 				Group actualGroup = player.getGroups().containsKey(serverType.getStaffType()) ? player.getGroups().get(serverType.getStaffType()) : Group.NORMAL;
 				if (actualGroup == group) {
@@ -134,7 +134,7 @@ public class GroupCommand extends CommandClass {
 		});
 	}
 
-	@Command(name = "givevip", usage = "/<command> <player> <tempo> <group>", groupToUse = Group.STREAMER, aliases = { "darvip" }, noPermMessageId = "command-givevip-no-access")
+	@Command(name = "givevip", usage = "/<command> <player> <tempo> <group>", groupToUse = Group.MODPLUS, aliases = { "darvip" }, noPermMessageId = "command-givevip-no-access")
 	public void givevip(CommandArgs cmdArgs) {
 		final CommandSender sender = cmdArgs.getSender();
 		final String[] args = cmdArgs.getArgs();

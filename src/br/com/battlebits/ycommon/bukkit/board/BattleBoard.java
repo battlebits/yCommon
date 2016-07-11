@@ -423,7 +423,7 @@ public class BattleBoard {
 
 	public Objective createObjectiveToPlayer(Player player, String objectiveID, String displayName, DisplaySlot displaySlot) {
 		Objective objective = getObjectiveFromPlayer(player, objectiveID);
-		if (objective != null) {
+		if (objective == null) {
 			if (objectiveID.length() > 16) {
 				objectiveID = objectiveID.substring(0, 16);
 			}
@@ -633,7 +633,7 @@ public class BattleBoard {
 		}
 	}
 
-	public void updateScoreNameOnObjectiveToPlayer(Player player, Objective objective, String scoreID, String name) {
+	public void updateScoreNameOnObjectiveToPlayer(Player player, Objective objective, String name) {
 		if (objective != null) {
 			Team team = getTeamFromPlayer(player, objective.getName());
 			if (team != null) {
@@ -641,43 +641,42 @@ public class BattleBoard {
 				team = null;
 			}
 		}
-		scoreID = null;
 		name = null;
 		player = null;
 	}
 
-	public void updateScoreNameOnObjectiveToPlayer(Player player, String objectiveID, String scoreID, String name) {
-		updateScoreNameOnObjectiveToPlayer(player, getObjectiveFromPlayer(player, objectiveID), scoreID, name);
+	public void updateScoreNameOnObjectiveToPlayer(Player player, String objectiveID, String name) {
+		updateScoreNameOnObjectiveToPlayer(player, getObjectiveFromPlayer(player, objectiveID), name);
 		objectiveID = null;
 	}
 
-	public void updateScoreNameOnObjectiveToPlayer(Player player, DisplaySlot objectiveSlot, String scoreID, String name) {
-		updateScoreNameOnObjectiveToPlayer(player, getObjectiveFromPlayer(player, objectiveSlot), scoreID, name);
+	public void updateScoreNameOnObjectiveToPlayer(Player player, DisplaySlot objectiveSlot, String name) {
+		updateScoreNameOnObjectiveToPlayer(player, getObjectiveFromPlayer(player, objectiveSlot), name);
 	}
 
-	public void updateScoreNameOnObjectiveForPlayers(Collection<? extends Player> players, String objectiveID, String scoreID, String name) {
+	public void updateScoreNameOnObjectiveForPlayers(Collection<? extends Player> players, String objectiveID, String name) {
 		for (Player player : players) {
-			updateScoreNameOnObjectiveToPlayer(player, objectiveID, scoreID, name);
+			updateScoreNameOnObjectiveToPlayer(player, objectiveID, name);
 		}
 		players = null;
 	}
 
-	public void updateScoreNameOnObjectiveForPlayers(Collection<? extends Player> players, DisplaySlot objectiveSlot, String scoreID, String name) {
+	public void updateScoreNameOnObjectiveForPlayers(Collection<? extends Player> players, DisplaySlot objectiveSlot, String name) {
 		for (Player player : players) {
-			updateScoreNameOnObjectiveToPlayer(player, objectiveSlot, scoreID, name);
+			updateScoreNameOnObjectiveToPlayer(player, objectiveSlot, name);
 		}
 		players = null;
 	}
 
-	public void updateScoreNameOnObjectiveForOnlinePlayers(String objectiveID, String scoreID, String name) {
+	public void updateScoreNameOnObjectiveForOnlinePlayers(String objectiveID, String name) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			updateScoreNameOnObjectiveToPlayer(player, objectiveID, scoreID, name);
+			updateScoreNameOnObjectiveToPlayer(player, objectiveID, name);
 		}
 	}
 
-	public void updateScoreNameOnObjectiveForOnlinePlayers(DisplaySlot objectiveSlot, String scoreID, String name) {
+	public void updateScoreNameOnObjectiveForOnlinePlayers(DisplaySlot objectiveSlot, String name) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			updateScoreNameOnObjectiveToPlayer(player, getObjectiveFromPlayer(player, objectiveSlot), scoreID, name);
+			updateScoreNameOnObjectiveToPlayer(player, getObjectiveFromPlayer(player, objectiveSlot), name);
 		}
 	}
 
@@ -778,16 +777,10 @@ public class BattleBoard {
 		}
 	}
 
-	public void updateScoreOnObjectiveToPlayer(Player player, Objective objective, String scoreID, String score) {
+	public void updateScoreOnObjectiveToPlayer(Player player, Objective objective, String scoreID, String name, String value) {
 		if (objective != null) {
-			Team team = getTeamFromPlayer(player, objective.getName());
+			Team team = getTeamFromPlayer(player, objective.getName() + scoreID);
 			if (team != null) {
-				String name = score;
-				String value = "";
-				if (score.length() > 16) {
-					name = score.substring(0, 16);
-					value = score.substring(16, score.length());
-				}
 				setTeamPrefix(team, name);
 				setTeamSuffix(team, value);
 				name = null;
@@ -796,42 +789,41 @@ public class BattleBoard {
 			}
 		}
 		scoreID = null;
-		score = null;
 		player = null;
 	}
 
-	public void updateScoreOnObjectiveToPlayer(Player player, String objectiveID, String scoreID, String score) {
-		updateScoreOnObjectiveToPlayer(player, getObjectiveFromPlayer(player, objectiveID), scoreID, score);
+	public void updateScoreOnObjectiveToPlayer(Player player, String objectiveID, String scoreID, String name, String value) {
+		updateScoreOnObjectiveToPlayer(player, getObjectiveFromPlayer(player, objectiveID), scoreID, name, value);
 		objectiveID = null;
 	}
 
-	public void updateScoreOnObjectiveToPlayer(Player player, DisplaySlot objectiveSlot, String scoreID, String score) {
-		updateScoreOnObjectiveToPlayer(player, getObjectiveFromPlayer(player, objectiveSlot), scoreID, score);
+	public void updateScoreOnObjectiveToPlayer(Player player, DisplaySlot objectiveSlot, String scoreID, String name, String value) {
+		updateScoreOnObjectiveToPlayer(player, getObjectiveFromPlayer(player, objectiveSlot), scoreID, name, value);
 	}
 
-	public void updateScoreOnObjectiveForPlayers(Collection<? extends Player> players, String objectiveID, String scoreID, String score) {
+	public void updateScoreOnObjectiveForPlayers(Collection<? extends Player> players, String objectiveID, String scoreID, String name, String value) {
 		for (Player player : players) {
-			updateScoreOnObjectiveToPlayer(player, objectiveID, scoreID, score);
+			updateScoreOnObjectiveToPlayer(player, objectiveID, scoreID, name, value);
 		}
 		players = null;
 	}
 
-	public void updateScoreOnObjectiveForPlayers(Collection<? extends Player> players, DisplaySlot objectiveSlot, String scoreID, String score) {
+	public void updateScoreOnObjectiveForPlayers(Collection<? extends Player> players, DisplaySlot objectiveSlot, String scoreID, String name, String value) {
 		for (Player player : players) {
-			updateScoreOnObjectiveToPlayer(player, objectiveSlot, scoreID, score);
+			updateScoreOnObjectiveToPlayer(player, objectiveSlot, scoreID, name, value);
 		}
 		players = null;
 	}
 
-	public void updateScoreOnObjectiveForOnlinePlayers(String objectiveID, String scoreID, String score) {
+	public void updateScoreOnObjectiveForOnlinePlayers(String objectiveID, String scoreID, String name, String value) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			updateScoreOnObjectiveToPlayer(player, objectiveID, scoreID, score);
+			updateScoreOnObjectiveToPlayer(player, objectiveID, scoreID, name, value);
 		}
 	}
 
-	public void updateScoreOnObjectiveForOnlinePlayers(DisplaySlot objectiveSlot, String scoreID, String score) {
+	public void updateScoreOnObjectiveForOnlinePlayers(DisplaySlot objectiveSlot, String scoreID, String name, String value) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			updateScoreOnObjectiveToPlayer(player, objectiveSlot, scoreID, score);
+			updateScoreOnObjectiveToPlayer(player, objectiveSlot, scoreID, name, value);
 		}
 	}
 

@@ -15,7 +15,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class TwitterCommand extends CommandClass {
 
-	@Command(name = "broadcast", aliases = { "bc", "alert", "tweet" }, groupToUse = Group.STREAMER, noPermMessageId = "command-broadcast-no-access")
+	@Command(name = "broadcast", aliases = { "bc", "alert", "tweet" }, groupToUse = Group.MODPLUS, noPermMessageId = "command-broadcast-no-access")
 	public void tweet(CommandArgs cmdArgs) {
 		Language language = BattlebitsAPI.getDefaultLanguage();
 		if (cmdArgs.isPlayer()) {

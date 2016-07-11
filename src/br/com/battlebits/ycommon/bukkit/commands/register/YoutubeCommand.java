@@ -25,7 +25,7 @@ public class YoutubeCommand extends CommandClass {
 		}
 		Player p = args.getPlayer();
 		BattlePlayer bP = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
-		if (!bP.getServerGroup().toString().contains("YOUTUBER") && !bP.hasGroupPermission(Group.STREAMER)) {
+		if (!bP.getServerGroup().toString().contains("YOUTUBER") && !bP.hasGroupPermission(Group.MODPLUS)) {
 			p.sendMessage(Translate.getTranslation(bP.getLanguage(), "command-fake-no-access"));
 			return;
 		}
@@ -71,7 +71,7 @@ public class YoutubeCommand extends CommandClass {
 		}
 		Player p = args.getPlayer();
 		BattlePlayer bP = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
-		if (!bP.getServerGroup().toString().contains("YOUTUBER") && !bP.hasGroupPermission(Group.STREAMER)) {
+		if (!bP.getServerGroup().toString().contains("YOUTUBER") && !bP.hasGroupPermission(Group.MODPLUS)) {
 			p.sendMessage(Translate.getTranslation(bP.getLanguage(), "command-fakeremove-no-access").replace("%command%", args.getLabel()));
 			return;
 		}

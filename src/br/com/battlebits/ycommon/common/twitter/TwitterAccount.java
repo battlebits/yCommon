@@ -1,8 +1,8 @@
 package br.com.battlebits.ycommon.common.twitter;
 
 public enum TwitterAccount {
-	BATTLEBITSMC("Y2lYtwoymGslYCVakGK1M0nvv", "OcjNWd1wzN1AVEGjKAhd1e88otlfB5DJ60FNINSEuzmFIXzGlc", "2972745022-92JuPoZ7dkHzc0YMDJusC17gcRO8qjyjeTwa6CW", "iLGnslOn8Lh9sQY28l4uIsnLCceRRAYZzcPy03AzRJ3Ji"), //
-	BATTLEBANS("5iYAeypiCXODosyvMrRompfZ8", "f2qPOGirbQMI2sKIPMHcteYJTCwKla4eT0Eu0skHwDvxLhjqxb", "731984028744699906-Vgg4SaYhQ1WJ1PnTiYDNW8OKKfGLHxQ", "vLGokQJdPtGou2IRFM5FuGGJh8AHDUklGJhirusn7U2qY");
+	BATTLEBITSMC("l9cKixd3YBCcOaa0r7Adf639K", "N0T6Hm2fOU6Pg5jRDK7Oun2JpuXj2G06mZQGqe9AfTZ8iEzFkK", "2972745022-pVbEjEYXxTMSuAIZSJp66x9jmUYbYuQsohR6BcU", "ZbVx5JewMYay2eNDvcTrM5KcuEZJizDZtFygmGyzkfbCY"), //
+	BATTLEBANS("aknJl79d9M4wLxvFlkp42ghsV", "JHgI9frnQ48l2defKNEylmdHUbN5MRImLkxvxf8biK5BtlVmsk", "731984028744699906-DN2Gjcxdvm0tdGExKySBhJ3bZegHxWv", "oI9aKhyAT4aKCvzXry53EaIM9jv1IRQjSdOKh18lixeTC");
 
 	private String consumerKey;
 	private String consumerSecret;

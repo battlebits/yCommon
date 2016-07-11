@@ -18,7 +18,7 @@ public abstract class UUIDFetcher {
 	public UUIDFetcher() {
 		servers = new ArrayList<>();
 		servers.add("https://api.mojang.com/users/profiles/minecraft/%player-name%#id#name");
-		servers.add("https://craftapi.com/api/user/uuid/%player-name%#uuid#username");
+		servers.add("https://mcapi.ca/uuid/player/%player-name%#id#name");
 		servers.add("https://us.mc-api.net/v3/uuid/%player-name%#full_uuid#name");
 		// URL # CAMPO ID # CAMPO NOME
 		fails = new HashMap<>();
@@ -41,7 +41,7 @@ public abstract class UUIDFetcher {
 		id = load(name, server1);
 		if (id == null) {
 			id = load(name, getNextServer());
-			if (id != null) {
+			if (id == null) {
 				if (fails.containsKey(server1)) {
 					fails.put(server1, fails.get(server1) + 1);
 				} else {
@@ -67,8 +67,7 @@ public abstract class UUIDFetcher {
 		if (id.length() == 36) {
 			return UUID.fromString(id);
 		} else if (id.length() == 32) {
-			return UUID.fromString(id.substring(0, 8) + "-" + id.substring(8, 12) + "-" + id.substring(12, 16) + "-" + id.substring(16, 20) + "-"
-					+ id.substring(20, 32));
+			return UUID.fromString(id.substring(0, 8) + "-" + id.substring(8, 12) + "-" + id.substring(12, 16) + "-" + id.substring(16, 20) + "-" + id.substring(20, 32));
 		} else {
 			return null;
 		}
