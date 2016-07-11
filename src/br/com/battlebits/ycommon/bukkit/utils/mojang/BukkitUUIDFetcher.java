@@ -2,6 +2,7 @@ package br.com.battlebits.ycommon.bukkit.utils.mojang;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.UUID;
@@ -49,7 +50,9 @@ public class BukkitUUIDFetcher extends UUIDFetcher {
 			String[] infos = server.split("#");
 			String serverUrl = infos[0].replace("%player-name%", name);
 			URL url = new URL(serverUrl);
-			InputStream is = url.openStream();
+			HttpURLConnection huc = (HttpURLConnection) url.openConnection();
+			huc.setConnectTimeout(1000);
+			InputStream is = huc.getInputStream();
 			InputStreamReader streamReader = new InputStreamReader(is, Charset.forName("UTF-8"));
 			JsonObject object = parser.parse(streamReader).getAsJsonObject();
 			if (object.get(infos[2]).getAsString().equalsIgnoreCase(name)) {

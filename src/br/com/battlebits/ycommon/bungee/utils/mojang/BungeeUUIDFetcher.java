@@ -50,7 +50,7 @@ public class BungeeUUIDFetcher extends UUIDFetcher {
 			String serverUrl = infos[0].replace("%player-name%", name);
 			URL url = new URL(serverUrl);
 			HttpURLConnection huc = (HttpURLConnection) url.openConnection();
-			huc.setConnectTimeout(100);
+			huc.setConnectTimeout(1000);
 			InputStream is = huc.getInputStream();
 			InputStreamReader streamReader = new InputStreamReader(is, Charset.forName("UTF-8"));
 			JsonObject object = parser.parse(streamReader).getAsJsonObject();
