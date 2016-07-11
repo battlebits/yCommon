@@ -48,7 +48,7 @@ public enum Tag {
 
 	public String getPrefix(Language language) {
 		String tag = prefix;
-		for (String strTag : new String[] { "owner", "star", "admin", "manager", "streamer", "mod", "trial", "helper", "staff", "builder", "developer", "youtuber", "youtuberplus", "tournament", "winner" })
+		for (String strTag : new String[] { "owner", "star", "admin", "manager", "streamer", "modplus", "mod", "trial", "helper", "staff", "builder", "developer", "youtuber", "youtuberplus", "tournament", "winner" })
 			tag = tag.replace("%" + strTag + "%", Translate.getTranslation(language, strTag).toUpperCase());
 		return tag;
 	}
