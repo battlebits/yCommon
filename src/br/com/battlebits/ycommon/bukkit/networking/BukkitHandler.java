@@ -3,6 +3,9 @@ package br.com.battlebits.ycommon.bukkit.networking;
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
+import br.com.battlebits.ycommon.common.account.BattlePlayer;
+import br.com.battlebits.ycommon.common.clans.Clan;
+import br.com.battlebits.ycommon.common.exception.HandlePacketException;
 import br.com.battlebits.ycommon.common.networking.CommonHandler;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAccountConfiguration;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAccountLoad;
@@ -16,10 +19,14 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeAccount;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLanguage;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLiga;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeTag;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketClanAbbreviationChange;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketClanLoad;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketCommandRun;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketCreateParty;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketDisbandParty;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketKeepAlive;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketPlayerJoinClan;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketPlayerLeaveClan;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveBlockedPlayer;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveFriend;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveFriendRequest;
@@ -233,6 +240,45 @@ public class BukkitHandler extends CommonHandler {
 	@Override
 	public void handlerKeepAlive(CPacketKeepAlive packet) {
 		// NAO PRECISA
+	}
+
+	@Override
+	public void handleClanLoad(CPacketClanLoad packet) throws HandlePacketException {
+		BattlebitsAPI.getClanCommon().loadClan(packet.getClan());
+	}
+
+	@Override
+	public void handlerPlayerJoinClan(CPacketPlayerJoinClan packet) throws HandlePacketException {
+		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(packet.getUuid());
+		if (player == null)
+			return;
+		Clan clan = BattlebitsAPI.getClanCommon().getClan(packet.getClanName());
+		if (clan == null)
+			return;
+		clan.addParticipant(player);
+	}
+
+	@Override
+	public void handlerPlayerLeaveClan(CPacketPlayerLeaveClan packet) throws HandlePacketException {
+		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(packet.getUuid());
+		if (player == null)
+			return;
+		if (player.getClan() != null) {
+			player.getClan().demote(player.getUuid());
+			player.getClan().removeParticipant(player.getUuid());
+			if (player.getClan().isOwner(player)) {
+				BattlebitsAPI.getClanCommon().unloadClan(player.getClanName());
+			}
+		}
+		player.setClan("");
+	}
+
+	@Override
+	public void handlerClanAbbreviationChange(CPacketClanAbbreviationChange packet) throws HandlePacketException {
+		Clan clan = BattlebitsAPI.getClanCommon().getClan(packet.getClanName());
+		if (clan == null)
+			return;
+		clan.changeAbbreviation(packet.getAbbreviation());
 	}
 
 }

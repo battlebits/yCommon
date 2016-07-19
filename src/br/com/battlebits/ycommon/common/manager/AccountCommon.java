@@ -64,7 +64,7 @@ public class AccountCommon {
 		if (players.containsKey(uuid))
 			players.remove(uuid);
 		else
-			BattlebitsAPI.getLogger().log(Level.SEVERE, "NAO FOI POSSIVEL ENCONTRAR " + uuid.toString());
+			BattlebitsAPI.getLogger().log(Level.SEVERE, "NAO FOI POSSIVEL ENCONTRAR PLAYER " + uuid.toString());
 	}
 
 	public void saveBattlePlayer(BattlePlayer player) {

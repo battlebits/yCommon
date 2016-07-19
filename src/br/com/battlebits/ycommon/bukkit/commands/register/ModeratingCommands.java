@@ -151,7 +151,7 @@ public class ModeratingCommands extends CommandClass {
 		// TODO: ALERT STAFFS
 	}
 
-	@Command(name = "teleportall", aliases = { "tpall" }, groupToUse = Group.MODPLUS, noPermMessageId = "command-teleportall-no-access", runAsync = false)
+	@Command(name = "teleportall", aliases = { "tpall" }, groupToUse = Group.MOD, noPermMessageId = "command-teleportall-no-access", runAsync = false)
 	public void tpall(CommandArgs cmdArgs) {
 		if (cmdArgs.isPlayer()) {
 			Player p = cmdArgs.getPlayer();

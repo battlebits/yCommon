@@ -37,6 +37,7 @@ import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.translate.Translate;
+import br.com.battlebits.ycommon.common.translate.languages.Language;
 
 /**
  * Command Framework - CommandFramework <br>
@@ -530,6 +531,15 @@ public class BukkitCommandFramework {
 
 		public boolean isPlayer() {
 			return sender instanceof Player;
+		}
+		
+		public Language getLanguage() {
+			if (isPlayer()) {
+				BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(getPlayer().getUniqueId());
+				if (player != null)
+					return player.getLanguage();
+			}
+			return BattlebitsAPI.getDefaultLanguage();
 		}
 
 		public Player getPlayer() {

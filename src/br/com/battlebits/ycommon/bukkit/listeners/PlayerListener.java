@@ -2,6 +2,7 @@ package br.com.battlebits.ycommon.bukkit.listeners;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -23,6 +24,7 @@ import br.com.battlebits.ycommon.bukkit.event.update.UpdateEvent;
 import br.com.battlebits.ycommon.bukkit.event.update.UpdateEvent.UpdateType;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
+import br.com.battlebits.ycommon.common.clans.Clan;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketKeepAlive;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 
@@ -64,7 +66,7 @@ public class PlayerListener implements Listener {
 	@EventHandler
 	public void onLogin(PlayerLoginEvent event) {
 		if (event.getResult() == Result.KICK_WHITELIST) {
-			if(BattlebitsAPI.getAccountCommon().getBattlePlayer(event.getPlayer().getUniqueId()) == null)
+			if (BattlebitsAPI.getAccountCommon().getBattlePlayer(event.getPlayer().getUniqueId()) == null)
 				event.disallow(Result.KICK_OTHER, ChatColor.RED + "ERROR");
 			if (BattlebitsAPI.getAccountCommon().getBattlePlayer(event.getPlayer().getUniqueId()).hasGroupPermission(Group.MODPLUS)) {
 				event.allow();
@@ -103,6 +105,21 @@ public class PlayerListener implements Listener {
 					players.remove();
 					BattlebitsAPI.debug("REMOVENDO BATTLEPLAYER " + player.getUserName() + " DO CACHE");
 				}
+			}
+		}
+		Iterator<Clan> clans = BattlebitsAPI.getClanCommon().getClans().iterator();
+		while (clans.hasNext()) {
+			Clan clan = clans.next();
+			boolean offline = true;
+			for (UUID uuid : clan.getParticipants()) {
+				if (Bukkit.getPlayer(uuid) != null) {
+					offline = false;
+					break;
+				}
+			}
+			if (offline) {
+				clans.remove();
+				BattlebitsAPI.debug("REMOVENDO CLAN " + clan.getClanName() + " DO CACHE");
 			}
 		}
 	}

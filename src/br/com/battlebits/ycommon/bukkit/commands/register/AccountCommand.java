@@ -21,7 +21,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class AccountCommand extends CommandClass {
 
-	@Command(name = "account")
+	@Command(name = "account", aliases = "acc")
 	public void account(CommandArgs args) {
 
 	}

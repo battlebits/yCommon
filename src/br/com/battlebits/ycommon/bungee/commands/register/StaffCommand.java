@@ -11,7 +11,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class StaffCommand extends CommandClass {
 
-	@Command(name = "staffchat", aliases = { "sc" }, groupToUse = Group.YOUTUBERPLUS, noPermMessageId = "command-staffchat-no-access")
+	@Command(name = "staffchat", aliases = { "sc" }, groupToUse = Group.STAFF, noPermMessageId = "command-staffchat-no-access")
 	public void staffchat(CommandArgs args) {
 		if (!args.isPlayer()) {
 			args.getSender().sendMessage(TextComponent.fromLegacyText("COMANDO APENAS PARA PLAYERS"));

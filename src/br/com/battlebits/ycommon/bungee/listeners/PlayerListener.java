@@ -1,13 +1,16 @@
 package br.com.battlebits.ycommon.bungee.listeners;
 
 import java.util.Iterator;
+import java.util.UUID;
 
 import br.com.battlebits.ycommon.bungee.event.UpdateEvent;
 import br.com.battlebits.ycommon.bungee.event.UpdateEvent.UpdateType;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
+import br.com.battlebits.ycommon.common.clans.Clan;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.tag.Tag;
+import br.com.battlebits.ycommon.common.translate.Translate;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -33,6 +36,25 @@ public class PlayerListener implements Listener {
 				}
 			}
 		}
+
+		Iterator<Clan> clans = BattlebitsAPI.getClanCommon().getClans().iterator();
+		while (clans.hasNext()) {
+			Clan clan = clans.next();
+			boolean offline = true;
+			for (UUID uuid : clan.getParticipants()) {
+				if (BungeeCord.getInstance().getPlayer(uuid) != null) {
+					offline = false;
+					break;
+				}
+			}
+			if (offline) {
+				if (clan.isCacheExpired()) {
+					BattlebitsAPI.getClanCommon().saveClan(clan);
+					clans.remove();
+					BattlebitsAPI.debug("REMOVENDO CLAN " + clan.getClanName() + " DO CACHE");
+				}
+			}
+		}
 	}
 
 	@EventHandler
@@ -45,7 +67,10 @@ public class PlayerListener implements Listener {
 			return;
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(((ProxiedPlayer) event.getSender()).getUniqueId());
 		if (player.getConfiguration().isStaffChatEnabled()) {
-			sendMessage(player, event.getMessage());
+			sendStaffMessage(player, event.getMessage());
+			event.setCancelled(true);
+		} else if (player.getConfiguration().isClanChatEnabled() && player.getClan() != null) {
+			sendClanMessage(player, event.getMessage());
 			event.setCancelled(true);
 		}
 	}
@@ -56,7 +81,7 @@ public class PlayerListener implements Listener {
 		player.connect(event.getServer().getInfo().getName());
 	}
 
-	public static void sendMessage(BattlePlayer bP, String message) {
+	public static void sendStaffMessage(BattlePlayer bP, String message) {
 		for (ProxiedPlayer player : BungeeCord.getInstance().getPlayers()) {
 			BattlePlayer onlineBp = BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId());
 			if (!onlineBp.hasGroupPermission(Group.YOUTUBERPLUS))
@@ -66,5 +91,27 @@ public class PlayerListener implements Listener {
 
 			player.sendMessage(TextComponent.fromLegacyText(ChatColor.YELLOW + "" + ChatColor.BOLD + "[STAFF] " + format + message));
 		}
+	}
+
+	public static void sendClanMessage(BattlePlayer bP, String message) {
+		for (ProxiedPlayer player : BungeeCord.getInstance().getPlayers()) {
+			BattlePlayer onlineBp = BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId());
+			if (onlineBp == null)
+				continue;
+			Clan clan = bP.getClan();
+			if (!clan.isParticipant(onlineBp))
+				continue;
+
+			String tag = "";
+			if (clan.isOwner(bP)) {
+				tag = ChatColor.DARK_RED + "" + ChatColor.BOLD + Translate.getTranslation(onlineBp.getLanguage(), "owner");
+			} else if (clan.isAdministrator(bP)) {
+				tag = ChatColor.RED + "" + ChatColor.BOLD + Translate.getTranslation(onlineBp.getLanguage(), "admin");
+			}
+			String format = ChatColor.DARK_RED + "" + ChatColor.BOLD + "[CLAN " + ChatColor.WHITE + "- " + tag.toUpperCase() + ChatColor.DARK_RED + "" + ChatColor.BOLD + "] " + ChatColor.GRAY + bP.getUserName() + ChatColor.WHITE + ": ";
+
+			player.sendMessage(TextComponent.fromLegacyText(format + message));
+		}
+
 	}
 }

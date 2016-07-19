@@ -15,7 +15,7 @@ import br.com.battlebits.ycommon.common.banmanager.constructors.Ban;
 import br.com.battlebits.ycommon.common.banmanager.constructors.Mute;
 import br.com.battlebits.ycommon.common.commandmanager.CommandClass;
 import br.com.battlebits.ycommon.common.enums.ServerStaff;
-import br.com.battlebits.ycommon.common.payment.enums.RankType;
+import br.com.battlebits.ycommon.common.payment.RankType;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.tag.Tag;
 import br.com.battlebits.ycommon.common.translate.Translate;
@@ -28,7 +28,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class AccountCommand extends CommandClass {
 
-	@Command(name = "account", usage = "/<command> [player]")
+	@Command(name = "account", aliases = { "acc" }, usage = "/<command> [player]")
 	public void account(CommandArgs cmdArgs) {
 		final CommandSender sender = cmdArgs.getSender();
 		final String[] args = cmdArgs.getArgs();

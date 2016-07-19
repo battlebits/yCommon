@@ -15,7 +15,6 @@ import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.account.game.GameStatus;
 import br.com.battlebits.ycommon.common.banmanager.history.BanHistory;
-import br.com.battlebits.ycommon.common.clans.Clan;
 import br.com.battlebits.ycommon.common.enums.Liga;
 import br.com.battlebits.ycommon.common.friends.Friend;
 import br.com.battlebits.ycommon.common.friends.block.Blocked;
@@ -120,8 +119,8 @@ public class BukkitPlayer extends BattlePlayer {
 	}
 
 	@Override
-	public void setActualClan(Clan actualClan) {
-		super.setActualClan(actualClan);
+	public void setClan(String clanName) {
+		super.setClan(clanName);
 	}
 
 	@Override

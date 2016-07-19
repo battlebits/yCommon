@@ -18,6 +18,7 @@ import br.com.battlebits.ycommon.bungee.listeners.PlayerListener;
 import br.com.battlebits.ycommon.bungee.listeners.QuitListener;
 import br.com.battlebits.ycommon.bungee.managers.AccountManager;
 import br.com.battlebits.ycommon.bungee.managers.BanManager;
+import br.com.battlebits.ycommon.bungee.managers.ClanManager;
 import br.com.battlebits.ycommon.bungee.managers.ServerManager;
 import br.com.battlebits.ycommon.bungee.networking.CommonServer;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
@@ -48,6 +49,7 @@ public class BungeeMain extends Plugin {
 
 	private CommonServer commonServer;
 	private AccountManager accountManager;
+	private ClanManager clanManager;
 	private BanManager banManager;
 	private ServerManager serverManager;
 	private BungeeCommandFramework commandFramework;
@@ -67,6 +69,7 @@ public class BungeeMain extends Plugin {
 		// loadConfiguration();
 		banManager = new BanManager();
 		accountManager = new AccountManager();
+		clanManager = new ClanManager();
 		try {
 			getProxy().getScheduler().runAsync(this, commonServer = new CommonServer());
 		} catch (Exception e) {
@@ -179,12 +182,20 @@ public class BungeeMain extends Plugin {
 		return accountManager;
 	}
 
+	public ClanManager getClanManager() {
+		return clanManager;
+	}
+
 	public BanManager getBanManager() {
 		return banManager;
 	}
 
 	public ServerManager getServerManager() {
 		return serverManager;
+	}
+
+	public CommonServer getCommonServer() {
+		return commonServer;
 	}
 
 	public BungeeCommandLoader getCommandLoader() {

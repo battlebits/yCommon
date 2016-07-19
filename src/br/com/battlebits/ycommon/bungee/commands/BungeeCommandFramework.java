@@ -17,6 +17,7 @@ import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.commandmanager.CommandClass;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.translate.Translate;
+import br.com.battlebits.ycommon.common.translate.languages.Language;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -207,6 +208,15 @@ public class BungeeCommandFramework {
 
 		public boolean isPlayer() {
 			return sender instanceof ProxiedPlayer;
+		}
+
+		public Language getLanguage() {
+			if (isPlayer()) {
+				BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(getPlayer().getUniqueId());
+				if (player != null)
+					return player.getLanguage();
+			}
+			return BattlebitsAPI.getDefaultLanguage();
 		}
 
 		public ProxiedPlayer getPlayer() {

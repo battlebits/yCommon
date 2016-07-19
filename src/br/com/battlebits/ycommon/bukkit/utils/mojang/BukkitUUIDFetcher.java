@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -54,7 +55,12 @@ public class BukkitUUIDFetcher extends UUIDFetcher {
 			huc.setConnectTimeout(1000);
 			InputStream is = huc.getInputStream();
 			InputStreamReader streamReader = new InputStreamReader(is, Charset.forName("UTF-8"));
-			JsonObject object = parser.parse(streamReader).getAsJsonObject();
+			JsonElement element = parser.parse(streamReader);
+			JsonObject object = null;
+			if (element.isJsonArray())
+				object = element.getAsJsonArray().get(0).getAsJsonObject();
+			else
+				object = element.getAsJsonObject();
 			if (object.get(infos[2]).getAsString().equalsIgnoreCase(name)) {
 				id = (getUUIDFromString(object.get(infos[1]).getAsString()));
 			}

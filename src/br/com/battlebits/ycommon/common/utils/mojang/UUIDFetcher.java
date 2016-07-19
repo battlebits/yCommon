@@ -19,7 +19,7 @@ public abstract class UUIDFetcher {
 		servers = new ArrayList<>();
 		servers.add("https://api.mojang.com/users/profiles/minecraft/%player-name%#id#name");
 		servers.add("https://mcapi.ca/uuid/player/%player-name%#id#name");
-		servers.add("https://us.mc-api.net/v3/uuid/%player-name%#full_uuid#name");
+		// servers.add("https://us.mc-api.net/v3/uuid/%player-name%#full_uuid#name");
 		// URL # CAMPO ID # CAMPO NOME
 		fails = new HashMap<>();
 		current = 0;

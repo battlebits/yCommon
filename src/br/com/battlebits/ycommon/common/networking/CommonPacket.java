@@ -19,11 +19,15 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeAccount;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLanguage;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLiga;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeTag;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketClanAbbreviationChange;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketClanLoad;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketCommandRun;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketCreateParty;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketDisbandParty;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketJoinParty;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketKeepAlive;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketPlayerJoinClan;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketPlayerLeaveClan;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveBlockedPlayer;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveFriend;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveFriendRequest;
@@ -57,6 +61,7 @@ public abstract class CommonPacket {
 		register((byte) 0x06, CPacketCommandRun.class);
 		register((byte) 0x07, CPacketTranslationsRequest.class);
 		register((byte) 0x08, CPacketTranslationsLoad.class);
+		register((byte) 0x09, CPacketClanLoad.class);
 
 		/** 0x1X: Account **/
 		register((byte) 0x10, CPacketAccountRequest.class);
@@ -90,6 +95,10 @@ public abstract class CommonPacket {
 		register((byte) 0x60, CPacketCreateParty.class);
 		register((byte) 0x61, CPacketJoinParty.class);
 		register((byte) 0x62, CPacketDisbandParty.class);
+
+		register((byte) 0x65, CPacketPlayerJoinClan.class);
+		register((byte) 0x66, CPacketPlayerLeaveClan.class);
+		register((byte) 0x67, CPacketClanAbbreviationChange.class);
 
 	}
 

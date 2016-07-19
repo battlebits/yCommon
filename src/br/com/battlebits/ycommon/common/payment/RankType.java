@@ -1,4 +1,4 @@
-package br.com.battlebits.ycommon.common.payment.enums;
+package br.com.battlebits.ycommon.common.payment;
 
 public enum RankType {
 	LIGHT, //

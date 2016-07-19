@@ -20,7 +20,7 @@ import br.com.battlebits.ycommon.common.friends.Friend;
 import br.com.battlebits.ycommon.common.friends.block.Blocked;
 import br.com.battlebits.ycommon.common.friends.request.Request;
 import br.com.battlebits.ycommon.common.party.Party;
-import br.com.battlebits.ycommon.common.payment.enums.RankType;
+import br.com.battlebits.ycommon.common.payment.RankType;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.tag.Tag;
 import br.com.battlebits.ycommon.common.time.TimeZone;
@@ -52,7 +52,7 @@ public class BattlePlayer {
 	private long joinTime;
 	private long lastLoggedIn;
 	private long firstTimePlaying;
-	private long cacheExpire;
+	private transient long cacheExpire;
 
 	// GRUPOS
 	private Map<ServerStaff, Group> groups;
@@ -272,8 +272,17 @@ public class BattlePlayer {
 		return blockedPlayers;
 	}
 
-	public Clan getActualClan() {
-		return BattlebitsAPI.getClanCommon().getClan(clanName);
+	public Clan getClan() {
+		if (clanName == null || clanName.isEmpty())
+			return null;
+		Clan clan = BattlebitsAPI.getClanCommon().getClan(clanName);
+		if (clan == null)
+			clanName = "";
+		return clan;
+	}
+
+	public String getClanName() {
+		return clanName;
 	}
 
 	public Party getActualParty() {
@@ -384,6 +393,8 @@ public class BattlePlayer {
 		if (xp < 0)
 			xp = 0;
 		this.xp += xp;
+		if (getClan() != null)
+			getClan().addXp(xp);
 		setXp(this.xp);
 		return xp;
 	}
@@ -416,8 +427,8 @@ public class BattlePlayer {
 		this.blockedPlayers = blockedPlayers;
 	}
 
-	public void setActualClan(Clan actualClan) {
-		this.clanName = actualClan.getClanName();
+	public void setClan(String clanName) {
+		this.clanName = clanName;
 	}
 
 	public void setActualParty(Party actualParty) {

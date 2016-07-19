@@ -249,6 +249,32 @@ public class BukkitMain extends JavaPlugin {
 	public static void isMemoryRamOnLimit() {
 		if (memoryRamRestart)
 			return;
+		switch (getServerType()) {
+		case FAIRPLAY:
+			return;
+		case GARTICCRAFT:
+			return;
+		case HUNGERGAMES:
+			return;
+		case LOBBY:
+			break;
+		case NETWORK:
+			break;
+		case NONE:
+			break;
+		case PVP_FULLIRON:
+			break;
+		case PVP_SIMULATOR:
+			break;
+		case RAID:
+			break;
+		case SKYWARS:
+			return;
+		case TESTSERVER:
+			return;
+		default:
+			break;
+		}
 		double total = Runtime.getRuntime().maxMemory();
 		double free = Runtime.getRuntime().freeMemory();
 		double used = total - free;

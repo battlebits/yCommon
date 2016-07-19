@@ -3,6 +3,8 @@ package br.com.battlebits.ycommon.bungee.networking;
 import br.com.battlebits.ycommon.bungee.BungeeMain;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
+import br.com.battlebits.ycommon.common.clans.Clan;
+import br.com.battlebits.ycommon.common.exception.HandlePacketException;
 import br.com.battlebits.ycommon.common.networking.CommonHandler;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAccountConfiguration;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketAccountLoad;
@@ -16,10 +18,14 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeAccount;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLanguage;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLiga;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeTag;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketClanAbbreviationChange;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketClanLoad;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketCommandRun;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketCreateParty;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketDisbandParty;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketKeepAlive;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketPlayerJoinClan;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketPlayerLeaveClan;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveBlockedPlayer;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveFriend;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveFriendRequest;
@@ -61,6 +67,16 @@ public class BungeePacketHandler extends CommonHandler {
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(packet.getUuid());
 		if (player == null)
 			player = BungeeMain.getPlugin().getAccountManager().loadBattlePlayer(packet.getUuid());
+		if (player.getClanName() != null && !player.getClanName().isEmpty()) {
+			Clan clan = BungeeMain.getPlugin().getClanManager().loadClan(player.getClanName());
+			if (clan == null) {
+				clan = player.getClan();
+			}
+			if (clan != null) {
+				clan.updatePlayer(player);
+				sender.sendPacket(new CPacketClanLoad(clan));
+			}
+		}
 		sender.sendPacket(new CPacketAccountLoad(player));
 		player = null;
 	}
@@ -176,7 +192,7 @@ public class BungeePacketHandler extends CommonHandler {
 	@Override
 	public void handleUpdateGameStatus(CPacketUpdateGameStatus packet) {
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(packet.getUuid());
-		if(player == null)
+		if (player == null)
 			player = BungeeMain.getPlugin().getAccountManager().loadBattlePlayer(packet.getUuid());
 		player.getGameStatus().updateMinigame(packet.getGameType(), packet.getJson());
 		if (BungeeCord.getInstance().getPlayer(player.getUuid()) == null)
@@ -193,7 +209,7 @@ public class BungeePacketHandler extends CommonHandler {
 	@Override
 	public void handleChangeLiga(CPacketChangeLiga packet) {
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(packet.getUuid());
-		if(player == null)
+		if (player == null)
 			player = BungeeMain.getPlugin().getAccountManager().loadBattlePlayer(packet.getUuid());
 		player.setLiga(packet.getLiga());
 		if (BungeeCord.getInstance().getPlayer(player.getUuid()) == null)
@@ -204,7 +220,7 @@ public class BungeePacketHandler extends CommonHandler {
 	@Override
 	public void handleChangeAccount(CPacketChangeAccount packet) {
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(packet.getUuid());
-		if(player == null)
+		if (player == null)
 			player = BungeeMain.getPlugin().getAccountManager().loadBattlePlayer(packet.getUuid());
 		player.setXp(packet.getXp());
 		player.setFichas(packet.getFichas());
@@ -223,7 +239,7 @@ public class BungeePacketHandler extends CommonHandler {
 	@Override
 	public void handleChangeTag(CPacketChangeTag packet) {
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(packet.getUniqueId());
-		if(player == null)
+		if (player == null)
 			player = BungeeMain.getPlugin().getAccountManager().loadBattlePlayer(packet.getUniqueId());
 		player.setTag(packet.getTag());
 		if (BungeeCord.getInstance().getPlayer(player.getUuid()) == null)
@@ -279,6 +295,26 @@ public class BungeePacketHandler extends CommonHandler {
 	@Override
 	public void handleServerStop(CPacketServerStop packet) {
 		sender.disconnect(true);
+	}
+
+	@Override
+	public void handleClanLoad(CPacketClanLoad packet) throws HandlePacketException {
+		// PROVAVEL QUE NUNCA VAI ACONTECER
+	}
+
+	@Override
+	public void handlerPlayerJoinClan(CPacketPlayerJoinClan packet) throws HandlePacketException {
+		// PROVAVEL QUE NUNCA VAI ACONTECER
+	}
+
+	@Override
+	public void handlerPlayerLeaveClan(CPacketPlayerLeaveClan packet) throws HandlePacketException {
+		// PROVAVEL QUE NUNCA VAI ACONTECER
+	}
+
+	@Override
+	public void handlerClanAbbreviationChange(CPacketClanAbbreviationChange packet) throws HandlePacketException {
+		// PROVAVEL QUE NUNCA VAI ACONTECER
 	}
 
 }

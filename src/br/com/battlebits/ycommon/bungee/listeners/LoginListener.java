@@ -14,6 +14,7 @@ import br.com.battlebits.ycommon.bungee.managers.BanManager;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.banmanager.constructors.Ban;
+import br.com.battlebits.ycommon.common.clans.Clan;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.utils.GeoIpUtils;
 import br.com.battlebits.ycommon.common.utils.GeoIpUtils.IpCityResponse;
@@ -57,6 +58,15 @@ public class LoginListener implements Listener {
 							BattlePlayer player = BattlebitsAPI.getGson().fromJson(result.getString("json"), BattlePlayer.class);
 							player.setJoinData(userName, ipAdress, countryCode, timeZoneCode);
 							BattlebitsAPI.getAccountCommon().loadBattlePlayer(uuid, player);
+							if (player.getClanName() != null && !player.getClanName().isEmpty()) {
+								Clan clan = BungeeMain.getPlugin().getClanManager().loadClan(player.getClanName());
+								if (clan == null) {
+									clan = player.getClan();
+								}
+								if (clan != null) {
+									clan.updatePlayer(player);
+								}
+							}
 							BattlebitsAPI.debug("ACCOUNT > LOADED");
 							success = true;
 						} catch (Exception e) {

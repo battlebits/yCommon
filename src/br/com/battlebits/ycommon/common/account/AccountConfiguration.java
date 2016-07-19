@@ -7,6 +7,7 @@ public class AccountConfiguration {
 	private boolean canPlaySound;
 	private boolean showAlerts = true;
 	private transient boolean staffChatEnabled = false;
+	private transient boolean clanChatEnabled = false;
 
 	public AccountConfiguration() {
 		ignoreAll = false;
@@ -47,14 +48,22 @@ public class AccountConfiguration {
 		return staffChatEnabled;
 	}
 
+	public boolean isClanChatEnabled() {
+		return clanChatEnabled;
+	}
+
 	public void setStaffChatEnabled(boolean staffChatEnabled) {
 		this.staffChatEnabled = staffChatEnabled;
 	}
-	
+
+	public void setClanChatEnabled(boolean clanChatEnabled) {
+		this.clanChatEnabled = clanChatEnabled;
+	}
+
 	public boolean canShowAlerts() {
 		return showAlerts;
 	}
-	
+
 	public void setShowAlerts(boolean showAlerts) {
 		this.showAlerts = showAlerts;
 	}

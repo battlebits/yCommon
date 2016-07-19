@@ -19,13 +19,13 @@ import br.com.battlebits.ycommon.common.permissions.enums.Group;
 
 public class ChatListener implements Listener {
 
-	//REGEX: #\w\w+
-	
+	// REGEX: #\w\w+
+
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onChatEnabled(AsyncPlayerChatEvent event) {
 		Player p = event.getPlayer();
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
-		if(player == null) {
+		if (player == null) {
 			event.setCancelled(true);
 			return;
 		}
@@ -59,7 +59,7 @@ public class ChatListener implements Listener {
 	public void onMute(AsyncPlayerChatEvent event) {
 		Player p = event.getPlayer();
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
-		if(player == null) {
+		if (player == null) {
 			event.setCancelled(true);
 			return;
 		}
@@ -77,7 +77,7 @@ public class ChatListener implements Listener {
 	public void onChat(AsyncPlayerChatEvent event) {
 		event.setCancelled(true);
 		BukkitPlayer player = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(event.getPlayer().getUniqueId());
-		if(player == null) {
+		if (player == null) {
 			event.setCancelled(true);
 			return;
 		}
@@ -96,8 +96,8 @@ public class ChatListener implements Listener {
 				if ((!receiver.getConfiguration().isIgnoreAll()) && (!receiver.getBlockedPlayers().containsKey(player.getUuid()) && (!player.getBlockedPlayers().containsKey(receiver.getUuid())))) {
 					String tag = player.getTag().getPrefix(receiver.getLanguage());
 					String format = tag + (ChatColor.stripColor(tag).trim().length() > 0 ? " " : "") + event.getPlayer().getName() + ChatColor.GRAY + " (" + player.getLiga().getSymbol() + ChatColor.GRAY + ") " + ChatColor.WHITE + ": ";
-					if (player.getActualClan() != null) {
-						format = "[" + player.getActualClan().getAbbreviation() + "] " + format;
+					if (player.getClan() != null) {
+						format = ChatColor.GRAY + "[" + ChatColor.DARK_GRAY + player.getClan().getAbbreviation() + ChatColor.GRAY + "] " + format;
 					}
 					r.sendMessage(format + event.getMessage());
 					format = null;

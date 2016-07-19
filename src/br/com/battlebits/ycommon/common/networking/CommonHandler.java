@@ -13,10 +13,14 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeAccount;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLanguage;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLiga;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeTag;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketClanAbbreviationChange;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketClanLoad;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketCommandRun;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketCreateParty;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketDisbandParty;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketKeepAlive;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketPlayerJoinClan;
+import br.com.battlebits.ycommon.common.networking.packets.CPacketPlayerLeaveClan;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveBlockedPlayer;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveFriend;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveFriendRequest;
@@ -44,6 +48,8 @@ public abstract class CommonHandler {
 	public abstract void handleTranslationsRequest(CPacketTranslationsRequest packet) throws HandlePacketException;
 
 	public abstract void handleTranslationsLoad(CPacketTranslationsLoad packet) throws HandlePacketException;
+
+	public abstract void handleClanLoad(CPacketClanLoad packet) throws HandlePacketException;
 
 	public abstract void handleCreateParty(CPacketCreateParty packet) throws HandlePacketException;
 
@@ -96,5 +102,11 @@ public abstract class CommonHandler {
 	public abstract void handleCommandRun(CPacketCommandRun packet) throws HandlePacketException;
 
 	public abstract void handlerKeepAlive(CPacketKeepAlive packet) throws HandlePacketException;
+
+	public abstract void handlerPlayerJoinClan(CPacketPlayerJoinClan packet) throws HandlePacketException;
+
+	public abstract void handlerPlayerLeaveClan(CPacketPlayerLeaveClan packet) throws HandlePacketException;
+
+	public abstract void handlerClanAbbreviationChange(CPacketClanAbbreviationChange packet) throws HandlePacketException;
 
 }
