@@ -75,6 +75,7 @@ public class MessengerComand extends CommandClass {
 										// BOSSBAR/ACTIONBAR
 										// TODO: PLAY SOUND
 										bt.setLastTellUUID(p.getUniqueId());
+										bp.setLastTellUUID(t.getUniqueId());
 										toTarget = null;
 										toPlayer = null;
 									} else {

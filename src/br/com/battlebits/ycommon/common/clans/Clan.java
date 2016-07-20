@@ -58,6 +58,10 @@ public class Clan {
 		return owner;
 	}
 
+	public String getOwnerName() {
+		return participants.get(owner);
+	}
+
 	public Set<UUID> getParticipants() {
 		return participants.keySet();
 	}
@@ -72,6 +76,10 @@ public class Clan {
 
 	public void updateCache() {
 		this.cacheExpire = System.currentTimeMillis() + (60 * 5 * 1000);
+	}
+
+	public String getPlayerName(UUID uuid) {
+		return participants.get(uuid);
 	}
 
 	public void addXp(int xp) {
@@ -185,7 +193,7 @@ public class Clan {
 		if (administrators.contains(uuid))
 			return false;
 		participants.remove(uuid);
-		vips.add(uuid);
+		vips.remove(uuid);
 		return true;
 	}
 

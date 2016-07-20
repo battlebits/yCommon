@@ -29,8 +29,6 @@ public class ClanCommon {
 	}
 
 	public void loadClan(Clan clan) {
-		if (clans.containsKey(clan.getClanName()))
-			return;
 		clans.put(clan.getClanName().toLowerCase(), clan);
 	}
 

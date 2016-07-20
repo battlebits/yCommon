@@ -104,11 +104,11 @@ public class PlayerListener implements Listener {
 
 			String tag = "";
 			if (clan.isOwner(bP)) {
-				tag = ChatColor.DARK_RED + "" + ChatColor.BOLD + Translate.getTranslation(onlineBp.getLanguage(), "owner");
+				tag = ChatColor.WHITE + " - " + ChatColor.DARK_RED + "" + Translate.getTranslation(onlineBp.getLanguage(), "owner");
 			} else if (clan.isAdministrator(bP)) {
-				tag = ChatColor.RED + "" + ChatColor.BOLD + Translate.getTranslation(onlineBp.getLanguage(), "admin");
+				tag = ChatColor.WHITE + " - " + ChatColor.RED + "" + Translate.getTranslation(onlineBp.getLanguage(), "admin");
 			}
-			String format = ChatColor.DARK_RED + "" + ChatColor.BOLD + "[CLAN " + ChatColor.WHITE + "- " + tag.toUpperCase() + ChatColor.DARK_RED + "" + ChatColor.BOLD + "] " + ChatColor.GRAY + bP.getUserName() + ChatColor.WHITE + ": ";
+			String format = ChatColor.DARK_RED + "[CLAN" + tag.toUpperCase() + ChatColor.DARK_RED + "] " + ChatColor.GRAY + bP.getUserName() + ChatColor.WHITE + ": ";
 
 			player.sendMessage(TextComponent.fromLegacyText(format + message));
 		}
