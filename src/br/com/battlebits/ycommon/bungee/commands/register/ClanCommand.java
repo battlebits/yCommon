@@ -11,7 +11,6 @@ import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.clans.Clan;
 import br.com.battlebits.ycommon.common.commandmanager.CommandClass;
-import br.com.battlebits.ycommon.common.networking.packets.CPacketClanAbbreviationChange;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketClanLoad;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketPlayerJoinClan;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketPlayerLeaveClan;
@@ -28,7 +27,7 @@ public class ClanCommand extends CommandClass {
 	private static int CLAN_PRICE = 5000;
 	private static int CHANGE_ABB_PRICE = 3000;
 
-	@Command(name = "clan")
+	@Command(name = "clan", aliases = { "clans" })
 	public void clan(CommandArgs args) {
 		BungeeCord.getInstance().getScheduler().runAsync(BungeeMain.getPlugin(), new Runnable() {
 			public void run() {
@@ -37,7 +36,7 @@ public class ClanCommand extends CommandClass {
 					if (args.isPlayer()) {
 						BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(args.getPlayer().getUniqueId());
 						if (player.getClan() != null) {
-							clanInfo(args.getLanguage(), args.getSender(), player.getClan(), "clan-info");
+							clanInfo(args.getLanguage(), args.getSender(), player.getClan(), true);
 							return;
 						}
 					}
@@ -74,9 +73,17 @@ public class ClanCommand extends CommandClass {
 						args.getSender().sendMessage(TextComponent.fromLegacyText(clanPrefix + Translate.getTranslation(args.getLanguage(), "clan-clanName-between-3-16")));
 						return;
 					}
+					if (!clanName.matches("[a-zA-Z0-9]")) {
+						args.getSender().sendMessage(TextComponent.fromLegacyText(clanPrefix + Translate.getTranslation(args.getLanguage(), "clan-clanName-invalid-chars")));
+						return;
+					}
 					String clanAbbreviation = args.getArgs()[2];
 					if (clanAbbreviation.length() < 3 || clanAbbreviation.length() > 5) {
 						args.getSender().sendMessage(TextComponent.fromLegacyText(clanPrefix + Translate.getTranslation(args.getLanguage(), "clan-changeabb-between-3-5")));
+						return;
+					}
+					if (!clanAbbreviation.matches("[a-zA-Z0-9]")) {
+						args.getSender().sendMessage(TextComponent.fromLegacyText(clanPrefix + Translate.getTranslation(args.getLanguage(), "clan-clanAbbreviation-invalid-chars")));
 						return;
 					}
 					if (BungeeMain.getPlugin().getClanManager().clanNameExists(clanName)) {
@@ -87,10 +94,10 @@ public class ClanCommand extends CommandClass {
 						args.getSender().sendMessage(TextComponent.fromLegacyText(clanPrefix + Translate.getTranslation(args.getLanguage(), "clan-clanAbbreviation-already-exists")));
 						return;
 					}
-					player.removeMoney(CLAN_PRICE);
 					Clan clan = new Clan(clanName, clanAbbreviation, player);
 					BattlebitsAPI.getClanCommon().loadClan(clan);
 					BattlebitsAPI.getClanCommon().saveClan(clan);
+					player.removeMoney(CLAN_PRICE);
 					CommonClient client = BungeeMain.getPlugin().getCommonServer().getClient(player.getServerConnected());
 					if (client != null) {
 						client.sendPacket(new CPacketClanLoad(clan));
@@ -100,7 +107,9 @@ public class ClanCommand extends CommandClass {
 					return;
 				}
 				case "join":
-				case "entrar": {
+				case "entrar":
+				case "accept":
+				case "aceitar": {
 					if (player.getClan() != null) {
 						args.getSender().sendMessage(TextComponent.fromLegacyText(clanPrefix + Translate.getTranslation(args.getLanguage(), "clan-already-have-clan")));
 						return;
@@ -177,7 +186,13 @@ public class ClanCommand extends CommandClass {
 					if (clan.isAdministrator(player)) {
 						clan.demote(player.getUuid());
 					}
-					clan.removeParticipant(player.getUuid());
+					if (clan.removeParticipant(player.getUuid()))
+						player.setClan("");
+					else {
+						args.getSender().sendMessage(TextComponent.fromLegacyText(clanPrefix + "ERROR"));
+						return;
+					}
+					BattlebitsAPI.getClanCommon().saveClan(clan);
 					for (UUID uuid : clan.getParticipants()) {
 						ProxiedPlayer proxied = BungeeCord.getInstance().getPlayer(uuid);
 						if (proxied == null)
@@ -188,7 +203,6 @@ public class ClanCommand extends CommandClass {
 							lang = battlePlayer.getLanguage();
 						proxied.sendMessage(TextComponent.fromLegacyText(Translate.getTranslation(lang, "clan-prefix") + " " + Translate.getTranslation(lang, "clan-player-leaved").replace("%player%", player.getUserName())));
 					}
-					BattlebitsAPI.getClanCommon().saveClan(clan);
 					CommonClient client = BungeeMain.getPlugin().getCommonServer().getClient(player.getServerConnected());
 					if (client != null) {
 						client.sendPacket(new CPacketClanLoad(clan));
@@ -204,7 +218,7 @@ public class ClanCommand extends CommandClass {
 					}
 					Clan clan = player.getClan();
 					if (!clan.isAdministrator(player)) {
-						args.getSender().sendMessage(TextComponent.fromLegacyText(clanPrefix + Translate.getTranslation(args.getLanguage(), "clan-player-not-admin")));
+						args.getSender().sendMessage(TextComponent.fromLegacyText(clanPrefix + Translate.getTranslation(args.getLanguage(), "clan-you-not-admin")));
 						return;
 					}
 					if (args.getArgs().length != 2) {
@@ -267,7 +281,7 @@ public class ClanCommand extends CommandClass {
 					}
 					Clan clan = player.getClan();
 					if (!clan.isAdministrator(player)) {
-						args.getSender().sendMessage(TextComponent.fromLegacyText(clanPrefix + Translate.getTranslation(args.getLanguage(), "clan-player-not-admin")));
+						args.getSender().sendMessage(TextComponent.fromLegacyText(clanPrefix + Translate.getTranslation(args.getLanguage(), "clan-you-not-admin")));
 						return;
 					}
 					if (args.getArgs().length != 2) {
@@ -305,7 +319,7 @@ public class ClanCommand extends CommandClass {
 					}
 					Clan clan = player.getClan();
 					if (!clan.isOwner(player)) {
-						args.getSender().sendMessage(TextComponent.fromLegacyText(clanPrefix + Translate.getTranslation(args.getLanguage(), "clan-player-not-owner")));
+						args.getSender().sendMessage(TextComponent.fromLegacyText(clanPrefix + Translate.getTranslation(args.getLanguage(), "clan-you-not-owner")));
 						return;
 					}
 					if (args.getArgs().length != 2) {
@@ -351,7 +365,7 @@ public class ClanCommand extends CommandClass {
 					}
 					Clan clan = player.getClan();
 					if (!clan.isOwner(player)) {
-						args.getSender().sendMessage(TextComponent.fromLegacyText(clanPrefix + Translate.getTranslation(args.getLanguage(), "clan-player-not-owner")));
+						args.getSender().sendMessage(TextComponent.fromLegacyText(clanPrefix + Translate.getTranslation(args.getLanguage(), "clan-you-not-owner")));
 						return;
 					}
 					if (args.getArgs().length != 2) {
@@ -479,15 +493,13 @@ public class ClanCommand extends CommandClass {
 								return;
 							}
 						}
-						clanInfo(args.getLanguage(), args.getSender(), clan, "clan-info-other");
-						return;
 					} else if (player.getClan() != null) {
 						clan = player.getClan();
 					} else {
 						args.getSender().sendMessage(TextComponent.fromLegacyText(clanPrefix + Translate.getTranslation(args.getLanguage(), "clan-info-usage-dont-have-any")));
 						return;
 					}
-					clanInfo(args.getLanguage(), args.getSender(), clan, "clan-info");
+					clanInfo(args.getLanguage(), args.getSender(), clan, clan == player.getClan());
 					return;
 				}
 				case "changeabb":
@@ -498,7 +510,7 @@ public class ClanCommand extends CommandClass {
 					}
 					Clan clan = player.getClan();
 					if (!clan.isOwner(player)) {
-						args.getSender().sendMessage(TextComponent.fromLegacyText(clanPrefix + Translate.getTranslation(args.getLanguage(), "clan-player-not-owner")));
+						args.getSender().sendMessage(TextComponent.fromLegacyText(clanPrefix + Translate.getTranslation(args.getLanguage(), "clan-you-not-owner")));
 						return;
 					}
 					if (args.getArgs().length != 2) {
@@ -518,9 +530,9 @@ public class ClanCommand extends CommandClass {
 						args.getSender().sendMessage(TextComponent.fromLegacyText(clanPrefix + Translate.getTranslation(args.getLanguage(), "clan-clanAbbreviation-already-exists")));
 						return;
 					}
-					player.removeMoney(CHANGE_ABB_PRICE);
 					clan.changeAbbreviation(abbreviation);
 					BattlebitsAPI.getClanCommon().saveClan(clan);
+					player.removeMoney(CHANGE_ABB_PRICE);
 					for (UUID participante : clan.getParticipants()) {
 						ProxiedPlayer proxied = BungeeCord.getInstance().getPlayer(participante);
 						if (proxied == null)
@@ -529,10 +541,6 @@ public class ClanCommand extends CommandClass {
 						BattlePlayer battlePlayer = BattlebitsAPI.getAccountCommon().getBattlePlayer(proxied.getUniqueId());
 						if (battlePlayer != null) {
 							lang = battlePlayer.getLanguage();
-							CommonClient client = BungeeMain.getPlugin().getCommonServer().getClient(player.getServerConnected());
-							if (client != null) {
-								client.sendPacket(new CPacketClanAbbreviationChange(clan.getClanName(), clan.getAbbreviation()));
-							}
 						}
 						proxied.sendMessage(TextComponent.fromLegacyText(Translate.getTranslation(lang, "clan-prefix") + " " + Translate.getTranslation(lang, "clan-abbreviation-changed").replace("%abb%", clan.getAbbreviation()).replace("%player%", player.getUserName())));
 					}
@@ -592,14 +600,15 @@ public class ClanCommand extends CommandClass {
 				}
 			}
 		});
+
 	}
 
-	private void clanInfo(Language lang, CommandSender sender, Clan clan, String info) {
-		String clanInfo = Translate.getTranslation(lang, info);
+	private void clanInfo(Language lang, CommandSender sender, Clan clan, boolean self) {
+		String clanInfo = Translate.getTranslation(lang, "clan-info" + (self ? "" : "-other"));
 		clanInfo = clanInfo.replace("%name%", clan.getClanName());
 		clanInfo = clanInfo.replace("%league%", clan.getClanRank().name());
 		clanInfo = clanInfo.replace("%abb%", clan.getAbbreviation());
-		clanInfo = clanInfo.replace("%owner%", clan.getOwnerName());
+		clanInfo = clanInfo.replace("%owner%", (self ? ((BungeeCord.getInstance().getPlayer(clan.getOwner())) != null ? ChatColor.GREEN + "" : ChatColor.RED + "") : "") + clan.getOwnerName());
 		clanInfo = clanInfo.replace("%slots%", clan.getSlots() + "");
 		clanInfo = clanInfo.replace("%players%", clan.getParticipants().size() + "");
 		clanInfo = clanInfo.replace("%xp%", clan.getXp() + "");
@@ -618,21 +627,44 @@ public class ClanCommand extends CommandClass {
 		// TODO HOVER - ServerIP | Click - Teleport Server
 		String adminList = "";
 		for (UUID admin : admins) {
-			if (BungeeCord.getInstance().getPlayer(admin) != null)
-				adminList = adminList + ChatColor.GREEN + clan.getPlayerName(admin) + ", ";
-			else
-				adminList = adminList + ChatColor.RED + clan.getPlayerName(admin) + ", ";
+			if (self) {
+				if (BungeeCord.getInstance().getPlayer(admin) != null)
+					adminList = adminList + ChatColor.GREEN + clan.getPlayerName(admin) + ", ";
+				else
+					adminList = adminList + ChatColor.RED + clan.getPlayerName(admin) + ", ";
+			} else
+				adminList = adminList + clan.getPlayerName(admin) + ", ";
 		}
 		clanInfo = clanInfo.replace("%adminList%", adminList);
 		String playerList = "";
 		for (UUID pl : players) {
-			if (BungeeCord.getInstance().getPlayer(pl) != null)
-				adminList = adminList + ChatColor.GREEN + clan.getPlayerName(pl) + ", ";
-			else
-				adminList = adminList + ChatColor.RED + clan.getPlayerName(pl) + ", ";
+			if (self) {
+				if (BungeeCord.getInstance().getPlayer(pl) != null)
+					playerList = playerList + ChatColor.GREEN + clan.getPlayerName(pl) + ", ";
+				else
+					playerList = playerList + ChatColor.RED + clan.getPlayerName(pl) + ", ";
+			} else
+				playerList = playerList + clan.getPlayerName(pl) + ", ";
 		}
 		clanInfo = clanInfo.replace("%playerList%", playerList);
 		sender.sendMessage(TextComponent.fromLegacyText(clanInfo));
 	}
+
+	/*
+	 * Para DONO
+	 * 
+	 * clan promote <Nick ou UUID> clan demote <Nick ou UUID> clan changeabb
+	 * <Sigla> clan disband
+	 * 
+	 * Para ADMIN
+	 * 
+	 * clan invite <Nick ou UUID> clan removeinvite <Nick ou UUID> clan kick
+	 * <Nick ou UUID>
+	 * 
+	 * Para Players
+	 * 
+	 * clan create <Nome do Clan> <Sigla> clan join <Nome do Clan> clan chat
+	 * clan info [Nome do Clan] clan leave clan help
+	 */
 
 }

@@ -22,6 +22,7 @@ import br.com.battlebits.ycommon.bungee.managers.ClanManager;
 import br.com.battlebits.ycommon.bungee.managers.ServerManager;
 import br.com.battlebits.ycommon.bungee.networking.CommonServer;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
+import br.com.battlebits.ycommon.common.clans.Clan;
 import br.com.battlebits.ycommon.common.connection.backend.MySQLBackend;
 import br.com.battlebits.ycommon.common.enums.BattleInstance;
 import br.com.battlebits.ycommon.common.translate.Translate;
@@ -108,6 +109,9 @@ public class BungeeMain extends Plugin {
 			commonServer.stopServer();
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+		for (Clan clan : BattlebitsAPI.getClanCommon().getClans()) {
+			BattlebitsAPI.getClanCommon().saveClan(clan);
 		}
 		try {
 			mysql.closeConnection();

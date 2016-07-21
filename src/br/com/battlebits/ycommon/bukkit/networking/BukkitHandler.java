@@ -19,7 +19,6 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeAccount;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLanguage;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLiga;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeTag;
-import br.com.battlebits.ycommon.common.networking.packets.CPacketClanAbbreviationChange;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketClanLoad;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketCommandRun;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketCreateParty;
@@ -271,14 +270,6 @@ public class BukkitHandler extends CommonHandler {
 			}
 		}
 		player.setClan("");
-	}
-
-	@Override
-	public void handlerClanAbbreviationChange(CPacketClanAbbreviationChange packet) throws HandlePacketException {
-		Clan clan = BattlebitsAPI.getClanCommon().getClan(packet.getClanName());
-		if (clan == null)
-			return;
-		clan.changeAbbreviation(packet.getAbbreviation());
 	}
 
 }

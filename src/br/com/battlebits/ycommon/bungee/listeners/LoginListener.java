@@ -59,12 +59,18 @@ public class LoginListener implements Listener {
 							player.setJoinData(userName, ipAdress, countryCode, timeZoneCode);
 							BattlebitsAPI.getAccountCommon().loadBattlePlayer(uuid, player);
 							if (player.getClanName() != null && !player.getClanName().isEmpty()) {
-								Clan clan = BungeeMain.getPlugin().getClanManager().loadClan(player.getClanName());
-								if (clan == null) {
-									clan = player.getClan();
-								}
-								if (clan != null) {
-									clan.updatePlayer(player);
+								try {
+									Clan clan = BungeeMain.getPlugin().getClanManager().loadClan(player.getClanName());
+									if (clan == null) {
+										clan = player.getClan();
+									}
+									if (!clan.isParticipant(player))
+										player.setClan("");
+									if (clan != null) {
+										clan.updatePlayer(player);
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
 								}
 							}
 							BattlebitsAPI.debug("ACCOUNT > LOADED");

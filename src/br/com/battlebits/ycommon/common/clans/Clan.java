@@ -7,8 +7,11 @@ import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
+import br.com.battlebits.ycommon.bungee.BungeeMain;
+import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.clans.ranking.ClanRank;
+import br.com.battlebits.ycommon.common.enums.BattleInstance;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 
 public class Clan {
@@ -83,11 +86,15 @@ public class Clan {
 	}
 
 	public void addXp(int xp) {
+		if (xp < 0)
+			xp = 0;
 		this.xp += xp;
+		updateStatus();
 	}
 
 	public void changeAbbreviation(String str) {
 		abbreviation = str;
+		updateStatus();
 	}
 
 	public boolean isOwner(BattlePlayer player) {
@@ -134,7 +141,8 @@ public class Clan {
 			return false;
 		if (administrators.contains(uuid))
 			return false;
-		administrators.remove(uuid);
+		administrators.add(uuid);
+		updateStatus();
 		return true;
 	}
 
@@ -143,7 +151,8 @@ public class Clan {
 			return false;
 		if (!administrators.contains(uuid))
 			return false;
-		administrators.add(uuid);
+		administrators.remove(uuid);
+		updateStatus();
 		return true;
 	}
 
@@ -175,12 +184,14 @@ public class Clan {
 				demote(uuid);
 		}
 		removeParticipant(player.getUuid());
+		updateStatus();
 		return true;
 	}
 
 	public void addParticipant(BattlePlayer player) {
 		participants.put(player.getUuid(), player.getUserName());
 		player.setClan(clanName);
+		updateStatus();
 		if (player.hasGroupPermission(Group.LIGHT)) {
 			if (!vips.contains(player.getUuid()))
 				vips.add(player.getUuid());
@@ -194,6 +205,7 @@ public class Clan {
 			return false;
 		participants.remove(uuid);
 		vips.remove(uuid);
+		updateStatus();
 		return true;
 	}
 
@@ -211,6 +223,12 @@ public class Clan {
 
 	public int getSlots() {
 		return 5 + (2 * rank.ordinal()) + vips.size();
+	}
+
+	public void updateStatus() {
+		if (BattlebitsAPI.getBattleInstance() != BattleInstance.BUNGEECORD)
+			return;
+		BungeeMain.getPlugin().getClanManager().updateClan(this);
 	}
 
 }

@@ -1,5 +1,7 @@
 package br.com.battlebits.ycommon.bungee.networking;
 
+import java.sql.SQLException;
+
 import br.com.battlebits.ycommon.bungee.BungeeMain;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
@@ -18,7 +20,6 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeAccount;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLanguage;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLiga;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeTag;
-import br.com.battlebits.ycommon.common.networking.packets.CPacketClanAbbreviationChange;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketClanLoad;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketCommandRun;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketCreateParty;
@@ -68,7 +69,13 @@ public class BungeePacketHandler extends CommonHandler {
 		if (player == null)
 			player = BungeeMain.getPlugin().getAccountManager().loadBattlePlayer(packet.getUuid());
 		if (player.getClanName() != null && !player.getClanName().isEmpty()) {
-			Clan clan = BungeeMain.getPlugin().getClanManager().loadClan(player.getClanName());
+			Clan clan;
+			try {
+				clan = BungeeMain.getPlugin().getClanManager().loadClan(player.getClanName());
+			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+				e.printStackTrace();
+				return;
+			}
 			if (clan == null) {
 				clan = player.getClan();
 			}
@@ -309,11 +316,6 @@ public class BungeePacketHandler extends CommonHandler {
 
 	@Override
 	public void handlerPlayerLeaveClan(CPacketPlayerLeaveClan packet) throws HandlePacketException {
-		// PROVAVEL QUE NUNCA VAI ACONTECER
-	}
-
-	@Override
-	public void handlerClanAbbreviationChange(CPacketClanAbbreviationChange packet) throws HandlePacketException {
 		// PROVAVEL QUE NUNCA VAI ACONTECER
 	}
 

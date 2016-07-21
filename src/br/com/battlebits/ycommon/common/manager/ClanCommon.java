@@ -44,12 +44,12 @@ public class ClanCommon {
 			return;
 		String json = BattlebitsAPI.getGson().toJson(clan);
 		try {
-			PreparedStatement stmt = BungeeMain.getPlugin().getConnection().prepareStatment("INSERT INTO `clans`(`name`,`abbreviation`, `json`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `json` = ? AND `abbreviation` = ?;");
+			PreparedStatement stmt = BungeeMain.getPlugin().getConnection().prepareStatment("INSERT INTO `clans`(`name`,`abbreviation`, `json`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `json` = ?, `abbreviation` = ?;");
 			stmt.setString(1, clan.getClanName().toLowerCase());
-			stmt.setString(2, clan.getAbbreviation());
+			stmt.setString(2, clan.getAbbreviation().toLowerCase());
 			stmt.setString(3, json);
 			stmt.setString(4, json);
-			stmt.setString(5, clan.getAbbreviation());
+			stmt.setString(5, clan.getAbbreviation().toLowerCase());
 			stmt.executeUpdate();
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
 			e.printStackTrace();

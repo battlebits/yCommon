@@ -48,50 +48,50 @@ public class BattlePlayer {
 	private String lastIpAddress;
 
 	// PLAYING
-	private long onlineTime;
+	private long onlineTime = 0;
 	private long joinTime;
 	private long lastLoggedIn;
 	private long firstTimePlaying;
 	private transient long cacheExpire;
 
 	// GRUPOS
-	private Map<ServerStaff, Group> groups;
-	private Map<RankType, Long> ranks;
+	private Map<ServerStaff, Group> groups = new HashMap<>();
+	private Map<RankType, Long> ranks = new HashMap<>();
 
 	// AMIGOS
-	private Map<UUID, Friend> friends;
-	private Map<UUID, Request> friendRequests;
-	private Map<UUID, Blocked> blockedPlayers;
+	private Map<UUID, Friend> friends = new HashMap<>();
+	private Map<UUID, Request> friendRequests = new HashMap<>();
+	private Map<UUID, Blocked> blockedPlayers = new HashMap<>();
 
 	// CLANS E PARTY
-	private String clanName;
+	private String clanName = "";
 	private Party actualParty;
 
 	// DADOS PESSOAIS COMPARTILHADOS
-	private String skype;
-	private boolean skypeFriendOnly;
-	private String twitter;
-	private String youtubeChannel;
-	private String steam;
+	private String skype = "";
+	private boolean skypeFriendOnly = true;
+	private String twitter = "";
+	private String youtubeChannel = "";
+	private String steam = "";
 
 	// CONFIGURACOES
-	private AccountConfiguration configuration;
+	private AccountConfiguration configuration = new AccountConfiguration();
 
 	// PAIS E LINGUA
 	private String countryCode;
-	private Language language;
+	private Language language = BattlebitsAPI.getDefaultLanguage();
 	private TimeZone timeZone;
 
 	// STATUS
-	private GameStatus gameStatus;
+	private GameStatus gameStatus = new GameStatus();
 
 	// HISTORIA
-	private BanHistory banHistory;
+	private BanHistory banHistory = new BanHistory();
 
 	private boolean online;
 
-	private String serverConnected;
-	private ServerType serverConnectedType;
+	private String serverConnected = "";
+	private ServerType serverConnectedType = ServerType.NONE;
 
 	public BattlePlayer() {
 
@@ -102,49 +102,15 @@ public class BattlePlayer {
 		this.uuid = uuid;
 		this.fakeName = userName;
 
-		this.fichas = 0;
-		this.money = 0;
-		this.xp = 0;
-		this.liga = Liga.UNRANKED;
-
 		this.ipAddress = ipAddress;
 		if (ipAddress != null)
 			this.lastIpAddress = ipAddress.getHostString();
 
-		this.onlineTime = 0;
 		this.lastLoggedIn = TimeZoneConversor.getCurrentMillsTimeIn(TimeZone.GMT0);
 		this.firstTimePlaying = TimeZoneConversor.getCurrentMillsTimeIn(TimeZone.GMT0);
 
-		this.configuration = new AccountConfiguration();
-
-		this.groups = new HashMap<>();
-		this.ranks = new HashMap<>();
-
-		this.friends = new HashMap<>();
-		this.friendRequests = new HashMap<>();
-		this.blockedPlayers = new HashMap<>();
-
-		this.clanName = "";
-		this.actualParty = null;
-
-		this.skype = "";
-		this.skypeFriendOnly = true;
-		this.twitter = "";
-		this.youtubeChannel = "";
-		this.steam = "";
-
 		this.countryCode = countryCode;
-		this.language = BattlebitsAPI.getDefaultLanguage();
 		this.timeZone = TimeZone.fromString(timeZoneCode);
-
-		this.gameStatus = new GameStatus();
-
-		this.banHistory = new BanHistory();
-
-		this.serverConnected = "";
-		this.serverConnectedType = ServerType.NONE;
-
-		this.tag = Tag.valueOf(getServerGroup().toString());
 	}
 
 	public String getUserName() {
@@ -386,16 +352,16 @@ public class BattlePlayer {
 	}
 
 	public void setXp(int xp) {
+		if (getClan() != null)
+			getClan().addXp(xp - this.xp);
 		this.xp = xp;
 	}
 
 	public int addXp(int xp) {
 		if (xp < 0)
 			xp = 0;
-		this.xp += xp;
-		if (getClan() != null)
-			getClan().addXp(xp);
-		setXp(this.xp);
+		int setarxp = this.xp + xp;
+		setXp(setarxp);
 		return xp;
 	}
 
@@ -531,6 +497,8 @@ public class BattlePlayer {
 	}
 
 	public Tag getTag() {
+		if (tag == null)
+			tag = Tag.valueOf(getServerGroup().toString());
 		return tag;
 	}
 

@@ -111,7 +111,7 @@ public class BanManager {
 			banSuccess = banSuccess.replace("%muted-By%", mute.getMutedBy());
 			banSuccess = banSuccess.replace("%reason%", mute.getReason());
 			banSuccess = banSuccess.replace("%duration%", DateUtils.formatDifference(pl.getLanguage(), mute.getDuration() / 1000));
-			if (pl.hasGroupPermission(Group.TRIAL)) {
+			if (pl.hasGroupPermission(Group.HELPER)) {
 				proxiedP.sendMessage(TextComponent.fromLegacyText(banSuccess));
 			}
 		}
@@ -137,7 +137,7 @@ public class BanManager {
 			String unbanSuccess = Translate.getTranslation(pl.getLanguage(), "command-unmute-prefix") + " " + Translate.getTranslation(pl.getLanguage(), "command-unmute-success");
 			unbanSuccess = unbanSuccess.replace("%player%", player.getUserName() + "(" + player.getUuid().toString().replace("-", "") + ")");
 			unbanSuccess = unbanSuccess.replace("%unmutedBy%", mute.getUnmutedBy());
-			if (pl.hasGroupPermission(Group.TRIAL)) {
+			if (pl.hasGroupPermission(Group.HELPER)) {
 				proxiedP.sendMessage(TextComponent.fromLegacyText(unbanSuccess));
 			}
 		}

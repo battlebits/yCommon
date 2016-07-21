@@ -8,7 +8,7 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketCommandRun;
 
 public class IW4Command extends CommandClass {
 
-	@Command(name = "iw4commandforbungee", aliases = { "unban", "unmute", "givevip", "ban" })
+	@Command(name = "iw4commandforbungee", aliases = { "unban", "unmute", "givevip", "ban", "tempban" })
 	public void account(CommandArgs args) {
 		if (args.isPlayer())
 			return;

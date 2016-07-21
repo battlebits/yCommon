@@ -53,8 +53,10 @@ public class AccountCommon {
 		if (!players.containsKey(uuid)) {
 			if (BattlebitsAPI.getBattleInstance() == BattleInstance.BUKKIT) {
 				BukkitMain.kickPlayer(uuid);
+			} else {
+				return null;
 			}
-			return null;
+			return new BattlePlayer();
 		}
 		players.get(uuid).updateCache();
 		return players.get(uuid);

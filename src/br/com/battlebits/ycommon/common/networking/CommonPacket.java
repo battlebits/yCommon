@@ -19,7 +19,6 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeAccount;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLanguage;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeLiga;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketChangeTag;
-import br.com.battlebits.ycommon.common.networking.packets.CPacketClanAbbreviationChange;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketClanLoad;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketCommandRun;
 import br.com.battlebits.ycommon.common.networking.packets.CPacketCreateParty;
@@ -98,7 +97,6 @@ public abstract class CommonPacket {
 
 		register((byte) 0x65, CPacketPlayerJoinClan.class);
 		register((byte) 0x66, CPacketPlayerLeaveClan.class);
-		register((byte) 0x67, CPacketClanAbbreviationChange.class);
 
 	}
 
