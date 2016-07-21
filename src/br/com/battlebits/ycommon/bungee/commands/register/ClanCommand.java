@@ -2,6 +2,8 @@ package br.com.battlebits.ycommon.bungee.commands.register;
 
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import br.com.battlebits.ycommon.bungee.BungeeMain;
 import br.com.battlebits.ycommon.bungee.commands.BungeeCommandFramework.Command;
@@ -73,7 +75,7 @@ public class ClanCommand extends CommandClass {
 						args.getSender().sendMessage(TextComponent.fromLegacyText(clanPrefix + Translate.getTranslation(args.getLanguage(), "clan-clanName-between-3-16")));
 						return;
 					}
-					if (!clanName.matches("[a-zA-Z0-9]")) {
+					if (!isLegal(clanName)) {
 						args.getSender().sendMessage(TextComponent.fromLegacyText(clanPrefix + Translate.getTranslation(args.getLanguage(), "clan-clanName-invalid-chars")));
 						return;
 					}
@@ -82,7 +84,7 @@ public class ClanCommand extends CommandClass {
 						args.getSender().sendMessage(TextComponent.fromLegacyText(clanPrefix + Translate.getTranslation(args.getLanguage(), "clan-changeabb-between-3-5")));
 						return;
 					}
-					if (!clanAbbreviation.matches("[a-zA-Z0-9]")) {
+					if (!isLegal(clanAbbreviation)) {
 						args.getSender().sendMessage(TextComponent.fromLegacyText(clanPrefix + Translate.getTranslation(args.getLanguage(), "clan-clanAbbreviation-invalid-chars")));
 						return;
 					}
@@ -526,6 +528,10 @@ public class ClanCommand extends CommandClass {
 						args.getSender().sendMessage(TextComponent.fromLegacyText(clanPrefix + Translate.getTranslation(args.getLanguage(), "clan-changeabb-between-3-5")));
 						return;
 					}
+					if (!isLegal(abbreviation)) {
+						args.getSender().sendMessage(TextComponent.fromLegacyText(clanPrefix + Translate.getTranslation(args.getLanguage(), "clan-clanAbbreviation-invalid-chars")));
+						return;
+					}
 					if (BungeeMain.getPlugin().getClanManager().clanAbbreviationExists(abbreviation)) {
 						args.getSender().sendMessage(TextComponent.fromLegacyText(clanPrefix + Translate.getTranslation(args.getLanguage(), "clan-clanAbbreviation-already-exists")));
 						return;
@@ -601,6 +607,12 @@ public class ClanCommand extends CommandClass {
 			}
 		});
 
+	}
+
+	public boolean isLegal(String clanName) {
+		Pattern pattern = Pattern.compile("[a-zA-Z0-9]{3,16}");
+		Matcher matcher = pattern.matcher(clanName);
+		return matcher.matches();
 	}
 
 	private void clanInfo(Language lang, CommandSender sender, Clan clan, boolean self) {
