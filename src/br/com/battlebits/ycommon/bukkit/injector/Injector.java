@@ -1,5 +1,6 @@
 package br.com.battlebits.ycommon.bukkit.injector;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -14,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import br.com.battlebits.ycommon.bukkit.api.admin.AdminMode;
 import br.com.battlebits.ycommon.bukkit.api.npc.CustomPlayerNPC;
 import br.com.battlebits.ycommon.bukkit.injector.PacketListener.PacketObject;
 import br.com.battlebits.ycommon.common.utils.reflection.ReflectionUtils;
@@ -32,6 +34,9 @@ import net.minecraft.server.v1_7_R4.PacketPlayOutEntityTeleport;
 import net.minecraft.server.v1_7_R4.PacketPlayOutNamedEntitySpawn;
 import net.minecraft.server.v1_7_R4.PacketPlayOutSpawnEntity;
 import net.minecraft.server.v1_7_R4.PacketPlayOutSpawnEntityLiving;
+import net.minecraft.server.v1_7_R4.PacketStatusOutServerInfo;
+import net.minecraft.server.v1_7_R4.ServerPing;
+import net.minecraft.server.v1_7_R4.ServerPingPlayerSample;
 
 public class Injector {
 	public static void createTinyProtocol(final Plugin plugin) {
@@ -99,6 +104,33 @@ public class Injector {
 			@Override
 			public void onPacketReceive(PacketObject pacote) {
 				// TODO Auto-generated method stub
+
+			}
+		});
+		
+		PacketListenerAPI.addListener(new PacketListener() {
+			@Override
+			public void onPacketSend(PacketObject pacote) {
+				Packet packet = pacote.getPacket();
+				if (packet instanceof PacketStatusOutServerInfo) {
+					PacketStatusOutServerInfo serverInfo = (PacketStatusOutServerInfo) packet;
+					try {
+						Field field = PacketStatusOutServerInfo.class.getDeclaredField("b");
+						field.setAccessible(true);
+						ServerPing ping = (ServerPing) field.get(serverInfo);
+						ServerPingPlayerSample old = ping.b();
+						ServerPingPlayerSample sample = new ServerPingPlayerSample(old.a(), old.b() - AdminMode.getInstance().playersInAdmin());
+						sample.a(old.c());
+						ping.setPlayerSample(sample);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					return;
+				}
+			}
+
+			@Override
+			public void onPacketReceive(PacketObject pacote) {
 
 			}
 		});

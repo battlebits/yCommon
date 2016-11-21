@@ -2,8 +2,9 @@ package br.com.battlebits.ycommon.common.enums;
 
 public enum ServerType {
 	NETWORK("bbits.com.br", ServerStaff.NETWORK), //
-	HUNGERGAMES("battle-hg.com", ServerStaff.HUNGERGAMES), //
+	DOUBLEKITHG("doublekit.battle-hg.com", ServerStaff.HUNGERGAMES), //
 	FAIRPLAY("fp.battle-hg.com", ServerStaff.HUNGERGAMES), //
+	HUNGERGAMES("battle-hg.com", ServerStaff.HUNGERGAMES), //
 	PVP_FULLIRON("fulliron.pvp.battlebits.com.br", ServerStaff.BATTLECRAFT), //
 	PVP_SIMULATOR("simulator.pvp.battlebits.com.br", ServerStaff.BATTLECRAFT), //
 	SKYWARS("sw.battlebits.com.br", ServerStaff.SKYWARS), //
@@ -31,7 +32,7 @@ public enum ServerType {
 
 	public static ServerType getServerType(String serverHostname) {
 		for (ServerType type : values()) {
-			if (serverHostname.endsWith(type.suffix))
+			if (serverHostname.toLowerCase().endsWith(type.suffix.toLowerCase()))
 				return type;
 		}
 		return NONE;

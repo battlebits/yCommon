@@ -15,6 +15,7 @@ import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.banmanager.constructors.Ban;
 import br.com.battlebits.ycommon.common.clans.Clan;
+import br.com.battlebits.ycommon.common.store.iw4.api.ConnectionRecover;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.utils.GeoIpUtils;
 import br.com.battlebits.ycommon.common.utils.GeoIpUtils.IpCityResponse;
@@ -29,6 +30,7 @@ public class LoginListener implements Listener {
 	public void onLogin(final LoginEvent event) {
 		BattlebitsAPI.debug("ACCOUNT > STARTING");
 		event.registerIntent(BungeeMain.getPlugin());
+		ConnectionRecover.reconnect();
 		final String userName = event.getConnection().getName();
 		final InetSocketAddress ipAdress = event.getConnection().getAddress();
 		final UUID uuid = event.getConnection().getUniqueId();

@@ -10,12 +10,15 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
+import br.com.battlebits.ycommon.common.store.iw4.api.ConnectionRecover;
 import br.com.battlebits.ycommon.common.translate.Translate;
 
 public class AccountListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public synchronized void onAsync(AsyncPlayerPreLoginEvent event) throws InterruptedException {
+		if (Bukkit.getPluginManager().getPlugin("iw4-stable") != null)
+			ConnectionRecover.reconnect();
 		if (Bukkit.getPlayer(event.getUniqueId()) != null) {
 			event.setLoginResult(Result.KICK_OTHER);
 			event.setKickMessage("Already online");

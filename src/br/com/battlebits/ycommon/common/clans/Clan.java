@@ -189,6 +189,7 @@ public class Clan {
 	}
 
 	public void addParticipant(BattlePlayer player) {
+		invites.remove(player.getUuid());
 		participants.put(player.getUuid(), player.getUserName());
 		player.setClan(clanName);
 		updateStatus();

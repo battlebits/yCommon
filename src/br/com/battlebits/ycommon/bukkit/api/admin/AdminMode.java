@@ -1,8 +1,9 @@
 package br.com.battlebits.ycommon.bukkit.api.admin;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.GameMode;
@@ -16,11 +17,11 @@ import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 
 public class AdminMode {
-	private ArrayList<UUID> admin;
+	private Set<UUID> admin;
 	private static final AdminMode instance = new AdminMode();
 
 	public AdminMode() {
-		admin = new ArrayList<UUID>();
+		admin = new HashSet<UUID>();
 	}
 
 	public static AdminMode getInstance() {
@@ -59,7 +60,7 @@ public class AdminMode {
 	}
 
 	public boolean isAdmin(Player p) {
-		return admin.contains(p.getUniqueId());
+		return p != null && admin.contains(p.getUniqueId());
 	}
 
 	public int playersInAdmin() {

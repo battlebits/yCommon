@@ -20,8 +20,11 @@ import br.com.battlebits.ycommon.bukkit.injector.PacketListenerAPI;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
+import net.minecraft.server.v1_7_R4.ChatSerializer;
+import net.minecraft.server.v1_7_R4.IChatBaseComponent;
 import net.minecraft.server.v1_7_R4.ItemStack;
 import net.minecraft.server.v1_7_R4.Packet;
+import net.minecraft.server.v1_7_R4.PacketPlayOutChat;
 import net.minecraft.server.v1_7_R4.PacketPlayOutOpenWindow;
 import net.minecraft.server.v1_7_R4.PacketPlayOutSetSlot;
 import net.minecraft.server.v1_7_R4.PacketPlayOutWindowItems;
@@ -29,27 +32,44 @@ import net.minecraft.server.v1_7_R4.PacketPlayOutWindowItems;
 public class MenuTranslationInjector {
 
 	private Pattern translateFinder = Pattern.compile("%msg:\\s*([a-zA-Z0-9_-]+)\\s*%");
-	private Cache<String, Cache<Language, String>> translations = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.DAYS)
-			.build(new CacheLoader<String, Cache<Language, String>>() {
-				@Override
-				public Cache<Language, String> load(String original) throws Exception {
-					return getLanguageForCache(original);
-				}
-			});
+	private Pattern finder = Pattern.compile("§%(([^)]+)%§)");
+	private Cache<String, Cache<Language, String>> translations = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.DAYS).build(new CacheLoader<String, Cache<Language, String>>() {
+		@Override
+		public Cache<Language, String> load(String original) throws Exception {
+			return getLanguageForCache(original);
+		}
+	});
 	private PacketListener injectorListener;
 
 	public MenuTranslationInjector() {
 		injectorListener = new PacketListener() {
 			@Override
 			public void onPacketSend(PacketObject pacote) {
-				if(pacote.getPlayer() == null)
+				if (pacote.getPlayer() == null)
 					return;
-				if(pacote.getPlayer().getUniqueId() == null)
+				if (pacote.getPlayer().getUniqueId() == null)
 					return;
-				if(BattlebitsAPI.getAccountCommon().getBattlePlayer(pacote.getPlayer().getUniqueId()) == null)
+				if (BattlebitsAPI.getAccountCommon().getBattlePlayer(pacote.getPlayer().getUniqueId()) == null)
 					return;
 				Packet packet = pacote.getPacket();
-				if (packet instanceof PacketPlayOutWindowItems) {
+				if (packet instanceof PacketPlayOutChat) {
+					PacketPlayOutChat chat = (PacketPlayOutChat) packet;
+					try {
+						Field field = chat.getClass().getDeclaredField("a");
+						field.setAccessible(true);
+						IChatBaseComponent component = (IChatBaseComponent) field.get(chat);
+						if (component != null) {
+							String message = ChatSerializer.a(component);
+							Matcher matcher = finder.matcher(message);
+							while (matcher.find()) {
+								message = message.replace(matcher.group(), Translate.getTranslation(BattlebitsAPI.getAccountCommon().getBattlePlayer(pacote.getPlayer().getUniqueId()).getLanguage(), matcher.group(2)));
+							}
+							field.set(chat, ChatSerializer.a(message));
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				} else if (packet instanceof PacketPlayOutWindowItems) {
 					PacketPlayOutWindowItems items = (PacketPlayOutWindowItems) packet;
 					Language lang = BattlebitsAPI.getAccountCommon().getBattlePlayer(pacote.getPlayer().getUniqueId()).getLanguage();
 					ArrayList<ItemStack> array = new ArrayList<>();
@@ -139,8 +159,7 @@ public class MenuTranslationInjector {
 						c.setAccessible(true);
 						String name = (String) c.get(openWindow);
 						if (name != null && name.contains("%msg:")) {
-							c.set(openWindow, getTranslation(name,
-									BattlebitsAPI.getAccountCommon().getBattlePlayer(pacote.getPlayer().getUniqueId()).getLanguage()));
+							c.set(openWindow, getTranslation(name, BattlebitsAPI.getAccountCommon().getBattlePlayer(pacote.getPlayer().getUniqueId()).getLanguage()));
 						}
 						name = null;
 						c = null;
@@ -172,8 +191,7 @@ public class MenuTranslationInjector {
 		string = "";
 		ArrayList<String> newString = new ArrayList<String>();
 		for (int i = 0; i < split.length; i++) {
-			if (ChatColor.stripColor(string).length() > 25 || ChatColor.stripColor(string).endsWith(".")
-					|| ChatColor.stripColor(string).endsWith("!")) {
+			if (ChatColor.stripColor(string).length() > 25 || ChatColor.stripColor(string).endsWith(".") || ChatColor.stripColor(string).endsWith("!")) {
 				newString.add("§7" + string);
 				if (string.endsWith(".") || string.endsWith("!"))
 					newString.add("");
@@ -235,4 +253,5 @@ public class MenuTranslationInjector {
 			return "";
 		}
 	}
+
 }

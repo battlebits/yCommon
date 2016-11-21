@@ -1,6 +1,5 @@
 package br.com.battlebits.ycommon.bukkit.api.title;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
@@ -12,6 +11,7 @@ import org.spigotmc.ProtocolInjector.PacketTitle.Action;
 
 import net.minecraft.server.v1_7_R4.ChatSerializer;
 import net.minecraft.server.v1_7_R4.EntityPlayer;
+import net.minecraft.server.v1_7_R4.IChatBaseComponent;
 import net.minecraft.server.v1_7_R4.PlayerConnection;
 
 public class Title {
@@ -98,7 +98,6 @@ public class Title {
 	}
 
 	public void send(Player player) {
-		// First reset previous settings
 		resetTitle(player);
 		EntityPlayer handle = ((CraftPlayer) player).getHandle();
 		PlayerConnection connection = handle.playerConnection;
@@ -112,18 +111,15 @@ public class Title {
 			linhas.toArray(array);
 			return;
 		}
-		PacketTitle packetTitle = new PacketTitle(Action.TITLE, fadeInTime * (ticks ? 1 : 20), stayTime * (ticks ? 1 : 20), fadeOutTime * (ticks ? 1 : 20));
-		try {
-			Field field = packetTitle.getClass().getField("text");
-			field.setAccessible(true);
-			field.set(packetTitle, ChatSerializer.a("{text:\"" + ChatColor.translateAlternateColorCodes('&', title) + "\",color:" + titleColor.name().toLowerCase() + "}"));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		PacketTitle packetTitle = new PacketTitle(Action.TIMES, fadeInTime * (ticks ? 1 : 20), stayTime * (ticks ? 1 : 20), fadeOutTime * (ticks ? 1 : 20));
 		if (fadeInTime != -1 && fadeOutTime != -1 && stayTime != -1)
 			connection.sendPacket(packetTitle);
+		IChatBaseComponent serializer = ChatSerializer.a("{text:\"" + ChatColor.translateAlternateColorCodes('&', title) + "\",color:" + titleColor.name().toLowerCase() + "}");
+		packetTitle = new PacketTitle(Action.TITLE, serializer);
+		connection.sendPacket(packetTitle);
 		if (subtitle != "") {
-			packetTitle = new PacketTitle(Action.SUBTITLE, ChatSerializer.a("{text:\"" + ChatColor.translateAlternateColorCodes('&', subtitle) + "\",color:" + subtitleColor.name().toLowerCase() + "}"));
+			serializer = ChatSerializer.a("{text:\"" + ChatColor.translateAlternateColorCodes('&', subtitle) + "\",color:" + subtitleColor.name().toLowerCase() + "}");
+			packetTitle = new PacketTitle(Action.SUBTITLE, serializer);
 			connection.sendPacket(packetTitle);
 		}
 	}

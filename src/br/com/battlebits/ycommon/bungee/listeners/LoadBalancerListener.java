@@ -47,18 +47,31 @@ public class LoadBalancerListener implements Listener {
 		switch (type) {
 		case PVP_FULLIRON: {
 			server = manager.getFullIronBalancer().next();
-			if (server != null)
+			if (server != null) {
 				toConnect = server.getServerInfo();
+			}
+			break;
 		}
 		case PVP_SIMULATOR: {
 			server = manager.getPeladoBalancer().next();
-			if (server != null)
+			if (server != null) {
 				toConnect = server.getServerInfo();
+			}
+			break;
+		}
+		case DOUBLEKITHG: {
+			server = manager.getDoubleKitHGBalancer().next();
+			if (server != null) {
+				toConnect = server.getServerInfo();
+			}
+			break;
 		}
 		case HUNGERGAMES: {
 			server = manager.getHgBalancer().next();
-			if (server != null)
+			if (server != null) {
 				toConnect = server.getServerInfo();
+			}
+			break;
 		}
 		default:
 			break;

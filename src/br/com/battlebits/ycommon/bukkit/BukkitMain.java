@@ -20,6 +20,7 @@ import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandLoader;
 import br.com.battlebits.ycommon.bukkit.event.ram.RamOutOfLimitEvent;
 import br.com.battlebits.ycommon.bukkit.injector.Injector;
 import br.com.battlebits.ycommon.bukkit.injector.injectors.MenuTranslationInjector;
+import br.com.battlebits.ycommon.bukkit.listeners.AntiAfk;
 import br.com.battlebits.ycommon.bukkit.listeners.ChatListener;
 import br.com.battlebits.ycommon.bukkit.listeners.PlayerListener;
 import br.com.battlebits.ycommon.bukkit.listeners.ScoreboardListener;
@@ -133,6 +134,7 @@ public class BukkitMain extends JavaPlugin {
 	}
 
 	private void registerListeners() {
+		getServer().getPluginManager().registerEvents(new AntiAfk(), this);
 		getServer().getPluginManager().registerEvents(new ChatListener(), this);
 		getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 		getServer().getPluginManager().registerEvents(new ScoreboardListener(), this);

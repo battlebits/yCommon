@@ -10,6 +10,8 @@ import br.com.battlebits.ycommon.bungee.servers.BattleServer;
 import br.com.battlebits.ycommon.bungee.servers.HungerGamesServer;
 import br.com.battlebits.ycommon.bungee.servers.HungerGamesServer.HungerGamesState;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
+import br.com.battlebits.ycommon.common.account.BattlePlayer;
+import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -36,6 +38,7 @@ public class MessageListener implements Listener {
 			return;
 		Server serverSender = (Server) event.getSender();
 		ProxiedPlayer proxiedPlayer = (ProxiedPlayer) event.getReceiver();
+		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(proxiedPlayer.getUniqueId());
 		ByteArrayDataInput in = ByteStreams.newDataInput(event.getData());
 		String subChannel = in.readUTF();
 		switch (subChannel) {
@@ -70,6 +73,14 @@ public class MessageListener implements Listener {
 			ByteArrayDataOutput out = ByteStreams.newDataOutput();
 			out.writeUTF("NetworkCount");
 			out.writeInt(BungeeMain.getPlugin().getProxy().getOnlineCount());
+			serverSender.sendData("BungeeCord", out.toByteArray());
+			break;
+		}
+		case "DoubleKitHGCount": {
+			event.setCancelled(true);
+			ByteArrayDataOutput out = ByteStreams.newDataOutput();
+			out.writeUTF("DoubleKitHGCount");
+			out.writeInt(manager.getDoubleKitHGBalancer().getTotalNumber());
 			serverSender.sendData("BungeeCord", out.toByteArray());
 			break;
 		}
@@ -109,13 +120,26 @@ public class MessageListener implements Listener {
 			event.setCancelled(true);
 			BattleServer server = manager.getHgBalancer().next();
 			if (server != null && server.getServerInfo() != null) {
-				proxiedPlayer.connect(server.getServerInfo());
-			} else {
-				proxiedPlayer.sendMessage(TextComponent.fromLegacyText(Translate.getTranslation(BattlebitsAPI.getAccountCommon().getBattlePlayer(proxiedPlayer.getUniqueId()).getLanguage(), "server-not-available")));
+				if (!server.isFull() || (server.isFull() && player.hasGroupPermission(Group.ULTIMATE))) {
+					proxiedPlayer.connect(server.getServerInfo());
+					break;
+				}
 			}
+			proxiedPlayer.sendMessage(TextComponent.fromLegacyText(Translate.getTranslation(BattlebitsAPI.getAccountCommon().getBattlePlayer(proxiedPlayer.getUniqueId()).getLanguage(), "server-not-available")));
 			break;
 		}
-
+		case "DoubleKitHungergames": {
+			event.setCancelled(true);
+			BattleServer server = manager.getDoubleKitHGBalancer().next();
+			if (server != null && server.getServerInfo() != null) {
+				if (!server.isFull() || (server.isFull() && player.hasGroupPermission(Group.ULTIMATE))) {
+					proxiedPlayer.connect(server.getServerInfo());
+					break;
+				}
+			}
+			proxiedPlayer.sendMessage(TextComponent.fromLegacyText(Translate.getTranslation(BattlebitsAPI.getAccountCommon().getBattlePlayer(proxiedPlayer.getUniqueId()).getLanguage(), "server-not-available")));
+			break;
+		}
 		case "Fairplayhg": {
 			event.setCancelled(true);
 			proxiedPlayer.sendMessage(TextComponent.fromLegacyText(Translate.getTranslation(BattlebitsAPI.getAccountCommon().getBattlePlayer(proxiedPlayer.getUniqueId()).getLanguage(), "server-not-available")));
@@ -126,10 +150,12 @@ public class MessageListener implements Listener {
 			event.setCancelled(true);
 			BattleServer server = manager.getFullIronBalancer().next();
 			if (server != null && server.getServerInfo() != null) {
-				proxiedPlayer.connect(server.getServerInfo());
-			} else {
-				proxiedPlayer.sendMessage(TextComponent.fromLegacyText(Translate.getTranslation(BattlebitsAPI.getAccountCommon().getBattlePlayer(proxiedPlayer.getUniqueId()).getLanguage(), "server-not-available")));
+				if (!server.isFull() || (server.isFull() && player.hasGroupPermission(Group.ULTIMATE))) {
+					proxiedPlayer.connect(server.getServerInfo());
+					break;
+				}
 			}
+			proxiedPlayer.sendMessage(TextComponent.fromLegacyText(Translate.getTranslation(BattlebitsAPI.getAccountCommon().getBattlePlayer(proxiedPlayer.getUniqueId()).getLanguage(), "server-not-available")));
 			break;
 		}
 
@@ -137,10 +163,12 @@ public class MessageListener implements Listener {
 			event.setCancelled(true);
 			BattleServer server = manager.getPeladoBalancer().next();
 			if (server != null && server.getServerInfo() != null) {
-				proxiedPlayer.connect(server.getServerInfo());
-			} else {
-				proxiedPlayer.sendMessage(TextComponent.fromLegacyText(Translate.getTranslation(BattlebitsAPI.getAccountCommon().getBattlePlayer(proxiedPlayer.getUniqueId()).getLanguage(), "server-not-available")));
+				if (!server.isFull() || (server.isFull() && player.hasGroupPermission(Group.ULTIMATE))) {
+					proxiedPlayer.connect(server.getServerInfo());
+					break;
+				}
 			}
+			proxiedPlayer.sendMessage(TextComponent.fromLegacyText(Translate.getTranslation(BattlebitsAPI.getAccountCommon().getBattlePlayer(proxiedPlayer.getUniqueId()).getLanguage(), "server-not-available")));
 			break;
 		}
 		default:

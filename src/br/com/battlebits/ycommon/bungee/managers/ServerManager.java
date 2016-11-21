@@ -27,6 +27,7 @@ public class ServerManager {
 	private BaseBalancer<BattleServer> fullIronBalancer;
 	private BaseBalancer<BattleServer> peladoBalancer;
 	private BaseBalancer<HungerGamesServer> hgBalancer;
+	private BaseBalancer<HungerGamesServer> doubleKitHgBalancer;
 
 	private BungeeMain main;
 
@@ -36,6 +37,7 @@ public class ServerManager {
 		fullIronBalancer = new MostConnection<>();
 		peladoBalancer = new MostConnection<>();
 		hgBalancer = new MostConnection<>();
+		doubleKitHgBalancer = new MostConnection<>();
 		battlebitsServers = new HashMap<>();
 		activeServers = new HashMap<>();
 		loadServers();
@@ -135,7 +137,9 @@ public class ServerManager {
 			fullIronBalancer.add(serverId, server);
 		} else if (serverId.endsWith("simulator.pvp.battlebits.com.br")) {
 			peladoBalancer.add(serverId, server);
-		} else if (serverId.endsWith("battle-hg.com")) {
+		} else if (serverId.endsWith("doublekit.battle-hg.com")) {
+			doubleKitHgBalancer.add(serverId, (HungerGamesServer) server);
+		} else if (serverId.endsWith("battle-hg.com") && !serverId.contains("doublekit")) {
 			hgBalancer.add(serverId, (HungerGamesServer) server);
 		}
 	}
@@ -148,7 +152,9 @@ public class ServerManager {
 			fullIronBalancer.remove(serverId);
 		} else if (serverId.endsWith("simulator.battlecraft.com.br")) {
 			peladoBalancer.remove(serverId);
-		} else if (serverId.endsWith("battle-hg.com")) {
+		} else if (serverId.endsWith("doublekit.battle-hg.com")) {
+			doubleKitHgBalancer.remove(serverId);
+		} else if (serverId.endsWith("battle-hg.com") && !serverId.contains("doublekit")) {
 			hgBalancer.remove(serverId);
 		}
 	}
@@ -159,6 +165,10 @@ public class ServerManager {
 
 	public BaseBalancer<HungerGamesServer> getHgBalancer() {
 		return hgBalancer;
+	}
+
+	public BaseBalancer<HungerGamesServer> getDoubleKitHGBalancer() {
+		return doubleKitHgBalancer;
 	}
 
 	public BaseBalancer<BattleServer> getLobbyBalancer() {

@@ -60,7 +60,7 @@ public class BattleServer implements LoadBalancerObject, NumberConnection {
 
 	@Override
 	public boolean canBeSelected() {
-		return !isFull() && isJoinEnabled();
+		return isJoinEnabled();
 	}
 
 	@Override

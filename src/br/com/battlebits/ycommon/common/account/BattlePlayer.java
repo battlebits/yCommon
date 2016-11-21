@@ -610,4 +610,12 @@ public class BattlePlayer {
 		return super.toString();
 	}
 
+	public static Language getLanguage(UUID uuid) {
+		return getPlayer(uuid).getLanguage();
+	}
+
+	public static BattlePlayer getPlayer(UUID uuid) {
+		return BattlebitsAPI.getAccountCommon().getBattlePlayer(uuid);
+	}
+
 }
