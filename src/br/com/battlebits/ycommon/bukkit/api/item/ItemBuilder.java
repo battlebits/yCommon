@@ -5,13 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import br.com.battlebits.ycommon.common.utils.string.StringLoreUtils;
 import net.minecraft.server.v1_7_R4.NBTTagCompound;
 import net.minecraft.server.v1_7_R4.NBTTagList;
 
@@ -85,29 +85,7 @@ public class ItemBuilder {
 		if (!this.useMeta) {
 			this.useMeta = true;
 		}
-		if (this.lore == null) {
-			this.lore = new ArrayList<>();
-		}
-		String[] split = text.split(" ");
-		text = "";
-		for (int i = 0; i < split.length; i++) {
-			if (ChatColor.stripColor(text).length() > 25 || ChatColor.stripColor(text).endsWith(".") || ChatColor.stripColor(text).endsWith("!")) {
-				this.lore.add("§7" + text);
-				if (text.endsWith(".") || text.endsWith("!"))
-					this.lore.add("");
-				text = "";
-			}
-			String toAdd = split[i];
-			if (toAdd.contains("\\n")) {
-				toAdd = toAdd.substring(0, toAdd.indexOf("\\n"));
-				split[i] = split[i].substring(toAdd.length() + 2);
-				this.lore.add("§7" + text + (text.length() == 0 ? "" : " ") + toAdd);
-				text = "";
-				i--;
-			} else {
-				text += (text.length() == 0 ? "" : " ") + toAdd;
-			}
-		}
+		this.lore = new ArrayList<>(StringLoreUtils.getLore(20, text));
 		return this;
 	}
 

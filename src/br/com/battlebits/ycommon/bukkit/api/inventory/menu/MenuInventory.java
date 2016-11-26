@@ -79,9 +79,10 @@ public class MenuInventory {
 		if (!onePerPlayer) {
 			p.openInventory(inv);
 		} else {
-			if (p.getOpenInventory() == null || p.getOpenInventory().getTopInventory().getType() != InventoryType.CHEST
-					|| p.getOpenInventory().getTopInventory().getSize() != rows * 9 || p.getOpenInventory().getTopInventory().getHolder() == null
-					|| !(p.getOpenInventory().getTopInventory().getHolder() instanceof MenuHolder)
+			if (p.getOpenInventory() == null//
+					|| p.getOpenInventory().getTopInventory().getType() != InventoryType.CHEST//
+					|| p.getOpenInventory().getTopInventory().getSize() != rows * 9 || p.getOpenInventory().getTopInventory().getHolder() == null//
+					|| !(p.getOpenInventory().getTopInventory().getHolder() instanceof MenuHolder)//
 					|| !(((MenuHolder) p.getOpenInventory().getTopInventory().getHolder()).isOnePerPlayer())) {
 				createAndOpenInventory(p);
 			} else {
@@ -100,6 +101,10 @@ public class MenuInventory {
 		updateTitle(p);
 		// Garbage Colector
 		p = null;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public void updateTitle(Player p) {

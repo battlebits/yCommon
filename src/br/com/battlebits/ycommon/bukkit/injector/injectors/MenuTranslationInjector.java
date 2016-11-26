@@ -2,24 +2,20 @@ package br.com.battlebits.ycommon.bukkit.injector.injectors;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.concurrent.Callable;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-
 import br.com.battlebits.ycommon.bukkit.injector.PacketListener;
 import br.com.battlebits.ycommon.bukkit.injector.PacketListenerAPI;
+import br.com.battlebits.ycommon.bukkit.utils.PlayerUtils;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
+import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.translate.languages.Language;
+import br.com.battlebits.ycommon.common.utils.string.StringLoreUtils;
 import net.minecraft.server.v1_7_R4.ChatSerializer;
 import net.minecraft.server.v1_7_R4.IChatBaseComponent;
 import net.minecraft.server.v1_7_R4.ItemStack;
@@ -31,14 +27,7 @@ import net.minecraft.server.v1_7_R4.PacketPlayOutWindowItems;
 
 public class MenuTranslationInjector {
 
-	private Pattern translateFinder = Pattern.compile("%msg:\\s*([a-zA-Z0-9_-]+)\\s*%");
 	private Pattern finder = Pattern.compile("§%(([^)]+)%§)");
-	private Cache<String, Cache<Language, String>> translations = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.DAYS).build(new CacheLoader<String, Cache<Language, String>>() {
-		@Override
-		public Cache<Language, String> load(String original) throws Exception {
-			return getLanguageForCache(original);
-		}
-	});
 	private PacketListener injectorListener;
 
 	public MenuTranslationInjector() {
@@ -49,8 +38,9 @@ public class MenuTranslationInjector {
 					return;
 				if (pacote.getPlayer().getUniqueId() == null)
 					return;
-				if (BattlebitsAPI.getAccountCommon().getBattlePlayer(pacote.getPlayer().getUniqueId()) == null)
+				if (BattlePlayer.getPlayer(pacote.getPlayer().getUniqueId()) == null)
 					return;
+				Language lang = BattlePlayer.getLanguage(pacote.getPlayer().getUniqueId());
 				Packet packet = pacote.getPacket();
 				if (packet instanceof PacketPlayOutChat) {
 					PacketPlayOutChat chat = (PacketPlayOutChat) packet;
@@ -62,7 +52,7 @@ public class MenuTranslationInjector {
 							String message = ChatSerializer.a(component);
 							Matcher matcher = finder.matcher(message);
 							while (matcher.find()) {
-								message = message.replace(matcher.group(), Translate.getTranslation(BattlebitsAPI.getAccountCommon().getBattlePlayer(pacote.getPlayer().getUniqueId()).getLanguage(), matcher.group(2)));
+								message = message.replace(matcher.group(), Translate.getTranslation(lang, matcher.group(2)));
 							}
 							field.set(chat, ChatSerializer.a(message));
 						}
@@ -71,7 +61,6 @@ public class MenuTranslationInjector {
 					}
 				} else if (packet instanceof PacketPlayOutWindowItems) {
 					PacketPlayOutWindowItems items = (PacketPlayOutWindowItems) packet;
-					Language lang = BattlebitsAPI.getAccountCommon().getBattlePlayer(pacote.getPlayer().getUniqueId()).getLanguage();
 					ArrayList<ItemStack> array = new ArrayList<>();
 					for (ItemStack item : items.b) {
 						if (item == null) {
@@ -81,26 +70,31 @@ public class MenuTranslationInjector {
 						ItemStack iS = CraftItemStack.copyNMSStack(item, item.count);
 						ItemMeta meta = CraftItemStack.getItemMeta(iS);
 						if (meta != null) {
-							if (meta.hasDisplayName() && meta.getDisplayName().contains("%msg:")) {
-								meta.setDisplayName(getTranslation(meta.getDisplayName(), lang));
+							if (meta.hasDisplayName()) {
+								String message = meta.getDisplayName();
+								Matcher matcher = finder.matcher(message);
+								while (matcher.find()) {
+									message = message.replace(matcher.group(), Translate.getTranslation(lang, matcher.group(2)));
+								}
+								meta.setDisplayName(message);
 							}
 							if (meta.hasLore()) {
 								String newlore = "";
-								for (String name : meta.getLore()) {
+								for (String message : meta.getLore()) {
 									if (!newlore.isEmpty()) {
 										newlore += "\\n";
 									}
-									if (name.contains("%msg:")) {
-										name = getTranslation(name, lang);
+									Matcher matcher = finder.matcher(message);
+									while (matcher.find()) {
+										message = message.replace(matcher.group(), Translate.getTranslation(lang, matcher.group(2)));
 									}
-									newlore += name;
-									name = null;
+									newlore += message;
+									message = null;
 								}
-								meta.setLore(formatForLore(newlore));
+								meta.setLore(StringLoreUtils.formatForLore(newlore));
 								newlore = null;
 							}
 							CraftItemStack.setItemMeta(iS, meta);
-							lang = null;
 							meta = null;
 						}
 						array.add(iS);
@@ -120,27 +114,31 @@ public class MenuTranslationInjector {
 							ItemStack iS = CraftItemStack.copyNMSStack(item, item.count);
 							ItemMeta meta = CraftItemStack.getItemMeta(iS);
 							if (meta != null) {
-								Language lang = BattlebitsAPI.getAccountCommon().getBattlePlayer(pacote.getPlayer().getUniqueId()).getLanguage();
-								if (meta.hasDisplayName() && meta.getDisplayName().contains("%msg:")) {
-									meta.setDisplayName(getTranslation(meta.getDisplayName(), lang));
+								if (meta.hasDisplayName()) {
+									String message = meta.getDisplayName();
+									Matcher matcher = finder.matcher(message);
+									while (matcher.find()) {
+										message = message.replace(matcher.group(), Translate.getTranslation(lang, matcher.group(2)));
+									}
+									meta.setDisplayName(message);
 								}
 								if (meta.hasLore()) {
 									String newlore = "";
-									for (String name : meta.getLore()) {
+									for (String message : meta.getLore()) {
 										if (!newlore.isEmpty()) {
 											newlore += "\\n";
 										}
-										if (name.contains("%msg:")) {
-											name = getTranslation(name, lang);
+										Matcher matcher = finder.matcher(message);
+										while (matcher.find()) {
+											message = message.replace(matcher.group(), Translate.getTranslation(lang, matcher.group(2)));
 										}
-										newlore += name;
-										name = null;
+										newlore += message;
+										message = null;
 									}
-									meta.setLore(formatForLore(newlore));
+									meta.setLore(StringLoreUtils.formatForLore(newlore));
 									newlore = null;
 								}
 								CraftItemStack.setItemMeta(iS, meta);
-								lang = null;
 								meta = null;
 							}
 							c.set(setSlot, iS);
@@ -158,8 +156,16 @@ public class MenuTranslationInjector {
 						Field c = openWindow.getClass().getDeclaredField("c");
 						c.setAccessible(true);
 						String name = (String) c.get(openWindow);
-						if (name != null && name.contains("%msg:")) {
-							c.set(openWindow, getTranslation(name, BattlebitsAPI.getAccountCommon().getBattlePlayer(pacote.getPlayer().getUniqueId()).getLanguage()));
+						if (name != null) {
+							String message = name;
+							Matcher matcher = finder.matcher(message);
+							while (matcher.find()) {
+								message = message.replace(matcher.group(), Translate.getTranslation(lang, matcher.group(2)));
+							}
+							if (!PlayerUtils.isPlayerOn18(pacote.getPlayer()))
+								c.set(openWindow, message.substring(0, message.length() > 32 ? 32 : message.length()));
+							else
+								c.set(openWindow, message);
 						}
 						name = null;
 						c = null;
@@ -184,74 +190,6 @@ public class MenuTranslationInjector {
 
 	public void end() {
 		PacketListenerAPI.removeListener(injectorListener);
-	}
-
-	private ArrayList<String> formatForLore(String string) {
-		String[] split = string.split(" ");
-		string = "";
-		ArrayList<String> newString = new ArrayList<String>();
-		for (int i = 0; i < split.length; i++) {
-			if (ChatColor.stripColor(string).length() > 25 || ChatColor.stripColor(string).endsWith(".") || ChatColor.stripColor(string).endsWith("!")) {
-				newString.add("§7" + string);
-				if (string.endsWith(".") || string.endsWith("!"))
-					newString.add("");
-				string = "";
-			}
-			String toAdd = split[i];
-			if (toAdd.contains("\\n")) {
-				toAdd = toAdd.substring(0, toAdd.indexOf("\\n"));
-				split[i] = split[i].substring(toAdd.length() + 2);
-				newString.add("§7" + string + (string.length() == 0 ? "" : " ") + toAdd);
-				string = "";
-				i--;
-			} else {
-				string += (string.length() == 0 ? "" : " ") + toAdd;
-			}
-		}
-		newString.add("§7" + string);
-		return newString;
-	}
-
-	private String getTranslation(String original, Language lang) {
-		try {
-			return translations.get(original, new Callable<Cache<Language, String>>() {
-				@Override
-				public Cache<Language, String> call() throws Exception {
-					return getLanguageForCache(original);
-				}
-			}).get(lang, new Callable<String>() {
-				@Override
-				public String call() throws Exception {
-					return getTranslationForCache(original, lang);
-				}
-			});
-		} catch (Exception e) {
-			return "";
-		}
-	}
-
-	private Cache<Language, String> getLanguageForCache(String original) {
-		return CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.DAYS).build(new CacheLoader<Language, String>() {
-			@Override
-			public String load(Language lang) throws Exception {
-				return getTranslationForCache(original, lang);
-			}
-		});
-	}
-
-	private String getTranslationForCache(String original, Language lang) {
-		try {
-			String message = original;
-			Matcher matcher = translateFinder.matcher(message);
-			while (matcher.find()) {
-				message = message.replace("%msg:" + matcher.group(1) + "%", Translate.getTranslation(lang, matcher.group(1)));
-			}
-			matcher = null;
-			lang = null;
-			return message;
-		} catch (Exception e) {
-			return "";
-		}
 	}
 
 }
