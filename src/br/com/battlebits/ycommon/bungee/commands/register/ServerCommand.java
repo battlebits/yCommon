@@ -54,6 +54,42 @@ public class ServerCommand extends CommandClass {
 			}
 		}
 	}
+	
+	@Command(name = "doublekit", usage = "/<command>", aliases = { "dk" })
+	public void doublekit(CommandArgs cmdArgs) {
+		if (cmdArgs.isPlayer()) {
+			ProxiedPlayer p = cmdArgs.getPlayer();
+			BattleServer hg = BungeeMain.getPlugin().getServerManager().getDoubleKitHGBalancer().next();
+			if (hg != null && hg.getServerInfo() != null) {
+				p.sendMessage(TextComponent.fromLegacyText(""));
+				p.sendMessage(TextComponent.fromLegacyText(Translate.getTranslation(BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId()).getLanguage(), "server-connect-doublekit")));
+				p.sendMessage(TextComponent.fromLegacyText(""));
+				p.connect(hg.getServerInfo());
+			} else {
+				p.sendMessage(TextComponent.fromLegacyText(""));
+				p.sendMessage(TextComponent.fromLegacyText(Translate.getTranslation(BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId()).getLanguage(), "server-not-available")));
+				p.sendMessage(TextComponent.fromLegacyText(""));
+			}
+		}
+	}
+	
+	@Command(name = "customhg", usage = "/<command>", aliases = { "custom" })
+	public void customhg(CommandArgs cmdArgs) {
+		if (cmdArgs.isPlayer()) {
+			ProxiedPlayer p = cmdArgs.getPlayer();
+			BattleServer hg = BungeeMain.getPlugin().getServerManager().getCustomHgBalancer().next();
+			if (hg != null && hg.getServerInfo() != null) {
+				p.sendMessage(TextComponent.fromLegacyText(""));
+				p.sendMessage(TextComponent.fromLegacyText(Translate.getTranslation(BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId()).getLanguage(), "server-connect-customhg")));
+				p.sendMessage(TextComponent.fromLegacyText(""));
+				p.connect(hg.getServerInfo());
+			} else {
+				p.sendMessage(TextComponent.fromLegacyText(""));
+				p.sendMessage(TextComponent.fromLegacyText(Translate.getTranslation(BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId()).getLanguage(), "server-not-available")));
+				p.sendMessage(TextComponent.fromLegacyText(""));
+			}
+		}
+	}
 
 	@Command(name = "fairplay", usage = "/<command>", aliases = { "fp" })
 	public void fairplay(CommandArgs cmdArgs) {

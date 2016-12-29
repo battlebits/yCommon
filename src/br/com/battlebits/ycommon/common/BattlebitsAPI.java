@@ -1,5 +1,6 @@
 package br.com.battlebits.ycommon.common;
 
+import java.util.Calendar;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -24,7 +25,7 @@ public class BattlebitsAPI {
 	private static AccountCommon accountCommon = new AccountCommon();
 	private static ClanCommon clanCommon = new ClanCommon();
 
-	private static Torneio torneio = Torneio.BATTLEBITS_PVP_1;
+	private static Torneio torneio = null;
 	private static Gson gson = new Gson();
 	private static BattleInstance battleInstance;
 	private static UUIDFetcher uuidFetcher;
@@ -128,5 +129,20 @@ public class BattlebitsAPI {
 	public static AccountUpdateVersion getDefaultAccountVersion() {
 		return defaultAccountVersion;
 	}
-
+	
+	public static boolean isChristmas() {
+		Calendar cal = Calendar.getInstance();
+		return cal.get(Calendar.MONDAY) == Calendar.DECEMBER && Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == 28;
+	}
+	
+	public static boolean isChildrensDay() {
+		Calendar cal = Calendar.getInstance();
+		return cal.get(Calendar.MONDAY) == Calendar.OCTOBER && Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == 12;
+	}
+	
+	public static boolean isNewYear() {
+		Calendar cal = Calendar.getInstance();
+		return cal.get(Calendar.MONDAY) == Calendar.JANUARY && Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == 1;
+	}
+	
 }

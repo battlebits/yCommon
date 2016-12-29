@@ -38,6 +38,9 @@ public class BattlePlayer {
 	private int fichas = 0;
 	private int money = 0;
 	private int xp = 0;
+	private int reportPoints = 1000;
+	private int rejectionLevel = 0;
+
 	private Liga liga = Liga.UNRANKED;
 	private Tag tag;
 	private Torneio torneio = null;
@@ -93,6 +96,9 @@ public class BattlePlayer {
 	private String serverConnected = "";
 	private ServerType serverConnectedType = ServerType.NONE;
 
+	private transient boolean screensharing = false;
+	private transient String lastServer = "";
+
 	public BattlePlayer() {
 
 	}
@@ -135,6 +141,14 @@ public class BattlePlayer {
 
 	public int getXp() {
 		return xp;
+	}
+
+	public int getReportPoints() {
+		return reportPoints;
+	}
+
+	public int getRejectionLevel() {
+		return rejectionLevel;
 	}
 
 	public Liga getLiga() {
@@ -202,6 +216,10 @@ public class BattlePlayer {
 				if (expire != null)
 					group = Group.valueOf(expire.name());
 			}
+		}
+		if (BattlebitsAPI.isChristmas()) {
+			if (group.ordinal() < Group.ULTIMATE.ordinal())
+				return Group.ULTIMATE;
 		}
 		return group;
 	}
@@ -293,6 +311,21 @@ public class BattlePlayer {
 		return banHistory;
 	}
 
+	public boolean isScreensharing() {
+		return screensharing;
+	}
+	
+	public String getLastServer() {
+		return lastServer;
+	}
+
+	public void setScreensharing(boolean screensharing) {
+		if (screensharing) {
+			lastServer = getServerConnected();
+		}
+		this.screensharing = screensharing;
+	}
+	
 	public boolean isCacheExpired() {
 		return System.currentTimeMillis() > cacheExpire;
 	}
@@ -315,6 +348,14 @@ public class BattlePlayer {
 
 	public void setFichas(int fichas) {
 		this.fichas = fichas;
+	}
+
+	public void setRejectionLevel(int rejectionLevel) {
+		this.rejectionLevel = rejectionLevel;
+	}
+
+	public void setReportPoints(int reportPoints) {
+		this.reportPoints = reportPoints;
 	}
 
 	public int addFichas(int fichas) {

@@ -61,11 +61,12 @@ public class BanManager {
 				proxiedP.sendMessage(TextComponent.fromLegacyText(banSuccess));
 			}
 		}
-		if (!player.isOnline())
-			BattlebitsAPI.getAccountCommon().saveBattlePlayer(player);
 		if (ban.isPermanent()) {
+			BungeeMain.getPlugin().getReportManager().banPlayer(player);
 			TweetUtils.tweet(TwitterAccount.BATTLEBANS, "Jogador banido: " + player.getUserName() + "\nBanido por: " + ban.getBannedBy() + "\nMotivo: " + ban.getReason() + "\n\nServidor: " + player.getServerConnected());
 		}
+		if (!player.isOnline())
+			BattlebitsAPI.getAccountCommon().saveBattlePlayer(player);
 		ProxiedPlayer pPlayer = BungeeMain.getPlugin().getProxy().getPlayer(player.getUuid());
 		if (pPlayer != null) {
 			if (ban.isPermanent()) {
@@ -115,6 +116,8 @@ public class BanManager {
 				proxiedP.sendMessage(TextComponent.fromLegacyText(banSuccess));
 			}
 		}
+		if (mute.isPermanent())
+			BungeeMain.getPlugin().getReportManager().mutePlayer(player);
 		if (!player.isOnline())
 			BattlebitsAPI.getAccountCommon().saveBattlePlayer(player);
 		ProxiedPlayer pPlayer = BungeeMain.getPlugin().getProxy().getPlayer(player.getUuid());

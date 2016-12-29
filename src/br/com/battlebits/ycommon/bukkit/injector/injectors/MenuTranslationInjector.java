@@ -2,6 +2,7 @@ package br.com.battlebits.ycommon.bukkit.injector.injectors;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -79,19 +80,21 @@ public class MenuTranslationInjector {
 								meta.setDisplayName(message);
 							}
 							if (meta.hasLore()) {
-								String newlore = "";
+								List<String> newlore = new ArrayList<>();
 								for (String message : meta.getLore()) {
-									if (!newlore.isEmpty()) {
-										newlore += "\\n";
-									}
 									Matcher matcher = finder.matcher(message);
 									while (matcher.find()) {
 										message = message.replace(matcher.group(), Translate.getTranslation(lang, matcher.group(2)));
 									}
-									newlore += message;
+									if (message.contains("\n")) {
+										for (String s : message.split("\n"))
+											newlore.addAll(StringLoreUtils.formatForLore(s));
+									} else {
+										newlore.addAll(StringLoreUtils.formatForLore(message));
+									}
 									message = null;
 								}
-								meta.setLore(StringLoreUtils.formatForLore(newlore));
+								meta.setLore(newlore);
 								newlore = null;
 							}
 							CraftItemStack.setItemMeta(iS, meta);
@@ -123,19 +126,21 @@ public class MenuTranslationInjector {
 									meta.setDisplayName(message);
 								}
 								if (meta.hasLore()) {
-									String newlore = "";
+									List<String> newlore = new ArrayList<>();
 									for (String message : meta.getLore()) {
-										if (!newlore.isEmpty()) {
-											newlore += "\\n";
-										}
 										Matcher matcher = finder.matcher(message);
 										while (matcher.find()) {
 											message = message.replace(matcher.group(), Translate.getTranslation(lang, matcher.group(2)));
 										}
-										newlore += message;
+										if (message.contains("\n")) {
+											for (String s : message.split("\n"))
+												newlore.addAll(StringLoreUtils.formatForLore(s));
+										} else {
+											newlore.addAll(StringLoreUtils.formatForLore(message));
+										}
 										message = null;
 									}
-									meta.setLore(StringLoreUtils.formatForLore(newlore));
+									meta.setLore(newlore);
 									newlore = null;
 								}
 								CraftItemStack.setItemMeta(iS, meta);
@@ -162,7 +167,7 @@ public class MenuTranslationInjector {
 							while (matcher.find()) {
 								message = message.replace(matcher.group(), Translate.getTranslation(lang, matcher.group(2)));
 							}
-							if (!PlayerUtils.isPlayerOn18(pacote.getPlayer()))
+							if (PlayerUtils.isPlayerOn18(pacote.getPlayer()))
 								c.set(openWindow, message.substring(0, message.length() > 32 ? 32 : message.length()));
 							else
 								c.set(openWindow, message);

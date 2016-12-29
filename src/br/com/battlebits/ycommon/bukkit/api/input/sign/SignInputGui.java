@@ -19,7 +19,6 @@ public class SignInputGui {
 		List<String> linesList = new ArrayList<>();
 		linesList.add("");
 		for (String s : StringLoreUtils.getLore(12, str)) {
-			System.out.println(s);
 			if (linesList.size() < 4) {
 				linesList.add(s);
 			}

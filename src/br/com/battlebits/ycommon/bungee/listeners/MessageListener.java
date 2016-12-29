@@ -92,6 +92,14 @@ public class MessageListener implements Listener {
 			serverSender.sendData("BungeeCord", out.toByteArray());
 			break;
 		}
+		case "CustomHGCount": {
+			event.setCancelled(true);
+			ByteArrayDataOutput out = ByteStreams.newDataOutput();
+			out.writeUTF("CustomHGCount");
+			out.writeInt(manager.getCustomHgBalancer().getTotalNumber());
+			serverSender.sendData("BungeeCord", out.toByteArray());
+			break;
+		}
 		case "FPCount": {
 			event.setCancelled(true);
 			ByteArrayDataOutput out = ByteStreams.newDataOutput();
@@ -119,6 +127,18 @@ public class MessageListener implements Listener {
 		case "Hungergames": {
 			event.setCancelled(true);
 			BattleServer server = manager.getHgBalancer().next();
+			if (server != null && server.getServerInfo() != null) {
+				if (!server.isFull() || (server.isFull() && player.hasGroupPermission(Group.ULTIMATE))) {
+					proxiedPlayer.connect(server.getServerInfo());
+					break;
+				}
+			}
+			proxiedPlayer.sendMessage(TextComponent.fromLegacyText(Translate.getTranslation(BattlebitsAPI.getAccountCommon().getBattlePlayer(proxiedPlayer.getUniqueId()).getLanguage(), "server-not-available")));
+			break;
+		}
+		case "CustomHungergames": {
+			event.setCancelled(true);
+			BattleServer server = manager.getCustomHgBalancer().next();
 			if (server != null && server.getServerInfo() != null) {
 				if (!server.isFull() || (server.isFull() && player.hasGroupPermission(Group.ULTIMATE))) {
 					proxiedPlayer.connect(server.getServerInfo());
@@ -162,6 +182,19 @@ public class MessageListener implements Listener {
 		case "PVPSimulator": {
 			event.setCancelled(true);
 			BattleServer server = manager.getPeladoBalancer().next();
+			if (server != null && server.getServerInfo() != null) {
+				if (!server.isFull() || (server.isFull() && player.hasGroupPermission(Group.ULTIMATE))) {
+					proxiedPlayer.connect(server.getServerInfo());
+					break;
+				}
+			}
+			proxiedPlayer.sendMessage(TextComponent.fromLegacyText(Translate.getTranslation(BattlebitsAPI.getAccountCommon().getBattlePlayer(proxiedPlayer.getUniqueId()).getLanguage(), "server-not-available")));
+			break;
+		}
+		
+		case "Lobby": {
+			event.setCancelled(true);
+			BattleServer server = manager.getLobbyBalancer().next();
 			if (server != null && server.getServerInfo() != null) {
 				if (!server.isFull() || (server.isFull() && player.hasGroupPermission(Group.ULTIMATE))) {
 					proxiedPlayer.connect(server.getServerInfo());

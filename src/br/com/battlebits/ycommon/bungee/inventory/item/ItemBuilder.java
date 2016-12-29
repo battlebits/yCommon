@@ -1,19 +1,17 @@
-package br.com.battlebits.ycommon.bukkit.api.item;
+package br.com.battlebits.ycommon.bungee.inventory.item;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftItemStack;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.spawl.bungeepackets.item.Enchantment;
+import org.spawl.bungeepackets.item.ItemStack;
+import org.spawl.bungeepackets.item.Material;
+import org.spawl.bungeepackets.nbt.NBTTagCompound;
+import org.spawl.bungeepackets.nbt.NBTTagList;
 
 import br.com.battlebits.ycommon.common.utils.string.StringLoreUtils;
-import net.minecraft.server.v1_7_R4.NBTTagCompound;
-import net.minecraft.server.v1_7_R4.NBTTagList;
 
 public class ItemBuilder {
 
@@ -110,30 +108,22 @@ public class ItemBuilder {
 	public ItemStack build() {
 		ItemStack stack = new ItemStack(material);
 		stack.setAmount(amount);
-		stack.setDurability(durability);
+		stack.setData(durability);
 		if (enchantments != null && !enchantments.isEmpty()) {
 			for (Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
 				stack.addEnchantment(entry.getKey(), entry.getValue());
 			}
 		}
 		if (useMeta) {
-			ItemMeta meta = stack.getItemMeta();
 			if (displayName != null) {
-				meta.setDisplayName(displayName.replace("&", "§"));
+				stack.setTitle(displayName.replace("&", "§"));
 			}
 			if (lore != null && !lore.isEmpty()) {
-				meta.setLore(lore);
+				stack.setLore(lore);
 			}
-			stack.setItemMeta(meta);
 		}
 		if (glow && (enchantments == null || enchantments.isEmpty())) {
-			net.minecraft.server.v1_7_R4.ItemStack nmsStack = CraftItemStack.asNMSCopy(stack);
-			if (nmsStack.hasTag()) {
-				nmsStack.getTag().set("ench", enchNBT);
-			} else {
-				nmsStack.setTag(basicNBT);
-			}
-			stack = CraftItemStack.asCraftMirror(nmsStack);
+			stack.addFakeGlow();
 		}
 		material = Material.STONE;
 		amount = 1;

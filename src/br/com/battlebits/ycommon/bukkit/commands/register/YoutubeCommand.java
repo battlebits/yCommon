@@ -37,7 +37,12 @@ public class YoutubeCommand extends CommandClass {
 		String playerName = args.getArgs()[0];
 
 		if (playerName.equalsIgnoreCase(bP.getUserName())) {
-			fakeremove(args);
+			new BukkitRunnable() {
+				@Override
+				public void run() {
+					fakeremove(args);
+				}
+			}.runTask(BukkitMain.getPlugin());
 			return;
 		}
 

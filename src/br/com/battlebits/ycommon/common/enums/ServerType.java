@@ -4,6 +4,7 @@ public enum ServerType {
 	NETWORK("bbits.com.br", ServerStaff.NETWORK), //
 	DOUBLEKITHG("doublekit.battle-hg.com", ServerStaff.HUNGERGAMES), //
 	FAIRPLAY("fp.battle-hg.com", ServerStaff.HUNGERGAMES), //
+	CUSTOMHG("custom.battle-hg.com", ServerStaff.HUNGERGAMES), //
 	HUNGERGAMES("battle-hg.com", ServerStaff.HUNGERGAMES), //
 	PVP_FULLIRON("fulliron.pvp.battlebits.com.br", ServerStaff.BATTLECRAFT), //
 	PVP_SIMULATOR("simulator.pvp.battlebits.com.br", ServerStaff.BATTLECRAFT), //

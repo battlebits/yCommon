@@ -61,6 +61,12 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onJoin(PlayerJoinEvent event) {
 		VanishAPI.getInstance().updateVanishToPlayer(event.getPlayer());
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				event.getPlayer().sendMessage("§%merry-christmas%§");
+			}
+		}.runTaskLater(BukkitMain.getPlugin(), 2);
 	}
 
 	@EventHandler

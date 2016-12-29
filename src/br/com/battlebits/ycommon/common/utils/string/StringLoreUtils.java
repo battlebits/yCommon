@@ -8,7 +8,7 @@ import org.bukkit.ChatColor;
 public class StringLoreUtils {
 
 	public static List<String> formatForLore(String text) {
-		return getLore(20, text);
+		return getLore(25, text);
 	}
 
 	public static List<String> getLore(int max, String text) {
@@ -26,10 +26,10 @@ public class StringLoreUtils {
 			}
 			String toAdd = split[i];
 			if (toAdd.contains("§"))
-				for (int ia = toAdd.length() - 1; ia >= 0; ia--) {
-					if (toAdd.charAt(ia) == '§') {
-						if (toAdd.length() >= ia + 1) {
-							ChatColor c = ChatColor.getByChar(toAdd.charAt(ia + 1));
+				for (int a = toAdd.length() - 1; a >= 0; a--) {
+					if (toAdd.charAt(a) == '§') {
+						if (toAdd.length() > a + 1) {
+							ChatColor c = ChatColor.getByChar(toAdd.toLowerCase().charAt(a + 1));
 							if (c != null)
 								color = c;
 						}
@@ -49,5 +49,9 @@ public class StringLoreUtils {
 		}
 		lore.add(text);
 		return lore;
+	}
+
+	public static void main(String[] args) {
+		System.out.println(getLore(20, "§AAAAAAAAAAAAAAAA AAAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAAAAAAAA ASD"));
 	}
 }

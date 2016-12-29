@@ -253,27 +253,20 @@ public class BukkitMain extends JavaPlugin {
 			return;
 		switch (getServerType()) {
 		case FAIRPLAY:
-			return;
 		case GARTICCRAFT:
-			return;
+		case CUSTOMHG:
+		case DOUBLEKITHG:
 		case HUNGERGAMES:
-			return;
-		case LOBBY:
-			break;
-		case NETWORK:
-			break;
-		case NONE:
-			break;
-		case PVP_FULLIRON:
-			break;
-		case PVP_SIMULATOR:
-			break;
-		case RAID:
-			break;
 		case SKYWARS:
-			return;
 		case TESTSERVER:
 			return;
+		case LOBBY:
+		case NETWORK:
+		case NONE:
+		case PVP_FULLIRON:
+		case PVP_SIMULATOR:
+		case RAID:
+			break;
 		default:
 			break;
 		}

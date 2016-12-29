@@ -73,6 +73,13 @@ public class LoadBalancerListener implements Listener {
 			}
 			break;
 		}
+		case CUSTOMHG: {
+			server = manager.getCustomHgBalancer().next();
+			if (server != null) {
+				toConnect = server.getServerInfo();
+			}
+			break;
+		}
 		default:
 			break;
 		}

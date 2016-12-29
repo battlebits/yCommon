@@ -11,6 +11,8 @@ import org.bukkit.entity.Player;
 import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandFramework.Command;
 import br.com.battlebits.ycommon.bukkit.commands.BukkitCommandFramework.CommandArgs;
+import br.com.battlebits.ycommon.bukkit.event.teleport.PlayerTeleportCommandEvent;
+import br.com.battlebits.ycommon.bukkit.event.teleport.PlayerTeleportCommandEvent.TeleportResult;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.commandmanager.CommandClass;
@@ -79,16 +81,35 @@ public class ModeratingCommands extends CommandClass {
 		// TODO: ALERT STAFFS
 	}
 
-	@Command(name = "teleport", aliases = { "tp", "teleportar" }, groupToUse = Group.TRIAL, noPermMessageId = "command-teleport-no-access", runAsync = false)
+	@Command(name = "teleport", aliases = { "tp", "teleportar" }, runAsync = false)
 	public void teleport(CommandArgs cmdArgs) {
 		if (cmdArgs.isPlayer()) {
 			Player p = cmdArgs.getPlayer();
+			TeleportResult result = TeleportResult.NO_PERMISSION;
 			String[] args = cmdArgs.getArgs();
 			BattlePlayer bp = BattlebitsAPI.getAccountCommon().getBattlePlayer(p.getUniqueId());
+
+			if (!bp.hasGroupPermission(Group.TRIAL)) {
+				result = TeleportResult.NO_PERMISSION;
+			} else {
+				if (bp.hasGroupPermission(Group.MOD)) {
+					result = TeleportResult.ALLOWED;
+				} else {
+					result = TeleportResult.ONLY_PLAYER_TELEPORT;
+				}
+			}
+
+			PlayerTeleportCommandEvent event = new PlayerTeleportCommandEvent(p, result);
+			Bukkit.getPluginManager().callEvent(event);
+			if (event.getResult() == TeleportResult.NO_PERMISSION || event.isCancelled()) {
+				p.sendMessage("§%command-teleport-no-access%§");
+				return;
+			}
+
 			String prefix = Translate.getTranslation(bp.getLanguage(), "command-teleport-prefix") + " ";
 			if (args.length == 0) {
 				p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-teleport-usage"));
-			} else if (args.length == 1 || !bp.hasGroupPermission(Group.MOD)) {
+			} else if (args.length == 1 || event.getResult() == TeleportResult.ONLY_PLAYER_TELEPORT) {
 				Player t = Bukkit.getPlayer(args[0]);
 				if (t != null) {
 					p.teleport(t.getLocation());
@@ -97,8 +118,8 @@ public class ModeratingCommands extends CommandClass {
 				} else {
 					p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "player-not-found"));
 				}
-			} else if (bp.hasGroupPermission(Group.MOD)) {
-				if (args.length == 2) {
+			} else {
+				if (args.length == 2 && event.getResult() == TeleportResult.ALLOWED) {
 					Player player = Bukkit.getPlayer(args[0]);
 					if (player != null) {
 						Player target = Bukkit.getPlayer(args[1]);
@@ -113,7 +134,7 @@ public class ModeratingCommands extends CommandClass {
 					} else {
 						p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "player-not-found"));
 					}
-				} else if (args.length >= 3) {
+				} else if (args.length >= 3 && (event.getResult() == TeleportResult.ONLY_PLAYER_TELEPORT || event.getResult() == TeleportResult.ALLOWED)) {
 					if (args.length == 3) {
 						Location loc = getLocationBased(p.getLocation(), args[0], args[1], args[2]);
 						if (loc != null) {

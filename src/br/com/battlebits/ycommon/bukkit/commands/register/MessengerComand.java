@@ -1,5 +1,8 @@
 package br.com.battlebits.ycommon.bukkit.commands.register;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,6 +21,7 @@ import br.com.battlebits.ycommon.common.networking.packets.CPacketRemoveBlockedP
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 import br.com.battlebits.ycommon.common.translate.Translate;
 import br.com.battlebits.ycommon.common.utils.string.StringURLUtils;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ClickEvent.Action;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -195,35 +199,58 @@ public class MessengerComand extends CommandClass {
 			if (args.length == 0) {
 				p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-block-usage"));
 			} else {
-				UUID id = BattlebitsAPI.getUUIDOf(args[0]);
-				if (id != null) {
-					if (id != p.getUniqueId()) {
-						if (!bp.getBlockedPlayers().containsKey(id)) {
-							try {
-								Blocked block = new Blocked(id);
-								bp.getBlockedPlayers().put(id, block);
-								BukkitMain.getPlugin().getClient().sendPacket(new CPacketAddBlockedPlayer(p.getUniqueId(), block));
-								p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-block-blocked").replace("%player%", cmdArgs.getArgs()[0]));
-								block = null;
-							} catch (Exception e) {
-								p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "error-try-again-please"));
-							}
-						} else {
-							try {
-								bp.getBlockedPlayers().remove(id);
-								BukkitMain.getPlugin().getClient().sendPacket(new CPacketRemoveBlockedPlayer(p.getUniqueId(), id));
-								p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-block-unblocked").replace("%player%", cmdArgs.getArgs()[0]));
-							} catch (Exception e) {
-								p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "error-try-again-please"));
-							}
+				if (args[0].equalsIgnoreCase("all")) {
+					if (bp.getConfiguration().isTellEnabled()) {
+						bp.getConfiguration().setTellEnabled(false);
+						p.sendMessage(prefix + "§%command-block-blocked-all%§");
+					} else {
+						bp.getConfiguration().setTellEnabled(true);
+						p.sendMessage(prefix + "§%command-block-unblocked-all%§");
+					}
+				} else if (args[0].equalsIgnoreCase("list")) {
+					p.sendMessage(prefix + "§%command-block-list-header%§");
+					if (!bp.getBlockedPlayers().isEmpty()) {
+						DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+						for (Blocked blo : bp.getBlockedPlayers().values()) {
+							Date date = new Date(blo.getBlockedTime());
+							String playerName = BattlebitsAPI.getNammeOf(blo.getPlayerUUID());
+
+							p.sendMessage(ChatColor.RED + playerName + ChatColor.RESET + " - " + ChatColor.AQUA + df.format(date));
 						}
 					} else {
-						p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-block-cant-you"));
+						p.sendMessage("§%command-block-no-blocked%§");
 					}
 				} else {
-					p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "player-not-exist"));
+					UUID id = BattlebitsAPI.getUUIDOf(args[0]);
+					if (id != null) {
+						if (id != p.getUniqueId()) {
+							if (!bp.getBlockedPlayers().containsKey(id)) {
+								try {
+									Blocked block = new Blocked(id);
+									bp.getBlockedPlayers().put(id, block);
+									BukkitMain.getPlugin().getClient().sendPacket(new CPacketAddBlockedPlayer(p.getUniqueId(), block));
+									p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-block-blocked").replace("%player%", cmdArgs.getArgs()[0]));
+									block = null;
+								} catch (Exception e) {
+									p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "error-try-again-please"));
+								}
+							} else {
+								try {
+									bp.getBlockedPlayers().remove(id);
+									BukkitMain.getPlugin().getClient().sendPacket(new CPacketRemoveBlockedPlayer(p.getUniqueId(), id));
+									p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-block-unblocked").replace("%player%", cmdArgs.getArgs()[0]));
+								} catch (Exception e) {
+									p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "error-try-again-please"));
+								}
+							}
+						} else {
+							p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "command-block-cant-you"));
+						}
+					} else {
+						p.sendMessage(prefix + Translate.getTranslation(bp.getLanguage(), "player-not-exist"));
+					}
+					id = null;
 				}
-				id = null;
 			}
 			prefix = null;
 			args = null;

@@ -27,6 +27,7 @@ public class ServerManager {
 	private BaseBalancer<BattleServer> fullIronBalancer;
 	private BaseBalancer<BattleServer> peladoBalancer;
 	private BaseBalancer<HungerGamesServer> hgBalancer;
+	private BaseBalancer<HungerGamesServer> customHgBalancer;
 	private BaseBalancer<HungerGamesServer> doubleKitHgBalancer;
 
 	private BungeeMain main;
@@ -37,6 +38,7 @@ public class ServerManager {
 		fullIronBalancer = new MostConnection<>();
 		peladoBalancer = new MostConnection<>();
 		hgBalancer = new MostConnection<>();
+		customHgBalancer = new MostConnection<>();
 		doubleKitHgBalancer = new MostConnection<>();
 		battlebitsServers = new HashMap<>();
 		activeServers = new HashMap<>();
@@ -139,7 +141,9 @@ public class ServerManager {
 			peladoBalancer.add(serverId, server);
 		} else if (serverId.endsWith("doublekit.battle-hg.com")) {
 			doubleKitHgBalancer.add(serverId, (HungerGamesServer) server);
-		} else if (serverId.endsWith("battle-hg.com") && !serverId.contains("doublekit")) {
+		} else if (serverId.endsWith("custom.battle-hg.com")) {
+			customHgBalancer.add(serverId, (HungerGamesServer) server);
+		} else if (serverId.endsWith("battle-hg.com") && !serverId.contains("doublekit") && !serverId.contains("custom")) {
 			hgBalancer.add(serverId, (HungerGamesServer) server);
 		}
 	}
@@ -154,7 +158,9 @@ public class ServerManager {
 			peladoBalancer.remove(serverId);
 		} else if (serverId.endsWith("doublekit.battle-hg.com")) {
 			doubleKitHgBalancer.remove(serverId);
-		} else if (serverId.endsWith("battle-hg.com") && !serverId.contains("doublekit")) {
+		} else if (serverId.endsWith("custom.battle-hg.com")) {
+			customHgBalancer.remove(serverId);
+		} else if (serverId.endsWith("battle-hg.com") && !serverId.contains("doublekit") && !serverId.contains("custom")) {
 			hgBalancer.remove(serverId);
 		}
 	}
@@ -165,6 +171,10 @@ public class ServerManager {
 
 	public BaseBalancer<HungerGamesServer> getHgBalancer() {
 		return hgBalancer;
+	}
+	
+	public BaseBalancer<HungerGamesServer> getCustomHgBalancer() {
+		return customHgBalancer;
 	}
 
 	public BaseBalancer<HungerGamesServer> getDoubleKitHGBalancer() {
