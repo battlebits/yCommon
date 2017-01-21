@@ -10,12 +10,13 @@ public class BukkitClient extends CommonClient {
 	public BukkitClient(Socket socket) throws Exception {
 		super(socket);
 		setPacketHandler(new BukkitHandler());
+		setServerIp("BungeeCord");
 	}
 
 	@Override
 	public void disconnect(boolean removeServer) {
 		super.disconnect(removeServer);
-		if (!removeServer)
+		if (removeServer)
 			BukkitMain.getPlugin().reconnect();
 	}
 

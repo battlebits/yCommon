@@ -13,11 +13,11 @@ public enum Group {
 	PREMIUM, //
 	ULTIMATE, //
 	YOUTUBER, //
-	YOUTUBERPLUS(new StreamerGroup()), //
 	BUILDER, //
 	STAFF, //
 	HELPER, //
 	DEV, //
+	YOUTUBERPLUS(new StreamerGroup()), //
 	TRIAL(new ModeratorGroup()), //
 	MOD(new ModeratorGroup()), //
 	MODPLUS(new StreamerGroup()), //

@@ -20,12 +20,12 @@ import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bukkit.api.admin.AdminMode;
 import br.com.battlebits.ycommon.bukkit.api.vanish.VanishAPI;
 import br.com.battlebits.ycommon.bukkit.event.account.update.PlayerChangeLeagueEvent;
+import br.com.battlebits.ycommon.bukkit.event.ram.RamOutOfLimitEvent;
 import br.com.battlebits.ycommon.bukkit.event.update.UpdateEvent;
 import br.com.battlebits.ycommon.bukkit.event.update.UpdateEvent.UpdateType;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
 import br.com.battlebits.ycommon.common.clans.Clan;
-import br.com.battlebits.ycommon.common.networking.packets.CPacketKeepAlive;
 import br.com.battlebits.ycommon.common.permissions.enums.Group;
 
 public class PlayerListener implements Listener {
@@ -61,12 +61,13 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onJoin(PlayerJoinEvent event) {
 		VanishAPI.getInstance().updateVanishToPlayer(event.getPlayer());
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				event.getPlayer().sendMessage("§%merry-christmas%§");
-			}
-		}.runTaskLater(BukkitMain.getPlugin(), 2);
+		if (BattlebitsAPI.isChristmas())
+			new BukkitRunnable() {
+				@Override
+				public void run() {
+					event.getPlayer().sendMessage("§%merry-christmas%§");
+				}
+			}.runTaskLater(BukkitMain.getPlugin(), 2);
 	}
 
 	@EventHandler
@@ -139,6 +140,10 @@ public class PlayerListener implements Listener {
 
 	@EventHandler
 	public void onChangeLiga(PlayerChangeLeagueEvent event) {
+		if(event.getBukkitPlayer() == null)
+			return;
+		if(event.getNewLeague().ordinal() < event.getOldLeague().ordinal())
+			return;
 		HashMap<String, String> replaces = new HashMap<>();
 		replaces.put("%league%", event.getNewLeague().toString());
 		replaces.put("%symbol%", event.getNewLeague().getSymbol());
@@ -146,13 +151,10 @@ public class PlayerListener implements Listener {
 	}
 
 	@EventHandler
-	public void onKeepAlive(UpdateEvent event) {
-		if (event.getType() != UpdateType.SECOND)
-			return;
-		if (BukkitMain.getPlugin().getClient().keepAlive >= 30) {
-			BukkitMain.getPlugin().getClient().sendPacket(new CPacketKeepAlive());
+	public void onRamOutOfLimit(RamOutOfLimitEvent event) {
+		if (Bukkit.getOnlinePlayers().size() <= 10) {
+			Bukkit.shutdown();
 		}
-		--BukkitMain.getPlugin().getClient().keepAlive;
 	}
 
 }

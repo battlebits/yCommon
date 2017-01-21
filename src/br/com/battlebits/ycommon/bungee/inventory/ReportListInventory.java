@@ -1,6 +1,5 @@
 package br.com.battlebits.ycommon.bungee.inventory;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -12,9 +11,18 @@ import org.spawl.bungeepackets.inventory.Inventory.ClickHandler;
 import org.spawl.bungeepackets.item.ItemStack;
 import org.spawl.bungeepackets.item.Material;
 
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
+
 import br.com.battlebits.ycommon.bungee.BungeeMain;
 import br.com.battlebits.ycommon.bungee.inventory.item.ItemBuilder;
 import br.com.battlebits.ycommon.bungee.report.Report;
+import br.com.battlebits.ycommon.bungee.report.ReportManager;
+import br.com.battlebits.ycommon.common.BattlebitsAPI;
+import br.com.battlebits.ycommon.common.account.BattlePlayer;
+import net.md_5.bungee.BungeeCord;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class ReportListInventory {
@@ -22,10 +30,24 @@ public class ReportListInventory {
 	private static int itemsPerPage = 36;
 
 	public ReportListInventory(ProxiedPlayer player, int page) {
-		List<Report> reports = new ArrayList<>(BungeeMain.getPlugin().getReportManager().getReports().values());
+		List<Report> reports = ReportManager.getReports();
 		Iterator<Report> iterator = reports.iterator();
 		while (iterator.hasNext()) {
-			if (BungeeMain.getPlugin().getProxy().getPlayer(iterator.next().getPlayerUniqueId()) == null)
+			Report report = iterator.next();
+			if (BungeeMain.getPlugin().getProxy().getPlayer(report.getPlayerUniqueId()) == null) {
+				iterator.remove();
+				continue;
+			}
+			BattlePlayer reportPlayer = BattlePlayer.getPlayer(report.getPlayerUniqueId());
+			if (reportPlayer == null || !reportPlayer.isOnline()) {
+				iterator.remove();
+				return;
+			}
+			if (report.isExpired()) {
+				iterator.remove();
+				continue;
+			}
+			if (report.getReportLevel() < 1000)
 				iterator.remove();
 		}
 		Collections.sort(reports, new Comparator<Report>() {
@@ -40,7 +62,6 @@ public class ReportListInventory {
 		});
 
 		Inventory menu = new Inventory("§%reports%§", 54);
-
 		// PAGINAÇÃO
 		int pageStart = 0;
 		int pageEnd = itemsPerPage;
@@ -74,34 +95,64 @@ public class ReportListInventory {
 
 		// REPORT LIST
 
-		int w = 19;
+		int w = 9;
 
 		for (int i = pageStart; i < pageEnd; i++) {
 			Report report = reports.get(i);
-			menu.setItem(w, new ItemStack(Material.SKULL).setData(3).setOwner(report.getPlayerUniqueId()).setTitle(report.getPlayerName()), new ReportClickHandler(report));
-			if (w % 9 == 7) {
-				w += 3;
-				continue;
-			}
+			ItemBuilder builder = new ItemBuilder();
+			builder.type(Material.SKULL_ITEM);
+			builder.durability(3);
+			builder.name(ChatColor.RED + report.getPlayerName());
+			builder.lore("§%right-click-teleport%§");
+			ItemStack skull = builder.build();
+			skull.setOwner(report.getPlayerUniqueId());
+			menu.setItem(w, skull, new ReportClickHandler(report, menu));
 			w += 1;
 		}
 		if (reports.size() == 0) {
 			menu.setItem(31, new ItemBuilder().type(Material.PAINTING).name("§c§lOps!").lore(Arrays.asList("§%error%§")).build());
 		}
 
+		ItemStack nullItem = new ItemBuilder().type(Material.STAINED_GLASS_PANE).durability(15).name(" ").build();
+		for (int i = 0; i < 9; i++) {
+			if (menu.getItem(i) == null)
+				menu.setItem(i, nullItem);
+		}
 		menu.open(player);
 	}
 
 	private static class ReportClickHandler implements ClickHandler {
 
-		public ReportClickHandler(Report report) {
-			// TODO Auto-generated constructor stub
+		private Report report;
+		private Inventory topInventory;
+
+		public ReportClickHandler(Report report, Inventory topInventory) {
+			this.report = report;
+			this.topInventory = topInventory;
 		}
 
 		@Override
 		public void onClick(ProxiedPlayer arg0, int arg1, ItemStack arg2, boolean arg3, boolean arg4) {
-			// TODO Auto-generated method stub
-
+			BattlePlayer reportPlayer = BattlePlayer.getPlayer(report.getPlayerUniqueId());
+			if (reportPlayer == null || !reportPlayer.isOnline()) {
+				new ReportListInventory(arg0, 1);
+				return;
+			}
+			if (arg3) {
+				ServerInfo info = BungeeCord.getInstance().getServerInfo(reportPlayer.getServerConnected());
+				if (info == null) {
+					return;
+				}
+				topInventory.close(arg0);
+				if (!arg0.getServer().getInfo().getName().equals(info.getName()))
+					arg0.connect(info);
+				ByteArrayDataOutput out = ByteStreams.newDataOutput();
+				out.writeUTF("Teleport");
+				out.writeUTF(report.getPlayerUniqueId() + "");
+				arg0.getServer().sendData(BattlebitsAPI.getBungeeChannel(), out.toByteArray());
+				return;
+			}
+			new ReportInventory(arg0, report);
 		}
 
 	}

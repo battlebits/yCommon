@@ -57,12 +57,6 @@ public class DebugCommand extends CommandClass {
 		BungeeMain.getPlugin().loadTranslations();
 		cmdArgs.getSender().sendMessage(TextComponent.fromLegacyText("Traducoes recarregadas!"));
 	}
-	
-	@Command(name = "reloadreports", usage = "/<command>", groupToUse = Group.DONO, noPermMessageId = "command-no-access")
-	public void reloadreports(CommandArgs cmdArgs) {
-		BungeeMain.getPlugin().loadReports();
-		cmdArgs.getSender().sendMessage(TextComponent.fromLegacyText("Reports recarregados!"));
-	}
 
 	@Command(name = "reloadservers", usage = "/<command>", aliases = { "rlservers", "reloadserver", "rlserver" }, groupToUse = Group.DONO, noPermMessageId = "command-no-access")
 	public void reloadServers(CommandArgs cmdArgs) {

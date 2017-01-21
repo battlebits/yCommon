@@ -10,6 +10,7 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 
 import br.com.battlebits.ycommon.bukkit.accounts.BukkitPlayer;
+import br.com.battlebits.ycommon.bukkit.api.admin.AdminMode;
 import br.com.battlebits.ycommon.bungee.managers.BanManager;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
@@ -121,6 +122,23 @@ public class MessageListener implements PluginMessageListener {
 			bP.setTorneio(null);
 			bP.loadTags();
 			bP.setTag(bP.getDefaultTag());
+			break;
+		}
+		case "ActivateDoubleXP": {
+			BukkitPlayer bP = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId());
+			bP.activateDoubleXp();
+			break;
+		}
+		case "Teleport": {
+			BukkitPlayer bP = (BukkitPlayer) BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId());
+			if (!bP.hasGroupPermission(Group.TRIAL))
+				break;
+			Player target = Bukkit.getPlayer(UUID.fromString(in.readUTF()));
+			if (target == null)
+				break;
+			if (!AdminMode.getInstance().isAdmin(player))
+				AdminMode.getInstance().setAdmin(player);
+			player.chat("/tp " + target.getName());
 			break;
 		}
 		default:

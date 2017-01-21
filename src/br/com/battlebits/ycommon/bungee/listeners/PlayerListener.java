@@ -32,6 +32,7 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
+import net.md_5.bungee.api.event.ServerConnectEvent;
 import net.md_5.bungee.api.event.ServerConnectedEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
@@ -97,6 +98,20 @@ public class PlayerListener implements Listener {
 		player.connect(event.getServer().getInfo().getName());
 	}
 
+	@EventHandler(priority = (byte) -128)
+	public void onConnectScreenShare(ServerConnectEvent event) {
+		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(event.getPlayer().getUniqueId());
+		if (event.getTarget() == null)
+			return;
+		if (!event.getTarget().getName().equals("ss.battlebits.com.br"))
+			return;
+		if (player.hasGroupPermission(Group.MODPLUS))
+			return;
+		if (player.isScreensharing())
+			return;
+		event.setCancelled(true);
+	}
+
 	public static void sendStaffMessage(BattlePlayer bP, String message) {
 		for (ProxiedPlayer player : BungeeCord.getInstance().getPlayers()) {
 			BattlePlayer onlineBp = BattlebitsAPI.getAccountCommon().getBattlePlayer(player.getUniqueId());
@@ -135,31 +150,33 @@ public class PlayerListener implements Listener {
 
 	@EventHandler
 	public void onPacket(PacketEvent event) {
-		if (event.getSender() instanceof BungeeConnection && event.getReciever() instanceof ProxiedPlayer) {
+
+		if (event.getSender() instanceof BungeeConnection) {
 			Language lang = BattlePlayer.getLanguage(event.getPlayer().getUniqueId());
 			if (event.getPacket() instanceof OutWindowItems) {
 				OutWindowItems packet = (OutWindowItems) event.getPacket();
 				for (ItemStack item : packet.items) {
 					if (item != null) {
 						try {
-							Field field = ItemStack.class.getField("tag");
+							Field field = ItemStack.class.getDeclaredField("tag");
+							field.setAccessible(true);
 							NBTTagCompound compound = (NBTTagCompound) field.get(item);
+							if (compound == null)
+								continue;
+							if (!compound.hasKey("display"))
+								continue;
 							NBTTagCompound metadata = compound.getCompound("display");
-							if (metadata == null)
-								return;
-							if (compound.getCompound("display").getString("display-name") == null)
-								return;
-							if (metadata.getString("display-name") != null) {
-								String message = metadata.getString("display-name");
+							if (metadata.hasKey("Name")) {
+								String message = metadata.getString("Name");
 								Matcher matcher = finder.matcher(message);
 								while (matcher.find()) {
 									message = message.replace(matcher.group(), Translate.getTranslation(lang, matcher.group(2)));
 								}
 								item.setTitle(message);
 							}
-							if (metadata.getList("lore") != null) {
+							if (metadata.hasKey("Lore")) {
 								List<String> newlore = new ArrayList<>();
-								NBTTagList list = metadata.getList("lore");
+								NBTTagList list = metadata.getList("Lore");
 								for (int i = 0; i < list.size(); i++) {
 									String message = list.getString(i);
 									Matcher matcher = finder.matcher(message);
@@ -199,24 +216,25 @@ public class PlayerListener implements Listener {
 				ItemStack item = packet.item;
 				if (item != null) {
 					try {
-						Field field = ItemStack.class.getField("tag");
+						Field field = ItemStack.class.getDeclaredField("tag");
+						field.setAccessible(true);
 						NBTTagCompound compound = (NBTTagCompound) field.get(item);
+						if (compound == null)
+							return;
+						if (!compound.hasKey("display"))
+							return;
 						NBTTagCompound metadata = compound.getCompound("display");
-						if (metadata == null)
-							return;
-						if (compound.getCompound("display").getString("display-name") == null)
-							return;
-						if (metadata.getString("display-name") != null) {
-							String message = metadata.getString("display-name");
+						if (metadata.hasKey("Name")) {
+							String message = metadata.getString("Name");
 							Matcher matcher = finder.matcher(message);
 							while (matcher.find()) {
 								message = message.replace(matcher.group(), Translate.getTranslation(lang, matcher.group(2)));
 							}
 							item.setTitle(message);
 						}
-						if (metadata.getList("lore") != null) {
+						if (metadata.hasKey("Lore")) {
 							List<String> newlore = new ArrayList<>();
-							NBTTagList list = metadata.getList("lore");
+							NBTTagList list = metadata.getList("Lore");
 							for (int i = 0; i < list.size(); i++) {
 								String message = list.getString(i);
 								Matcher matcher = finder.matcher(message);

@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
@@ -22,8 +21,6 @@ import br.com.battlebits.ycommon.bungee.managers.BanManager;
 import br.com.battlebits.ycommon.bungee.managers.ClanManager;
 import br.com.battlebits.ycommon.bungee.managers.ServerManager;
 import br.com.battlebits.ycommon.bungee.networking.CommonServer;
-import br.com.battlebits.ycommon.bungee.report.Report;
-import br.com.battlebits.ycommon.bungee.report.ReportManager;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.clans.Clan;
 import br.com.battlebits.ycommon.common.connection.backend.MySQLBackend;
@@ -55,7 +52,6 @@ public class BungeeMain extends Plugin {
 	private AccountManager accountManager;
 	private ClanManager clanManager;
 	private BanManager banManager;
-	private ReportManager reportManager;
 	private ServerManager serverManager;
 	private BungeeCommandFramework commandFramework;
 	private BungeeCommandLoader commandLoader;
@@ -75,7 +71,6 @@ public class BungeeMain extends Plugin {
 		banManager = new BanManager();
 		accountManager = new AccountManager();
 		clanManager = new ClanManager();
-		reportManager = new ReportManager();
 		try {
 			getProxy().getScheduler().runAsync(this, commonServer = new CommonServer());
 		} catch (Exception e) {
@@ -94,7 +89,6 @@ public class BungeeMain extends Plugin {
 			e1.printStackTrace();
 		}
 		loadTranslations();
-		loadReports();
 		serverManager = new ServerManager(this);
 		getProxy().getScheduler().schedule(this, new UpdateScheduler(), 0, 50, TimeUnit.MILLISECONDS);
 		getProxy().registerChannel(BattlebitsAPI.getBungeeChannel());
@@ -184,33 +178,6 @@ public class BungeeMain extends Plugin {
 
 	}
 
-	public void loadReports() {
-		try {
-			BattlebitsAPI.debug("REPORTS > LOADING");
-			PreparedStatement stmt = null;
-			ResultSet result = null;
-			try {
-				stmt = getConnection().getConnection().prepareStatement("SELECT * FROM `reports`;");
-				result = stmt.executeQuery();
-				if (result.next()) {
-					UUID uuid = UUID.fromString(result.getString("uuid"));
-					Report report = BattlebitsAPI.getGson().fromJson(result.getString("report"), Report.class);
-					getReportManager().loadReport(uuid, report);
-				}
-				result.close();
-				stmt.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			result = null;
-			stmt = null;
-			BattlebitsAPI.debug("REPORTS > CLOSE");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
-
 	public MySQLBackend getConnection() {
 		return mysql;
 	}
@@ -225,10 +192,6 @@ public class BungeeMain extends Plugin {
 
 	public BanManager getBanManager() {
 		return banManager;
-	}
-
-	public ReportManager getReportManager() {
-		return reportManager;
 	}
 
 	public ServerManager getServerManager() {

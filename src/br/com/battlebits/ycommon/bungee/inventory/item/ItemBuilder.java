@@ -8,8 +8,6 @@ import java.util.Map.Entry;
 import org.spawl.bungeepackets.item.Enchantment;
 import org.spawl.bungeepackets.item.ItemStack;
 import org.spawl.bungeepackets.item.Material;
-import org.spawl.bungeepackets.nbt.NBTTagCompound;
-import org.spawl.bungeepackets.nbt.NBTTagList;
 
 import br.com.battlebits.ycommon.common.utils.string.StringLoreUtils;
 
@@ -18,23 +16,16 @@ public class ItemBuilder {
 	private Material material;
 	private int amount;
 	private short durability;
-	private boolean useMeta;
 	private boolean glow;
 	private String displayName;
 	private HashMap<Enchantment, Integer> enchantments;
 	private ArrayList<String> lore;
-	private NBTTagCompound basicNBT;
-	private NBTTagList enchNBT;
 
 	public ItemBuilder() {
 		material = Material.STONE;
 		amount = 1;
 		durability = 0;
-		useMeta = false;
 		glow = false;
-		basicNBT = new NBTTagCompound();
-		enchNBT = new NBTTagList();
-		basicNBT.set("ench", enchNBT);
 	}
 
 	public ItemBuilder type(Material material) {
@@ -60,9 +51,6 @@ public class ItemBuilder {
 	}
 
 	public ItemBuilder name(String text) {
-		if (!useMeta) {
-			useMeta = true;
-		}
 		this.displayName = text.replace("&", "§");
 		return this;
 	}
@@ -80,17 +68,11 @@ public class ItemBuilder {
 	}
 
 	public ItemBuilder lore(String text) {
-		if (!this.useMeta) {
-			this.useMeta = true;
-		}
 		this.lore = new ArrayList<>(StringLoreUtils.getLore(25, text));
 		return this;
 	}
 
 	public ItemBuilder lore(List<String> text) {
-		if (!this.useMeta) {
-			this.useMeta = true;
-		}
 		if (this.lore == null) {
 			this.lore = new ArrayList<>();
 		}
@@ -114,13 +96,11 @@ public class ItemBuilder {
 				stack.addEnchantment(entry.getKey(), entry.getValue());
 			}
 		}
-		if (useMeta) {
-			if (displayName != null) {
-				stack.setTitle(displayName.replace("&", "§"));
-			}
-			if (lore != null && !lore.isEmpty()) {
-				stack.setLore(lore);
-			}
+		if (displayName != null) {
+			stack.setTitle(displayName.replace("&", "§"));
+		}
+		if (lore != null && !lore.isEmpty()) {
+			stack.setLore(lore);
 		}
 		if (glow && (enchantments == null || enchantments.isEmpty())) {
 			stack.addFakeGlow();
@@ -128,9 +108,6 @@ public class ItemBuilder {
 		material = Material.STONE;
 		amount = 1;
 		durability = 0;
-		if (useMeta) {
-			useMeta = false;
-		}
 		if (glow) {
 			glow = false;
 		}

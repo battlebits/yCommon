@@ -35,7 +35,7 @@ public class BattlebitsAPI {
 	private static boolean useRedisBungee = false;
 	private static TimeZone serverTimeZone = TimeZone.GMT03;
 	private static TimeZone defaultTimeZone = TimeZone.GMT03;
-	private static AccountUpdateVersion defaultAccountVersion = AccountUpdateVersion.LIGA_UPDATE;
+	private static AccountUpdateVersion defaultAccountVersion = AccountUpdateVersion.SEASON_3_BUG_2;
 	public final static String FORUM_WEBSITE = "http://forum.battlebits.com.br";
 	public final static String WEBSITE = "http://battlebits.com.br";
 	public final static String STORE = "http://loja.battlebits.com.br";
@@ -43,6 +43,7 @@ public class BattlebitsAPI {
 	public final static String TWITTER = "@BattlebitsMC";
 	public final static String HUNGERGAMES_ADDRESS = "battle-hg.com";
 	public final static String TRANSLATION_ID = "ycommon";
+	public final static long MULTIPLIER_DURATION = 60000 * 60;
 	public static Language defaultLanguage = Language.PORTUGUES;
 
 	public static Torneio getDefaultTorneio() {
@@ -129,20 +130,20 @@ public class BattlebitsAPI {
 	public static AccountUpdateVersion getDefaultAccountVersion() {
 		return defaultAccountVersion;
 	}
-	
+
 	public static boolean isChristmas() {
 		Calendar cal = Calendar.getInstance();
 		return cal.get(Calendar.MONDAY) == Calendar.DECEMBER && Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == 28;
 	}
-	
+
 	public static boolean isChildrensDay() {
 		Calendar cal = Calendar.getInstance();
 		return cal.get(Calendar.MONDAY) == Calendar.OCTOBER && Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == 12;
 	}
-	
+
 	public static boolean isNewYear() {
 		Calendar cal = Calendar.getInstance();
 		return cal.get(Calendar.MONDAY) == Calendar.JANUARY && Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == 1;
 	}
-	
+
 }

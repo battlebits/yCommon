@@ -35,8 +35,7 @@ public class CommonConnectionInput extends Thread {
 					BattlebitsAPI.debug("MCC>INP>" + PACKET.getClass().getName());
 				}
 			} catch (IOException e) {
-				if (BattlebitsAPI.debugModeEnabled())
-					e.printStackTrace();
+				e.printStackTrace();
 				CLIENT.disconnect(true);
 			} catch (HandlePacketException e) {
 				e.printStackTrace();

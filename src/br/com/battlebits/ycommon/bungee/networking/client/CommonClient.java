@@ -17,15 +17,14 @@ public abstract class CommonClient {
 	private final CommonConnectionInput inputHandler;
 	private CommonHandler packetHandler;
 	public final Socket socket;
-	public int keepAlive;
 
 	public CommonClient(Socket socket) throws Exception {
 		this.socket = socket;
-		keepAlive = 0;
 		outputHandler = new CommonConnectionOutput(this, new DataOutputStream(socket.getOutputStream()));
 		inputHandler = new CommonConnectionInput(this, new DataInputStream(socket.getInputStream()));
 		outputHandler.start();
 		inputHandler.start();
+		System.out.println("Cliente registrado");
 	}
 
 	protected void setPacketHandler(CommonHandler packetHandler) {
@@ -53,6 +52,7 @@ public abstract class CommonClient {
 
 	public void setServerIp(String serverIp) {
 		this.serverIp = serverIp;
+		System.out.println("ServerIp registrado: " + serverIp);
 	}
 
 	public void registerClient() {

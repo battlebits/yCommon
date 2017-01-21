@@ -57,8 +57,7 @@ public class CommonConnectionOutput extends Thread {
 					LOCK.wait(3250);
 				}
 			} catch (IOException e) {
-				if (BattlebitsAPI.debugModeEnabled())
-					e.printStackTrace();
+				e.printStackTrace();
 				QUEUE.remove(0);
 				CLIENT.disconnect(true);
 			} catch (InterruptedException e) {

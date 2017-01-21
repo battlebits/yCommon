@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+import br.com.battlebits.ycommon.bungee.report.Report;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.game.GameStatus;
 import br.com.battlebits.ycommon.common.banmanager.history.BanHistory;
@@ -40,6 +41,11 @@ public class BattlePlayer {
 	private int xp = 0;
 	private int reportPoints = 1000;
 	private int rejectionLevel = 0;
+
+	private int doubleXpMultiplier = 0;
+
+	private long lastActivatedMultiplier = Long.MIN_VALUE;
+	private long lastVIPMultiplierReceived = Long.MIN_VALUE;
 
 	private Liga liga = Liga.UNRANKED;
 	private Tag tag;
@@ -96,6 +102,8 @@ public class BattlePlayer {
 	private String serverConnected = "";
 	private ServerType serverConnectedType = ServerType.NONE;
 
+	private Report report;
+
 	private transient boolean screensharing = false;
 	private transient String lastServer = "";
 
@@ -141,6 +149,10 @@ public class BattlePlayer {
 
 	public int getXp() {
 		return xp;
+	}
+
+	public int getDoubleXpMultiplier() {
+		return doubleXpMultiplier;
 	}
 
 	public int getReportPoints() {
@@ -191,6 +203,18 @@ public class BattlePlayer {
 		return groups;
 	}
 
+	public Report getReport() {
+		return report;
+	}
+
+	public Report newReport() {
+		return report = new Report(getUuid(), getUserName());
+	}
+
+	public void clearReport() {
+		report = null;
+	}
+
 	public Group getServerGroup() {
 		Group group = Group.NORMAL;
 		if (!getGroups().isEmpty()) {
@@ -239,6 +263,10 @@ public class BattlePlayer {
 		}
 		return false;
 	}
+	
+	public void setDoubleXpMultiplier(int doubleXpMultiplier) {
+		this.doubleXpMultiplier = doubleXpMultiplier;
+	}
 
 	public Map<RankType, Long> getRanks() {
 		return ranks;
@@ -260,8 +288,6 @@ public class BattlePlayer {
 		if (clanName == null || clanName.isEmpty())
 			return null;
 		Clan clan = BattlebitsAPI.getClanCommon().getClan(clanName);
-		if (clan == null)
-			clanName = "";
 		return clan;
 	}
 
@@ -314,9 +340,13 @@ public class BattlePlayer {
 	public boolean isScreensharing() {
 		return screensharing;
 	}
-	
+
 	public String getLastServer() {
 		return lastServer;
+	}
+	
+	public long getLastActivatedMultiplier() {
+		return lastActivatedMultiplier;
 	}
 
 	public void setScreensharing(boolean screensharing) {
@@ -325,7 +355,7 @@ public class BattlePlayer {
 		}
 		this.screensharing = screensharing;
 	}
-	
+
 	public boolean isCacheExpired() {
 		return System.currentTimeMillis() > cacheExpire;
 	}
@@ -350,12 +380,31 @@ public class BattlePlayer {
 		this.fichas = fichas;
 	}
 
+	public void activateDoubleXp() {
+		removeDoubleXpMultiplier(1);
+		lastActivatedMultiplier = System.currentTimeMillis() + BattlebitsAPI.MULTIPLIER_DURATION;
+	}
+
+	public void addDoubleXpMultiplier(int i) {
+		doubleXpMultiplier += i;
+	}
+
+	public void removeDoubleXpMultiplier(int i) {
+		doubleXpMultiplier -= i;
+		if (doubleXpMultiplier < 0)
+			doubleXpMultiplier = 0;
+	}
+
 	public void setRejectionLevel(int rejectionLevel) {
 		this.rejectionLevel = rejectionLevel;
+		if (this.rejectionLevel < 0)
+			this.rejectionLevel = 0;
 	}
 
 	public void setReportPoints(int reportPoints) {
 		this.reportPoints = reportPoints;
+		if (this.reportPoints < 0)
+			this.reportPoints = 0;
 	}
 
 	public int addFichas(int fichas) {
@@ -401,9 +450,15 @@ public class BattlePlayer {
 	public int addXp(int xp) {
 		if (xp < 0)
 			xp = 0;
+		if (isDoubleXPActivated())
+			xp *= 2;
 		int setarxp = this.xp + xp;
 		setXp(setarxp);
 		return xp;
+	}
+
+	public boolean isDoubleXPActivated() {
+		return System.currentTimeMillis() < lastActivatedMultiplier;
 	}
 
 	public AccountUpdateVersion getAccountVersion() {
@@ -525,6 +580,25 @@ public class BattlePlayer {
 		this.countryCode = countryCode;
 		this.online = true;
 		this.serverConnectedType = ServerType.NONE;
+	}
+	
+	public void checkForMultipliers() {
+		if (System.currentTimeMillis() > lastVIPMultiplierReceived) {
+			if(hasGroupPermission(Group.MODPLUS)) {
+				return;
+			} else if(hasGroupPermission(Group.ULTIMATE)) {
+				doubleXpMultiplier += 5;
+			} else if(hasGroupPermission(Group.PREMIUM)) {
+				doubleXpMultiplier += 3;
+			} else if(hasGroupPermission(Group.LIGHT)) {
+				doubleXpMultiplier += 1;
+			} else {
+				return;
+			}
+			
+			lastVIPMultiplierReceived = System.currentTimeMillis() + (1000l * 60l * 60l * 24l * 30l);
+			
+		}
 	}
 
 	public void setLeaveData() {

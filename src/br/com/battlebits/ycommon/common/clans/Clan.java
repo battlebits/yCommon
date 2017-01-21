@@ -178,8 +178,10 @@ public class Clan {
 					random.add(unique);
 				}
 			}
-			if (random.size() > 0)
-				uuid = random.get(new Random().nextInt(random.size() - 1));
+			if (random.size() > 0) {
+				int i = random.size() - 1 > 0 ? new Random().nextInt(random.size() - 1) : 0;
+				uuid = random.get(i);
+			}
 			if (uuid == player.getUuid())
 				demote(uuid);
 		}

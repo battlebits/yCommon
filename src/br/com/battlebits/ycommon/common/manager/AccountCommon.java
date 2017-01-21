@@ -11,7 +11,6 @@ import br.com.battlebits.ycommon.bukkit.BukkitMain;
 import br.com.battlebits.ycommon.bungee.BungeeMain;
 import br.com.battlebits.ycommon.common.BattlebitsAPI;
 import br.com.battlebits.ycommon.common.account.BattlePlayer;
-import br.com.battlebits.ycommon.common.enums.AccountUpdateVersion;
 import br.com.battlebits.ycommon.common.enums.BattleInstance;
 import br.com.battlebits.ycommon.common.enums.Liga;
 
@@ -41,9 +40,10 @@ public class AccountCommon {
 	public void loadBattlePlayer(UUID uuid, BattlePlayer player) {
 		if (players.containsKey(uuid))
 			return;
-		if (player.getAccountVersion().ordinal() < AccountUpdateVersion.LIGA_UPDATE.ordinal()) {
+		if (player.getAccountVersion().ordinal() < BattlebitsAPI.getDefaultAccountVersion().ordinal()) {
 			player.setXp(0);
 			player.setLiga(Liga.UNRANKED);
+			player.setDoubleXpMultiplier(0);
 		}
 		player.setAccountVersion(BattlebitsAPI.getDefaultAccountVersion());
 		players.put(uuid, player);
@@ -51,12 +51,9 @@ public class AccountCommon {
 
 	public BattlePlayer getBattlePlayer(UUID uuid) {
 		if (!players.containsKey(uuid)) {
-			if (BattlebitsAPI.getBattleInstance() == BattleInstance.BUKKIT) {
+			if (BattlebitsAPI.getBattleInstance() == BattleInstance.BUKKIT)
 				BukkitMain.kickPlayer(uuid);
-			} else {
-				return null;
-			}
-			return new BattlePlayer();
+			return null;
 		}
 		players.get(uuid).updateCache();
 		return players.get(uuid);

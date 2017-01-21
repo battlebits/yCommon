@@ -28,7 +28,7 @@ public class StaffCommand extends CommandClass {
 		args.getSender().sendMessage(TextComponent.fromLegacyText(Translate.getTranslation(player.getLanguage(), "command-staffchat-" + (active ? "disabled" : "enabled"))));
 	}
 
-	@Command(name = "screeshare", aliases = { "ss" }, groupToUse = Group.MODPLUS, noPermMessageId = "command-screeshare-no-access")
+	@Command(name = "screenshare", aliases = { "ss" }, groupToUse = Group.MODPLUS, noPermMessageId = "command-screeshare-no-access")
 	public void screeshare(CommandArgs cmdArgs) {
 		if (!cmdArgs.isPlayer()) {
 			cmdArgs.getSender().sendMessage(TextComponent.fromLegacyText("COMANDO APENAS PARA PLAYERS"));
@@ -40,9 +40,9 @@ public class StaffCommand extends CommandClass {
 		if (cmdArgs.isPlayer()) {
 			lang = BattlebitsAPI.getAccountCommon().getBattlePlayer(cmdArgs.getPlayer().getUniqueId()).getLanguage();
 		}
-		String ssPrefix = Translate.getTranslation(lang, "command-screeshare-prefix") + " ";
-		if (args.length < 2) {
-			sender.sendMessage(TextComponent.fromLegacyText(ssPrefix + Translate.getTranslation(lang, "command-screeshare-usage").replace("%command%", cmdArgs.getLabel())));
+		String ssPrefix = Translate.getTranslation(lang, "command-screenshare-prefix") + " ";
+		if (args.length < 1) {
+			sender.sendMessage(TextComponent.fromLegacyText(ssPrefix + Translate.getTranslation(lang, "command-screenshare-usage").replace("%command%", cmdArgs.getLabel())));
 			return;
 		}
 		ProxiedPlayer proxied = BungeeMain.getPlugin().getProxy().getPlayer(args[0]);
@@ -50,9 +50,14 @@ public class StaffCommand extends CommandClass {
 			sender.sendMessage(TextComponent.fromLegacyText(ssPrefix + Translate.getTranslation(lang, "player-not-online")));
 			return;
 		}
+		if (proxied.getUniqueId().equals(cmdArgs.getPlayer().getUniqueId())) {
+			sender.sendMessage(TextComponent.fromLegacyText(ssPrefix + Translate.getTranslation(lang, "cant-yourself")));
+			return;
+		}
 		BattlePlayer player = BattlebitsAPI.getAccountCommon().getBattlePlayer(proxied.getUniqueId());
 		if (player.isScreensharing()) {
 			player.setScreensharing(false);
+			cmdArgs.getPlayer().sendMessage(TextComponent.fromLegacyText(ssPrefix + Translate.getTranslation(player.getLanguage(), "command-screenshare-finished")));
 			proxied.sendMessage(TextComponent.fromLegacyText(ssPrefix + Translate.getTranslation(player.getLanguage(), "command-screenshare-finished")));
 			if (player.getLastServer().isEmpty()) {
 				proxied.connect(BungeeMain.getPlugin().getServerManager().getLobbyBalancer().next().getServerInfo());

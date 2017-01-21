@@ -116,6 +116,10 @@ public class LoginListener implements Listener {
 					event.setCancelReason(BanManager.getBanKickMessage(ban, player.getLanguage(), player.getTimeZone()));
 				}
 				BattlebitsAPI.debug("BANNING > FINISHED");
+				
+				player.checkForMultipliers();
+				
+				
 				event.completeIntent(BungeeMain.getPlugin());
 				if (event.isCancelled()) {
 					BattlebitsAPI.getAccountCommon().saveBattlePlayer(player);

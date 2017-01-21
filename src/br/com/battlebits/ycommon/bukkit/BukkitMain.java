@@ -129,7 +129,7 @@ public class BukkitMain extends JavaPlugin {
 		tagManager = null;
 		if (socketClient != null) {
 			getClient().sendPacket(new CPacketServerStop());
-			socketClient.disconnect(true);
+			socketClient.disconnect(false);
 		}
 	}
 
@@ -204,8 +204,15 @@ public class BukkitMain extends JavaPlugin {
 			Socket socket = new Socket(CommonServer.ADDRESS, CommonServer.PORT);
 			socketClient = new BukkitClient(socket);
 			socketClient.sendPacket(new CPacketServerRecall(getServer().getIp() + ":" + getServer().getPort(), getServer().getOnlinePlayers().size(), getServer().getMaxPlayers()));
-		} catch (Exception e1) {
-			e1.printStackTrace();
+		} catch (UnknownHostException e) {
+			System.out.println("Couldnt find CommonServer");
+			e.printStackTrace();
+			getServer().shutdown();
+		} catch (IOException e) {
+			e.printStackTrace();
+			getServer().shutdown();
+		} catch (Exception e) {
+			e.printStackTrace();
 			getServer().shutdown();
 		}
 	}
@@ -276,9 +283,12 @@ public class BukkitMain extends JavaPlugin {
 
 		double usedPercentage = (used / total) * 100;
 		if (usedPercentage > 90) {
-			memoryRamRestart = true;
-			BukkitMain.getPlugin().getServer().getPluginManager().callEvent(new RamOutOfLimitEvent());
-			BukkitMain.getPlugin().setCanJoin(false);
+			RamOutOfLimitEvent event = new RamOutOfLimitEvent();
+			BukkitMain.getPlugin().getServer().getPluginManager().callEvent(event);
+			if (!event.isCancelled()) {
+				memoryRamRestart = true;
+				BukkitMain.getPlugin().setCanJoin(false);
+			}
 		}
 	}
 

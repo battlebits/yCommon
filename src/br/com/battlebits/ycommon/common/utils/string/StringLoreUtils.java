@@ -3,7 +3,7 @@ package br.com.battlebits.ycommon.common.utils.string;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
 
 public class StringLoreUtils {
 

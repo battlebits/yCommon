@@ -170,6 +170,8 @@ public class BukkitPlayer extends BattlePlayer {
 
 	@Override
 	public void sendMessage(String tagId, String translateId, Map<String, String> replaces) {
+		if(getBukkitPlayer() == null)
+			return;
 		String tag = tagId != null ? Translate.getTranslation(getLanguage(), tagId) + " " : "";
 		String message = Translate.getTranslation(getLanguage(), translateId);
 		if (replaces != null)
